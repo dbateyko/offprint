@@ -255,7 +255,6 @@ autoresearch/
 prompts/
 opencode.json
 AGENTS.md
-offprint.png
 ci/
 scripts/attic/
 scripts/benchmarks/
