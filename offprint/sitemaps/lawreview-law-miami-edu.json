@@ -1,0 +1,13 @@
+{
+  "id": "lawreview-law-miami-edu",
+  "start_urls": [
+    "https://lawreview.law.miami.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Miami Law Review",
+    "platform": "unknown",
+    "url": "https://lawreview.law.miami.edu/",
+    "created_date": "2025-12-14"
+  }
+}

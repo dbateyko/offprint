@@ -1,0 +1,28 @@
+{
+  "id": "registry-390-5ad877f252",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "onlinelibrary.wiley.com",
+    "journal_name": "Family Court Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://onlinelibrary.wiley.com/journal/17441617",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "390",
+    "registry_names": "Family Court Review",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/onlinelibrary.wiley.com/url_5ad877f25292",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T14:02:19Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://onlinelibrary.wiley.com/journal/17441617"
+  ]
+}

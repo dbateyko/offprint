@@ -1,0 +1,29 @@
+{
+  "id": "berkeleyjournalofinternationallaw-com",
+  "start_urls": [
+    "https://www.berkeleyjournalofinternationallaw.com/current-issue"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Berkeleyjournalofinternationallaw",
+    "platform": "Wix",
+    "url": "https://www.berkeleyjournalofinternationallaw.com/about",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/vol-\\d+(-vol-\\d+)?",
+      "archive_path": "header volume nav -> /vol-*. pattern links",
+      "notes": "No pagination. PDFs directly available on listing page. Use headings for title/author."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.MW5IWV",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
+}

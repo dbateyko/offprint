@@ -1,0 +1,14 @@
+{
+  "id": "brooklynworks-brooklaw-edu",
+  "start_urls": [
+    "https://brooklynworks.brooklaw.edu/bjcfcl/all_issues.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Brooklyn Journal of Corporate, Financial & Commercial Law",
+    "platform": "Digital Commons",
+    "url": "https://brooklynworks.brooklaw.edu/bjcfcl/",
+    "created_date": "2025-12-14",
+    "notes": "This sitemap is a duplicate of brooklyn_journal_of_corporate_financial_commercial_law.json - consider disabling."
+  }
+}

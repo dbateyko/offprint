@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-seattleu-edu",
+  "start_urls": [
+    "https://digitalcommons.law.seattleu.edu/sulr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Seattle University Law Review",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.seattleu.edu/sulr/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

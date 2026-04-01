@@ -1,0 +1,14 @@
+{
+  "url": "https://brooklynworks.brooklaw.edu/jlp/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Journal of Law and Policy",
+    "platform": "digitalcommons",
+    "original_url": "https://brooklynworks.brooklaw.edu/jlp/",
+    "domain": "brooklynworks.brooklaw.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://brooklynworks.brooklaw.edu/jlp/sitemap.xml"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.lsu.edu/jelr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "LSU Journal of Energy Law and Resources",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.lsu.edu/jelr/",
+    "domain": "digitalcommons.law.lsu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.lsu.edu/jelr/sitemap.xml"
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "Jurimetrics",
+  "metadata": {
+    "original_url": "https://www.americanbar.org/groups/science_technology/resources/jurimetrics/issue-archive/",
+    "status": "paused_waf",
+    "status_evidence_ref": "artifacts/site_fingerprints/www.americanbar.org",
+    "status_reason": "waf_blocked_403_playwright_probe",
+    "status_updated_at": "2026-03-04T04:36:02Z"
+  },
+  "raw_sitemap": {
+    "_id": "Jurimetrics",
+    "selectors": [
+      {
+        "clickActionType": "real",
+        "clickElementSelector": "button.aba-recent-news__load-more",
+        "clickElementUniquenessType": "uniqueText",
+        "clickType": "clickMore",
+        "delay": 2000,
+        "discardInitialElements": "do-not-discard",
+        "id": "lick",
+        "multiple": true,
+        "parentSelectors": [
+          "_root"
+        ],
+        "selector": "button.aba-recent-news__load-more",
+        "type": "SelectorElementClick"
+      },
+      {
+        "id": "issue",
+        "linkType": "linkFromHref",
+        "multiple": true,
+        "parentSelectors": [
+          "_root"
+        ],
+        "selector": "a.aba-recent-news__article-link",
+        "type": "SelectorLink"
+      },
+      {
+        "elementLimit": 0,
+        "id": "articles",
+        "multiple": true,
+        "parentSelectors": [
+          "issue"
+        ],
+        "scroll": false,
+        "selector": "a.aba-publication-article-card__cta",
+        "type": "SelectorElement"
+      },
+      {
+        "id": "pdf",
+        "linkType": "linkFromHref",
+        "multiple": false,
+        "parentSelectors": [
+          "articles"
+        ],
+        "selector": "_parent_",
+        "type": "SelectorLink"
+      },
+      {
+        "id": "author",
+        "multiple": false,
+        "multipleType": "singleColumn",
+        "parentSelectors": [
+          "articles"
+        ],
+        "regex": "",
+        "selector": "p.aba-publication-article-card__byline",
+        "type": "SelectorText"
+      }
+    ],
+    "startUrl": [
+      "https://www.americanbar.org/groups/science_technology/publications/jurimetrics/"
+    ]
+  },
+  "source": "csv",
+  "start_urls": [
+    "https://www.americanbar.org/groups/science_technology/resources/jurimetrics/issue-archive/"
+  ],
+  "url": "https://www.americanbar.org/groups/science_technology/resources/jurimetrics/issue-archive/"
+}

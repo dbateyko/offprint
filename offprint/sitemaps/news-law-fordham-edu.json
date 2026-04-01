@@ -1,0 +1,14 @@
+{
+  "id": "news-law-fordham-edu",
+  "start_urls": [
+    "https://news.law.fordham.edu/jcfl"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "news.law.fordham.edu",
+    "platform": "unknown",
+    "url": "https://news.law.fordham.edu/jcfl",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

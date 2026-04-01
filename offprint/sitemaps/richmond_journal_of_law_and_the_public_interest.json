@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.richmond.edu/pilr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Richmond Journal of Law and the Public Interest",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.richmond.edu/pilr/",
+    "domain": "scholarship.richmond.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.richmond.edu/pilr/sitemap.xml"
+  ]
+}

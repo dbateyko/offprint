@@ -1,0 +1,18 @@
+{
+  "id": "lawschool-unm-tlj",
+  "start_urls": [
+    "https://digitalrepository.unm.edu/tlj/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Tribal Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://digitalrepository.unm.edu/tlj/",
+    "original_url": "https://lawschool.unm.edu/tlj/",
+    "created_date": "2026-03-01",
+    "status": "active",
+    "status_reason": "alternate_digital_commons_seed_validated",
+    "status_evidence_ref": "artifacts/reports/smoke_mercer_tlj_20260314/smoke_one_pdf_20260314T034320Z.json",
+    "status_updated_at": "2026-03-14T03:43:20Z"
+  }
+}

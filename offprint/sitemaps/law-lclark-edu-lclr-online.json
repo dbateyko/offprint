@@ -1,0 +1,13 @@
+{
+  "id": "law-lclark-edu-lclr-online",
+  "start_urls": [
+    "https://law.lclark.edu/law_reviews/lewis_and_clark_law_review/online/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Lewis and Clark Law Review Online Supplement",
+    "platform": "wordpress",
+    "url": "https://law.lclark.edu/law_reviews/lewis_and_clark_law_review/online/",
+    "created_date": "2026-03-01"
+  }
+}

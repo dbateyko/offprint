@@ -1,0 +1,18 @@
+{
+  "id": "www-law-uchicago-edu",
+  "start_urls": [
+    "https://www.law.uchicago.edu/supremecourt/supremecourt.html"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "Supreme Court Review",
+    "platform": "drupal",
+    "url": "https://www.law.uchicago.edu/supremecourt/supremecourt.html",
+    "created_date": "2026-03-26",
+    "status": "paused_paywall",
+    "navigation": {
+      "archive_path": "law school landing page -> Past Issues -> University of Chicago Press",
+      "notes": "No direct PDF links found on the law school page. Past Issues points to https://www.journals.uchicago.edu/scr, which is Cloudflare-protected and returns an HTTP 403 challenge to curl/HEAD requests. Treat as paywalled/no-direct-pdf until a direct accessible PDF path is confirmed."
+    }
+  }
+}

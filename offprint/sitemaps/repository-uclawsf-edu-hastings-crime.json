@@ -1,0 +1,14 @@
+{
+  "id": "repository-uclawsf-edu-hastings-crime",
+  "start_urls": [
+    "https://repository.uclawsf.edu/hastings_journal_crime_punishment/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Hastings Journal of Crime and Punishment",
+    "platform": "digitalcommons",
+    "url": "https://repository.uclawsf.edu/hastings_journal_crime_punishment/",
+    "created_date": "2026-03-01",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "www-annualreviews-org",
+  "start_urls": [
+    "https://www.annualreviews.org/journal/lawsocsci"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.annualreviews.org",
+    "platform": "unknown",
+    "url": "https://www.annualreviews.org/journal/lawsocsci",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

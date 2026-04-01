@@ -1,0 +1,13 @@
+{
+  "id": "nccivilrights-law-unc-edu",
+  "start_urls": [
+    "https://nccivilrights.law.unc.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "North Carolina Civil Rights Law Review",
+    "platform": "wordpress",
+    "url": "https://nccivilrights.law.unc.edu/",
+    "created_date": "2026-03-01"
+  }
+}

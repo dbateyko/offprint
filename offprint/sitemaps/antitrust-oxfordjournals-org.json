@@ -1,0 +1,14 @@
+{
+  "id": "antitrust-oxfordjournals-org",
+  "start_urls": [
+    "http://antitrust.oxfordjournals.org"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "antitrust.oxfordjournals.org",
+    "platform": "unknown",
+    "url": "http://antitrust.oxfordjournals.org",
+    "created_date": "2026-03-25",
+    "status": "active"
+  }
+}

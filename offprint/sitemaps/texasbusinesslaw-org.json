@@ -1,0 +1,19 @@
+{
+  "id": "texasbusinesslaw-org",
+  "start_urls": [
+    "https://www.texasbusinesslaw.org/resources/texas-business-law-journal"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Texasbusinesslaw",
+    "platform": "Plone",
+    "url": "https://www.texasbusinesslaw.org/resources/texas-business-law-journal",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/resources/texas-business-law-journal/volume-*-issue-*",
+      "archive_path": "seed page lists volumes and issues directly",
+      "notes": "Plone 6 site. Articles grouped by <div.content.grid-list-content>. Each contains title, date, PDF link directly. No separate article page. Use generic selectors to match year, season.\n"
+    }
+  }
+}

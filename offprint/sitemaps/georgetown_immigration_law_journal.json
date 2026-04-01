@@ -1,0 +1,25 @@
+{
+  "url": "https://www.law.georgetown.edu/immigration-law-journal/in-print/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Georgetown Immigration Law Journal",
+    "platform": "WordPress",
+    "original_url": "https://www.law.georgetown.edu/immigration-law-journal/",
+    "domain": "www.law.georgetown.edu",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_targeted_curl_investigation_20260310_flrf_ucla_wustl_gilj.json",
+    "status_reason": "in_print_article_and_pdfemb_viewer_paths_validated",
+    "status_updated_at": "2026-03-10T13:33:26Z",
+    "adapter_config": {
+      "issue_path_prefixes": [
+        "/immigration-law-journal/in-print/"
+      ],
+      "pdf_button_selectors": [
+        "a.pdfemb-viewer[href$='.pdf']"
+      ],
+      "author_selectors": [
+        ".published_author"
+      ]
+    }
+  }
+}

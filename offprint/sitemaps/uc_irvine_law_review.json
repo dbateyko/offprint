@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "domain": "escholarship.org",
+    "journal": "UC Irvine Law Review",
+    "original_url": "https://www.law.uci.edu/lawreview/",
+    "platform": "eScholarship",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z"
+  },
+  "sitemap_url": null,
+  "url": "https://escholarship.org/uc/ucilr"
+}

@@ -1,0 +1,44 @@
+{
+  "id": "kentuckylawjournal-org",
+  "start_urls": [
+    "https://www.kentuckylawjournal.org/online-originals"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Kentuckylawjournal",
+    "platform": "Squarespace",
+    "url": "https://www.kentuckylawjournal.org/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "archive_path": "(seed has 'Print Archive' link) → https://www.kentuckylawjournal.org/print-archive",
+      "notes": "Squarespace site, pagination via ?offset param, article pages contain PDF links"
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": ".entry-title",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

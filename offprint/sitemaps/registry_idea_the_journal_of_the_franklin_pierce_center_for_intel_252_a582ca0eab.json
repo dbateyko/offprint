@@ -1,0 +1,28 @@
+{
+  "id": "registry-252-a582ca0eab",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "law.unh.edu",
+    "journal_name": "IDEA: The Journal of the Franklin Pierce Center for Intellectual Property",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://law.unh.edu/academics/journals/idea",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "252",
+    "registry_names": "IDEA: The Journal of the Franklin Pierce Center for Intellectual Property",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DrupalAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/law.unh.edu/url_a582ca0eabc6",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:21:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.ipmall.info/content/idea-%C2%AE-law-review-franklin-pierce-center-intellectual-property-index"
+  ]
+}

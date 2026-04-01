@@ -1,0 +1,16 @@
+{
+  "id": "law-uc-edu",
+  "start_urls": [
+    "https://www.law.uc.edu/education/library/archives.html"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://law.uc.edu/student-life/experiences/journals/immigration-and-nationality-law-review.html",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

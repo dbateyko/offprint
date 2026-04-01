@@ -1,0 +1,79 @@
+{
+  "id": "uclstj",
+  "start_urls": [
+    "https://repository.uclawsf.edu/hastings_science_technology_law_journal/all_issues.html"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "uclstj",
+    "startUrl": [
+      "https://repository.uclawsf.edu/hastings_science_technology_law_journal/all_issues.html"
+    ],
+    "selectors": [
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorLink",
+        "selector": ".issue a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "articles",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.doc",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "issue_year",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorText",
+        "selector": "#alpha h1",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorText",
+        "selector": "p:nth-of-type(2) a",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorText",
+        "selector": "span",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "pdf_link",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorLink",
+        "selector": ".pdf a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      }
+    ]
+  }
+}

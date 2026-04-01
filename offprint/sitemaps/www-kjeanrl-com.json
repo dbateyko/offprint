@@ -1,0 +1,27 @@
+{
+  "id": "www-kjeanrl-com",
+  "start_urls": [
+    "https://www.kjeanrl.com/publication-archive-1"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "http://www.kjeanrl.com/",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/blog-archive-1",
+        "/publication-archive-1",
+        "/volume-1-2008-2009",
+        "/volume-10-2018"
+      ],
+      "issue_path_prefixes": [
+        "/full-blog",
+        "/full-blog/2025",
+        "/full-blog/2026"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "DePaul Journal for Social Justice",
+  "site_url": "https://via.library.depaul.edu/jsj",
+  "platform": "Digital Commons",
+  "rss_feed": "https://via.library.depaul.edu/jsj/recent.rss",
+  "all_issues_url": "https://via.library.depaul.edu/jsj/all_issues.html",
+  "adapter": "DigitalCommonsIssueArticleHopAdapter"
+}

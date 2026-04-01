@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.kentlaw.iit.edu/erepj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Employee Rights and Employment Policy Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.kentlaw.iit.edu/erepj/",
+    "domain": "scholarship.kentlaw.iit.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.kentlaw.iit.edu/erepj/sitemap.xml"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "registry-1986-5fcc075d17",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.law.washington.edu",
+    "journal_name": "Washington Journal of Social & Environmental Justice",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.law.washington.edu/wjsej/about.aspx",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1986",
+    "registry_names": "Washington Journal of Social & Environmental Justice",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.law.washington.edu/url_5fcc075d1749",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.law.washington.edu/wjsej/about.aspx"
+  ]
+}

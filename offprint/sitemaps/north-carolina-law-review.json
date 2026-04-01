@@ -1,0 +1,15 @@
+{
+  "id": "north-carolina-law-review",
+  "start_urls": [
+    "https://northcarolinalawreview.org/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "North Carolina Law Review",
+    "platform": "wordpress",
+    "url": "https://northcarolinalawreview.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

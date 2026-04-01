@@ -1,0 +1,13 @@
+{
+  "id": "repository-law-indiana-edu",
+  "start_urls": [
+    "https://www.repository.law.indiana.edu/ilj/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Indiana Law Journal",
+    "platform": "unknown",
+    "url": "https://www.repository.law.indiana.edu/ilj/",
+    "created_date": "2025-12-14"
+  }
+}

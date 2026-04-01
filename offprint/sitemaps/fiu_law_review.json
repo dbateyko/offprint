@@ -1,0 +1,14 @@
+{
+  "url": "https://ecollections.law.fiu.edu/lawreview/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "FIU Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://ecollections.law.fiu.edu/lawreview/",
+    "domain": "ecollections.law.fiu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://ecollections.law.fiu.edu/lawreview/sitemap.xml"
+  ]
+}

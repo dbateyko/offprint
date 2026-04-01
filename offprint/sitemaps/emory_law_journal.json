@@ -1,0 +1,14 @@
+{
+  "id": "emory-law-journal",
+  "start_urls": [
+    "https://scholarlycommons.law.emory.edu/elj/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Emory Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://scholarlycommons.law.emory.edu/elj/",
+    "created_date": "2026-03-02",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

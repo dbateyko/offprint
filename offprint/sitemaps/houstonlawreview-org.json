@@ -1,0 +1,13 @@
+{
+  "id": "houstonlawreview-org",
+  "start_urls": [
+    "https://houstonlawreview.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Houston Law Review",
+    "platform": "wordpress",
+    "url": "https://houstonlawreview.org/",
+    "created_date": "2025-12-14"
+  }
+}

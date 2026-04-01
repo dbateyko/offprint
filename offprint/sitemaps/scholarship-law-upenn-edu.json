@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-upenn-edu",
+  "start_urls": [
+    "https://scholarship.law.upenn.edu/"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Penn Carey Law (legacy host)",
+    "platform": "unknown",
+    "url": "https://scholarship.law.upenn.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Listing page not found; Penn journals currently on Quartex at repository.law.upenn.edu."
+  }
+}

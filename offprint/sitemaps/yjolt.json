@@ -1,0 +1,68 @@
+{
+  "id": "yjolt",
+  "start_urls": [
+    "https://yjolt.org/archive"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "yjolt",
+    "startUrl": [
+      "https://yjolt.org/archive"
+    ],
+    "selectors": [
+      {
+        "id": "article_elements",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": ".view-current-issue div.views-row",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "authors",
+        "parentSelectors": [
+          "article_elements"
+        ],
+        "type": "SelectorText",
+        "selector": "strong",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "cite",
+        "parentSelectors": [
+          "article_elements"
+        ],
+        "type": "SelectorText",
+        "selector": "em",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "title-link",
+        "parentSelectors": [
+          "article_elements"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "title-link"
+        ],
+        "type": "SelectorLink",
+        "selector": ".file a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      }
+    ]
+  }
+}

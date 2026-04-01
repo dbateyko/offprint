@@ -1,0 +1,14 @@
+{
+  "id": "journals-upress-ufl-edu",
+  "start_urls": [
+    "https://journals.upress.ufl.edu/ftr/index"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "journals.upress.ufl.edu",
+    "platform": "ojs",
+    "url": "https://journals.upress.ufl.edu/ftr/index",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

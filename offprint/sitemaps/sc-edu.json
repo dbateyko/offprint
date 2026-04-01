@@ -1,0 +1,24 @@
+{
+  "id": "sc-edu",
+  "start_urls": [
+    "https://sc.edu/study/colleges_schools/law/student_life/journals/jled/editions/_documents/2025_54_1/jled_full_54-1.pdf"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://sc.edu/study/colleges_schools/law/student_life/journals/jled/index.php",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/study",
+        "/study/colleges_schools"
+      ],
+      "issue_path_prefixes": [
+        "/study",
+        "/study/colleges_schools"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

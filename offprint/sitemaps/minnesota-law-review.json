@@ -1,0 +1,15 @@
+{
+  "id": "minnesota-law-review",
+  "start_urls": [
+    "https://minnesotalawreview.org/law-review-archive/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "Minnesota Law Review",
+    "platform": "wordpress",
+    "url": "https://minnesotalawreview.org/law-review-archive/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

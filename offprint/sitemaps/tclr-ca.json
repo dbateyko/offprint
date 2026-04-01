@@ -1,0 +1,13 @@
+{
+  "id": "tclr-ca",
+  "start_urls": [
+    "https://tclr.ca/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Transnational Criminal Law Review",
+    "platform": "wordpress",
+    "url": "https://tclr.ca/",
+    "created_date": "2026-03-01"
+  }
+}

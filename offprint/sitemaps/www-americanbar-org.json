@@ -1,0 +1,14 @@
+{
+  "id": "www-americanbar-org",
+  "start_urls": [
+    "https://www.americanbar.org/groups/labor_law/publications/aba_journal_of_labor_employment_law_home"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.americanbar.org",
+    "platform": "unknown",
+    "url": "https://www.americanbar.org/groups/labor_law/publications/aba_journal_of_labor_employment_law_home",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

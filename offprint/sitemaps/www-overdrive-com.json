@@ -1,0 +1,28 @@
+{
+  "id": "www-overdrive-com",
+  "start_urls": [
+    "https://www.overdrive.com/explore"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.overdrive.com/media/1303458/defense-law-journal",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/media",
+        "/media/12008195",
+        "/media/12008196",
+        "/media/12008197"
+      ],
+      "issue_path_prefixes": [
+        "/media",
+        "/series",
+        "/series/the-2024-ultimate-guide-to-roblox",
+        "/collections"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

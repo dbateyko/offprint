@@ -1,0 +1,16 @@
+{
+  "id": "duwaterlawreview-com",
+  "start_urls": [
+    "https://www.duwaterlawreview.com/archive"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "http://duwaterlawreview.com/",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

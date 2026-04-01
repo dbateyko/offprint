@@ -1,0 +1,14 @@
+{
+  "id": "dc-law-mc-edu",
+  "start_urls": [
+    "https://dc.law.mc.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Mississippi College Law (multiple journals)",
+    "platform": "digitalcommons",
+    "url": "https://dc.law.mc.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include lawreview and related publications. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

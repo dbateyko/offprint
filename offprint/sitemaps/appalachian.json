@@ -1,0 +1,14 @@
+{
+  "id": "appalachian",
+  "start_urls": [
+    "https://appalachian.scholasticahq.com/issues"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "appalachian",
+    "startUrl": [
+      "https://appalachian.scholasticahq.com/issues"
+    ],
+    "selectors": []
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "registry-1915-dd27b3e5ee",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "law.udmercy.edu",
+    "journal_name": "University of Detroit Mercy Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://law.udmercy.edu/students/law-review",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "1915",
+    "registry_names": "University of Detroit Mercy Law Review",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/law.udmercy.edu/url_dd27b3e5ee55",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:21:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://law.udmercy.edu/students/law-review"
+  ]
+}

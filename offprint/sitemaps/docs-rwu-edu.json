@@ -1,0 +1,39 @@
+{
+  "id": "docs-rwu-edu",
+  "start_urls": [
+    "https://docs.rwu.edu/cpc_justice/sitemap.xml",
+    "https://docs.rwu.edu/cpc_law/sitemap.xml",
+    "https://docs.rwu.edu/justice_studies_research/sitemap.xml",
+    "https://docs.rwu.edu/law_archives_commencement/sitemap.xml",
+    "https://docs.rwu.edu/law_archives_founding/sitemap.xml",
+    "https://docs.rwu.edu/law_archives_life/sitemap.xml",
+    "https://docs.rwu.edu/law_fac_fs/sitemap.xml",
+    "https://docs.rwu.edu/law_fac_prod/sitemap.xml",
+    "https://docs.rwu.edu/law_feinstein_auction/sitemap.xml",
+    "https://docs.rwu.edu/law_feinstein_pbcnews/sitemap.xml",
+    "https://docs.rwu.edu/law_feinstein_sp/sitemap.xml",
+    "https://docs.rwu.edu/law_lib_facnews/sitemap.xml",
+    "https://docs.rwu.edu/law_lib_guide/sitemap.xml",
+    "https://docs.rwu.edu/law_lib_newsblog/sitemap.xml",
+    "https://docs.rwu.edu/law_lib_ribj/sitemap.xml",
+    "https://docs.rwu.edu/law_lib_ridocs/sitemap.xml",
+    "https://docs.rwu.edu/law_lib_sp/sitemap.xml",
+    "https://docs.rwu.edu/law_ma_conf/sitemap.xml",
+    "https://docs.rwu.edu/law_ma_jmlc/sitemap.xml",
+    "https://docs.rwu.edu/law_ma_seagrant/sitemap.xml",
+    "https://docs.rwu.edu/law_ma_sp/sitemap.xml",
+    "https://docs.rwu.edu/law_pubs_RL/sitemap.xml",
+    "https://docs.rwu.edu/law_pubs_amicus/sitemap.xml",
+    "https://docs.rwu.edu/law_pubs_blogs/sitemap.xml",
+    "https://docs.rwu.edu/law_pubs_conf/sitemap.xml",
+    "https://docs.rwu.edu/publicpolicy_fp/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Roger Williams University (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://docs.rwu.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include law journals and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

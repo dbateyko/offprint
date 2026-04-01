@@ -1,0 +1,14 @@
+{
+  "id": "www-aublr-org",
+  "start_urls": [
+    "http://www.aublr.org/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.aublr.org",
+    "platform": "wordpress",
+    "url": "http://www.aublr.org/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

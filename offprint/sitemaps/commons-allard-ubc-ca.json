@@ -1,0 +1,14 @@
+{
+  "id": "commons-allard-ubc-ca",
+  "start_urls": [
+    "https://commons.allard.ubc.ca/ubclawreview/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Allard School of Law (UBC)",
+    "platform": "digitalcommons",
+    "url": "https://commons.allard.ubc.ca/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include ubclawreview and related collections. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

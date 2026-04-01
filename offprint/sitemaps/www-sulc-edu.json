@@ -1,0 +1,28 @@
+{
+  "id": "www-sulc-edu",
+  "start_urls": [
+    "https://www.sulc.edu/assets/sulc/Admissions/Admissions-2024.pdf"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.sulc.edu/page/southern-university-law-review",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/page",
+        "/assets",
+        "/assets/sulc",
+        "/page/the-jurisprudence-volume-1"
+      ],
+      "issue_path_prefixes": [
+        "/assets",
+        "/assets/sulc",
+        "/page",
+        "/page/fall-2025-commencement"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

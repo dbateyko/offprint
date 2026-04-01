@@ -1,0 +1,14 @@
+{
+  "url": "https://www.repository.law.indiana.edu/ilj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Indiana Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://www.repository.law.indiana.edu/ilj/",
+    "domain": "www.repository.law.indiana.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://www.repository.law.indiana.edu/ilj/sitemap.xml"
+  ]
+}

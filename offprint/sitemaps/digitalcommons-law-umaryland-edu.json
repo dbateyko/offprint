@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-umaryland-edu",
+  "start_urls": [
+    "https://digitalcommons.law.umaryland.edu/rrgc/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Maryland Journal of Race, Religion, Gender and Class",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.umaryland.edu/rrgc/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "id": "nslj-org",
+  "start_urls": ["https://www.nslj.org/issues/"],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "National Security Law Journal",
+    "platform": "wordpress",
+    "url": "https://www.nslj.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.nslj.org/issues/",
+      "volume_url_pattern": "none — each issue has an inconsistent slug; all linked from /issues/",
+      "archive_path": "/issues/ lists all volume/issue pages → each issue page lists articles with direct PDF links",
+      "pagination": "none",
+      "pagination_url_template": null,
+      "total_volumes_estimated": 12,
+      "pdf_location": "direct-on-issue-page",
+      "needs_headless": false,
+      "notes": "WordPress (Neve theme). Vol 1 (2013) through Vol 12 (2025). Issue slugs are inconsistent (e.g. /volume-12-iss-2/, /issues/vol5-iss2/, /2014/02/17/vol1-iss1/). PDFs at /wp-content/uploads/. Modern issues (Vol 11+) use <ul><li><strong>Author</strong>, <a href=PDF>Title</a>, Citation</li></ul>; older issues use <p><strong>Author</strong>, <em><a>Title</a></em></p>. Title text = PDF anchor text. Registry entry had domain nslj.org but live site is www.nslj.org."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.entry-content li, div.entry-content p",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href*=\"/wp-content/uploads/\"]",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "strong",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"], a[href*=\"/wp-content/uploads/\"]",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

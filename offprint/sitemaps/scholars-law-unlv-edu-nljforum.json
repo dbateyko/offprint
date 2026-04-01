@@ -1,0 +1,14 @@
+{
+  "id": "scholars-law-unlv-edu-nljforum",
+  "start_urls": [
+    "https://scholars.law.unlv.edu/nljforum/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Nevada Law Journal Forum",
+    "platform": "digitalcommons",
+    "url": "https://scholars.law.unlv.edu/nljforum/",
+    "created_date": "2026-03-01",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

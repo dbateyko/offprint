@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.richmond.edu/global/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Richmond Journal of Global Law and Business",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.richmond.edu/global/",
+    "domain": "scholarship.richmond.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.richmond.edu/global/sitemap.xml"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "domain": "michiganlawreview.org",
+    "journal": "Michigan Law Review",
+    "original_url": "https://michiganlawreview.org/",
+    "platform": "WordPress",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch1_20260310_summary.json",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-10T00:46:33Z"
+  },
+  "sitemap_url": null,
+  "url": "https://michiganlawreview.org/"
+}

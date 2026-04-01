@@ -1,0 +1,13 @@
+{
+  "id": "lawandmobility-org",
+  "start_urls": [
+    "https://lawandmobility.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Law and Mobility",
+    "platform": "wordpress",
+    "url": "https://lawandmobility.org/",
+    "created_date": "2026-03-01"
+  }
+}

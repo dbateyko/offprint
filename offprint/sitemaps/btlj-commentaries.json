@@ -1,0 +1,13 @@
+{
+  "id": "btlj-commentaries",
+  "start_urls": [
+    "https://btlj.org/commentaries/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "BTLJ Commentaries",
+    "platform": "wordpress",
+    "url": "https://btlj.org/commentaries/",
+    "created_date": "2026-03-01"
+  }
+}

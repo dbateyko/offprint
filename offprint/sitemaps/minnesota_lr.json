@@ -1,0 +1,27 @@
+{
+  "id": "minnesota_lr",
+  "metadata": {
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/law-review-archive",
+        "/vol-",
+        "/print-issues"
+      ],
+      "extraction_mode": "direct_pdf",
+      "issue_path_prefixes": [
+        "/law-review-archive",
+        "/vol-",
+        "/print-issues",
+        "/current-issue"
+      ]
+    },
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_vanderbilt_minnesota_20260310_summary.json",
+    "status_reason": "site_adapter_validated_smoke_pass_archive_seed",
+    "status_updated_at": "2026-03-10T01:18:44Z"
+  },
+  "source": "playbook_expansion",
+  "start_urls": [
+    "https://minnesotalawreview.org/law-review-archive/"
+  ]
+}

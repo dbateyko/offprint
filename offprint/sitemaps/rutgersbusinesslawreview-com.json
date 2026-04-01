@@ -1,0 +1,13 @@
+{
+  "id": "rutgersbusinesslawreview-com",
+  "start_urls": [
+    "https://www.rutgersbusinesslawreview.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Rutgers Business Law Review",
+    "platform": "wordpress",
+    "url": "https://www.rutgersbusinesslawreview.com/",
+    "created_date": "2026-03-01"
+  }
+}

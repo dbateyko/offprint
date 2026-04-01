@@ -1,0 +1,14 @@
+{
+  "url": "https://jle.aals.org/home/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Journal of Legal Education",
+    "platform": "digitalcommons",
+    "original_url": "https://jle.aals.org/",
+    "domain": "jle.aals.org",
+    "notes": "Added /home/all_issues.html suffix for standard Digital Commons discovery. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://jle.aals.org/home/sitemap.xml"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.shu.edu/shlj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Seton Hall Legislative Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.shu.edu/shlj/",
+    "domain": "scholarship.shu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.shu.edu/shlj/sitemap.xml"
+  ]
+}

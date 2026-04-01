@@ -1,0 +1,13 @@
+{
+  "id": "campbelllawobserver-com",
+  "start_urls": [
+    "https://campbelllawobserver.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Campbell Law Observer",
+    "platform": "wordpress",
+    "url": "https://campbelllawobserver.com/",
+    "created_date": "2026-03-01"
+  }
+}

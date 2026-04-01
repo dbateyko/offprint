@@ -1,0 +1,30 @@
+{
+  "id": "www-alanet-org",
+  "start_urls": [
+    "https://www.alanet.org/publications"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "http://www.alanet.org/publications/legalmgmt.aspx",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/legal-management",
+        "/legal-management/legal-management-archives"
+      ],
+      "issue_path_prefixes": [
+        "/events",
+        "/events/2023-events",
+        "/events/2024-events",
+        "/legal-management"
+      ],
+      "article_path_prefixes": [
+        "/publications",
+        "/publications/white-papers"
+      ],
+      "extraction_mode": "article_then_pdf"
+    }
+  }
+}

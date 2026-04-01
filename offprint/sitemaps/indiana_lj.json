@@ -1,0 +1,7 @@
+{
+  "id": "indiana_lj",
+  "start_urls": [
+    "https://www.repository.law.indiana.edu/ilj/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

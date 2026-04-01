@@ -1,0 +1,28 @@
+{
+  "id": "registry-1860-a35f1161ab",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.illinoislawreview.org",
+    "journal_name": "University of Illinois Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.illinoislawreview.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "1860",
+    "registry_names": "University of Illinois Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch3_20260310_summary.json",
+    "status_reason": "site_adapter_validated_shallow_pdf_check",
+    "status_updated_at": "2026-03-10T00:55:09Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://illinoislawreview.org/"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.marquette.edu/benefits/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Marquette Benefits & Social Welfare Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.marquette.edu/benefits/",
+    "domain": "scholarship.law.marquette.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.marquette.edu/benefits/sitemap.xml"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://ideaexchange.uakron.edu/akronlawreview/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Akron Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://ideaexchange.uakron.edu/akronlawreview/",
+    "domain": "ideaexchange.uakron.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://ideaexchange.uakron.edu/akronlawreview/sitemap.xml"
+  ]
+}

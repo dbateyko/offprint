@@ -1,0 +1,23 @@
+{
+  "id": "dsc-duq-edu",
+  "start_urls": [
+    "https://dsc.duq.edu/law-books/sitemap.xml",
+    "https://dsc.duq.edu/law-dcli-speakers/sitemap.xml",
+    "https://dsc.duq.edu/law-dcli-symposia/sitemap.xml",
+    "https://dsc.duq.edu/law-faculty-scholarship/sitemap.xml",
+    "https://dsc.duq.edu/law-misc-pamphlets/sitemap.xml",
+    "https://dsc.duq.edu/law-student-papers/sitemap.xml",
+    "https://dsc.duq.edu/law-student-ulwr/sitemap.xml",
+    "https://dsc.duq.edu/limpopo-law/sitemap.xml",
+    "https://dsc.duq.edu/limpopo-policy/sitemap.xml",
+    "https://dsc.duq.edu/wis-travelaward/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Duquesne University (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://dsc.duq.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include law journals (DLR, DCLJ) and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

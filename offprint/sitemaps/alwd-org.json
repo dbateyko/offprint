@@ -1,0 +1,75 @@
+{
+  "id": "alwd-org",
+  "start_urls": [
+    "https://www.alwd.org/lcr",
+    "https://www.alwd.org/lcr-archives/fall-2025-volume-22",
+    "https://www.alwd.org/lcr-archives/fall-2024-volume-21",
+    "https://www.alwd.org/lcr-archives/fall-2023-volume-20",
+    "https://www.alwd.org/lcr-archives/fall-2022-volume-19",
+    "https://www.alwd.org/lcr-archives/fall-2021-volume-18",
+    "https://www.alwd.org/lcr-archives/fall-2020-volume-17",
+    "https://www.alwd.org/lcr-archives/fall-2019-volume-16",
+    "https://www.alwd.org/lcr-archives/fall-2018-volume-15",
+    "https://www.alwd.org/lcr-archives/fall-2017-volume-14",
+    "https://www.alwd.org/lcr-archives/fall-2016-volume-13",
+    "https://www.alwd.org/lcr-archives/fall-2015-volume-12",
+    "https://www.alwd.org/lcr-archives/fall-2014-volume-11",
+    "https://www.alwd.org/lcr-archives/fall-2013-volume-10",
+    "https://www.alwd.org/lcr-archives/fall-2012-volume-9",
+    "https://www.alwd.org/lcr-archives/fall-2011-volume-8",
+    "https://www.alwd.org/lcr-archives/fall-2010-volume-7",
+    "https://www.alwd.org/lcr-archives/fall-2009-volume-6",
+    "https://www.alwd.org/lcr-archives/fall-2008-volume-5",
+    "https://www.alwd.org/lcr-archives/fall-2007-volume-4",
+    "https://www.alwd.org/lcr-archives/fall-2006-volume-3",
+    "https://www.alwd.org/lcr-archives/fall-2004-volume-2",
+    "https://www.alwd.org/lcr-archives/fall-2002-volume-1"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Legal Communication & Rhetoric: JALWD",
+    "platform": "Joomla/Gantry",
+    "url": "https://www.alwd.org/lcr",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.alwd.org/lcr-archives",
+      "pdf_location": "article-detail-page",
+      "notes": "Archive list is JS-rendered; used specific volume URLs derived from internal JSON data. Selectors targeted at static volume and article pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.mod-custom p:has(a)",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.at_url",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
+}

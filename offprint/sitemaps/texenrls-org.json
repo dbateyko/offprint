@@ -1,0 +1,45 @@
+{
+  "id": "texenrls-org",
+  "start_urls": [
+    "https://www.texenrls.org/texas-environmental-law-journal/",
+    "https://www.texenrls.org/environmental-law-journals/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Texas Environmental Law Journal",
+    "platform": "WordPress",
+    "url": "https://www.texenrls.org/texas-environmental-law-journal/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.texenrls.org/environmental-law-journals/",
+      "notes": "WordPress site. Uses AJAX for latest issues, but static archive exists."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".law_post_list, .article_title_container",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h5, .article_title",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

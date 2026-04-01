@@ -1,0 +1,13 @@
+{
+  "id": "cjel-law-columbia-edu",
+  "start_urls": [
+    "https://cjel.law.columbia.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Columbia Journal of European Law",
+    "platform": "unknown",
+    "url": "https://cjel.law.columbia.edu/",
+    "created_date": "2025-12-14"
+  }
+}

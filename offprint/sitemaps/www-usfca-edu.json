@@ -1,0 +1,14 @@
+{
+  "id": "www-usfca-edu",
+  "start_urls": [
+    "https://www.usfca.edu/law/professional-skills/student-run-academic-journals/iptlj"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.usfca.edu",
+    "platform": "drupal",
+    "url": "https://www.usfca.edu/law/professional-skills/student-run-academic-journals/iptlj",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

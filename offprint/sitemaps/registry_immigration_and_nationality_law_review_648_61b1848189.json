@@ -1,0 +1,28 @@
+{
+  "id": "registry-648-61b1848189",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "law.uc.edu",
+    "journal_name": "Immigration and Nationality Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://law.uc.edu/student-life/experiences/journals/immigration-and-nationality-law-review.html",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "648",
+    "registry_names": "Immigration and Nationality Law Review",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/law.uc.edu/url_61b18481896f",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://law.uc.edu/student-life/experiences/journals/immigration-and-nationality-law-review.html"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "virginia-law-review",
+  "metadata": {
+    "created_date": "2026-03-02",
+    "journal_name": "Virginia Law Review",
+    "platform": "wordpress",
+    "status": "active",
+    "status_evidence_ref": "smoke_one_pdf_20260327T044639Z.json",
+    "status_reason": "registry_fix_virginialawreview_org_now_mapped_to_WPAdapter",
+    "status_updated_at": "2026-03-27T04:46:39Z",
+    "url": "https://virginialawreview.org/",
+    "navigation": {
+      "archive_path": "/print/ lists all volumes (90-112) with article links; /online/ lists online-only articles",
+      "notes": "PDFs at /wp-content/uploads/YYYY/MM/. Article pages have direct <a href='.pdf'> links. Registry was missing virginialawreview.org mapping — root cause of 16-PDF undercollection. Fixed 2026-03-27."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://virginialawreview.org/print/",
+    "https://virginialawreview.org/online/"
+  ]
+}

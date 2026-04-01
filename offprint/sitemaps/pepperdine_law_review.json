@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.pepperdine.edu/plr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Pepperdine Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.pepperdine.edu/plr/",
+    "domain": "digitalcommons.pepperdine.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.pepperdine.edu/plr/sitemap.xml"
+  ]
+}

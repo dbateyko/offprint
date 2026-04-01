@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-stjohns-edu",
+  "start_urls": [
+    "https://scholarship.law.stjohns.edu/lawreview/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "St. John's Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.stjohns.edu/lawreview/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

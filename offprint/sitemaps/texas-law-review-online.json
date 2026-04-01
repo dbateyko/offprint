@@ -1,0 +1,15 @@
+{
+  "id": "texas-law-review-online",
+  "start_urls": [
+    "https://texaslawreview.org/online-edition"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "Texas Law Review Online Edition",
+    "platform": "wordpress",
+    "url": "https://texaslawreview.org/online-edition",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

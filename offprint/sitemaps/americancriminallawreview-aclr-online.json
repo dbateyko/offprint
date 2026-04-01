@@ -1,0 +1,13 @@
+{
+  "id": "americancriminallawreview-aclr-online",
+  "start_urls": [
+    "https://www.law.georgetown.edu/american-criminal-law-review/aclr-online/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "ACLR Online",
+    "platform": "wordpress",
+    "url": "https://www.law.georgetown.edu/american-criminal-law-review/aclr-online/",
+    "created_date": "2026-03-01"
+  }
+}

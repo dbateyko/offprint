@@ -1,0 +1,18 @@
+{
+  "id": "luc-edu",
+  "start_urls": [
+    "https://lawecommons.luc.edu/lclr/all_issues.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Loyola Consumer Law Review",
+    "platform": "digitalcommons",
+    "url": "https://lawecommons.luc.edu/lclr/all_issues.html",
+    "created_date": "2026-03-27",
+    "status": "active",
+    "navigation": {
+      "archive_path": "/lclr/all_issues.html",
+      "notes": "Canonical DC seed on lawecommons.luc.edu; 2026-03-27 smoke PASS with PDF, title, authors, volume, and year."
+    }
+  }
+}

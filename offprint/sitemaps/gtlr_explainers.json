@@ -1,0 +1,69 @@
+{
+  "id": "gtlr_explainers",
+  "start_urls": [
+    "https://georgetownlawtechreview.org/technology-explainers/page/[1-4]"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "gtlr_explainers",
+    "startUrl": [
+      "https://georgetownlawtechreview.org/technology-explainers/page/[1-4]"
+    ],
+    "selectors": [
+      {
+        "id": "article",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorLink",
+        "selector": ".post-teaser--title a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "h2.post--title",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "div.post--author",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "cite",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "div.post--citation",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "a.download-link",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "waynelawreview-org",
+  "start_urls": [
+    "https://waynelawreview.org/archive/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Wayne Law Review",
+    "platform": "wordpress",
+    "url": "https://waynelawreview.org/archive/",
+    "created_date": "2026-03-27",
+    "status": "active",
+    "navigation": {
+      "notes": "Seed moved from homepage to archive page for stronger issue/article discovery."
+    }
+  }
+}

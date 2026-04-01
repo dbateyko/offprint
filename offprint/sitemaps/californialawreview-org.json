@@ -1,0 +1,15 @@
+{
+  "id": "californialawreview-org",
+  "start_urls": [
+    "https://www.californialawreview.org/print"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "California Law Review",
+    "platform": "Squarespace",
+    "url": "https://www.californialawreview.org/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "notes": "Squarespace site. Archive at /print with category filters for volumes."
+  }
+}

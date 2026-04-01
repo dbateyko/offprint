@@ -1,0 +1,13 @@
+{
+  "id": "cumberlandtrialjournal-com",
+  "start_urls": [
+    "https://cumberlandtrialjournal.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "American Journal of Trial Advocacy",
+    "platform": "wordpress",
+    "url": "https://cumberlandtrialjournal.com/",
+    "created_date": "2025-12-14"
+  }
+}

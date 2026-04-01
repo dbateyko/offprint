@@ -1,0 +1,45 @@
+{
+  "id": "jlep-net",
+  "start_urls": [
+    "http://jlep.net/past-editions"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Jlep",
+    "platform": "Squarespace",
+    "url": "http://jlep.net/home",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/past-editions",
+      "archive_path": "Archive link leads to /past-editions page",
+      "notes": "Site uses Squarespace; no pagination; no authors or dates inline; PDF links present"
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "li.accordion-item",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

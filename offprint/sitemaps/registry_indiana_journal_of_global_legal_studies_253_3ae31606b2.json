@@ -1,0 +1,28 @@
+{
+  "id": "registry-253-3ae31606b2",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "ijgls.indiana.edu",
+    "journal_name": "Indiana Journal of Global Legal Studies",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://ijgls.indiana.edu/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "253",
+    "registry_names": "Indiana Journal of Global Legal Studies",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_paywall",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/ijgls.indiana.edu/url_3ae31606b2eb",
+    "status_reason": "probe_paywall_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://ijgls.indiana.edu/"
+  ]
+}

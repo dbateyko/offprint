@@ -1,0 +1,28 @@
+{
+  "id": "registry-380-f08e64ec0a",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "scholarship.law.stjohns.edu",
+    "journal_name": "Journal of Catholic Legal Studies",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://scholarship.law.stjohns.edu/jcls",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "380",
+    "registry_names": "Journal of Catholic Legal Studies",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://scholarship.law.stjohns.edu/jcls/"
+  ]
+}

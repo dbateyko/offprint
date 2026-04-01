@@ -1,0 +1,16 @@
+{
+  "id": "law-lclark-edu",
+  "start_urls": [
+    "https://lawcommons.lclark.edu/alr/all_issues.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Animal Law",
+    "platform": "digital_commons",
+    "url": "https://lawcommons.lclark.edu/alr/all_issues.html",
+    "original_url": "https://law.lclark.edu/law_reviews/animal_law_review/issues/",
+    "created_date": "2025-12-14",
+    "updated_at": "2026-02-23",
+    "notes": "Canonical archive appears on lawcommons.lclark.edu (Digital Commons)."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "registry-584-87bf554fe2",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "mjrl.org",
+    "journal_name": "Michigan Journal of Race & Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://mjrl.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "584",
+    "registry_names": "Michigan Journal of Race & Law",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/smoke/onboarding_known_platform_20260315/runs/smoke_one_pdf_20260315T140442Z.json",
+    "status_reason": "adapter_validated_smoke",
+    "status_updated_at": "2026-03-15T14:30:23Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://mjrl.org/"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "disabilitylawjournal-org",
+  "start_urls": [
+    "https://disabilitylawjournal.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Disability Law Journal at UCLA",
+    "platform": "wordpress",
+    "url": "https://disabilitylawjournal.org/",
+    "created_date": "2026-03-01"
+  }
+}

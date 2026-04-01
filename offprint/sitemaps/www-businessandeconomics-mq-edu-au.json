@@ -1,0 +1,14 @@
+{
+  "id": "www-businessandeconomics-mq-edu-au",
+  "start_urls": [
+    "http://www.businessandeconomics.mq.edu.au/our_departments/accounting_and_corporate_governance/accounting_finance_research/current_publications/MqJBL"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.businessandeconomics.mq.edu.au",
+    "platform": "unknown",
+    "url": "http://www.businessandeconomics.mq.edu.au/our_departments/accounting_and_corporate_governance/accounting_finance_research/current_publications/MqJBL",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

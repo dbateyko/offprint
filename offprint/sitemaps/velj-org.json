@@ -1,0 +1,44 @@
+{
+  "id": "velj-org",
+  "start_urls": [
+    "http://www.velj.org/current-and-past-volumes.html"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Velj",
+    "platform": "Wix",
+    "url": "http://www.velj.org/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "archive_path": "seed has volume nav in header -> /current-and-past-volumes.html pages list articles",
+      "notes": "article listings are in div.paragraph with <a> title, <em> author, <span> date. Volume/issue info not embedded."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.paragraph",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a:first-child",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

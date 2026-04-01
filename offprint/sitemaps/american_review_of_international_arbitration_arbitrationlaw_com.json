@@ -1,0 +1,16 @@
+{
+  "id": "american-review-of-international-arbitration",
+  "start_urls": [
+    "https://arbitrationlaw.com/books/american-review-international-arbitration-aria"
+  ],
+  "source": "auto",
+  "metadata": {
+    "journal_name": "American Review of International Arbitration",
+    "original_url": "https://arbitrationlaw.com/books/american-review-international-arbitration-aria",
+    "domain": "arbitrationlaw.com",
+    "platform": "unknown",
+    "canonicalized_at": "2026-02-03",
+    "evidence_dir": "webscraper_results_journal_metadata/arbitrationlaw.com/seed_canonicalization/20260203-201339",
+    "notes": ""
+  }
+}

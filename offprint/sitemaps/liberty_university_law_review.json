@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.liberty.edu/lu_law_review/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Liberty University Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.liberty.edu/lu_law_review/",
+    "domain": "digitalcommons.liberty.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.liberty.edu/lu_law_review/sitemap.xml"
+  ]
+}

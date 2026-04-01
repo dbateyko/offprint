@@ -1,0 +1,13 @@
+{
+  "id": "feslr-com",
+  "start_urls": [
+    "https://feslr.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Florida Entertainment and Sports Law Review",
+    "platform": "wordpress",
+    "url": "https://feslr.com/",
+    "created_date": "2026-03-01"
+  }
+}

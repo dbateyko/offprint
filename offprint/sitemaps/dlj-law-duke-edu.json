@@ -1,0 +1,15 @@
+{
+  "id": "dlj-law-duke-edu",
+  "start_urls": [
+    "https://dlj.law.duke.edu/archive/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Duke Law Journal",
+    "platform": "WordPress",
+    "url": "https://dlj.law.duke.edu/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "notes": "WordPress site (previously misidentified as Digital Commons). Uses WordPressAcademicBaseAdapter."
+  }
+}

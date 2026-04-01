@@ -1,0 +1,15 @@
+{
+  "id": "repository-usfca-edu",
+  "start_urls": [
+    "https://repository.usfca.edu/ontarioreview/sitemap.xml",
+    "https://repository.usfca.edu/usflawreview/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of San Francisco (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://repository.usfca.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include USF Law Review and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

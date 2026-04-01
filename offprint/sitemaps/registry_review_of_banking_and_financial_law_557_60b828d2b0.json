@@ -1,0 +1,28 @@
+{
+  "id": "registry-557-60b828d2b0",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.bu.edu",
+    "journal_name": "Review of Banking and Financial Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.bu.edu/rbfl",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "557",
+    "registry_names": "Review of Banking and Financial Law",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_targeted_curl_investigation_20260310_bu_bc_batch3.json",
+    "status_reason": "issues_pages_expose_in_host_pdf_links_under_rbfl_files",
+    "status_updated_at": "2026-03-10T14:15:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.bu.edu/rbfl/issues/"
+  ]
+}

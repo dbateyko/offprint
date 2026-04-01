@@ -1,0 +1,13 @@
+{
+  "id": "michigan_lr",
+  "metadata": {
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch1_20260310_summary.json",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-10T00:46:33Z"
+  },
+  "source": "playbook_expansion",
+  "start_urls": [
+    "https://michiganlawreview.org/"
+  ]
+}

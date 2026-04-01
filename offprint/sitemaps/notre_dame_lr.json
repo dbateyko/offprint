@@ -1,0 +1,13 @@
+{
+  "id": "notre_dame_lr",
+  "metadata": {
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch6_20260310_summary.json",
+    "status_reason": "site_adapter_validated_shallow_pdf_check",
+    "status_updated_at": "2026-03-10T00:58:31Z"
+  },
+  "source": "playbook_expansion",
+  "start_urls": [
+    "https://ndlawreview.org/"
+  ]
+}

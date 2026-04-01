@@ -1,0 +1,18 @@
+{
+  "id": "law-ucla-edu",
+  "metadata": {
+    "created_date": "2025-12-14",
+    "journal_name": "Asian Pacific American Law Journal",
+    "notes": "Manual override: UCLA links to eScholarship archive.",
+    "platform": "unknown",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z",
+    "url": "https://law.ucla.edu/academics/journals/asian-pacific-american-law-journal"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://escholarship.org/uc/uclalaw_apalj"
+  ]
+}

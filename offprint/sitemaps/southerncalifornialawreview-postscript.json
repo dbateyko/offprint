@@ -1,0 +1,17 @@
+{
+  "id": "southerncalifornialawreview-postscript",
+  "metadata": {
+    "created_date": "2026-03-01",
+    "journal_name": "Southern California Law Review Postscript",
+    "platform": "wordpress",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch3_20260310_summary.json",
+    "status_reason": "site_adapter_validated_shallow_pdf_check",
+    "status_updated_at": "2026-03-10T00:55:09Z",
+    "url": "https://southerncalifornialawreview.com/postscript/"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://southerncalifornialawreview.com/postscript/"
+  ]
+}

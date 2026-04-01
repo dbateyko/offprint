@@ -1,0 +1,15 @@
+{
+  "id": "nyulawreview-org",
+  "start_urls": [
+    "https://nyulawreview.org/issues/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "NYU Law Review",
+    "platform": "wordpress",
+    "url": "https://www.nyulawreview.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "WordPress site with /issues/ page for articles. Uses WordPressAcademicBaseAdapter."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.slu.edu/jhlp/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Saint Louis University Journal of Health Law & Policy",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.slu.edu/jhlp/",
+    "domain": "scholarship.law.slu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.slu.edu/jhlp/sitemap.xml"
+  ]
+}

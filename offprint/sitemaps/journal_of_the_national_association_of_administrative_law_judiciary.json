@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.pepperdine.edu/naalj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Journal of the National Association of Administrative Law Judiciary",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.pepperdine.edu/naalj/",
+    "domain": "digitalcommons.pepperdine.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.pepperdine.edu/naalj/sitemap.xml"
+  ]
+}

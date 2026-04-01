@@ -1,0 +1,26 @@
+{
+  "id": "www-naela-org",
+  "start_urls": [
+    "https://www.naela.org/NewsJournalOnline/NewsJournalOnline/Journal_Articles/NAELA_Journal_Archives.aspx"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.naela.org/NewsJournalOnline/Journal_Online/NewsJournalOnline/Journal_Online_Main_New.aspx?hkey=c7335376-3500-419b-9244-2756ffe49204",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/NewsJournalOnline",
+        "/NewsJournalOnline/NewsJournalOnline"
+      ],
+      "issue_path_prefixes": [
+        "/NewsJournalOnline",
+        "/NewsJournalOnline/Journal_Articles",
+        "/Shared_Content",
+        "/Shared_Content/ContactManagement"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

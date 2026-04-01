@@ -1,0 +1,19 @@
+{
+  "id": "alr-law-duke-edu",
+  "start_urls": [
+    "https://scholarship.law.duke.edu/alr/all_issues.html"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Alaska Law Review",
+    "platform": "digitalcommons",
+    "url": "https://alr.law.duke.edu/",
+    "created_date": "2026-03-31",
+    "status": "todo_adapter",
+    "status_reason": "Digital Commons site - handled by DigitalCommonsBaseAdapter",
+    "navigation": {
+      "archive_root": "https://scholarship.law.duke.edu/alr/all_issues.html",
+      "notes": "Hybrid site. WordPress homepage at alr.law.duke.edu but archive hosted on Digital Commons (scholarship.law.duke.edu). DC adapter will handle discovery via OAI-PMH or sitemap enumeration."
+    }
+  }
+}

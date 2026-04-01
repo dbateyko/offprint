@@ -1,0 +1,28 @@
+{
+  "id": "registry-624-4631589dda",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "scholarship.law.ufl.edu",
+    "journal_name": "Journal of Technology Law & Policy",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://scholarship.law.ufl.edu/jtlp",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": true,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "624",
+    "registry_names": "Journal of Technology Law & Policy",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "smoke_validated",
+    "registry_suggested_adapter": "DigitalCommonsIssueArticleHopAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/reports/smoke_techlaw_batch_20260313/smoke_one_pdf_20260314T024955Z.json",
+    "status_reason": "adapter_validated_smoke_pass_digital_commons",
+    "status_updated_at": "2026-03-14T02:49:55Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://scholarship.law.ufl.edu/jtlp/all_issues.html"
+  ]
+}

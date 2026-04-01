@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "domain": "www.aipla.org",
+    "journal": "AIPLA Quarterly Journal",
+    "notes": "Manual override: journal issues page (access may be restricted).",
+    "original_url": "https://www.aipla.org/home/news-publications/journal-issues",
+    "platform": "Custom/Unknown",
+    "status": "active",
+    "status_evidence_ref": "artifacts/site_fingerprints/www.aipla.org",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-04T04:36:02Z"
+  },
+  "sitemap_url": null,
+  "url": "https://www.aipla.org/home/news-publications/journal-issues"
+}

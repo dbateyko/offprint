@@ -1,0 +1,13 @@
+{
+  "id": "mjlr-org",
+  "start_urls": [
+    "https://mjlr.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Michigan Journal of Law Reform",
+    "platform": "wordpress",
+    "url": "https://mjlr.org/",
+    "created_date": "2025-12-14"
+  }
+}

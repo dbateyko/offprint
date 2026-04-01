@@ -1,0 +1,14 @@
+{
+  "id": "jcl-law-uiowa-edu",
+  "start_urls": [
+    "https://jcl.law.uiowa.edu/issue-archive"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Corporation Law",
+    "platform": "unknown",
+    "url": "https://jcl.law.uiowa.edu/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: article archive page."
+  }
+}

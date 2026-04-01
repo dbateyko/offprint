@@ -1,0 +1,47 @@
+{
+  "id": "vjolt-org",
+  "metadata": {
+    "created_date": "2026-03-22",
+    "journal_name": "Vjolt",
+    "navigation": {
+      "archive_path": "seed \u2192 click 'Archives' link \u2192 /archives lists all volumes \u2192 click a volume, e.g., /volume-29, which lists individual articles",
+      "notes": "The journal is hosted on Squarespace. The main page lists the current issue\u2019s articles with PDF links directly available. Volume URLs follow the pattern /volume-{number} and contain the article listings. No separate article HTML pages exist; PDFs are linked straight from the listing, so author and date metadata are not present in the page content. Pagination is not used on the archive or volume pages.",
+      "volume_url_pattern": "/volume-{N}"
+    },
+    "platform": "Squarespace",
+    "status": "ready_for_promotion",
+    "status_evidence_ref": "scripts/promote_sitemaps.py:20260323T014543Z",
+    "status_updated_at": "2026-03-23T01:46:08.834016+00:00",
+    "url": "http://www.vjolt.org/"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "div.sqs-block-content",
+      "type": "SelectorElement"
+    },
+    {
+      "id": "title",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a:first-child",
+      "type": "SelectorText"
+    },
+    {
+      "id": "pdf_link",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href$=\".pdf\"]",
+      "type": "SelectorLink"
+    }
+  ],
+  "source": "llm_explore",
+  "start_urls": [
+    "http://www.vjolt.org/"
+  ]
+}

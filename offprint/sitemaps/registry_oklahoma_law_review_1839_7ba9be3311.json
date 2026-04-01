@@ -1,0 +1,28 @@
+{
+  "id": "registry-1839-7ba9be3311",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "law.ou.edu",
+    "journal_name": "Oklahoma Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://law.ou.edu/faculty-and-scholarship/journals/oklahoma-law-review",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1839",
+    "registry_names": "Oklahoma Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DrupalAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_404",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/law.ou.edu/url_7ba9be3311b9",
+    "status_reason": "probe_http_404",
+    "status_updated_at": "2026-03-14T04:21:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://law.ou.edu/faculty-and-scholarship/journals/oklahoma-law-review"
+  ]
+}

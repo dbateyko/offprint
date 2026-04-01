@@ -1,0 +1,14 @@
+{
+  "url": "https://ecommons.udayton.edu/udlr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "University of Dayton Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://ecommons.udayton.edu/udlr/",
+    "domain": "ecommons.udayton.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://ecommons.udayton.edu/udlr/sitemap.xml"
+  ]
+}

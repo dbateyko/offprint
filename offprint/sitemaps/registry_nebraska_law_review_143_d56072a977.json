@@ -1,0 +1,28 @@
+{
+  "id": "registry-143-d56072a977",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "lawreview.unl.edu",
+    "journal_name": "Nebraska Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://lawreview.unl.edu/",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "143",
+    "registry_names": "Nebraska Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "in_progress",
+    "registry_suggested_adapter": "NebraskaLawReviewAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "docs/registry/input/url_capture_summary.csv",
+    "status_reason": "seed_repoint_to_nebraska_host_archive",
+    "status_updated_at": "2026-03-16T20:30:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://lawreview.unl.edu/print/current-issue-archive"
+  ]
+}

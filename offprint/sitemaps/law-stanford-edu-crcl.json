@@ -1,0 +1,14 @@
+{
+  "id": "law-stanford-edu-crcl",
+  "start_urls": [
+    "https://law.stanford.edu/stanford-journal-of-civil-rights-civil-liberties-sjcrcl/sjcrcl-archive/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Stanford Journal of Civil Rights and Civil Liberties",
+    "platform": "wordpress",
+    "url": "https://law.stanford.edu/stanford-journal-of-civil-rights-civil-liberties-sjcrcl/",
+    "created_date": "2026-03-01",
+    "notes": "Uses StanfordSTLRAdapter with WP fallback for non-STLR paths."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-tourolaw-edu",
+  "start_urls": [
+    "https://digitalcommons.tourolaw.edu/lawreview/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Touro Law Review",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.tourolaw.edu/lawreview/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://ir.lawnet.fordham.edu/iplj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Fordham Intellectual Property, Media & Entertainment Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://ir.lawnet.fordham.edu/iplj/",
+    "domain": "ir.lawnet.fordham.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://ir.lawnet.fordham.edu/iplj/sitemap.xml"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "accessiblelaw-untdallas-edu",
+  "start_urls": [
+    "https://accessiblelaw.untdallas.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "status": "paused_other",
+    "status_reason": "discovery_timeout_hang_2026-03-05",
+    "journal_name": "Accessible Law",
+    "platform": "wordpress",
+    "url": "https://accessiblelaw.untdallas.edu/",
+    "created_date": "2026-03-01"
+  }
+}

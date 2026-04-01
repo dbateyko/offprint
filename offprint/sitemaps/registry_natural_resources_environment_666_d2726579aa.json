@@ -1,0 +1,28 @@
+{
+  "id": "registry-666-d2726579aa",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.jstor.org",
+    "journal_name": "Natural Resources & Environment",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.jstor.org/journal/natresenv",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "666",
+    "registry_names": "Natural Resources & Environment",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.jstor.org/url_d2726579aa35",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T14:02:19Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.jstor.org/journal/natresenv"
+  ]
+}

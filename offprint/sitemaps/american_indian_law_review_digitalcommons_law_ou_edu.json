@@ -1,0 +1,16 @@
+{
+  "id": "american-indian-law-review",
+  "start_urls": [
+    "https://digitalcommons.law.ou.edu/ailr/all_issues.html"
+  ],
+  "source": "auto",
+  "metadata": {
+    "journal_name": "American Indian Law Review",
+    "original_url": "https://digitalcommons.law.ou.edu/ailr/",
+    "domain": "digitalcommons.law.ou.edu",
+    "platform": "digital_commons",
+    "canonicalized_at": "2026-02-03",
+    "evidence_dir": "webscraper_results_journal_metadata/digitalcommons.law.ou.edu/seed_canonicalization/20260203-201335",
+    "notes": ""
+  }
+}

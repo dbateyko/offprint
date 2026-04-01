@@ -1,0 +1,28 @@
+{
+  "id": "registry-376-fe5c38b286",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "louisville.campuslabs.com",
+    "journal_name": "University of Louisville Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://louisville.campuslabs.com/engage/organization/law-review-at-the-university-of-louisville",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "376",
+    "registry_names": "University of Louisville Law Review",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_404",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/louisville.campuslabs.com/url_fe5c38b286fe",
+    "status_reason": "probe_http_404",
+    "status_updated_at": "2026-03-14T04:21:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://louisville.campuslabs.com/engage/organization/law-review-at-the-university-of-louisville"
+  ]
+}

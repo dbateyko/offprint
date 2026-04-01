@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarlycommons.law.hofstra.edu/jibl/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Journal of International Business and Law",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarlycommons.law.hofstra.edu/jibl/",
+    "domain": "scholarlycommons.law.hofstra.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarlycommons.law.hofstra.edu/jibl/sitemap.xml"
+  ]
+}

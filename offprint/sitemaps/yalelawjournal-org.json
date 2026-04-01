@@ -1,0 +1,17 @@
+{
+  "id": "yalelawjournal-org",
+  "start_urls": [
+    "https://www.yalelawjournal.org/issue"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Yale Law Journal",
+    "platform": "custom",
+    "url": "https://www.yalelawjournal.org/",
+    "created_date": "2026-03-31",
+    "status": "todo_adapter",
+    "status_reason": "Custom platform with 1100+ articles on single /issue page. Requires custom adapter implementation.",
+    "status_updated_at": "2026-03-31T21:26:29Z",
+    "notes": "SPA-like structure but links are in HTML. Not WordPress/OJS/Scholastica. Needs custom YaleLawJournalAdapter."
+  }
+}

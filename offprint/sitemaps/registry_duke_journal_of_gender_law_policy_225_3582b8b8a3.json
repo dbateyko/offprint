@@ -1,0 +1,28 @@
+{
+  "id": "registry-225-3582b8b8a3",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "djglp.law.duke.edu",
+    "journal_name": "Duke Journal of Gender Law & Policy",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://djglp.law.duke.edu/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "80",
+    "registry_mainids": "225",
+    "registry_names": "Duke Journal of Gender Law & Policy",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_paywall",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/djglp.law.duke.edu/url_3582b8b8a387",
+    "status_reason": "probe_paywall_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://djglp.law.duke.edu/"
+  ]
+}

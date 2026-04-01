@@ -1,0 +1,45 @@
+{
+  "id": "nsglc-olemiss-edu",
+  "start_urls": [
+    "http://nsglc.olemiss.edu/sglpj/archive/vol14.1/index.html"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Nsglc.Olemiss",
+    "platform": "custom",
+    "url": "http://nsglc.olemiss.edu/sglpj",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/archive/vol{N}.{M}/index.html",
+      "archive_path": "seed has volume navigation in header with links to /archive/vol{N}.{M}/index.html",
+      "notes": "The site uses non‑standard markup: each volume page lists all articles in <div class='features_text'> with a <div.sandbar_credits> containing authors and an <a> to a redirect PDF. No article sub‑pages. No pagination. Volume navigation is present in the header/footer."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".features_text",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a:first-child",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

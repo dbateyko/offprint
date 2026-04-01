@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-richmond-edu",
+  "start_urls": [
+    "https://scholarship.richmond.edu/pilr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Richmond Public Interest Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.richmond.edu/pilr/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

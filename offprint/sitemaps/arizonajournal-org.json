@@ -1,0 +1,53 @@
+{
+  "id": "arizonajournal-org",
+  "metadata": {
+    "created_date": "2026-03-22",
+    "journal_name": "Arizonajournal",
+    "navigation": {
+      "archive_path": "seed \u2192 Archive link in nav (http://arizonajournal.org/archive/) \u2192 Repository link \u2192 /handle/10150/679294 lists all articles in vol 42 no 2",
+      "notes": "The site runs WordPress for the site front\u2011page, but all article metadata and PDFs are served by a DSpace repository under repository.arizona.edu. Each volume/issue is a handle URL; the volume page lists all article entries. Each article page includes meta tags for title, author, date, volume/issue, and a direct PDF URL. No pagination on volume pages \u2013 all items displayed. No separate online\u2011only section; the repository is the authoritative archive.",
+      "volume_url_pattern": "https://repository.arizona.edu/handle/10150/{volume_id}"
+    },
+    "platform": "DSpace",
+    "status": "ready_for_promotion",
+    "url": "http://arizonajournal.org/"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "li.ds-artifact-item",
+      "type": "SelectorElement"
+    },
+    {
+      "id": "title",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": ".list-title-clamper",
+      "type": "SelectorText"
+    },
+    {
+      "id": "article_url",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": ".description-content a",
+      "type": "SelectorLink"
+    },
+    {
+      "id": "pdf_link",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "a[href$=\"pdf\"], a[href*=\"/bitstream/\"], a.download-button",
+      "type": "SelectorLink"
+    }
+  ],
+  "source": "llm_explore",
+  "start_urls": [
+    "https://repository.arizona.edu/handle/10150/679294"
+  ]
+}

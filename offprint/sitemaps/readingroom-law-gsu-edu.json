@@ -1,0 +1,13 @@
+{
+  "id": "readingroom-law-gsu-edu",
+  "start_urls": [
+    "https://readingroom.law.gsu.edu/gsulr/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Georgia State University Law Review",
+    "platform": "unknown",
+    "url": "https://readingroom.law.gsu.edu/gsulr/",
+    "created_date": "2025-12-14"
+  }
+}

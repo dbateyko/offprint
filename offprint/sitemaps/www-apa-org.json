@@ -1,0 +1,14 @@
+{
+  "id": "www-apa-org",
+  "start_urls": [
+    "https://www.apa.org/pubs/journals/lhb"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.apa.org",
+    "platform": "unknown",
+    "url": "https://www.apa.org/pubs/journals/lhb",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

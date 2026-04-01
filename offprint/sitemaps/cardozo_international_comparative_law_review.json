@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "canonicalized_at": "2026-02-03",
+    "domain": "www.cardozociclr.com",
+    "journal": "Cardozo International & Comparative Law Review",
+    "notes": "Manual override: archives page (content may be restricted).",
+    "original_url": "https://cardozociclr.com/",
+    "platform": "Custom/Unknown",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z"
+  },
+  "sitemap_url": null,
+  "url": "https://www.cardozociclr.com/archives"
+}

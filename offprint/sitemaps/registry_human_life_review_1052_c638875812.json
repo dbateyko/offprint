@@ -1,0 +1,28 @@
+{
+  "id": "registry-1052-c638875812",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "humanlifereview.com",
+    "journal_name": "Human Life Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://humanlifereview.com/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "1052",
+    "registry_names": "Human Life Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/humanlifereview.com/url_c63887581242",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://humanlifereview.com/"
+  ]
+}

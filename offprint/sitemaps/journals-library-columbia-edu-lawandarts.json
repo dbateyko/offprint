@@ -1,0 +1,13 @@
+{
+  "id": "journals-library-columbia-edu-lawandarts",
+  "start_urls": [
+    "https://journals.library.columbia.edu/index.php/lawandarts/issue/archive"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "JLA Beat",
+    "platform": "ojs",
+    "url": "https://journals.library.columbia.edu/index.php/lawandarts",
+    "created_date": "2026-03-01"
+  }
+}

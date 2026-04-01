@@ -1,0 +1,14 @@
+{
+  "id": "law-ku-edu",
+  "start_urls": [
+    "https://kansaslawreview.ku.edu/past-issues"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Kansas Law Review",
+    "platform": "unknown",
+    "url": "https://law.ku.edu/law-review/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: past issues page on kansaslawreview.ku.edu."
+  }
+}

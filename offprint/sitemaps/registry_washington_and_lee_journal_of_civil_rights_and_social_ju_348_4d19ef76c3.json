@@ -1,0 +1,28 @@
+{
+  "id": "registry-348-4d19ef76c3",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "jcrsj.wlulaw.wlu.edu",
+    "journal_name": "Washington and Lee Journal of Civil Rights and Social Justice",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://jcrsj.wlulaw.wlu.edu/",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "348",
+    "registry_names": "Washington and Lee Journal of Civil Rights and Social Justice",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_needs_adapter",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://scholarlycommons.law.wlu.edu/crsj/"
+  ]
+}

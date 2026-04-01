@@ -1,0 +1,13 @@
+{
+  "id": "jolt-richmond-edu",
+  "start_urls": [
+    "https://jolt.richmond.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Richmond Journal of Law and Technology",
+    "platform": "unknown",
+    "url": "https://jolt.richmond.edu/",
+    "created_date": "2025-12-14"
+  }
+}

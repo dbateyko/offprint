@@ -1,0 +1,13 @@
+{
+  "id": "weblaw-usc-edu",
+  "start_urls": [
+    "https://www.gould.usc.edu/students/journals/ilj/issues/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Southern California Interdisciplinary Law Journal",
+    "platform": "unknown",
+    "url": "https://www.gould.usc.edu/students/journals/ilj/issues/",
+    "created_date": "2025-12-14"
+  }
+}

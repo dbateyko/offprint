@@ -1,0 +1,13 @@
+{
+  "id": "theelderlawjournal-com",
+  "start_urls": [
+    "https://theelderlawjournal.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Elder Law Journal",
+    "platform": "wordpress",
+    "url": "https://theelderlawjournal.com/",
+    "created_date": "2025-12-14"
+  }
+}

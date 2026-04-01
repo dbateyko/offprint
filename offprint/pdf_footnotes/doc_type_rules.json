@@ -1,0 +1,78 @@
+{
+  "version": "1",
+  "overrides": {
+    "platform": {
+      "digital_commons": [
+        {
+          "field": "filename",
+          "pattern": "(^|[^a-z])(toc|table[-_ ]?of[-_ ]?contents|editorialboard|masthead|inside[-_ ]?cover|dedication|yearbook)([^a-z]|$)",
+          "doc_type": "frontmatter",
+          "reason": "dc_frontmatter_filename"
+        },
+        {
+          "field": "text",
+          "pattern": "\\btable of contents\\b",
+          "doc_type": "issue_compilation",
+          "reason": "dc_toc_text"
+        },
+        {
+          "field": "text",
+          "pattern": "\\byearbook\\b",
+          "doc_type": "other",
+          "reason": "dc_yearbook_text"
+        }
+      ],
+      "wordpress": [
+        {
+          "field": "filename",
+          "pattern": "(inside[-_ ]?cov|editorial|masthead|toc|table[-_ ]?of[-_ ]?contents)",
+          "doc_type": "frontmatter",
+          "reason": "wp_frontmatter_filename"
+        }
+      ]
+    },
+    "domain": {
+      "aria.law.columbia.edu": [
+        {
+          "field": "filename",
+          "pattern": "inside[-_ ]?cov",
+          "doc_type": "frontmatter",
+          "reason": "aria_inside_cover"
+        }
+      ],
+      "commons.allard.ubc.ca": [
+        {
+          "field": "text",
+          "pattern": "allard research commons",
+          "doc_type": "other",
+          "reason": "allard_repository_wrapper"
+        }
+      ],
+      "campbelllawobserver.com": [
+        {
+          "field": "filename",
+          "pattern": "rubric|guideline|submission",
+          "doc_type": "other",
+          "reason": "campbell_non_article"
+        }
+      ]
+    }
+  },
+  "footnote_layout_overrides": {
+    "domain": {
+      "cardozoaelj.com": {
+        "note_cutoff_ratio": 0.60
+      },
+      "chicagounbound.uchicago.edu": {
+        "note_cutoff_ratio": 0.62
+      },
+      "commons.stmarytx.edu": {
+        "note_cutoff_ratio": 0.60
+      },
+      "digitalcommons.nyls.edu": {
+        "note_cutoff_ratio": 0.60
+      }
+    },
+    "platform": {}
+  }
+}

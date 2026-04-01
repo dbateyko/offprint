@@ -1,0 +1,14 @@
+{
+  "id": "asil-org",
+  "start_urls": [
+    "https://asil.org/resources/american-journal-international-law"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "asil.org",
+    "platform": "unknown",
+    "url": "https://asil.org/resources/american-journal-international-law",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

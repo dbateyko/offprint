@@ -1,0 +1,14 @@
+{
+  "id": "studzr-de",
+  "start_urls": [
+    "https://studzr.de/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "studzr.de",
+    "platform": "ojs",
+    "url": "https://studzr.de/",
+    "created_date": "2026-03-25",
+    "status": "active"
+  }
+}

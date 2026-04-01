@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.marquette.edu/iplr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Marquette Intellectual Property Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.marquette.edu/iplr/",
+    "domain": "scholarship.law.marquette.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.marquette.edu/iplr/sitemap.xml"
+  ]
+}

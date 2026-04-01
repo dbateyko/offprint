@@ -1,0 +1,13 @@
+{
+  "id": "lawreview-unl-bulletin",
+  "start_urls": [
+    "https://digitalcommons.unl.edu/lawrevbulletin/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Nebraska Law Review Bulletin",
+    "platform": "drupal",
+    "url": "https://lawreview.unl.edu/print/current-issue-archive",
+    "created_date": "2026-03-01"
+  }
+}

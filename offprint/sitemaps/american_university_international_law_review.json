@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.wcl.american.edu/auilr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "American University International Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://auilr.org/",
+    "domain": "digitalcommons.wcl.american.edu",
+    "notes": "Primary archive moved to Digital Commons; auilr.org publications endpoint returns bot-blocked responses for requests. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.wcl.american.edu/auilr/sitemap.xml"
+  ]
+}

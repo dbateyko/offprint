@@ -1,0 +1,21 @@
+{
+  "id": "scholarworks-uark-edu",
+  "start_urls": [
+    "https://scholarworks.uark.edu/alr/sitemap.xml",
+    "https://scholarworks.uark.edu/anrlaw/sitemap.xml",
+    "https://scholarworks.uark.edu/arlnlaw/sitemap.xml",
+    "https://scholarworks.uark.edu/catalog-law/sitemap.xml",
+    "https://scholarworks.uark.edu/education-policy-news/sitemap.xml",
+    "https://scholarworks.uark.edu/lawpub/sitemap.xml",
+    "https://scholarworks.uark.edu/mole-street-journal/sitemap.xml",
+    "https://scholarworks.uark.edu/ozark-historical-review/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of Arkansas, Fayetteville (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://scholarworks.uark.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include law collections. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

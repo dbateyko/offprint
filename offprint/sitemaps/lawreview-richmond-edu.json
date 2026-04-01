@@ -1,0 +1,13 @@
+{
+  "id": "lawreview-richmond-edu",
+  "start_urls": [
+    "https://lawreview.richmond.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Richmond Law Review",
+    "platform": "unknown",
+    "url": "https://lawreview.richmond.edu/",
+    "created_date": "2025-12-14"
+  }
+}

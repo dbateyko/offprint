@@ -1,0 +1,14 @@
+{
+  "id": "ateneolawjournal-com",
+  "start_urls": [
+    "http://ateneolawjournal.com/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "ateneolawjournal.com",
+    "platform": "unknown",
+    "url": "http://ateneolawjournal.com/",
+    "created_date": "2026-03-25",
+    "status": "active"
+  }
+}

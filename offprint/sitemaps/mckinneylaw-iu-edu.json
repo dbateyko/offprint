@@ -1,0 +1,18 @@
+{
+  "id": "mckinneylaw-iu-edu",
+  "start_urls": [
+    "https://journals.indianapolis.iu.edu/index.php/ihlr/issue/current"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Indiana McKinney Law Journals Host",
+    "platform": "ojs",
+    "url": "https://journals.indianapolis.iu.edu/index.php/ihlr/",
+    "created_date": "2026-03-27",
+    "status": "active",
+    "navigation": {
+      "archive_path": "/index.php/ihlr/issue/current",
+      "notes": "2026-03-27 onboarding smoke on canonical OJS host passed with title, volume, year, and authors for IHLR. Legacy mckinneylaw.iu.edu seed is not the working archive."
+    }
+  }
+}

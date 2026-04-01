@@ -1,0 +1,13 @@
+{
+  "id": "impunitywatch-com",
+  "start_urls": [
+    "https://impunitywatch.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Global Rights and Organizations",
+    "platform": "wordpress",
+    "url": "https://impunitywatch.com/",
+    "created_date": "2026-03-01"
+  }
+}

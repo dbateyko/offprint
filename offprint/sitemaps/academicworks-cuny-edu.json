@@ -1,0 +1,15 @@
+{
+  "id": "academicworks-cuny-edu",
+  "start_urls": [
+    "https://academicworks.cuny.edu/cl_pubs/sitemap.xml",
+    "https://academicworks.cuny.edu/clr/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "CUNY CL Publications",
+    "platform": "digitalcommons",
+    "url": "https://academicworks.cuny.edu/cl_pubs/",
+    "created_date": "2026-02-26",
+    "notes": "Targeted CL publications index seed (year anchors 2022..1986) with article-listing links to /cl_pubs/<id>. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

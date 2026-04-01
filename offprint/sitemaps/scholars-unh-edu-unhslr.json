@@ -1,0 +1,14 @@
+{
+  "id": "scholars-unh-edu-unhslr",
+  "start_urls": [
+    "https://scholars.unh.edu/unhslr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "UNH Sports Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholars.unh.edu/unhslr/",
+    "created_date": "2026-03-01",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

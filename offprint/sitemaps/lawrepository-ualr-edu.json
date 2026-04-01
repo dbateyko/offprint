@@ -1,0 +1,14 @@
+{
+  "id": "lawrepository-ualr-edu",
+  "start_urls": [
+    "https://lawrepository.ualr.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of Arkansas at Little Rock Law",
+    "platform": "digitalcommons",
+    "url": "https://lawrepository.ualr.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include lawreview and related series. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

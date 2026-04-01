@@ -1,0 +1,17 @@
+{
+  "id": "huskiecommons-lib-niu-edu",
+  "start_urls": [
+    "https://huskiecommons.lib.niu.edu/allgraduate-legal/sitemap.xml",
+    "https://huskiecommons.lib.niu.edu/clglaw/sitemap.xml",
+    "https://huskiecommons.lib.niu.edu/ctrgovernment-policyprofiles/sitemap.xml",
+    "https://huskiecommons.lib.niu.edu/history-studentnorthernerreview/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Northern Illinois University (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://huskiecommons.lib.niu.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include NIU law collections. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

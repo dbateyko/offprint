@@ -1,0 +1,28 @@
+{
+  "id": "registry-1887-fcaf9100d9",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "digitalcommons.law.scu.edu",
+    "journal_name": "Santa Clara Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://digitalcommons.law.scu.edu/lawreview",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1887",
+    "registry_names": "Santa Clara Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://digitalcommons.law.scu.edu/lawreview"
+  ]
+}

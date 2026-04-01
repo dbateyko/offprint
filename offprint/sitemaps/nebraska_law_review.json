@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.unl.edu/nlr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Nebraska Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.unl.edu/nlr/",
+    "domain": "digitalcommons.unl.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.unl.edu/nlr/sitemap.xml"
+  ]
+}

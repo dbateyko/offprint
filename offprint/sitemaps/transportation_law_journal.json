@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.du.edu/tlj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Transportation Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.du.edu/tlj/",
+    "domain": "digitalcommons.du.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.du.edu/tlj/sitemap.xml"
+  ]
+}

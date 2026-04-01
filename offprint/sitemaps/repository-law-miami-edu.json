@@ -1,0 +1,18 @@
+{
+  "id": "repository-law-miami-edu",
+  "start_urls": [
+    "https://repository.law.miami.edu/umlr/vol68/iss4/1/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Miami Law Review (Digital Commons host)",
+    "platform": "digitalcommons",
+    "url": "https://repository.law.miami.edu/umlr/all_issues.html",
+    "created_date": "2026-03-27",
+    "status": "active",
+    "navigation": {
+      "archive_path": "/umlr/all_issues.html",
+      "notes": "Canonical DC seed for UMiami Law Review; 2026-03-27 smoke PASS with PDF, title, and 2/3 metadata fields. Short-loop run 2026-03-27: issue/volume/article seeds all PASS with stable metadata_fields_present=2; promoted to active."
+    }
+  }
+}

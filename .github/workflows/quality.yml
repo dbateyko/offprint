@@ -1,0 +1,33 @@
+name: quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint-format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+      - name: Ruff
+        run: |
+          ruff check offprint scripts
+      - name: Black
+        run: |
+          black --check offprint scripts
+      - name: Adapter policy gate
+        run: |
+          python scripts/check_no_generic_active_seeds.py --sitemaps-dir offprint/sitemaps
+      - name: Repo layout check
+        run: |
+          python scripts/check_repo_layout.py --repo-root .

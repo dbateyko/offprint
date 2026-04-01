@@ -1,0 +1,28 @@
+{
+  "id": "registry-1843-1902fbd3b9",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "dlj.law.duke.edu",
+    "journal_name": "Duke Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://dlj.law.duke.edu/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "1843",
+    "registry_names": "Duke Law Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch2_20260310_summary.json",
+    "status_reason": "site_adapter_validated_shallow_pdf_check",
+    "status_updated_at": "2026-03-10T00:54:01Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://dlj.law.duke.edu/"
+  ]
+}

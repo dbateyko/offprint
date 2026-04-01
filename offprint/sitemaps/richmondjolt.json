@@ -1,0 +1,141 @@
+{
+  "id": "richmondjolt",
+  "start_urls": [
+    "https://jolt.richmond.edu/pastissues/"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "richmondjolt",
+    "startUrl": [
+      "https://jolt.richmond.edu/pastissues/"
+    ],
+    "selectors": [
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorLink",
+        "selector": "li > strong a, .post-content li > a, span strong a, li:nth-of-type(n+2) span > a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "articles",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorElement",
+        "selector": "p:nth-of-type(15), p:nth-of-type(16) a",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "title_author",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorText",
+        "selector": "_parent_",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "articles_2",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorElement",
+        "selector": ".entry-content p:nth-of-type(n+2)",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "pdf2",
+        "parentSelectors": [
+          "articles_2"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "title_author2",
+        "parentSelectors": [
+          "articles_2"
+        ],
+        "type": "SelectorText",
+        "selector": "_parent_",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "article3",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorElement",
+        "selector": "p tr:nth-of-type(1) td[valign], tr:nth-of-type(n+2) [valign] p",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "download_link",
+        "parentSelectors": [
+          "article3"
+        ],
+        "type": "SelectorLink",
+        "selector": "font a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "article_text",
+        "parentSelectors": [
+          "article3"
+        ],
+        "type": "SelectorText",
+        "selector": "_parent_",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "article_html",
+        "parentSelectors": [
+          "article3"
+        ],
+        "type": "SelectorLink",
+        "selector": "a[target]",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "full_text_html",
+        "parentSelectors": [
+          "article_html"
+        ],
+        "type": "SelectorHTML",
+        "selector": "html",
+        "multiple": false,
+        "regex": ""
+      }
+    ]
+  }
+}

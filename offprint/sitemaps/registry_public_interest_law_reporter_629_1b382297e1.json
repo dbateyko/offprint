@@ -1,0 +1,28 @@
+{
+  "id": "registry-629-1b382297e1",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "lawecommons.luc.edu",
+    "journal_name": "Public Interest Law Reporter",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://lawecommons.luc.edu/pilr",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "60",
+    "registry_mainids": "629",
+    "registry_names": "Public Interest Law Reporter",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://lawecommons.luc.edu/pilr"
+  ]
+}

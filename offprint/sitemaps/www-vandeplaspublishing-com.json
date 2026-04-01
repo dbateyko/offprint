@@ -1,0 +1,16 @@
+{
+  "id": "www-vandeplaspublishing-com",
+  "start_urls": [
+    "https://vandeplaspublishing.com/pages/order-publications"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "http://www.vandeplaspublishing.com/",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "alabama-law-review",
+  "start_urls": [
+    "https://law.ua.edu"
+  ],
+  "source": "auto",
+  "metadata": {
+    "journal_name": "Alabama Law Review",
+    "original_url": "https://www.law.ua.edu/lawreview/",
+    "domain": "law.ua.edu",
+    "platform": "wordpress",
+    "canonicalized_at": "2026-02-03",
+    "evidence_dir": "webscraper_results_journal_metadata/www.law.ua.edu/seed_canonicalization/20260203-201335",
+    "notes": ""
+  }
+}

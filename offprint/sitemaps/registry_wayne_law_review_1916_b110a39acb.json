@@ -1,0 +1,28 @@
+{
+  "id": "registry-1916-b110a39acb",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "waynelawreview.org",
+    "journal_name": "Wayne Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://waynelawreview.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1916",
+    "registry_names": "Wayne Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/smoke/todo_known_platform_non_dc_20260315/runs/smoke_one_pdf_20260315T143057Z.json",
+    "status_reason": "adapter_validated_smoke",
+    "status_updated_at": "2026-03-15T14:41:58Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://waynelawreview.org/"
+  ]
+}

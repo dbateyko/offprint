@@ -1,0 +1,28 @@
+{
+  "id": "registry-282-3dc572ec84",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "law.tulane.edu",
+    "journal_name": "Tulane Journal of Law & Sexuality",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://law.tulane.edu/tjls",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "282",
+    "registry_names": "Tulane Journal of Law & Sexuality",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DrupalAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/law.tulane.edu/url_3dc572ec842d",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-15T14:02:19Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://law.tulane.edu/tjls"
+  ]
+}

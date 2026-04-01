@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.nd.edu/jleg/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Journal of Legislation",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.nd.edu/jleg/",
+    "domain": "scholarship.law.nd.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.nd.edu/jleg/sitemap.xml"
+  ]
+}

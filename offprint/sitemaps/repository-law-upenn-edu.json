@@ -1,0 +1,21 @@
+{
+  "id": "repository-law-upenn-edu",
+  "start_urls": [
+    "https://repository.law.upenn.edu/university-of-pennsylvania-law-review/uplr",
+    "https://repository.law.upenn.edu/asian-law-review",
+    "https://repository.law.upenn.edu/journal-of-business-law",
+    "https://repository.law.upenn.edu/journal-of-constitutional-law",
+    "https://repository.law.upenn.edu/journal-of-international-law",
+    "https://repository.law.upenn.edu/journal-of-law-public-affairs",
+    "https://repository.law.upenn.edu/journal-of-law-and-social-change",
+    "https://repository.law.upenn.edu/journal-of-law-innovation"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Penn Carey Law (Quartex journals)",
+    "platform": "quartex",
+    "url": "https://repository.law.upenn.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Per-journal seeds for Quartex front end; Regulatory Review is external (theregreview.org)."
+  }
+}

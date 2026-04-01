@@ -1,0 +1,13 @@
+{
+  "id": "uwyo-edu",
+  "start_urls": [
+    "https://www.uwyo.edu/law/publications/law-review/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Wyoming Law Review",
+    "platform": "unknown",
+    "url": "https://www.uwyo.edu/law/publications/law-review/",
+    "created_date": "2025-12-14"
+  }
+}

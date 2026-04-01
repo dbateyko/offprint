@@ -1,0 +1,89 @@
+{
+  "id": "gltr_scrape",
+  "start_urls": [
+    "https://georgetownlawtechreview.org/issues/"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "gltr_scrape",
+    "startUrl": [
+      "https://georgetownlawtechreview.org/issues/"
+    ],
+    "selectors": [
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorLink",
+        "selector": ".issues--issue a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "article_link",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorLink",
+        "selector": ".post-teaser--title a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "article_link"
+        ],
+        "type": "SelectorText",
+        "selector": "h2.post--title",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "article_link"
+        ],
+        "type": "SelectorText",
+        "selector": "div.post--author",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "date",
+        "parentSelectors": [
+          "article_link"
+        ],
+        "type": "SelectorText",
+        "selector": "div.post--date",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "citation",
+        "parentSelectors": [
+          "article_link"
+        ],
+        "type": "SelectorText",
+        "selector": "div.post--citation",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "article_link"
+        ],
+        "type": "SelectorLink",
+        "selector": "a.download-link",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "fjil-org",
+  "start_urls": [
+    "https://www.fjil.org/print-issues/archive/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Florida Journal of International Law",
+    "platform": "WordPress",
+    "url": "https://www.fjil.org/",
+    "created_date": "2025-12-14",
+    "notes": "Updated to archive seed and WordPressAcademicBaseAdapter."
+  }
+}

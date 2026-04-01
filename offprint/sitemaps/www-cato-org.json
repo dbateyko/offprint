@@ -1,0 +1,14 @@
+{
+  "id": "www-cato-org",
+  "start_urls": [
+    "https://www.cato.org/search/category/reviews-journals+supreme-court-review/type/serial-issue"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.cato.org",
+    "platform": "unknown",
+    "url": "https://www.cato.org/search/category/reviews-journals+supreme-court-review/type/serial-issue",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

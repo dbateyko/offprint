@@ -1,0 +1,14 @@
+{
+  "id": "djclpp-law-duke-edu",
+  "start_urls": [
+    "https://scholarship.law.duke.edu/djclpp/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Duke Journal of Constitutional Law & Public Policy",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.duke.edu/djclpp/",
+    "created_date": "2025-12-14",
+    "notes": "Updated to Digital Commons archive; WP landing page at djclpp.law.duke.edu has only current issue. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

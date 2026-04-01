@@ -1,0 +1,37 @@
+{
+  "id": "vlbr-org",
+  "start_urls": [
+    "https://www.vlbr.org/volumes/volume-20"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Vlbr",
+    "platform": "Squarespace",
+    "url": "https://www.vlbr.org/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/volumes/volume-{N}",
+      "archive_path": "content",
+      "notes": "Site lists volumes under /volumes/volume-{N}. Each volume page lists articles each as div.sqs-block-content containing title (h4.sqs-html-content or div.sqs-text-block-container) and a direct PDF link. No per-article detail page. Navigation uses simple pattern."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.sqs-block-content",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

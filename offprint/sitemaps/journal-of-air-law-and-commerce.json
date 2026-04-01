@@ -1,0 +1,14 @@
+{
+  "id": "journal-of-air-law-and-commerce",
+  "start_urls": [
+    "https://scholar.smu.edu/jalc/all_issues.html"
+  ],
+  "source": "bepress",
+  "metadata": {
+    "journal_name": "Journal of Air Law and Commerce",
+    "platform": "digitalcommons",
+    "url": "https://scholar.smu.edu/jalc/",
+    "created_date": "2026-03-23",
+    "notes": "Digital Commons/BePress platform. Volumes 1-90 (1935-2025). ISSN: 0021-8642."
+  }
+}

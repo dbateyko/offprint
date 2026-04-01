@@ -1,0 +1,16 @@
+{
+  "id": "digital-commons-usnwc-edu",
+  "start_urls": [
+    "https://digital-commons.usnwc.edu/ciwag-policy-papers/sitemap.xml",
+    "https://digital-commons.usnwc.edu/cmsi-quarterly-review/sitemap.xml",
+    "https://digital-commons.usnwc.edu/nwc-review/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "U.S. Naval War College (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://digital-commons.usnwc.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include usnwc-journals and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

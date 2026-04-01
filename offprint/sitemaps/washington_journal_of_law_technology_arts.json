@@ -1,0 +1,18 @@
+{
+  "url": "https://digitalcommons.law.uw.edu/wjlta/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Washington Journal of Law, Technology & Arts",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.uw.edu/wjlta/",
+    "domain": "digitalcommons.law.uw.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]",
+    "status": "active",
+    "status_reason": "adapter_validated_smoke_pass_digital_commons",
+    "status_evidence_ref": "artifacts/reports/smoke_techlaw_20260313/smoke_one_pdf_20260313T142854Z.json",
+    "status_updated_at": "2026-03-13T14:28:54Z"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.uw.edu/wjlta/sitemap.xml"
+  ]
+}

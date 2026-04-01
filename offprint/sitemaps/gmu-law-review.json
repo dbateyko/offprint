@@ -1,0 +1,15 @@
+{
+  "id": "gmu-law-review",
+  "start_urls": [
+    "https://lawreview.gmu.edu/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "George Mason Law Review",
+    "platform": "wordpress",
+    "url": "https://lawreview.gmu.edu/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

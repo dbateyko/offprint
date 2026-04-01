@@ -1,0 +1,14 @@
+{
+  "id": "scholarlycommons-law-northwestern-edu-njihr",
+  "start_urls": [
+    "https://scholarlycommons.law.northwestern.edu/njihr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Northwestern Journal of Human Rights",
+    "platform": "digitalcommons",
+    "url": "https://scholarlycommons.law.northwestern.edu/njihr/",
+    "created_date": "2026-03-01",
+    "notes": "Smoke test passed 2026-03-01 via DigitalCommonsAdapter. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

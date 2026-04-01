@@ -1,0 +1,28 @@
+{
+  "id": "registry-228-77f457b04c",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "lrus.wolterskluwer.com",
+    "journal_name": "Employee Relations Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://lrus.wolterskluwer.com/store/product/employee-relations-law-journal",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "228",
+    "registry_names": "Employee Relations Law Journal",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/lrus.wolterskluwer.com/url_77f457b04c1c",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T14:02:19Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://lrus.wolterskluwer.com/store/product/employee-relations-law-journal"
+  ]
+}

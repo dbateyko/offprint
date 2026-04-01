@@ -1,0 +1,28 @@
+{
+  "id": "registry-519-a5bbdaa666",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.njchs.org",
+    "journal_name": "Western Legal History",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.njchs.org/publications/western-legal-history",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "519",
+    "registry_names": "Western Legal History",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.njchs.org/url_a5bbdaa666cf",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.njchs.org/publications/western-legal-history"
+  ]
+}

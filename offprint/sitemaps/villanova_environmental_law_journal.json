@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.villanova.edu/elj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Villanova Environmental Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.villanova.edu/elj/",
+    "domain": "digitalcommons.law.villanova.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.villanova.edu/elj/sitemap.xml"
+  ]
+}

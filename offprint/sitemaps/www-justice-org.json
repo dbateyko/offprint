@@ -1,0 +1,26 @@
+{
+  "id": "www-justice-org",
+  "start_urls": [
+    "https://www.justice.org/advocacy/our-issues"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.justice.org/resources/publications/trial-magazine",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/advocacy",
+        "/advocacy/our-issues"
+      ],
+      "issue_path_prefixes": [
+        "/resources",
+        "/resources/publications",
+        "/winter-convention",
+        "/winter-convention/event-home"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

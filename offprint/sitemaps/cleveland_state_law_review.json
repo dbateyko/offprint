@@ -1,0 +1,14 @@
+{
+  "url": "https://engagedscholarship.csuohio.edu/clevstlrev/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Cleveland State Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://engagedscholarship.csuohio.edu/clevstlrev/",
+    "domain": "engagedscholarship.csuohio.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://engagedscholarship.csuohio.edu/clevstlrev/sitemap.xml"
+  ]
+}

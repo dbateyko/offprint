@@ -1,0 +1,14 @@
+{
+  "url": "https://repository.usfca.edu/usflawreview/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "University of San Francisco Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://repository.usfca.edu/usflawreview/",
+    "domain": "repository.usfca.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://repository.usfca.edu/usflawreview/sitemap.xml"
+  ]
+}

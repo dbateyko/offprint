@@ -1,0 +1,28 @@
+{
+  "id": "registry-1944-151523c506",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.uscourts.gov",
+    "journal_name": "Federal Probation Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.uscourts.gov/statistics-reports/publications/federal-probation-journal",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1944",
+    "registry_names": "Federal Probation Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DrupalAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.uscourts.gov/url_151523c50666",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.uscourts.gov/statistics-reports/publications/federal-probation-journal"
+  ]
+}

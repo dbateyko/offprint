@@ -1,0 +1,15 @@
+{
+  "id": "georgetown-law-journal",
+  "start_urls": [
+    "https://www.law.georgetown.edu/georgetown-law-journal/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Georgetown Law Journal",
+    "platform": "wordpress",
+    "url": "https://www.law.georgetown.edu/georgetown-law-journal/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "WordPress site hosted on law.georgetown.edu domain"
+  }
+}

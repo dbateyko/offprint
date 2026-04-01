@@ -1,0 +1,55 @@
+{
+  "id": "stanfordlawreview-org",
+  "start_urls": [
+    "https://www.stanfordlawreview.org/print/",
+    "https://www.stanfordlawreview.org/online-archive/",
+    "https://www.stanfordlawreview.org/print/category/77/",
+    "https://www.stanfordlawreview.org/print/category/76/",
+    "https://www.stanfordlawreview.org/print/category/75/",
+    "https://www.stanfordlawreview.org/print/category/74/",
+    "https://www.stanfordlawreview.org/print/category/73/",
+    "https://www.stanfordlawreview.org/print/category/72/",
+    "https://www.stanfordlawreview.org/print/category/71/",
+    "https://www.stanfordlawreview.org/online/category/78/",
+    "https://www.stanfordlawreview.org/online/category/77/",
+    "https://www.stanfordlawreview.org/online/category/76/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Stanford Law Review",
+    "platform": "WordPress",
+    "url": "https://www.stanfordlawreview.org/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.stanfordlawreview.org/print/",
+      "notes": "WordPress site. Combined print and online archives. Article containers are loop-item elements."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.loop-item",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3.li-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "h5.li-meta em",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h3.li-title a",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

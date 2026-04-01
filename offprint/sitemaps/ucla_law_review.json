@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/archive",
+        "/archives"
+      ],
+      "extraction_mode": "direct_pdf",
+      "issue_path_prefixes": [
+        "/archive",
+        "/volume",
+        "/vol-",
+        "/issues"
+      ]
+    },
+    "domain": "www.uclalawreview.org",
+    "journal": "UCLA Law Review",
+    "original_url": "https://www.uclalawreview.org/archive/",
+    "platform": "WordPress",
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/smoke_one_pdf_20260310T014940Z.json",
+    "status_reason": "site_adapter_validated_smoke_pass_archive_seed_pdfemb",
+    "status_updated_at": "2026-03-10T01:50:30Z"
+  },
+  "sitemap_url": null,
+  "url": "https://www.uclalawreview.org/archive/"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "www-calwesternilj-org",
+  "start_urls": [
+    "https://www.calwesternilj.org/from-the-archives"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.calwesternilj.org/",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/from-the-archives",
+        "/symposia-from-the-archives"
+      ],
+      "issue_path_prefixes": [
+        "/fall-2020",
+        "/fall-2021",
+        "/fall-2022",
+        "/fall-2023"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

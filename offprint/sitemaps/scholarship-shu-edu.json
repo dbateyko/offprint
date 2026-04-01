@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-shu-edu",
+  "start_urls": [
+    "https://scholarship.shu.edu/shlr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Seton Hall Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.shu.edu/shlr/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

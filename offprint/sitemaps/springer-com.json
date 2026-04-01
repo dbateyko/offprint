@@ -1,0 +1,21 @@
+{
+  "id": "springer-com",
+  "metadata": {
+    "created_date": "2025-12-14",
+    "journal_name": "Criminal Law Forum",
+    "notes": "Issues are hosted on link.springer.com and commonly require subscription/login. Onboarding smoke on 2026-03-27 was blocked at preflight because link.springer.com is unmapped and this queue entry is treated as paywalled/out-of-scope for current action-list onboarding.",
+    "platform": "unknown",
+    "status": "paused_paywall",
+    "status_evidence_ref": "scripts/onboard_smoke_target.py",
+    "status_reason": "preflight_blocked_unmapped_link_springer_and_paywall_risk",
+    "status_updated_at": "2026-03-27T04:34:00Z",
+    "url": "https://www.springer.com/journal/10609",
+    "navigation": {
+      "notes": "Short-loop run 2026-03-27: host/scoped seeds blocked or subscription-gated; keep paused_paywall."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://link.springer.com/journal/10609"
+  ]
+}

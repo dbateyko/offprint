@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "domain": "bclawreview.bc.edu",
+    "journal": "Boston College Law Review",
+    "original_url": "https://bclawreview.bc.edu/issue/archive",
+    "platform": "OJS",
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/smoke_one_pdf_20260310T040938Z.json",
+    "status_reason": "site_adapter_validated_smoke_pass_issue_archive_seed",
+    "status_updated_at": "2026-03-10T04:10:30Z"
+  },
+  "sitemap_url": null,
+  "url": "https://bclawreview.bc.edu/issue/archive"
+}

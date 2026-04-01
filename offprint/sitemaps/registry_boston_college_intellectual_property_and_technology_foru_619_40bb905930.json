@@ -1,0 +1,28 @@
+{
+  "id": "registry-619-40bb905930",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "sites.bc.edu",
+    "journal_name": "Boston College Intellectual Property and Technology Forum",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://sites.bc.edu/iptf",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "619",
+    "registry_names": "Boston College Intellectual Property and Technology Forum",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/smoke/onboarding_known_platform_20260315/runs/smoke_one_pdf_20260315T140442Z.json",
+    "status_reason": "adapter_validated_smoke",
+    "status_updated_at": "2026-03-15T14:30:24Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://sites.bc.edu/iptf"
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "id": "btlj",
+  "start_urls": [
+    "https://btlj.org/category/journal/"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "btlj",
+    "startUrl": [
+      "https://btlj.org/category/journal/"
+    ],
+    "selectors": [
+      {
+        "id": "next_page",
+        "parentSelectors": [
+          "_root",
+          "next_page"
+        ],
+        "paginationType": "clickMore",
+        "type": "SelectorPagination",
+        "selector": "a.next"
+      },
+      {
+        "id": "link",
+        "parentSelectors": [
+          "_root",
+          "next_page"
+        ],
+        "type": "SelectorLink",
+        "selector": ".fwpl-item a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "articles_list",
+        "parentSelectors": [
+          "link"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.text",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "links",
+        "parentSelectors": [
+          "articles_list"
+        ],
+        "type": "SelectorElement",
+        "selector": "ul:nth-of-type(3) li",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "link_to_pdf",
+        "parentSelectors": [
+          "links"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "title_author",
+        "parentSelectors": [
+          "links"
+        ],
+        "type": "SelectorText",
+        "selector": "_parent_",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "publication_date",
+        "parentSelectors": [
+          "link"
+        ],
+        "type": "SelectorText",
+        "selector": "p span:nth-of-type(2)",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "articles_list2",
+        "parentSelectors": [
+          "link"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.content",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "article_discrete",
+        "parentSelectors": [
+          "articles_list2"
+        ],
+        "type": "SelectorElement",
+        "selector": "li",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "link_title",
+        "parentSelectors": [
+          "article_discrete"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "author_title",
+        "parentSelectors": [
+          "article_discrete"
+        ],
+        "type": "SelectorText",
+        "selector": "_parent_",
+        "multiple": true,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

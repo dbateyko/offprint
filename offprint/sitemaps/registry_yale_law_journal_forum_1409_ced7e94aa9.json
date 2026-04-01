@@ -1,0 +1,28 @@
+{
+  "id": "registry-1409-ced7e94aa9",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.yalelawjournal.org",
+    "journal_name": "Yale Law Journal Forum",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.yalelawjournal.org/forum",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "1409",
+    "registry_names": "Yale Law Journal Forum",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/smoke_one_pdf_20260309T231955Z.json",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-09T23:20:15Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.yalelawjournal.org/forum"
+  ]
+}

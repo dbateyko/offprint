@@ -1,0 +1,7 @@
+{
+  "id": "chicago_kent_lr",
+  "start_urls": [
+    "https://scholarship.kentlaw.iit.edu/cklawreview/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

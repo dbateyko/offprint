@@ -1,0 +1,14 @@
+{
+  "id": "www-gjil-org",
+  "start_urls": [
+    "http://www.gjil.org/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.gjil.org",
+    "platform": "wordpress",
+    "url": "http://www.gjil.org/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

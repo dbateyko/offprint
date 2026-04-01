@@ -1,0 +1,14 @@
+{
+  "id": "www-actec-org",
+  "start_urls": [
+    "https://www.actec.org/actec-law-journal"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.actec.org",
+    "platform": "wordpress",
+    "url": "https://www.actec.org/actec-law-journal",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

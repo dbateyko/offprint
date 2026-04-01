@@ -1,0 +1,28 @@
+{
+  "id": "registry-370-8492c96269",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "journals.sagepub.com",
+    "journal_name": "Antitrust Bulletin",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://journals.sagepub.com/home/abx",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "370",
+    "registry_names": "Antitrust Bulletin",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/journals.sagepub.com/url_8492c9626973",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T03:47:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://journals.sagepub.com/home/abx"
+  ]
+}

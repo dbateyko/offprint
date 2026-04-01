@@ -1,0 +1,15 @@
+{
+  "id": "cuny-law-review",
+  "start_urls": [
+    "http://www.cunylawreview.org/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "CUNY Law Review",
+    "platform": "wordpress",
+    "url": "http://www.cunylawreview.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

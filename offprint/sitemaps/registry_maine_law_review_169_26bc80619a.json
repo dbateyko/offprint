@@ -1,0 +1,28 @@
+{
+  "id": "registry-169-26bc80619a",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.mainelawreview.org",
+    "journal_name": "Maine Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.mainelawreview.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "84",
+    "registry_mainids": "169",
+    "registry_names": "Maine Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.mainelawreview.org/url_26bc80619a4a",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://www.mainelawreview.org/"
+  ]
+}

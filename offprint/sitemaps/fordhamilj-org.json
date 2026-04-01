@@ -1,0 +1,14 @@
+{
+  "id": "fordhamilj-org",
+  "start_urls": [
+    "http://www.fordhamilj.org/archive/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Fordham International Law Journal",
+    "platform": "custom",
+    "url": "http://www.fordhamilj.org/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: public archive page."
+  }
+}

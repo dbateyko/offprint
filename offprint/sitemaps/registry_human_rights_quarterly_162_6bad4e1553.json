@@ -1,0 +1,28 @@
+{
+  "id": "registry-162-6bad4e1553",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.press.jhu.edu",
+    "journal_name": "Human Rights Quarterly",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.press.jhu.edu/journals/human-rights-quarterly",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "162",
+    "registry_names": "Human Rights Quarterly",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.press.jhu.edu/url_6bad4e155366",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.press.jhu.edu/journals/human-rights-quarterly"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "bu-edu-bulawreview",
+  "start_urls": [
+    "https://www.bu.edu/bulawreview/archives/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Boston University Law Review",
+    "platform": "WordPress",
+    "url": "https://www.bu.edu/bulawreview/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.bu.edu/bulawreview/archives/",
+      "volume_url_pattern": "/{YYYY}/{MM}/{DD}/volume-{N}-issue-{M}/",
+      "archive_path": "homepage -> /archives/ -> issue links -> PDFs",
+      "pdf_location": "direct-on-issue-page",
+      "notes": "WordPress site. Articles are listed directly on issue pages with direct PDF links. Issue pages use a mix of p and div tags for article entries."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "ul > li > a[href*=\"volume-\"]",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "p, div",
+      "parentSelectors": ["_root", "issue_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href$=\"pdf\"]",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\"pdf\"]",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "a[href*=\"profile/\"], a[href*=\"faculty/\"]",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "american-journal-of-jurisprudence",
+  "start_urls": [
+    "https://scholarship.law.nd.edu/ajj/all_issues.html"
+  ],
+  "source": "auto",
+  "metadata": {
+    "journal_name": "American Journal of Jurisprudence",
+    "original_url": "https://scholarship.law.nd.edu/ajj/",
+    "domain": "scholarship.law.nd.edu",
+    "platform": "digital_commons",
+    "canonicalized_at": "2026-02-03",
+    "evidence_dir": "webscraper_results_journal_metadata/scholarship.law.nd.edu/seed_canonicalization/20260203-201335",
+    "notes": ""
+  }
+}

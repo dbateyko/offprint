@@ -1,0 +1,28 @@
+{
+  "id": "registry-680-c6e7f91b07",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.stcl.edu",
+    "journal_name": "Currents: International Trade Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.stcl.edu/currents/about.currents.html",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "680",
+    "registry_names": "Currents: International Trade Law Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_404",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.stcl.edu/url_c6e7f91b0750",
+    "status_reason": "probe_http_404",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://www.stcl.edu/currents/about.currents.html"
+  ]
+}

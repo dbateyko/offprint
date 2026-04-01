@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-uga-edu",
+  "start_urls": [
+    "https://digitalcommons.law.uga.edu/gjicl/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Georgia Journal of International and Comparative Law",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.uga.edu/gjicl/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

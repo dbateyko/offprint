@@ -1,0 +1,28 @@
+{
+  "id": "registry-453-01fb669bf3",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "store.legal.thomsonreuters.com",
+    "journal_name": "Norton Journal of Bankruptcy Law and Practice",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://store.legal.thomsonreuters.com/law-products/Law-Reviews-and-Journals/Norton-Journal-of-Bankruptcy-Law-and-Practice/p/100029006",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "453",
+    "registry_names": "Norton Journal of Bankruptcy Law and Practice",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/store.legal.thomsonreuters.com/url_01fb669bf32f",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T14:02:19Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://store.legal.thomsonreuters.com/law-products/Law-Reviews-and-Journals/Norton-Journal-of-Bankruptcy-Law-and-Practice/p/100029006"
+  ]
+}

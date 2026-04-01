@@ -1,0 +1,26 @@
+{
+  "id": "law-mc-edu",
+  "start_urls": [
+    "https://law.mc.edu/legal-scholarship/publications-student-scholarly-articles"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://law.mc.edu/students/student-organizations/mc-law-review",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/students",
+        "/students/student-organizations"
+      ],
+      "issue_path_prefixes": [
+        "/admissions",
+        "/admissions/summer-start-programs",
+        "/students",
+        "/students/graduation"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

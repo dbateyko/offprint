@@ -1,0 +1,28 @@
+{
+  "id": "registry-409-9100ae60e9",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "derecho.pucpr.edu",
+    "journal_name": "Revista de Derecho Puertorrique\u00f1o",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://derecho.pucpr.edu/revista-de-derecho-puertorriqueno",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "409",
+    "registry_names": "Revista de Derecho Puertorrique\u00f1o",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/derecho.pucpr.edu/url_9100ae60e936",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://derecho.pucpr.edu/revista-de-derecho-puertorriqueno"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "wclr-ca",
+  "start_urls": [
+    "https://wclr.ca/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Wrongful Conviction Law Review",
+    "platform": "wordpress",
+    "url": "https://wclr.ca/",
+    "created_date": "2026-03-01"
+  }
+}

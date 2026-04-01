@@ -1,0 +1,61 @@
+{
+  "id": "abdn-ac-uk",
+  "metadata": {
+    "created_date": "2026-03-24",
+    "journal_name": "Aberdeen Student Law Review",
+    "navigation": {
+      "archive_path": "seed page includes 'Publications' section listing volumes as direct PDF links",
+      "notes": "Direct PDF links are listed on the journal page as volume entries (Volume 1-13). No per-article listing observed; each volume is a single PDF. Author/issue extraction intentionally skipped for this student law review (not necessary for onboarding).",
+      "volume_url_pattern": "none"
+    },
+    "platform": "custom",
+    "status": "active",
+    "url": "https://www.abdn.ac.uk/law/why-us/student-activities/aberdeen-student-law-review/"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "main li:has(a[href*=\"/media/site/law/documents/\"][href$=\".pdf\"]:not([href*=\"House-Style\"]):not([href*=\"Declaration\"]))",
+      "type": "SelectorElement"
+    },
+    {
+      "id": "title",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href*=\"/media/site/law/documents/\"][href$=\".pdf\"]",
+      "type": "SelectorText"
+    },
+    {
+      "id": "volume",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href*=\"/media/site/law/documents/\"][href$=\".pdf\"]",
+      "type": "SelectorText"
+    },
+    {
+      "id": "date",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href*=\"/media/site/law/documents/\"][href$=\".pdf\"]",
+      "type": "SelectorText"
+    },
+    {
+      "id": "pdf_link",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href*=\"/media/site/law/documents/\"][href$=\".pdf\"]",
+      "type": "SelectorLink"
+    }
+  ],
+  "source": "llm_explore",
+  "start_urls": [
+    "https://www.abdn.ac.uk/law/why-us/student-activities/aberdeen-student-law-review/"
+  ]
+}

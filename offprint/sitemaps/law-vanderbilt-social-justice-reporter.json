@@ -1,0 +1,13 @@
+{
+  "id": "law-vanderbilt-social-justice-reporter",
+  "start_urls": [
+    "https://law.vanderbilt.edu/social-justice-reporter/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Social Justice Reporter",
+    "platform": "wordpress",
+    "url": "https://law.vanderbilt.edu/social-justice-reporter/",
+    "created_date": "2026-03-01"
+  }
+}

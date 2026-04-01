@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-byu-edu",
+  "start_urls": [
+    "https://digitalcommons.law.byu.edu/elj/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Brigham Young University Education and Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.byu.edu/elj/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

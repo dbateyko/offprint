@@ -1,0 +1,45 @@
+{
+  "id": "ojs-lib-umassd-edu",
+  "start_urls": [
+    "https://ojs.lib.umassd.edu/umlr/issue/current"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Ojs.Lib.Umassd",
+    "platform": "Open Journal Systems",
+    "url": "https://ojs.lib.umassd.edu/umlr",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/issue/view/UMassLawReviewV{volume}_I{issue}",
+      "archive_path": "seed has volume nav in header -> /issue/archive",
+      "notes": "Listings show titles, authors, and a placeholder for PDF. PDF link is on article view page under /download. No pagination."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.article_summary",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h4",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

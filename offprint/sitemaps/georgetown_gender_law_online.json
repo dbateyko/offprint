@@ -1,0 +1,13 @@
+{
+  "id": "georgetown_gender_law_online",
+  "start_urls": [
+    "https://www.law.georgetown.edu/gender-journal/online/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Georgetown Journal of Gender and the Law Online",
+    "platform": "wordpress",
+    "url": "https://www.law.georgetown.edu/gender-journal/online/",
+    "created_date": "2026-03-01"
+  }
+}

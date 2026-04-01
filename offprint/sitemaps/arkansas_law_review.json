@@ -1,0 +1,17 @@
+{
+  "url": "https://scholarworks.uark.edu/alr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Arkansas Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarworks.uark.edu/alr/",
+    "domain": "scholarworks.uark.edu",
+    "status": "active",
+    "status_reason": "adapter_validated_smoke_pass_digital_commons",
+    "status_evidence_ref": "artifacts/reports/smoke_canonical_batch2_20260314/smoke_one_pdf_20260314T033912Z.json",
+    "status_updated_at": "2026-03-14T03:39:12Z"
+  },
+  "start_urls": [
+    "https://scholarworks.uark.edu/alr/sitemap.xml"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "virginialawreview-org",
+  "start_urls": [
+    "https://virginialawreview.org/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Virginia Law Review",
+    "platform": "WordPress",
+    "url": "https://virginialawreview.org/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "notes": "WordPress site. Uses custom post type 'articles'. WordPressAcademicBaseAdapter will discover from REST API and homepage."
+  }
+}

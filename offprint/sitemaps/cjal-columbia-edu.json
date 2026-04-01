@@ -1,0 +1,15 @@
+{
+  "id": "cjal-columbia-edu",
+  "start_urls": [
+    "https://journals.library.columbia.edu/index.php/cjal/issue/archive"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Columbia Journal of Asian Law",
+    "platform": "ojs",
+    "url": "https://journals.library.columbia.edu/index.php/cjal/issue/archive",
+    "original_url": "https://cjal.columbia.edu/",
+    "updated_at": "2026-02-23",
+    "notes": "seed correction: canonical OJS archive entrypoint"
+  }
+}

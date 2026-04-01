@@ -1,0 +1,13 @@
+{
+  "id": "smulawreviewforum-org",
+  "start_urls": [
+    "https://www.smulawreviewforum.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "SMU Law Review Forum",
+    "platform": "wordpress",
+    "url": "https://www.smulawreviewforum.org/",
+    "created_date": "2026-03-01"
+  }
+}

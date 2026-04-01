@@ -1,0 +1,13 @@
+{
+  "id": "scholars-unh-edu",
+  "start_urls": [
+    "https://scholars.unh.edu/unh_lr/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Pierce Law Review (now UNH Law Review)",
+    "platform": "unknown",
+    "url": "https://scholars.unh.edu/unh_lr/",
+    "created_date": "2025-12-14"
+  }
+}

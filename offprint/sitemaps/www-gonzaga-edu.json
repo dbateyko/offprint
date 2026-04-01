@@ -1,0 +1,25 @@
+{
+  "id": "www-gonzaga-edu",
+  "start_urls": [
+    "https://www.gonzaga.edu/school-of-law/student-life/student-resources/student-organizations/gonzaga-law-review/submissions-glr"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.gonzaga.edu/school-of-law/about/student-life/student-resources/student-organizations/gonzaga-law-review",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/school-of-law",
+        "/school-of-law/student-life"
+      ],
+      "issue_path_prefixes": [
+        "/news-events",
+        "/news-events/stories",
+        "/news-events/events"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://lawecommons.luc.edu/lclr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Loyola Consumer Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://lawecommons.luc.edu/lclr/",
+    "domain": "lawecommons.luc.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://lawecommons.luc.edu/lclr/sitemap.xml"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "registry-404-d21a105c07",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "commons.lib.niu.edu",
+    "journal_name": "Northern Illinois University Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://commons.lib.niu.edu/handle/10843/17469",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "404",
+    "registry_names": "Northern Illinois University Law Review",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "scripts/promote_todo_adapter_seeds.py",
+    "status_reason": "bulk_promoted_from_todo_adapter",
+    "status_updated_at": "2026-03-16T21:03:58Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://commons.lib.niu.edu/handle/10843/17469"
+  ]
+}

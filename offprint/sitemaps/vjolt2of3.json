@@ -1,0 +1,58 @@
+{
+  "id": "vjolt2of3",
+  "start_urls": [
+    "https://www.vjolt.org/archives"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "vjolt2of3",
+    "startUrl": [
+      "https://www.vjolt.org/archives"
+    ],
+    "selectors": [
+      {
+        "id": "article",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.fluid-engine",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "pdf_title",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "authors",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "p:nth-of-type(2)",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "date",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "div.fe-block:nth-of-type(n+2) p:nth-of-type(1)",
+        "multiple": true,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

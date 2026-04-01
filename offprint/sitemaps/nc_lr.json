@@ -1,0 +1,7 @@
+{
+  "id": "nc_lr",
+  "start_urls": [
+    "https://scholarship.law.unc.edu/nclr/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

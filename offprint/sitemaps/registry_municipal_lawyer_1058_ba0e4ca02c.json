@@ -1,0 +1,28 @@
+{
+  "id": "registry-1058-ba0e4ca02c",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "imla.org",
+    "journal_name": "Municipal Lawyer",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://imla.org/municipal-lawyer-magazine",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1058",
+    "registry_names": "Municipal Lawyer",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/imla.org/url_ba0e4ca02cd1",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://imla.org/municipal-lawyer-magazine"
+  ]
+}

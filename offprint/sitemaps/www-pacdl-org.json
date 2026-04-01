@@ -1,0 +1,25 @@
+{
+  "id": "www-pacdl-org",
+  "start_urls": [
+    "https://www.pacdl.org/content.asp?contentid=147"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.pacdl.org/for_the_defense",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/issues_and_archives"
+      ],
+      "issue_path_prefixes": [
+        "/files",
+        "/ev_calendar_day.asp",
+        "/2026%20annual%20sponsorship",
+        "/files/2026%20Annual%20Conference%20Brochure%20Digital%20Fillable%20FINAL2_10.pdf"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "registry-392-670fad1f83",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "scholarsarchive.byu.edu",
+    "journal_name": "Brigham Young University Education and Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://scholarsarchive.byu.edu/byu_elj",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "392",
+    "registry_names": "Brigham Young University Education and Law Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/scholarsarchive.byu.edu/url_670fad1f8381",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:21:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://scholarsarchive.byu.edu/byu_elj"
+  ]
+}

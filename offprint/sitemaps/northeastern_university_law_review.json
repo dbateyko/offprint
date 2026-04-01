@@ -1,0 +1,18 @@
+{
+  "id": "northeastern_university_law_review",
+  "metadata": {
+    "created_date": "2026-03-02",
+    "journal_name": "Northeastern University Law Review",
+    "notes": "Primary archive URL; preferred over www.nulj.org which returns 403 from this environment.",
+    "platform": "wordpress",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z",
+    "url": "https://nulawreview.org/issues-archive"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://nulawreview.org/issues-archive"
+  ]
+}

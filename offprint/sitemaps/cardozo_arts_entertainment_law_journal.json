@@ -1,0 +1,14 @@
+{
+  "url": "https://larc.cardozo.yu.edu/cardozoaelj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Cardozo Arts & Entertainment Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://cardozoaelj.com/",
+    "domain": "larc.cardozo.yu.edu",
+    "notes": "Manual override: PDF archive hosted on LARC Digital Commons. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://larc.cardozo.yu.edu/cardozoaelj/sitemap.xml"
+  ]
+}

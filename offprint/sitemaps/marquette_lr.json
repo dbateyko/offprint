@@ -1,0 +1,7 @@
+{
+  "id": "marquette_lr",
+  "start_urls": [
+    "https://scholarship.law.marquette.edu/mulr/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

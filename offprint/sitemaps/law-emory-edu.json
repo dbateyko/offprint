@@ -1,0 +1,14 @@
+{
+  "id": "law-emory-edu",
+  "start_urls": [
+    "https://scholarlycommons.law.emory.edu/ebdj/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Emory Bankruptcy Developments Journal",
+    "platform": "digital_commons",
+    "url": "https://law.emory.edu/ebdj/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: PDF archive hosted on Emory Digital Commons."
+  }
+}

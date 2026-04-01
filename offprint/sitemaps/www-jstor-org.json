@@ -1,0 +1,14 @@
+{
+  "id": "www-jstor-org",
+  "start_urls": [
+    "https://www.jstor.org/journal/franchiselawj"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.jstor.org",
+    "platform": "unknown",
+    "url": "https://www.jstor.org/journal/franchiselawj",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

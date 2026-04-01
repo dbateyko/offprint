@@ -1,0 +1,28 @@
+{
+  "id": "registry-1320-1e27d34474",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.msujanrl.org",
+    "journal_name": "Journal of Animal & Natural Resources Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.msujanrl.org/previous-volumes",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "1320",
+    "registry_names": "Journal of Animal & Natural Resources Law",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.msujanrl.org/url_1e27d3447466",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://www.msujanrl.org/previous-volumes"
+  ]
+}

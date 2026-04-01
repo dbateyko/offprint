@@ -1,0 +1,28 @@
+{
+  "id": "registry-2036-eb8e767996",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.acslaw.org",
+    "journal_name": "ACS Supreme Court Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.acslaw.org/analysis/acs-supreme-court-review",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "2036",
+    "registry_names": "ACS Supreme Court Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.acslaw.org/url_eb8e76799694",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.acslaw.org/analysis/acs-supreme-court-review"
+  ]
+}

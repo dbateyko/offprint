@@ -1,0 +1,13 @@
+{
+  "id": "ideaexchange-uakron-edu",
+  "start_urls": [
+    "https://ideaexchange.uakron.edu/akronlawreview/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Akron Law Review",
+    "platform": "unknown",
+    "url": "https://ideaexchange.uakron.edu/akronlawreview/",
+    "created_date": "2025-12-14"
+  }
+}

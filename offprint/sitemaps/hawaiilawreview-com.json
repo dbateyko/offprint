@@ -1,0 +1,29 @@
+{
+  "id": "hawaiilawreview-com",
+  "start_urls": [
+    "http://hawaiilawreview.com/issue"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Hawaiilawreview",
+    "platform": "Squarespace",
+    "url": "http://hawaiilawreview.com/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/issues-archive-1/*",
+      "archive_path": "issues-archive-1",
+      "notes": "PDF links are siblings of title elements; no separate article pages.\nVolume and issue data are in h1 and h3 tags."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "h4.accordion-item__title-wrapper",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
+}

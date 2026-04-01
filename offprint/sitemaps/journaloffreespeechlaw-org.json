@@ -1,0 +1,13 @@
+{
+  "id": "journaloffreespeechlaw-org",
+  "start_urls": [
+    "https://www.journaloffreespeechlaw.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Free Speech Law",
+    "platform": "wordpress",
+    "url": "https://www.journaloffreespeechlaw.org/",
+    "created_date": "2026-03-01"
+  }
+}

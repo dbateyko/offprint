@@ -1,0 +1,16 @@
+{
+  "id": "hastings-business-law-journal",
+  "start_urls": [
+    "https://repository.uclawsf.edu/hastings_business_law_journal/recent.rss"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "UC Law Business Journal",
+    "platform": "digitalcommons",
+    "url": "https://repository.uclawsf.edu/hastings_business_law_journal",
+    "created_date": "2026-03-23",
+    "notes": "Digital Commons (BePress) journal. Formerly Hastings Business Law Journal. Published by UC Law SF. Uses context=hastings_business_law_journal for article URLs.",
+    "host": "repository.uclawsf.edu",
+    "context": "hastings_business_law_journal"
+  }
+}

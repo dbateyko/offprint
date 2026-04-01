@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-marquette-edu",
+  "start_urls": [
+    "https://scholarship.law.marquette.edu/mulr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Marquette Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.marquette.edu/mulr/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

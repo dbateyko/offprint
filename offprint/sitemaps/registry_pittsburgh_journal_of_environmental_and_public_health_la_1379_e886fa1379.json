@@ -1,0 +1,28 @@
+{
+  "id": "registry-1379-e886fa1379",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "pjephl.law.pitt.edu",
+    "journal_name": "Pittsburgh Journal of Environmental and Public Health Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://pjephl.law.pitt.edu/ojs/index.php/pjephl/index",
+    "platform": "ojs",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1379",
+    "registry_names": "Pittsburgh Journal of Environmental and Public Health Law",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "ojs",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "OJSAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/smoke/onboarding_known_platform_20260315/runs/smoke_one_pdf_20260315T140442Z.json",
+    "status_reason": "adapter_validated_smoke",
+    "status_updated_at": "2026-03-15T14:30:23Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://pjephl.law.pitt.edu/ojs/index.php/pjephl/index"
+  ]
+}

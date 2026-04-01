@@ -1,0 +1,28 @@
+{
+  "id": "www-americanhealthlaw-org",
+  "start_urls": [
+    "https://www.americanhealthlaw.org/publications/journal-of-health-and-life-sciences-law/past-issues"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.americanhealthlaw.org/publications/journal-of-health-and-life-sciences-law",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/content-library",
+        "/content-library/journal-health-law",
+        "/ahla-membership",
+        "/ahla-membership/join-ahla"
+      ],
+      "issue_path_prefixes": [
+        "/publications",
+        "/publications/white-paper-directory",
+        "/content-library",
+        "/content-library/journal-health-law"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

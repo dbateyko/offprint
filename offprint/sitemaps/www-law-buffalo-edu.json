@@ -1,0 +1,16 @@
+{
+  "id": "www-law-buffalo-edu",
+  "start_urls": [
+    "https://www.law.buffalo.edu/beyond/journals/belj.html"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.law.buffalo.edu/beyond/journals/belj.html",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

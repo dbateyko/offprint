@@ -1,0 +1,52 @@
+{
+  "id": "ilj-law-indiana-edu",
+  "start_urls": [
+    "https://ilj.law.indiana.edu/latest-issues/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Indiana Law Journal",
+    "platform": "WordPress",
+    "url": "https://ilj.law.indiana.edu/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://ilj.law.indiana.edu/latest-issues/",
+      "notes": "Hybrid site. Main archive on Digital Commons. WP site hosts latest issues and The Supplement."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "p.has-very-dark-gray-color",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "em",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

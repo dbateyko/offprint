@@ -1,0 +1,18 @@
+{
+  "url": "https://scholarcommons.sc.edu/sclr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "South Carolina Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarcommons.sc.edu/sclr/",
+    "domain": "scholarcommons.sc.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]",
+    "status": "active",
+    "status_reason": "adapter_validated_smoke_pass_digital_commons",
+    "status_evidence_ref": "artifacts/reports/smoke_top3_promote_20260314/smoke_one_pdf_20260314T033316Z.json",
+    "status_updated_at": "2026-03-14T03:33:16Z"
+  },
+  "start_urls": [
+    "https://scholarcommons.sc.edu/sclr/sitemap.xml"
+  ]
+}

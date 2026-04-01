@@ -1,0 +1,43 @@
+{
+  "id": "albertalawreview-com",
+  "start_urls": ["https://albertalawreview.com/index.php/ALR/issue/archive"],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Alberta Law Review",
+    "platform": "ojs",
+    "url": "https://www.albertalawreview.com/",
+    "created_date": "2026-03-23",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/index.php/ALR/issue/view/{ID}",
+      "archive_path": "seed -> /index.php/ALR/issue/archive (225+ issues) -> issue pages -> articles with PDFs",
+      "notes": "Standard OJS deployment. PDF links follow /index.php/ALR/article/view/{article_id}/{pdf_id}. OJSAdapter handles discovery natively. 225+ issues going back to 1955. Recent volumes CC-BY-NC-ND 4.0."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.obj_article_summary",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3.title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "ul.authors",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.pdf",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

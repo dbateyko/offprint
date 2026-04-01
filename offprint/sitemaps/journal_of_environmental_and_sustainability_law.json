@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.missouri.edu/jesl/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Journal of Environmental and Sustainability Law",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.missouri.edu/jesl/",
+    "domain": "scholarship.law.missouri.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.missouri.edu/jesl/sitemap.xml"
+  ]
+}

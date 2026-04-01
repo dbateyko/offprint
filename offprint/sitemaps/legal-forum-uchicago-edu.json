@@ -1,0 +1,14 @@
+{
+  "id": "legal-forum-uchicago-edu",
+  "start_urls": [
+    "https://legal-forum.uchicago.edu/publications"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Chicago Legal Forum",
+    "platform": "drupal",
+    "url": "https://legal-forum.uchicago.edu/",
+    "created_date": "2026-03-01",
+    "notes": "Smoke test passed 2026-03-01 via GenericAdapter. Drupal site (sites/default/files path). Registered as DrupalAdapter."
+  }
+}

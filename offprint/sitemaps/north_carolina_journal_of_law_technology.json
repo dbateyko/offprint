@@ -1,0 +1,11 @@
+{
+  "url": "https://journals.law.unc.edu/ncjolt/articles/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "North Carolina Journal of Law & Technology",
+    "platform": "WordPress",
+    "original_url": "https://ncjolt.org/",
+    "domain": "journals.law.unc.edu",
+    "notes": "Manual override: UNC Law WordPress articles index (PDFs under wp-content/uploads). Broadened seed to /articles/."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "journals-librarypublishing-arizona-edu-azlawjet",
+  "start_urls": [
+    "https://journals.librarypublishing.arizona.edu/azlawjet/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Arizona Law Journal of Emerging Technologies",
+    "platform": "wordpress",
+    "url": "https://journals.librarypublishing.arizona.edu/azlawjet/",
+    "created_date": "2026-03-01"
+  }
+}

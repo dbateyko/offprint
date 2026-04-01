@@ -1,0 +1,18 @@
+{
+  "id": "www-samford-edu",
+  "start_urls": [
+    "https://www.samford.edu/cumberlandlawreview/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Cumberland Law Review",
+    "platform": "custom",
+    "url": "https://www.samford.edu/cumberlandlawreview/",
+    "created_date": "2026-03-27",
+    "status": "paused_other",
+    "navigation": {
+      "archive_path": "/cumberlandlawreview/",
+      "notes": "Seed aligned to action-list host-level smoke target, but 2026-03-27 smoke found no PDF candidates with SelectorDrivenAdapter. Evidence update 2026-03-27: canonical content appears migrated to cumberlandlawreview.com (Wix) where lightweight crawl found many journal PDFs; samford host remains non-discoverable with current seed."
+    }
+  }
+}

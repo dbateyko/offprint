@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.slu.edu/lj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Saint Louis University Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.slu.edu/lj/",
+    "domain": "scholarship.law.slu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.slu.edu/lj/sitemap.xml"
+  ]
+}

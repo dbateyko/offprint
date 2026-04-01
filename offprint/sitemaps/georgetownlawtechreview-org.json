@@ -1,0 +1,47 @@
+{
+  "id": "georgetownlawtechreview-org",
+  "metadata": {
+    "created_date": "2026-03-22",
+    "journal_name": "Georgetown Law Technology Review",
+    "navigation": {
+      "archive_path": "seed \u2192 'Issues' link \u2192 /issues/ \u2192 volume/issue link e.g. /issues/volume-1/issue-1-2016/",
+      "notes": "The site is WordPress. Each issue page lists articles in <article class=\"post-teaser\">. PDF for the whole issue is a \"Download\" link at top. Individual article pages contain a separate PDF link (a[href$=\".pdf\"]). No pagination. Volume/issue navigation via /issues/volume-{volume}/issue-{issue}-{year}/. Smoke passes on /issues/ and issue pages via GeorgetownGLTRAdapter. Current smoke metadata is partial (volume/issue extracted; author/year may be blank).",
+      "volume_url_pattern": "/issues/volume-{volume}/issue-{issue}-{year}/"
+    },
+    "platform": "WordPress",
+    "status": "active",
+    "status_evidence_ref": "smoke_one_pdf_per_site:20260326T054327Z",
+    "status_updated_at": "2026-03-26T05:43:27Z",
+    "url": "https://georgetownlawtechreview.org/"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "article",
+      "type": "SelectorElement"
+    },
+    {
+      "id": "title",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "h2",
+      "type": "SelectorText"
+    },
+    {
+      "id": "article_url",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a",
+      "type": "SelectorLink"
+    }
+  ],
+  "source": "llm_explore",
+  "start_urls": [
+    "https://georgetownlawtechreview.org/issues/"
+  ]
+}

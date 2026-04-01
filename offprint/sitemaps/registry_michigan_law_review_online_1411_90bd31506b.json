@@ -1,0 +1,28 @@
+{
+  "id": "registry-1411-90bd31506b",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "michiganlawreview.org",
+    "journal_name": "Michigan Law Review Online",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://michiganlawreview.org/category/mlr-online",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "1411",
+    "registry_names": "Michigan Law Review Online",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch1_20260310_summary.json",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-10T00:46:33Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://michiganlawreview.org/category/mlr-online"
+  ]
+}

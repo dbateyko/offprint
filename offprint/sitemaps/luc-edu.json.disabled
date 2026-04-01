@@ -1,0 +1,13 @@
+{
+  "id": "luc-edu",
+  "start_urls": [
+    "https://www.luc.edu/law/academics/journals-publications/journalofregulatorycompliance/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Regulatory Compliance",
+    "platform": "unknown",
+    "url": "https://www.luc.edu/law/academics/journals-publications/journalofregulatorycompliance/",
+    "created_date": "2025-12-14"
+  }
+}

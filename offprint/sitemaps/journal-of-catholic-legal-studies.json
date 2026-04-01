@@ -1,0 +1,16 @@
+{
+  "id": "journal-of-catholic-legal-studies",
+  "start_urls": [
+    "https://scholarship.law.stjohns.edu/jcls/all_issues.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Catholic Legal Studies",
+    "platform": "Digital Commons",
+    "url": "https://scholarship.law.stjohns.edu/jcls/",
+    "rss_feed": "https://scholarship.law.stjohns.edu/jcls/recent.rss",
+    "created_date": "2026-03-24",
+    "status": "active",
+    "notes": "Digital Commons platform (Bepress). Issue archive at all_issues.html with volumes from 2005-2025."
+  }
+}

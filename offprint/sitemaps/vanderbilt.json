@@ -1,0 +1,74 @@
+{
+  "id": "vanderbilt",
+  "metadata": {
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_vanderbilt_minnesota_20260310_summary.json",
+    "status_reason": "site_adapter_validated_smoke_pass_digital_commons",
+    "status_updated_at": "2026-03-10T01:18:43Z"
+  },
+  "raw_sitemap": {
+    "_id": "vanderbilt",
+    "selectors": [
+      {
+        "id": "issue",
+        "linkType": "linkFromHref",
+        "multiple": true,
+        "parentSelectors": [
+          "_root"
+        ],
+        "selector": "h4 a",
+        "type": "SelectorLink"
+      },
+      {
+        "elementLimit": 0,
+        "id": "articles",
+        "multiple": true,
+        "parentSelectors": [
+          "issue"
+        ],
+        "scroll": false,
+        "selector": "div.doc",
+        "type": "SelectorElement"
+      },
+      {
+        "id": "pdf",
+        "linkType": "linkFromHref",
+        "multiple": false,
+        "parentSelectors": [
+          "articles"
+        ],
+        "selector": ".pdf a",
+        "type": "SelectorLink"
+      },
+      {
+        "id": "title",
+        "multiple": false,
+        "multipleType": "singleColumn",
+        "parentSelectors": [
+          "articles"
+        ],
+        "regex": "",
+        "selector": "p:nth-of-type(2) a",
+        "type": "SelectorText"
+      },
+      {
+        "id": "author",
+        "multiple": false,
+        "multipleType": "singleColumn",
+        "parentSelectors": [
+          "articles"
+        ],
+        "regex": "",
+        "selector": "span",
+        "type": "SelectorText"
+      }
+    ],
+    "startUrl": [
+      "https://scholarship.law.vanderbilt.edu/jetlaw/vol[1-26]"
+    ]
+  },
+  "source": "csv",
+  "start_urls": [
+    "https://scholarship.law.vanderbilt.edu/jetlaw/vol[1-26]"
+  ]
+}

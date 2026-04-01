@@ -1,0 +1,15 @@
+{
+  "id": "colorado-law-review",
+  "start_urls": [
+    "https://lawreview.colorado.edu/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "University of Colorado Law Review",
+    "platform": "wordpress",
+    "url": "https://lawreview.colorado.edu/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

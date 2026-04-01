@@ -1,0 +1,69 @@
+{
+  "id": "colorado1of2",
+  "start_urls": [
+    "https://sites.suffolk.edu/jhtl/home/publications/"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "colorado1of2",
+    "startUrl": [
+      "https://sites.suffolk.edu/jhtl/home/publications/"
+    ],
+    "selectors": [
+      {
+        "id": "full_issue",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": "#main div:nth-of-type(n+2), div.issueFull",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "titles",
+        "parentSelectors": [
+          "full_issue"
+        ],
+        "type": "SelectorText",
+        "selector": "h6",
+        "multiple": true,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "pdfs",
+        "parentSelectors": [
+          "full_issue"
+        ],
+        "type": "SelectorLink",
+        "selector": "a:nth-of-type(n+2)",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "authors",
+        "parentSelectors": [
+          "full_issue"
+        ],
+        "type": "SelectorText",
+        "selector": "span.author",
+        "multiple": true,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "full_issue"
+        ],
+        "type": "SelectorText",
+        "selector": "h2",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

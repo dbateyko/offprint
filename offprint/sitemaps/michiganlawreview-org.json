@@ -1,0 +1,15 @@
+{
+  "id": "michiganlawreview-org",
+  "start_urls": [
+    "https://michiganlawreview.org/journal/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Michigan Law Review",
+    "platform": "wordpress",
+    "url": "https://www.michiganlawreview.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "WordPress site with /journal/ page for articles. Uses WordPressAcademicBaseAdapter."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "domain": "kb.osu.edu",
+    "journal": "Ohio State Journal of Criminal Law",
+    "notes": "Canonicalized from legacy handle redirect to DSpace collection URL.",
+    "original_url": "https://kb.osu.edu/handle/1811/739",
+    "platform": "Custom/Unknown",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z",
+    "updated_at": "2026-02-23"
+  },
+  "sitemap_url": null,
+  "url": "https://kb.osu.edu/collections/9c8dcae4-b8f7-516f-b6dd-54e1fcb9dca9"
+}

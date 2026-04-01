@@ -1,0 +1,28 @@
+{
+  "id": "registry-650-ca016b986b",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "illinoisjltp.com",
+    "journal_name": "University of Illinois Journal of Law, Technology & Policy",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://illinoisjltp.com/journal-archive/",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": true,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "650",
+    "registry_names": "University of Illinois Journal of Law, Technology & Policy",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "smoke_validated",
+    "registry_suggested_adapter": "IllinoisJLTPAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/reports/smoke_techlaw_batch_20260313/smoke_one_pdf_20260314T024955Z.json",
+    "status_reason": "adapter_validated_smoke_pass_illinois_jltp",
+    "status_updated_at": "2026-03-14T02:49:55Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://illinoisjltp.com/journal-archive/"
+  ]
+}

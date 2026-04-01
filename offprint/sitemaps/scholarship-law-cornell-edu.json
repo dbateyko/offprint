@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-cornell-edu",
+  "start_urls": [
+    "https://scholarship.law.cornell.edu/cjlpp/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Cornell Journal of Law and Public Policy",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.cornell.edu/cjlpp/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

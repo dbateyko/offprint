@@ -1,0 +1,57 @@
+{
+  "id": "hjlt",
+  "start_urls": [
+    "https://jolt.law.harvard.edu/volumes/volume-36"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "hjlt",
+    "startUrl": [
+      "https://jolt.law.harvard.edu/volumes/volume-36"
+    ],
+    "selectors": [
+      {
+        "id": "volume_select",
+        "parentSelectors": [
+          "_root",
+          "volume_select"
+        ],
+        "paginationType": "linkFromHref",
+        "type": "SelectorPagination",
+        "selector": "a.aside__list-item__link"
+      },
+      {
+        "id": "table",
+        "parentSelectors": [
+          "volume_select"
+        ],
+        "type": "SelectorElement",
+        "selector": ".volume--fall section:nth-of-type(1), section.volume",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "urls",
+        "parentSelectors": [
+          "table"
+        ],
+        "type": "SelectorLink",
+        "selector": "li a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "Volume_Number",
+        "parentSelectors": [
+          "table"
+        ],
+        "type": "SelectorText",
+        "selector": "h2",
+        "multiple": true,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

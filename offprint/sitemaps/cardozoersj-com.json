@@ -1,0 +1,45 @@
+{
+  "id": "cardozoersj-com",
+  "start_urls": [
+    "https://www.cardozoersj.com/volume-31"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Cardozoersj",
+    "platform": "Wix",
+    "url": "https://www.cardozoersj.com/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/volume(-)?\\d+",
+      "archive_path": "archive link leads to listing of all volumes",
+      "notes": "No authentication required; site uses Wix builder; PDF links on volume pages; each article has a title h2 and pdf link; some volume URLs vary between /volume-XX and /volumeXX; no pagination on individual volume pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div:has(h2)",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h2",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

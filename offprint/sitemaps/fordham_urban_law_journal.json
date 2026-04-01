@@ -1,0 +1,14 @@
+{
+  "url": "https://ir.lawnet.fordham.edu/ulj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Fordham Urban Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://ir.lawnet.fordham.edu/ulj/",
+    "domain": "ir.lawnet.fordham.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://ir.lawnet.fordham.edu/ulj/sitemap.xml"
+  ]
+}

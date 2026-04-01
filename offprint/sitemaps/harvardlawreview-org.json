@@ -1,0 +1,57 @@
+{
+  "id": "harvardlawreview-org",
+  "start_urls": [
+    "https://harvardlawreview.org/category/articles/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Harvard Law Review",
+    "platform": "wordpress",
+    "url": "https://harvardlawreview.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Custom WordPress theme with post-card structure. PDFs on article detail pages."
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.post",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h2.post-card__title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "a.post-card__author",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "issue",
+      "type": "SelectorText",
+      "selector": "span.post-card__issue",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h2.post-card__title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

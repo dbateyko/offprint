@@ -1,0 +1,18 @@
+{
+  "id": "kb-osu-edu",
+  "start_urls": [
+    "https://kb.osu.edu/collections/9c8dcae4-b8f7-516f-b6dd-54e1fcb9dca9"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Ohio State Journal of Criminal Law",
+    "platform": "dspace",
+    "url": "https://kb.osu.edu/collections/9c8dcae4-b8f7-516f-b6dd-54e1fcb9dca9",
+    "created_date": "2026-03-27",
+    "status": "active",
+    "navigation": {
+      "archive_path": "/collections/9c8dcae4-b8f7-516f-b6dd-54e1fcb9dca9",
+      "notes": "DSpace collection seed for OSJCL. 2026-03-27 onboarding smoke PASS: PDF on disk with title and >=2/3 metadata fields."
+    }
+  }
+}

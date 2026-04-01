@@ -1,0 +1,28 @@
+{
+  "id": "registry-1889-df8600c8cb",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "scholarcommons.sc.edu",
+    "journal_name": "South Carolina Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://scholarcommons.sc.edu/sclr/",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": true,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "1889",
+    "registry_names": "South Carolina Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "smoke_validated",
+    "registry_suggested_adapter": "DigitalCommonsIssueArticleHopAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/reports/smoke_top3_promote_20260314/smoke_one_pdf_20260314T033316Z.json",
+    "status_reason": "alternate_digital_commons_seed_validated",
+    "status_updated_at": "2026-03-14T03:33:16Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://scholarcommons.sc.edu/sclr/all_issues.html"
+  ]
+}

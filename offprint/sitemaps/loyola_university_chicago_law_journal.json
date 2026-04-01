@@ -1,0 +1,14 @@
+{
+  "url": "https://lawecommons.luc.edu/luclj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Loyola University Chicago Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://lawecommons.luc.edu/luclj/",
+    "domain": "lawecommons.luc.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://lawecommons.luc.edu/luclj/sitemap.xml"
+  ]
+}

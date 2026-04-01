@@ -1,0 +1,19 @@
+{
+  "id": "american-journal-of-legal-history",
+  "metadata": {
+    "canonicalized_at": "2026-02-03",
+    "domain": "academic.oup.com",
+    "journal_name": "American Journal of Legal History",
+    "notes": "Manual seed override: OUP issue page (subscription access likely required).",
+    "original_url": "https://academic.oup.com/ajlh",
+    "platform": "unknown",
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/academic.oup.com/url_64eb4dfa13b8",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://academic.oup.com/ajlh/issue/56/1"
+  ]
+}

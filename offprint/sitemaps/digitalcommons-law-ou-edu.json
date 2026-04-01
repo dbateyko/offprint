@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-ou-edu",
+  "start_urls": [
+    "https://digitalcommons.law.ou.edu/ailr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "American Indian Law Review",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.ou.edu/ailr/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

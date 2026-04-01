@@ -1,0 +1,16 @@
+{
+  "id": "www-msujanrl-org",
+  "start_urls": [
+    "http://msujanrl.org/s/2016-JANRL-Volume-XII.pdf"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "http://www.msujanrl.org/previous-volumes",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

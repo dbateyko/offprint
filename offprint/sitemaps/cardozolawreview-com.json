@@ -1,0 +1,21 @@
+{
+  "id": "cardozolawreview-com",
+  "metadata": {
+    "created_date": "2026-03-22",
+    "journal_name": "Cardozolawreview",
+    "navigation": {
+      "archive_path": "seed \u2192 \u2018Issues\u2019 link \u2192 /volume-47/issues/ lists all articles in the current volume",
+      "notes": "Only Volume\u202f47 is available. No pagination \u2013 all articles appear on a single page. PDFs are linked on the article page, not on the volume list. WordPress theme provides stable class names; no JS\u2011only rendering. No separate online\u2011originals archive.",
+      "volume_url_pattern": "/volume-{N}/"
+    },
+    "platform": "WordPress",
+    "status": "ready_for_promotion",
+    "status_evidence_ref": "scripts/promote_sitemaps.py:20260323T012250Z",
+    "status_updated_at": "2026-03-23T01:27:38.589111+00:00",
+    "url": "http://cardozolawreview.com/de-novo"
+  },
+  "source": "llm_explore",
+  "start_urls": [
+    "https://cardozolawreview.com/volume-47/issues/"
+  ]
+}

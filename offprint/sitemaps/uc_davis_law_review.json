@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "domain": "lawreview.law.ucdavis.edu",
+    "journal": "UC Davis Law Review",
+    "notes": "Search pass found archives index under /archives/.",
+    "original_url": "https://lawreview.law.ucdavis.edu/",
+    "platform": "Custom/Unknown",
+    "status": "paused_waf",
+    "status_evidence_ref": "artifacts/top50_batch5_20260310_summary.json",
+    "status_reason": "cloudflare_403_challenge_detected",
+    "status_updated_at": "2026-03-10T00:13:41Z"
+  },
+  "sitemap_url": null,
+  "url": "https://lawreview.law.ucdavis.edu/archives/"
+}

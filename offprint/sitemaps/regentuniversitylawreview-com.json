@@ -1,0 +1,28 @@
+{
+  "id": "regentuniversitylawreview-com",
+  "start_urls": [
+    "https://www.regentuniversitylawreview.com/past-volumes"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Regentuniversitylawreview",
+    "platform": "Squarespace",
+    "url": "https://www.regentuniversitylawreview.com/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "archive_path": "Home has a 'Past Volumes' link → /past-volumes",
+      "notes": "Article titles and URLs are separate <a> tags; dates are sibling <time> tags. PDF links are only present on article pages, not on the listing."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "a.BlogList-item-title",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
+}

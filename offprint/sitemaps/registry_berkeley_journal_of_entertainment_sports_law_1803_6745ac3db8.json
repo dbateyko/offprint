@@ -1,0 +1,28 @@
+{
+  "id": "registry-1803-6745ac3db8",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.law.berkeley.edu",
+    "journal_name": "Berkeley Journal of Entertainment & Sports Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.law.berkeley.edu/library/ir/bjesl",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "1803",
+    "registry_names": "Berkeley Journal of Entertainment & Sports Law",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "scripts/promote_todo_adapter_seeds.py",
+    "status_reason": "bulk_promoted_from_todo_adapter",
+    "status_updated_at": "2026-03-16T21:03:58Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.law.berkeley.edu/library/ir/bjesl"
+  ]
+}

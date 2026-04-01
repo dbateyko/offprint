@@ -1,0 +1,13 @@
+{
+  "id": "charlestonlawreview-org",
+  "start_urls": [
+    "https://charlestonlawreview.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Charleston Law Review",
+    "platform": "wordpress",
+    "url": "https://charlestonlawreview.org/",
+    "created_date": "2025-12-14"
+  }
+}

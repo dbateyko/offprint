@@ -1,0 +1,14 @@
+{
+  "id": "law-uoregon-edu",
+  "start_urls": [
+    "https://law.uoregon.edu/life-law/student-organizations-journals/oregon-law-review"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "law.uoregon.edu",
+    "platform": "drupal",
+    "url": "https://law.uoregon.edu/life-law/student-organizations-journals/oregon-law-review",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

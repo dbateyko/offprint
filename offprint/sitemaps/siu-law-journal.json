@@ -1,0 +1,26 @@
+{
+  "id": "siu-law-journal",
+  "start_urls": [
+    "https://opensiuc.lib.siu.edu/siulj/"
+  ],
+  "source": "manual",
+  "raw_sitemap": {
+    "selectors": [
+      {
+        "id": "pdf",
+        "selector": "a[href$='.pdf']",
+        "type": "SelectorLink",
+        "multiple": true,
+        "parentSelectors": [
+          "_root"
+        ]
+      }
+    ]
+  },
+  "metadata": {
+    "journal_name": "Southern Illinois University Law Journal",
+    "platform": "digital_commons",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: PDF archive hosted on OpenSIUC (Digital Commons)."
+  }
+}

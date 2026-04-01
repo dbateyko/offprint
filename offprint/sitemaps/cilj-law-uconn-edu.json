@@ -1,0 +1,13 @@
+{
+  "id": "cilj-law-uconn-edu",
+  "start_urls": [
+    "https://cilj.law.uconn.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Connecticut Insurance Law Journal",
+    "platform": "unknown",
+    "url": "https://cilj.law.uconn.edu/",
+    "created_date": "2025-12-14"
+  }
+}

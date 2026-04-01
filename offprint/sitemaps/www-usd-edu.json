@@ -1,0 +1,20 @@
+{
+  "id": "www-usd-edu",
+  "start_urls": [
+    "https://www.usd.edu/Resources-For/Current-Students"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.usd.edu/law/south-dakota-law-review",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "issue_path_prefixes": [
+        "/the-south-dakotan",
+        "/the-south-dakotan/2026-unite-for-usd-sets-record-with-over-$3m-raised"
+      ],
+      "extraction_mode": "article_then_pdf"
+    }
+  }
+}

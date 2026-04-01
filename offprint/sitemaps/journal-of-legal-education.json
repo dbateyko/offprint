@@ -1,0 +1,99 @@
+{
+  "journal": {
+    "name": "Journal of Legal Education",
+    "abbreviation": "JLE",
+    "issn": "0022-2208",
+    "publisher": "Association of American Law Schools (AALS)",
+    "url": "https://jle.aals.org",
+    "description": "The Journal of Legal Education (ISSN 0022-2208) is the journal of record for the American legal academy, published by the Association of American Law Schools in its role as the learned society for the study of law and legal education."
+  },
+  "platform": {
+    "type": "Digital Commons",
+    "provider": "bepress",
+    "host": "jle.aals.org",
+    "evidence": [
+      "network.bepress.com references in navigation",
+      "cgi/viewcontent.cgi URL pattern for PDFs",
+      "context=home parameter in URLs",
+      "Adobe DTM analytics (beprress)",
+      "BePress citation meta tags (bepress_citation_*)"
+    ]
+  },
+  "urls": {
+    "homepage": "https://jle.aals.org/home",
+    "browse": "https://jle.aals.org/communities.html",
+    "search": "https://jle.aals.org/do/search/advanced/",
+    "articles_base": "https://jle.aals.org/home/vol{volume}/iss{issue}",
+    "pdf_base": "https://jle.aals.org/cgi/viewcontent.cgi?article={article_id}&context=home",
+    "rss": "https://jle.aals.org/recent.rss"
+  },
+  "structure": {
+    "volume_url_pattern": "https://jle.aals.org/home/vol{volume}",
+    "issue_url_pattern": "https://jle.aals.org/home/vol{volume}/iss{issue}",
+    "article_url_pattern": "https://jle.aals.org/home/vol{volume}/iss{issue}/{article_number}",
+    "article_id_pattern": "article={number} in viewcontent.cgi URLs"
+  },
+  "metadata_fields": {
+    "available_in_html": [
+      "title",
+      "authors",
+      "publication_date",
+      "keywords",
+      "first_page",
+      "journal_title",
+      "author_institutions"
+    ],
+    "meta_tag_examples": {
+      "title": "meta name=\"twitter:title\"",
+      "author": "meta property=\"article:author\" or meta name=\"author\"",
+      "date": "meta name=\"description\" contains 'Published on'",
+      "keywords": "meta name=\"keywords\"",
+      "journal": "meta name=\"bepress_citation_journal_title\"",
+      "first_page": "meta name=\"bepress_citation_firstpage\"",
+      "author_institution": "meta name=\"bepress_citation_author_institution\""
+    }
+  },
+  "issues": {
+    "volumes_covered": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73],
+    "latest_volume": 73,
+    "latest_issue": 4,
+    "latest_issue_date": "Summer 2025"
+  },
+  "sample_articles": [
+    {
+      "title": "Restorative Justice in Legal Education",
+      "url": "https://jle.aals.org/home/vol73/iss4/1",
+      "pdf_url": "https://jle.aals.org/cgi/viewcontent.cgi?article=3359&context=home",
+      "article_id": 3359,
+      "authors": ["Lindsey Pointer", "Aparna Polavarapu", "Alanna Ojibway"],
+      "volume": 73,
+      "issue": 4,
+      "publication_date": "2025-06-22",
+      "keywords": ["Restorative Justice", "Criminal Law"]
+    },
+    {
+      "title": "Pedagogies in the Meantime: Reflections on ADR and Restorative Justice in U.S. and Canadian Legal Education",
+      "url": "https://jle.aals.org/home/vol73/iss4/2",
+      "pdf_url": "https://jle.aals.org/cgi/viewcontent.cgi?article=3360&context=home",
+      "article_id": 3360,
+      "authors": ["Amy J. Cohen", "Daniel Del Gobbo"],
+      "volume": 73,
+      "issue": 4
+    },
+    {
+      "title": "Restoring the Promise of Legal Education",
+      "url": "https://jle.aals.org/home/vol73/iss4/3",
+      "pdf_url": "https://jle.aals.org/cgi/viewcontent.cgi?article=3361&context=home",
+      "article_id": 3361,
+      "authors": ["Olwyn Conway", "Inga N. Laurent"],
+      "volume": 73,
+      "issue": 4
+    }
+  ],
+  "crawling_notes": {
+    "article_listing_url": "https://jle.aals.org/home/vol{volume}/iss{issue}",
+    "pdf_extraction": "Look for <p class=\"pdf\"><a href=\"https://jle.aals.org/cgi/viewcontent.cgi?article={id}&context=home\"",
+    "article_title_author": "Look for <p><a href=\"...\">TITLE</a><br><span class=\"auth\">AUTHORS</span>",
+    "article_metadata": "Individual article pages contain OpenGraph and BePress citation meta tags"
+  }
+}

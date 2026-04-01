@@ -1,0 +1,13 @@
+{
+  "id": "florida_lr",
+  "metadata": {
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_alias_cleanup_batch1_20260310_summary.json",
+    "status_reason": "alias_seed_synced_to_active_canonical_host",
+    "status_updated_at": "2026-03-10T04:45:38Z"
+  },
+  "source": "playbook_expansion",
+  "start_urls": [
+    "https://www.floridalawreview.com/"
+  ]
+}

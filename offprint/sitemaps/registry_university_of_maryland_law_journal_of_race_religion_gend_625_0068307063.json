@@ -1,0 +1,28 @@
+{
+  "id": "registry-625-0068307063",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "digitalcommons.law.umaryland.edu",
+    "journal_name": "University of Maryland Law Journal of Race, Religion, Gender & Class",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://digitalcommons.law.umaryland.edu/rrgc",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "625",
+    "registry_names": "University of Maryland Law Journal of Race, Religion, Gender & Class",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://digitalcommons.law.umaryland.edu/rrgc"
+  ]
+}

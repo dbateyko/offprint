@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.seattleu.edu/sulr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Seattle University Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.seattleu.edu/sulr/",
+    "domain": "digitalcommons.law.seattleu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.seattleu.edu/sulr/sitemap.xml"
+  ]
+}

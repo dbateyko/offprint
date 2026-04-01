@@ -1,0 +1,7 @@
+{
+  "id": "nd_lr",
+  "start_urls": [
+    "https://commons.und.edu/ndlr/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

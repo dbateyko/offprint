@@ -1,0 +1,13 @@
+{
+  "id": "statelessness-citizenship-review",
+  "start_urls": [
+    "https://statelessnessandcitizenshipreview.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Statelessness and Citizenship Review",
+    "platform": "wordpress",
+    "url": "https://statelessnessandcitizenshipreview.com/",
+    "created_date": "2026-03-01"
+  }
+}

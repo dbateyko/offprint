@@ -1,0 +1,28 @@
+{
+  "id": "www-jdsupra-com",
+  "start_urls": [
+    "https://www.jdsupra.com/post/fileServer.aspx?fName=e3e31f49-5a89-4cea-a11e-03dd317eac89.pdf"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.jdsupra.com/legalnews/qui-tam-quarterly-the-department-of-94974",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/topics",
+        "/topics/employer-liability-issues",
+        "/legalnews",
+        "/legalnews/cms-issues-request-for-information-on-4598210"
+      ],
+      "issue_path_prefixes": [
+        "/legalnews",
+        "/legalnews/california-water-plan-2028-what-to-know-9421847",
+        "/legalnews/daily-compliance-news-october-13-2025-33556",
+        "/legalnews/dol-proposes-a-rule-reverting-to-2021-9209272"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

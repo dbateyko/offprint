@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-villanova-edu",
+  "start_urls": [
+    "https://digitalcommons.law.villanova.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Villanova Law (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.villanova.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include VLR, MSLJ, VJILM, etc. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "arbitrationlaw-com",
+  "start_urls": [
+    "https://arbitrationlaw.com/books/american-review-international-arbitration-aria"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "American Review of International Arbitration",
+    "platform": "wordpress",
+    "url": "https://arbitrationlaw.com/books/american-review-international-arbitration-aria",
+    "created_date": "2025-12-14"
+  }
+}

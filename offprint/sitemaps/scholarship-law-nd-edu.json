@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-nd-edu",
+  "start_urls": [
+    "https://scholarship.law.nd.edu/ajj/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "American Journal of Jurisprudence",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.nd.edu/ajj/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

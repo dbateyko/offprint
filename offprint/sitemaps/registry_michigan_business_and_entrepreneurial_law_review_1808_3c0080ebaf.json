@@ -1,0 +1,28 @@
+{
+  "id": "registry-1808-3c0080ebaf",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "mbelr.org",
+    "journal_name": "Michigan Business and Entrepreneurial Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://mbelr.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1808",
+    "registry_names": "Michigan Business and Entrepreneurial Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/mbelr.org/url_3c0080ebafb2",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-14T04:05:31Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://mbelr.org/"
+  ]
+}

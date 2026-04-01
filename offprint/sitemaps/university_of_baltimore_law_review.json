@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarworks.law.ubalt.edu/ublr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "University of Baltimore Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarworks.law.ubalt.edu/ublr/",
+    "domain": "scholarworks.law.ubalt.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarworks.law.ubalt.edu/ublr/sitemap.xml"
+  ]
+}

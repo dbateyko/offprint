@@ -1,0 +1,14 @@
+{
+  "id": "www-transnat-org",
+  "start_urls": [
+    "https://www.transnat.org/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.transnat.org",
+    "platform": "wix",
+    "url": "https://www.transnat.org/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

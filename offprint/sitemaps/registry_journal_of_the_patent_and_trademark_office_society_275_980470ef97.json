@@ -1,0 +1,28 @@
+{
+  "id": "registry-275-980470ef97",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.jptos.org",
+    "journal_name": "Journal of the Patent and Trademark Office Society",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.jptos.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "275",
+    "registry_names": "Journal of the Patent and Trademark Office Society",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_paywall",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.jptos.org/url_980470ef97cf",
+    "status_reason": "probe_paywall_detected",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.jptos.org/"
+  ]
+}

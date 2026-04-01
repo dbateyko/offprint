@@ -1,0 +1,13 @@
+{
+  "id": "gwjeel-com",
+  "start_urls": [
+    "https://gwjeel.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "George Washington Journal of Energy and Environmental Law",
+    "platform": "wordpress",
+    "url": "https://gwjeel.com/",
+    "created_date": "2025-12-14"
+  }
+}

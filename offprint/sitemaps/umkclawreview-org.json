@@ -1,0 +1,14 @@
+{
+  "id": "umkclawreview-org",
+  "start_urls": [
+    "https://umkclawreview.org/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "umkclawreview.org",
+    "platform": "wordpress",
+    "url": "https://umkclawreview.org/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

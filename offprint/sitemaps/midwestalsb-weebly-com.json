@@ -1,0 +1,36 @@
+{
+  "id": "midwestalsb-weebly-com",
+  "start_urls": [
+    "https://midwestalsb.weebly.com/pdfs-of-midwest-law-journal.html"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Midwestalsb.Weebly",
+    "platform": "unknown",
+    "url": "https://midwestalsb.weebly.com/the-midwest-law-journal.html",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "archive_path": "PDF list page as primary archive",
+      "notes": "No pagination or volume navigation. Weebly site. PDF links directly on listing page."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.paragraph",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

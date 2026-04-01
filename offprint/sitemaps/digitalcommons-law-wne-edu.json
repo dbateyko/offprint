@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-wne-edu",
+  "start_urls": [
+    "https://digitalcommons.law.wne.edu/lawreview/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Western New England Law Review",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.wne.edu/lawreview/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

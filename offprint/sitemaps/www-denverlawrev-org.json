@@ -1,0 +1,22 @@
+{
+  "id": "www-denverlawrev-org",
+  "start_urls": [
+    "https://www.denverlawrev.org/_files/ugd/9d4c2a_025b51b60f3c43c0adfa24c0ce1b2ac9.pdf"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.denverlawrev.org/",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/symposium-volume103",
+        "/volume-99-symposium",
+        "/volume100",
+        "/volume101"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

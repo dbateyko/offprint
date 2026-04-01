@@ -1,0 +1,28 @@
+{
+  "id": "registry-671-c5563ff558",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.asl.edu",
+    "journal_name": "Appalachian Journal of Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.asl.edu/law-journal",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "671",
+    "registry_names": "Appalachian Journal of Law",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.asl.edu/url_c5563ff558d8",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:05:31Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://www.asl.edu/law-journal"
+  ]
+}

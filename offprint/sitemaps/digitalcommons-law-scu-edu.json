@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-scu-edu",
+  "start_urls": [
+    "https://digitalcommons.law.scu.edu/lawreview/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Santa Clara Law Review",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.scu.edu/lawreview/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

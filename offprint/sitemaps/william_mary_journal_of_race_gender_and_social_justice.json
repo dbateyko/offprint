@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.wm.edu/wmjowl/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "William & Mary Journal of Race, Gender, and Social Justice",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.wm.edu/wmjowl/",
+    "domain": "scholarship.law.wm.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.wm.edu/wmjowl/sitemap.xml"
+  ]
+}

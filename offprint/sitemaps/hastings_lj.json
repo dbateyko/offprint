@@ -1,0 +1,12 @@
+{
+  "id": "hastings_lj",
+  "start_urls": [
+    "https://www.uclawjournal.org/"
+  ],
+  "source": "playbook_expansion",
+  "metadata": {
+    "domain": "www.uclawjournal.org",
+    "canonicalized_at": "2026-02-03",
+    "notes": "seed_audit: update domain via canonical URL"
+  }
+}

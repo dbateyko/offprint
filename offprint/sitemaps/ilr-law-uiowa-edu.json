@@ -1,0 +1,17 @@
+{
+  "id": "ilr-law-uiowa-edu",
+  "metadata": {
+    "created_date": "2025-12-14",
+    "journal_name": "Iowa Law Review",
+    "platform": "unknown",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch4_20260310_summary.json",
+    "status_reason": "site_adapter_validated_shallow_pdf_check",
+    "status_updated_at": "2026-03-10T00:56:21Z",
+    "url": "https://ilr.law.uiowa.edu/"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://ilr.law.uiowa.edu/"
+  ]
+}

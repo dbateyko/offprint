@@ -1,0 +1,14 @@
+{
+  "id": "idaholawreview-com",
+  "start_urls": [
+    "https://digitalcommons.law.uidaho.edu/idaho-law-review/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Idaho Law Review",
+    "platform": "digital_commons",
+    "url": "https://idaholawreview.com/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: PDF archive hosted on University of Idaho Digital Commons."
+  }
+}

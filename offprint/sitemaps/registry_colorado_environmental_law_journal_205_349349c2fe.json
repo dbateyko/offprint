@@ -1,0 +1,28 @@
+{
+  "id": "registry-205-349349c2fe",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.colorado.edu",
+    "journal_name": "Colorado Environmental Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.colorado.edu/law/colorado-environmental-law-journal",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "205",
+    "registry_names": "Colorado Environmental Law Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DrupalAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_404",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.colorado.edu/url_349349c2fece",
+    "status_reason": "probe_http_404",
+    "status_updated_at": "2026-03-14T04:05:31Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.colorado.edu/law/colorado-environmental-law-journal"
+  ]
+}

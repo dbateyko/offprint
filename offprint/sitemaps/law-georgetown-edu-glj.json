@@ -1,0 +1,15 @@
+{
+  "id": "law-georgetown-edu-glj",
+  "start_urls": [
+    "https://www.law.georgetown.edu/georgetown-law-journal/in-print/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Georgetown Law Journal",
+    "platform": "WordPress",
+    "url": "https://www.law.georgetown.edu/georgetown-law-journal/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "notes": "WordPress site. Uses WordPressAcademicBaseAdapter to decode pdf-embedder links."
+  }
+}

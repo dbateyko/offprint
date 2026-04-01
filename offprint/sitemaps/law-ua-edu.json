@@ -1,0 +1,13 @@
+{
+  "id": "law-ua-edu",
+  "start_urls": [
+    "https://www.law.ua.edu/lawreview/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Alabama Law Review",
+    "platform": "unknown",
+    "url": "https://www.law.ua.edu/lawreview/",
+    "created_date": "2025-12-14"
+  }
+}

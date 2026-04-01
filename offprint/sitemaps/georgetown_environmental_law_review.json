@@ -1,0 +1,26 @@
+{
+  "url": "https://www.law.georgetown.edu/environmental-law-review/in-print/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Georgetown Environmental Law Review",
+    "platform": "WordPress",
+    "original_url": "https://www.law.georgetown.edu/environmental-law-review/",
+    "domain": "www.law.georgetown.edu",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_targeted_curl_investigation_20260310_georgetown_batch2.json",
+    "status_reason": "in_print_article_pdf_paths_validated",
+    "status_updated_at": "2026-03-10T14:15:53Z",
+    "adapter_config": {
+      "issue_path_prefixes": [
+        "/environmental-law-review/in-print/"
+      ],
+      "author_selectors": [
+        ".published_author"
+      ],
+      "pdf_button_selectors": [
+        "a.pdfemb-viewer[href$='.pdf']",
+        "a[href$='.pdf']"
+      ]
+    }
+  }
+}

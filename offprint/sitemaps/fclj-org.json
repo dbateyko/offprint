@@ -1,0 +1,13 @@
+{
+  "id": "fclj-org",
+  "start_urls": [
+    "http://www.fclj.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Federal Communications Law Journal",
+    "platform": "wordpress",
+    "url": "http://www.fclj.org/",
+    "created_date": "2025-12-14"
+  }
+}

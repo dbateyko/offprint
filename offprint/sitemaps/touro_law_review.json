@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.tourolaw.edu/lawreview/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Touro Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.tourolaw.edu/lawreview/",
+    "domain": "digitalcommons.tourolaw.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.tourolaw.edu/lawreview/sitemap.xml"
+  ]
+}

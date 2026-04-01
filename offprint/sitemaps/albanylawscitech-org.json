@@ -1,0 +1,13 @@
+{
+  "id": "albanylawscitech-org",
+  "start_urls": [
+    "https://www.albanylawscitech.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Albany Law Journal of Science & Technology",
+    "platform": "wordpress",
+    "url": "https://www.albanylawscitech.org/",
+    "created_date": "2025-12-14"
+  }
+}

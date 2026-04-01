@@ -1,0 +1,28 @@
+{
+  "id": "registry-186-3019306a00",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "umkclawreview.org",
+    "journal_name": "UMKC Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://umkclawreview.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "186",
+    "registry_names": "UMKC Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/umkclawreview.org/url_3019306a0060",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-14T04:21:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://umkclawreview.org/"
+  ]
+}

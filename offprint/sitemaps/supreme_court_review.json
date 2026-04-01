@@ -1,0 +1,17 @@
+{
+  "id": "supreme-court-review",
+  "metadata": {
+    "created_date": "2026-03-02",
+    "journal_name": "Supreme Court Review",
+    "platform": "drupal",
+    "status": "paused_paywall",
+    "status_evidence_ref": "artifacts/top50_supreme_court_review_20260310_summary.json",
+    "status_reason": "publisher_hosted_content_no_direct_pdf_links",
+    "status_updated_at": "2026-03-10T04:45:38Z",
+    "url": "https://www.law.uchicago.edu/supremecourt/supremecourt.html"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://www.law.uchicago.edu/supremecourt/supremecourt.html"
+  ]
+}

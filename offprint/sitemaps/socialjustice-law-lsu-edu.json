@@ -1,0 +1,13 @@
+{
+  "id": "socialjustice-law-lsu-edu",
+  "start_urls": [
+    "https://socialjustice.law.lsu.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "LSU Law Journal for Social Justice and Policy",
+    "platform": "wordpress",
+    "url": "https://socialjustice.law.lsu.edu/",
+    "created_date": "2026-03-01"
+  }
+}

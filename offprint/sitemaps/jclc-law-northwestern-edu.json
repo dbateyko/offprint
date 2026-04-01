@@ -1,0 +1,14 @@
+{
+  "id": "jclc-law-northwestern-edu",
+  "start_urls": [
+    "https://jclc.law.northwestern.edu/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "jclc.law.northwestern.edu",
+    "platform": "wordpress",
+    "url": "https://jclc.law.northwestern.edu/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

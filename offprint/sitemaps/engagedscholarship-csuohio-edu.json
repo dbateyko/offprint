@@ -1,0 +1,14 @@
+{
+  "id": "engagedscholarship-csuohio-edu",
+  "start_urls": [
+    "https://engagedscholarship.csuohio.edu/clevstlrev/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Cleveland State Law Review",
+    "platform": "digitalcommons",
+    "url": "https://engagedscholarship.csuohio.edu/clevstlrev/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

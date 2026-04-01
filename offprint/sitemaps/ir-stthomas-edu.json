@@ -1,0 +1,15 @@
+{
+  "id": "ir-stthomas-edu",
+  "start_urls": [
+    "https://researchonline.stthomas.edu/esploro/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of St. Thomas Law Journal",
+    "platform": "unknown",
+    "url": "https://researchonline.stthomas.edu/esploro/",
+    "original_url": "https://ir.stthomas.edu/ustlj/",
+    "updated_at": "2026-02-23",
+    "notes": "legacy bepress seed now redirects to Esploro root; treated as invalid smoke seed"
+  }
+}

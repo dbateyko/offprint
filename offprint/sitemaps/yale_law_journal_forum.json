@@ -1,0 +1,19 @@
+{
+  "id": "yale-law-journal-forum",
+  "metadata": {
+    "created_date": "2026-03-02",
+    "journal_name": "Yale Law Journal Forum",
+    "original_url": "https://yalelawjournal.org/forum/list",
+    "platform": "custom",
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/smoke_one_pdf_20260309T231955Z.json",
+    "status_reason": "site_adapter_validated_smoke_pass_forum_list",
+    "status_updated_at": "2026-03-09T23:20:14Z",
+    "url": "https://www.yalelawjournal.org/forum"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://yalelawjournal.org/forum/list"
+  ],
+  "url": "https://yalelawjournal.org/forum/list"
+}

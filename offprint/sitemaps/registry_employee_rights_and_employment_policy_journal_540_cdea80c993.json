@@ -1,0 +1,28 @@
+{
+  "id": "registry-540-cdea80c993",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "blogs.kentlaw.iit.edu",
+    "journal_name": "Employee Rights and Employment Policy Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://blogs.kentlaw.iit.edu/erepj",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "540",
+    "registry_names": "Employee Rights and Employment Policy Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/blogs.kentlaw.iit.edu/url_cdea80c993ce",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://blogs.kentlaw.iit.edu/erepj"
+  ]
+}

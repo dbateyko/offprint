@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-duke-edu-dltr",
+  "start_urls": [
+    "https://scholarship.law.duke.edu/dltr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Duke Law and Technology Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.duke.edu/dltr/",
+    "created_date": "2026-03-01",
+    "notes": "Canonical DC host is scholarship.law.duke.edu, not dltr.law.duke.edu. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

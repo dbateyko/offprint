@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/print",
+        "/online"
+      ],
+      "extraction_mode": "direct_pdf",
+      "issue_path_prefixes": [
+        "/print",
+        "/online",
+        "/20"
+      ]
+    },
+    "domain": "wustllawreview.org",
+    "journal": "Washington University Law Review",
+    "original_url": "https://wustllawreview.org/print/",
+    "platform": "WordPress",
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/smoke_one_pdf_20260310T035500Z.json",
+    "status_reason": "site_adapter_validated_smoke_pass_print_seed",
+    "status_updated_at": "2026-03-10T03:56:30Z"
+  },
+  "sitemap_url": null,
+  "url": "https://wustllawreview.org/print/"
+}

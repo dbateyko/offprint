@@ -1,0 +1,44 @@
+{
+  "id": "vjil-org",
+  "start_urls": [
+    "http://www.vjil.org/onlinearchive"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Vjil",
+    "platform": "Squarespace",
+    "url": "http://www.vjil.org/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "archive_path": "seed has 'Archive' nav link -> /onlinearchive",
+      "notes": "All articles are in accordion items; PDFs are linked directly, no separate article pages. Titles and authors appear in a single text node separated by //. No pagination."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "li.accordion-item div.accordion-item__dropdown",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a:first-child",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

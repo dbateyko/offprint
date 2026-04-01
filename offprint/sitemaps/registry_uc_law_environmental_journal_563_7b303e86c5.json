@@ -1,0 +1,28 @@
+{
+  "id": "registry-563-7b303e86c5",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "repository.uclawsf.edu",
+    "journal_name": "UC Law Environmental Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://repository.uclawsf.edu/hastings_environmental_law_journal",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "563",
+    "registry_names": "UC Law Environmental Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://repository.uclawsf.edu/hastings_environmental_law_journal"
+  ]
+}

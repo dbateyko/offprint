@@ -1,0 +1,14 @@
+{
+  "id": "journals-library-columbia-edu-cjrl",
+  "start_urls": [
+    "https://journals.library.columbia.edu/index.php/cjrl/issue/archive"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Columbia Journal of Race and Law",
+    "platform": "ojs",
+    "url": "https://journals.library.columbia.edu/index.php/cjrl",
+    "created_date": "2026-03-01",
+    "notes": "Smoke test passed 2026-03-01 via ColumbiaSTLRAdapter."
+  }
+}

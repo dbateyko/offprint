@@ -1,0 +1,28 @@
+{
+  "id": "registry-447-a40376b0a1",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.yjolt.org",
+    "journal_name": "Yale Journal of Law & Technology",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.yjolt.org/",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "447",
+    "registry_names": "Yale Journal of Law & Technology",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DrupalAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "scripts/promote_todo_adapter_seeds.py",
+    "status_reason": "bulk_promoted_from_todo_adapter",
+    "status_updated_at": "2026-03-16T21:03:58Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://www.yjolt.org/"
+  ]
+}

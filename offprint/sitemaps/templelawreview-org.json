@@ -1,0 +1,44 @@
+{
+  "id": "templelawreview-org",
+  "start_urls": [
+    "https://www.templelawreview.org/archive/"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Templelawreview",
+    "platform": "WordPress",
+    "url": "http://www.templelawreview.org/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "archive_path": "seed has archive link in header -> /archive/ page lists articles",
+      "notes": "Site uses WordPress; article entries are in div.collapse containing title, author, date, volume/issue in text, and PDF link. No distinct volume or issue sub-pages; all content on archive page. No pagination (the page contains all entries)."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.collapse",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a:first-child",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "connecticutlawreview-law-uconn-edu",
+  "start_urls": [
+    "https://connecticutlawreview.law.uconn.edu/archive/print-edition-archive/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Connecticut Law Review",
+    "platform": "unknown",
+    "url": "https://connecticutlawreview.law.uconn.edu/archive/print-edition-archive/",
+    "created_date": "2025-12-14",
+    "updated_at": "2026-02-23",
+    "notes": "Print-edition archive exposes volume/issue pages with Digital Commons PDF links."
+  }
+}

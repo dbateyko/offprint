@@ -1,0 +1,14 @@
+{
+  "id": "law-howard-edu-howard-human-civil-rights-law-review",
+  "start_urls": [
+    "https://law.howard.edu/student-life/co-curricular-activities/howard-human-civil-rights-law-review"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Howard Human & Civil Rights Law Review",
+    "platform": "drupal",
+    "url": "https://law.howard.edu/student-life/co-curricular-activities/howard-human-civil-rights-law-review",
+    "created_date": "2026-03-02",
+    "notes": "Added from discovered_journals generic triage; validated reachable with Drupal PDF paths."
+  }
+}

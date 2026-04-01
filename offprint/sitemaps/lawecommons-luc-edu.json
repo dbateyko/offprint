@@ -1,0 +1,14 @@
+{
+  "id": "lawecommons-luc-edu",
+  "start_urls": [
+    "https://lawecommons.luc.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Loyola University Chicago Law (multiple journals)",
+    "platform": "digitalcommons",
+    "url": "https://lawecommons.luc.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to allow cross-journal discovery (annals, clrj, lclr, lucilr, pilr). [Updated to XML sitemap on 2026-03-03]"
+  }
+}

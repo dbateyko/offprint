@@ -1,0 +1,28 @@
+{
+  "id": "registry-399-0335c7ab71",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.americanbar.org",
+    "journal_name": "ABA Journal of Labor & Employment Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.americanbar.org/groups/labor_law/publications/aba_journal_of_labor_employment_law_home",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "399",
+    "registry_names": "ABA Journal of Labor & Employment Law",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.americanbar.org/url_0335c7ab717d",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T14:02:19Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.americanbar.org/groups/labor_law/publications/aba_journal_of_labor_employment_law_home"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-slu-edu-lj-online",
+  "start_urls": [
+    "https://scholarship.law.slu.edu/siteindex.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Saint Louis University Law Journal Online",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.slu.edu/lj_online/",
+    "created_date": "2026-03-01",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

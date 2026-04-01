@@ -1,0 +1,14 @@
+{
+  "url": "https://repository.law.umich.edu/mttlr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Michigan Technology Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://repository.law.umich.edu/mttlr/",
+    "domain": "repository.law.umich.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://repository.law.umich.edu/mttlr/sitemap.xml"
+  ]
+}

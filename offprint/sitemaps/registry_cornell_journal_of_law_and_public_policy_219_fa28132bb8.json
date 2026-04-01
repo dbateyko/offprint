@@ -1,0 +1,28 @@
+{
+  "id": "registry-219-fa28132bb8",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "community.lawschool.cornell.edu",
+    "journal_name": "Cornell Journal of Law and Public Policy",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://community.lawschool.cornell.edu/jlpp",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "219",
+    "registry_names": "Cornell Journal of Law and Public Policy",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/smoke/onboarding_known_platform_20260315/runs/smoke_one_pdf_20260315T140442Z.json",
+    "status_reason": "adapter_validated_smoke",
+    "status_updated_at": "2026-03-15T14:30:22Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://community.lawschool.cornell.edu/jlpp"
+  ]
+}

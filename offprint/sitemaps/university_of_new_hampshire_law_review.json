@@ -1,0 +1,14 @@
+{
+  "url": "https://scholars.unh.edu/unh_lr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "University of New Hampshire Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholars.unh.edu/unh_lr/",
+    "domain": "scholars.unh.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholars.unh.edu/unh_lr/sitemap.xml"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "www-law-upenn-edu",
+  "start_urls": [
+    "https://www.law.upenn.edu/journals"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.law.upenn.edu/journals/jlasc",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/live",
+        "/live/news",
+        "/journals",
+        "/journals/jlasc"
+      ],
+      "issue_path_prefixes": [
+        "/live",
+        "/live/news"
+      ],
+      "article_path_prefixes": [
+        "/live",
+        "/live/news"
+      ],
+      "extraction_mode": "article_then_pdf"
+    }
+  }
+}

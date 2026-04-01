@@ -1,0 +1,28 @@
+{
+  "id": "registry-1373-44af61e83a",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "journals.sagepub.com",
+    "journal_name": "Criminal Justice Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://journals.sagepub.com/loi/cjr",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "1373",
+    "registry_names": "Criminal Justice Review",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/journals.sagepub.com/url_44af61e83a91",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T14:02:19Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://journals.sagepub.com/loi/cjr"
+  ]
+}

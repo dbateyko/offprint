@@ -1,0 +1,14 @@
+{
+  "id": "law-smu-edu",
+  "start_urls": [
+    "https://scholar.smu.edu/jalc/all_issues.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Air Law and Commerce",
+    "platform": "digital_commons",
+    "url": "https://law.smu.edu/centers-and-journals/jalc",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: PDF archive hosted on SMU Scholar Digital Commons."
+  }
+}

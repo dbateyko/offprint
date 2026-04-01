@@ -1,0 +1,15 @@
+{
+  "id": "stanford-law-review-online",
+  "start_urls": [
+    "https://www.stanfordlawreview.org/online-archive/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "Stanford Law Review Online",
+    "platform": "wordpress",
+    "url": "https://www.stanfordlawreview.org/online-archive/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

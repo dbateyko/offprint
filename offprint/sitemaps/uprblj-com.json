@@ -1,0 +1,13 @@
+{
+  "id": "uprblj-com",
+  "start_urls": [
+    "https://www.uprblj.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Puerto Rico Business Law Journal",
+    "platform": "wordpress",
+    "url": "https://www.uprblj.com/",
+    "created_date": "2026-03-01"
+  }
+}

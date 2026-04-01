@@ -1,0 +1,14 @@
+{
+  "url": "https://nsuworks.nova.edu/ilsajournal/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "ILSA Journal of International and Comparative Law",
+    "platform": "digitalcommons",
+    "original_url": "https://nsuworks.nova.edu/ilsajournal/",
+    "domain": "nsuworks.nova.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://nsuworks.nova.edu/ilsajournal/sitemap.xml"
+  ]
+}

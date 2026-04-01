@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarlycommons.law.northwestern.edu/jclc/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Journal of Criminal Law and Criminology",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarlycommons.law.northwestern.edu/jclc/",
+    "domain": "scholarlycommons.law.northwestern.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarlycommons.law.northwestern.edu/jclc/sitemap.xml"
+  ]
+}

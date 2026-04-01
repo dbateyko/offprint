@@ -1,0 +1,27 @@
+{
+  "id": "commonwealthlaw-widener-edu",
+  "start_urls": [
+    "https://commonwealthlaw.widener.edu/current-students/dean-of-students/academic-issues"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://commonwealthlaw.widener.edu/current-students/student-organizations/widener-law-journal",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/current-students",
+        "/current-students/dean-of-students",
+        "/current-students/law-school"
+      ],
+      "issue_path_prefixes": [
+        "/current-students",
+        "/files",
+        "/files/resources",
+        "/current-students/law-school"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "www-chapman-edu",
+  "start_urls": [
+    "https://www.chapman.edu/academics/graduate-education/current-students.aspx"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.chapman.edu/law/publications/nexus-journal/index.aspx",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/academics",
+        "/academics/undergraduate"
+      ],
+      "issue_path_prefixes": [
+        "/academics",
+        "/academics/_files",
+        "/academics/graduate-education",
+        "/academics/undergraduate"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

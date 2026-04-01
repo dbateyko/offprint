@@ -1,0 +1,28 @@
+{
+  "id": "registry-2025-04d2d11348",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "ideaexchange.uakron.edu",
+    "journal_name": "ConLawNOW",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://ideaexchange.uakron.edu/conlawnow",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "60",
+    "registry_mainids": "2025",
+    "registry_names": "ConLawNOW",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "working_host_only",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": true,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_working_host_only_unverified",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://ideaexchange.uakron.edu/conlawnow"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "url": "https://openscholarship.wustl.edu/law_journal_law_policy/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Washington University Journal of Law & Policy",
+    "platform": "digitalcommons",
+    "original_url": "https://openscholarship.wustl.edu/law_journal_law_policy/",
+    "domain": "openscholarship.wustl.edu",
+    "updated_at": "2026-02-24",
+    "notes": "All issues endpoint is required for deterministic archive enumeration. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://openscholarship.wustl.edu/law_journal_law_policy/sitemap.xml"
+  ]
+}

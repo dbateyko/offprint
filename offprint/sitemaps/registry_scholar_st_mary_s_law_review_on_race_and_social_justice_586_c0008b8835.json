@@ -1,0 +1,28 @@
+{
+  "id": "registry-586-c0008b8835",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "commons.stmarytx.edu",
+    "journal_name": "Scholar: St. Mary's Law Review on Race and Social Justice",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://commons.stmarytx.edu/thescholar",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "60",
+    "registry_mainids": "586",
+    "registry_names": "Scholar: St. Mary's Law Review on Race and Social Justice",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://commons.stmarytx.edu/thescholar"
+  ]
+}

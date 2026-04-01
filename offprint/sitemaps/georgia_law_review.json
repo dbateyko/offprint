@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.uga.edu/glr/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Georgia Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://georgialawreview.org/",
+    "domain": "digitalcommons.law.uga.edu",
+    "notes": "Manual override: PDF archive hosted on UGA Digital Commons. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.uga.edu/glr/sitemap.xml"
+  ]
+}

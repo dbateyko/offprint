@@ -1,0 +1,7 @@
+{
+  "id": "louisiana_lr",
+  "start_urls": [
+    "https://digitalcommons.law.lsu.edu/lalrev/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

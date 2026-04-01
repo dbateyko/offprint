@@ -1,0 +1,47 @@
+{
+  "id": "jolt-law-harvard-edu",
+  "metadata": {
+    "created_date": "2026-03-22",
+    "journal_name": "Harvard Journal of Law & Technology",
+    "navigation": {
+      "archive_path": "/volumes",
+      "notes": "39 volumes available via sidebar links (li.aside__list-item > a.aside__list-item__link). Each volume page has sections: div.volume__articles and div.volume__notes, each containing a <ul> with <li> items. Each <li> contains an <a href='/assets/articlePDFs/...pdf'>Title</a> followed by ' - Author Name' text. PDFs are direct links on the volume page. Volume/issue info is in the h2 heading (e.g. 'Volume 39, Number 1: Fall 2025'). Section types (Articles, Notes, Forum) are in h3 headings.",
+      "volume_url_pattern": "/volumes/volume-{number}"
+    },
+    "platform": "custom",
+    "status": "ready_for_promotion",
+    "status_evidence_ref": "scripts/promote_sitemaps.py:20260323T014543Z",
+    "status_updated_at": "2026-03-23T01:45:59.974742+00:00",
+    "url": "https://jolt.law.harvard.edu/"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "div.volume__articles ul li, div.volume__notes ul li",
+      "type": "SelectorElement"
+    },
+    {
+      "id": "title",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href*='articlePDFs']",
+      "type": "SelectorText"
+    },
+    {
+      "id": "pdf_link",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href$=\".pdf\"]",
+      "type": "SelectorLink"
+    }
+  ],
+  "source": "llm_explore",
+  "start_urls": [
+    "https://jolt.law.harvard.edu/volumes/volume-39"
+  ]
+}

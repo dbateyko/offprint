@@ -1,0 +1,111 @@
+{
+  "id": "colorado2of2",
+  "start_urls": [
+    "https://ctlj.colorado.edu/?paged=[1-6]&cat=9"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "colorado2of2",
+    "startUrl": [
+      "https://ctlj.colorado.edu/?paged=[1-6]&cat=9"
+    ],
+    "selectors": [
+      {
+        "id": "article",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": "article",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "[itemprop='headline'] a",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": ".cat-links a:nth-of-type(1)",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "volume",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "a:nth-of-type(3)",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "authors",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "span[itemprop='name']",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "article_link",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorLink",
+        "selector": "[itemprop='headline'] a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "article_link"
+        ],
+        "type": "SelectorLink",
+        "selector": "p a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "pdfs",
+        "parentSelectors": [
+          "article_link"
+        ],
+        "type": "SelectorLink",
+        "selector": "p a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "article_text",
+        "parentSelectors": [
+          "article_link"
+        ],
+        "type": "SelectorText",
+        "selector": "article",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

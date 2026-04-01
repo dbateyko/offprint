@@ -1,0 +1,7 @@
+{
+  "id": "smu_lr",
+  "start_urls": [
+    "https://scholar.smu.edu/smulr/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

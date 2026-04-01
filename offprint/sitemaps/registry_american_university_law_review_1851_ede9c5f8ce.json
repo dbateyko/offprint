@@ -1,0 +1,28 @@
+{
+  "id": "registry-1851-ede9c5f8ce",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.aulawreview.org",
+    "journal_name": "American University Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.aulawreview.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "1851",
+    "registry_names": "American University Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "docs/registry/input/failed_smoke_link_seed_summary.csv",
+    "status_reason": "seed_repoint_failed_smoke_inventory",
+    "status_updated_at": "2026-03-15T22:55:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://aulawreview.org/by-volume/"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "scholar-smu-edu",
+  "start_urls": [
+    "https://scholar.smu.edu/jalc"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "scholar.smu.edu",
+    "platform": "digitalcommons",
+    "url": "https://scholar.smu.edu/jalc",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

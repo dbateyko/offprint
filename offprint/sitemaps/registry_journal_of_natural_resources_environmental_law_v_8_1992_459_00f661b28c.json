@@ -1,0 +1,28 @@
+{
+  "id": "registry-459-00f661b28c",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "uknowledge.uky.edu",
+    "journal_name": "Journal of Natural Resources & Environmental Law (v. 8 1992 - v.22 2009)",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://uknowledge.uky.edu/jnrel",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "459",
+    "registry_names": "Journal of Natural Resources & Environmental Law (v. 8 1992 - v.22 2009)",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://uknowledge.uky.edu/jnrel"
+  ]
+}

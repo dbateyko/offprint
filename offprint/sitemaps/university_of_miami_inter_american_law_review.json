@@ -1,0 +1,14 @@
+{
+  "url": "https://repository.law.miami.edu/umialr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "University of Miami Inter-American Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://repository.law.miami.edu/umialr/",
+    "domain": "repository.law.miami.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://repository.law.miami.edu/umialr/sitemap.xml"
+  ]
+}

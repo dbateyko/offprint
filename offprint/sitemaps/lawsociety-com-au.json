@@ -1,0 +1,14 @@
+{
+  "id": "www-lawsociety-com-au",
+  "start_urls": [
+    "http://www.lawsociety.com.au/resources/journal/index.htm"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.lawsociety.com.au",
+    "platform": "drupal",
+    "url": "http://www.lawsociety.com.au/resources/journal/index.htm",
+    "created_date": "2026-03-25",
+    "status": "active"
+  }
+}

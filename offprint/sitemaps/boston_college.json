@@ -1,0 +1,14 @@
+{
+  "id": "boston_college",
+  "start_urls": [
+    "https://bclawreview.bc.edu/issues"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "boston_college",
+    "startUrl": [
+      "https://bclawreview.bc.edu/issues"
+    ],
+    "selectors": []
+  }
+}

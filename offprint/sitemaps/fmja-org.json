@@ -1,0 +1,14 @@
+{
+  "id": "fmja-org",
+  "start_urls": [
+    "https://www.fclr.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Federal Courts Law Review",
+    "platform": "custom",
+    "url": "https://www.fmja.org/federal-courts-law-review/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: journal archive hosted at fclr.org."
+  }
+}

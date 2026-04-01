@@ -1,0 +1,7 @@
+{
+  "id": "cleveland_state_lr",
+  "start_urls": [
+    "https://engagedscholarship.csuohio.edu/clevstlrev/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

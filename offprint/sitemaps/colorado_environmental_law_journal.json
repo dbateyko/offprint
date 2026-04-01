@@ -1,0 +1,14 @@
+{
+  "url": "https://scholar.law.colorado.edu/celj/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Colorado Environmental Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://celj.org/",
+    "domain": "scholar.law.colorado.edu",
+    "notes": "Manual override: PDF archive hosted on CU Scholar Digital Commons. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholar.law.colorado.edu/celj/sitemap.xml"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "ttujelp-org",
+  "start_urls": [
+    "https://ttujelp.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of the Energy Law Practitioner",
+    "platform": "wordpress",
+    "url": "https://ttujelp.org/",
+    "created_date": "2026-03-01"
+  }
+}

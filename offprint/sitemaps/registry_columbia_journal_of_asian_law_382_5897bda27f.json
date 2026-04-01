@@ -1,0 +1,28 @@
+{
+  "id": "registry-382-5897bda27f",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "cjal.columbia.edu",
+    "journal_name": "Columbia Journal of Asian Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://cjal.columbia.edu/",
+    "platform": "ojs",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "382",
+    "registry_names": "Columbia Journal of Asian Law",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "ojs",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "OJSAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/cjal.columbia.edu/url_5897bda27f80",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://cjal.columbia.edu/"
+  ]
+}

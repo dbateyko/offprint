@@ -1,0 +1,13 @@
+{
+  "id": "drakelawreview-org",
+  "start_urls": [
+    "https://drakelawreview.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Drake Law Review",
+    "platform": "wordpress",
+    "url": "https://drakelawreview.org/",
+    "created_date": "2025-12-14"
+  }
+}

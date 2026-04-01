@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-lmu-edu",
+  "start_urls": [
+    "https://digitalcommons.lmu.edu/elr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Loyola of Los Angeles Entertainment Law Review",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.lmu.edu/elr/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

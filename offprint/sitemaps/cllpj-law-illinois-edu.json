@@ -1,0 +1,13 @@
+{
+  "id": "cllpj-law-illinois-edu",
+  "start_urls": [
+    "https://digitalcommons.osgoode.yorku.ca/cllpj/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Comparative Labor Law & Policy Journal",
+    "platform": "digital_commons",
+    "url": "https://digitalcommons.osgoode.yorku.ca/cllpj/",
+    "created_date": "2025-12-14"
+  }
+}

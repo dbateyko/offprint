@@ -1,0 +1,28 @@
+{
+  "id": "registry-1935-73326a97ac",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "digitalrepository.unm.edu",
+    "journal_name": "Natural Resources Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://digitalrepository.unm.edu/nrj/",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": true,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "1935",
+    "registry_names": "Natural Resources Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "smoke_validated",
+    "registry_suggested_adapter": "DigitalCommonsIssueArticleHopAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/reports/smoke_canonical_batch2_20260314/smoke_one_pdf_20260314T033912Z.json",
+    "status_reason": "alternate_digital_commons_seed_validated",
+    "status_updated_at": "2026-03-14T03:39:12Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://digitalrepository.unm.edu/nrj/all_issues.html"
+  ]
+}

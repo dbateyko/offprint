@@ -1,0 +1,13 @@
+{
+  "id": "lawpublications-barry-edu",
+  "start_urls": [
+    "https://lawpublications.barry.edu/barrylrev/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Barry Law Review",
+    "platform": "unknown",
+    "url": "https://lawpublications.barry.edu/barrylrev/",
+    "created_date": "2025-12-14"
+  }
+}

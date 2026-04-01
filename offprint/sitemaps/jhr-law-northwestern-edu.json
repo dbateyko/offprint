@@ -1,0 +1,18 @@
+{
+  "id": "jhr-law-northwestern-edu",
+  "start_urls": [
+    "https://jhr.law.northwestern.edu/issues/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Northwestern Journal of International Human Rights",
+    "platform": "wordpress",
+    "url": "https://jhr.law.northwestern.edu/issues/",
+    "created_date": "2026-03-27",
+    "status": "active_partial_metadata",
+    "navigation": {
+      "archive_path": "/issues",
+      "notes": "WordPress issues listing links to article pages and external scholarlycommons issue entries. 2026-03-27 loop: issues seed still returned targets=0 / no runnable PDF candidates; keep partial and revisit discovery seed. Short-loop policy retained issue seed; metadata remains partial."
+    }
+  }
+}

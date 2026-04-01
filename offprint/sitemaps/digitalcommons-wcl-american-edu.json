@@ -1,0 +1,19 @@
+{
+  "id": "digitalcommons-wcl-american-edu",
+  "start_urls": [
+    "https://digitalcommons.wcl.american.edu/alr/sitemap.xml",
+    "https://digitalcommons.wcl.american.edu/facsch_lawrev/sitemap.xml",
+    "https://digitalcommons.wcl.american.edu/femscholarship/sitemap.xml",
+    "https://digitalcommons.wcl.american.edu/peel_student/sitemap.xml",
+    "https://digitalcommons.wcl.american.edu/socialjusticebib/sitemap.xml",
+    "https://digitalcommons.wcl.american.edu/stusch_lawrev/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "American University WCL (multiple journals)",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.wcl.american.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include AULR, AUILR, AUBLR, JGSPL, HRB, HLP, etc. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

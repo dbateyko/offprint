@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.uidaho.edu/idaho-law-review/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Idaho Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.uidaho.edu/idaho-law-review/",
+    "domain": "digitalcommons.law.uidaho.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.uidaho.edu/idaho-law-review/sitemap.xml"
+  ]
+}

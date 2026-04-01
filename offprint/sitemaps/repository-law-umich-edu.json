@@ -1,0 +1,14 @@
+{
+  "id": "repository-law-umich-edu",
+  "start_urls": [
+    "https://repository.law.umich.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of Michigan Law (multiple journals)",
+    "platform": "digitalcommons",
+    "url": "https://repository.law.umich.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include MLR, MJLR, MJIL, MTTLR, etc. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

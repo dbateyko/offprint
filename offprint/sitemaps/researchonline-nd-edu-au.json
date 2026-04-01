@@ -1,0 +1,17 @@
+{
+  "id": "researchonline-nd-edu-au",
+  "start_urls": [
+    "https://researchonline.nd.edu.au/law_article/sitemap.xml",
+    "https://researchonline.nd.edu.au/law_books/sitemap.xml",
+    "https://researchonline.nd.edu.au/law_chapters/sitemap.xml",
+    "https://researchonline.nd.edu.au/law_conference/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of Notre Dame Australia (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://researchonline.nd.edu.au/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include law journals and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

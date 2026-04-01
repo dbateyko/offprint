@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.shu.edu/circuit_review/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Seton Hall Circuit Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.shu.edu/circuit_review/",
+    "domain": "scholarship.shu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.shu.edu/circuit_review/sitemap.xml"
+  ]
+}

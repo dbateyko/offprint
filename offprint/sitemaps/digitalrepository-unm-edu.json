@@ -1,0 +1,39 @@
+{
+  "id": "digitalrepository-unm-edu",
+  "start_urls": [
+    "https://digitalrepository.unm.edu/ft_sumner_review_news/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_admin_ar/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_admin_bulletins/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_admin_libar/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_admin_schedules/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_certificate_indianlaw_ihs/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_certificate_indianlaw_sandia/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_certificate_indianlaw_santaclara/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_certificate_natres-envlaw_newsletter/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_facbookdisplay/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_facultyscholarship/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_nmbarexams/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_photogallery_historical/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_service_ethicsreform/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_service_individual/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_service_westernwater_aes/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_service_westernwater_rbs/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_service_westernwater_reports/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_studentpublications/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_studentscholarship/sitemap.xml",
+    "https://digitalrepository.unm.edu/law_teaching/sitemap.xml",
+    "https://digitalrepository.unm.edu/lawjournals_annualreports/sitemap.xml",
+    "https://digitalrepository.unm.edu/nss_journal/sitemap.xml",
+    "https://digitalrepository.unm.edu/prc-peer-review-pubs/sitemap.xml",
+    "https://digitalrepository.unm.edu/provost_acad_program_review/sitemap.xml",
+    "https://digitalrepository.unm.edu/wjk_journals/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of New Mexico (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://digitalrepository.unm.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include UNM law journals and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "ndlsjet-com",
+  "start_urls": [
+    "https://www.ndlsjet.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal on Emerging Technologies",
+    "platform": "wordpress",
+    "url": "https://www.ndlsjet.com/",
+    "created_date": "2026-03-01"
+  }
+}

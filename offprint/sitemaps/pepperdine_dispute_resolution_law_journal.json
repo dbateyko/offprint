@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.pepperdine.edu/drlj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Pepperdine Dispute Resolution Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.pepperdine.edu/drlj/",
+    "domain": "digitalcommons.pepperdine.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.pepperdine.edu/drlj/sitemap.xml"
+  ]
+}

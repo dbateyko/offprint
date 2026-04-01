@@ -1,0 +1,28 @@
+{
+  "id": "registry-451-26ccc219ef",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.law.tulane.edu",
+    "journal_name": "Tulane Tax Institute",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.law.tulane.edu/tlsLifeAfterLS/cle_tax_docs.aspx",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "451",
+    "registry_names": "Tulane Tax Institute",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DrupalAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_404",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.law.tulane.edu/url_26ccc219efae",
+    "status_reason": "probe_http_404",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://www.law.tulane.edu/tlsLifeAfterLS/cle_tax_docs.aspx"
+  ]
+}

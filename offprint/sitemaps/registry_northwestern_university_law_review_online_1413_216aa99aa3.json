@@ -1,0 +1,28 @@
+{
+  "id": "registry-1413-216aa99aa3",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "scholarlycommons.law.northwestern.edu",
+    "journal_name": "Northwestern University Law Review Online",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://scholarlycommons.law.northwestern.edu/nulr_online/",
+    "platform": "digitalcommons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "1413",
+    "registry_names": "Northwestern University Law Review Online",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digitalcommons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsIssueArticleHopAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/smoke_one_pdf_20260310T014940Z.json",
+    "status_reason": "site_adapter_validated_smoke_pass_digitalcommons_seed",
+    "status_updated_at": "2026-03-10T01:50:30Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://scholarlycommons.law.northwestern.edu/nulr_online/"
+  ]
+}

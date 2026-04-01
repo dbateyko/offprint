@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarlycommons.law.case.edu/jil/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Case Western Reserve Journal of International Law",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarlycommons.law.case.edu/jil/",
+    "domain": "scholarlycommons.law.case.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarlycommons.law.case.edu/jil/sitemap.xml"
+  ]
+}

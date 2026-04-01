@@ -1,0 +1,28 @@
+{
+  "id": "registry-389-9128c05970",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "thefederation.site-ym.com",
+    "journal_name": "FDCC Quarterly",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://thefederation.site-ym.com/page/QuarterlyArchive",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "389",
+    "registry_names": "FDCC Quarterly",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/thefederation.site-ym.com/url_9128c05970ce",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:21:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://thefederation.site-ym.com/page/QuarterlyArchive"
+  ]
+}

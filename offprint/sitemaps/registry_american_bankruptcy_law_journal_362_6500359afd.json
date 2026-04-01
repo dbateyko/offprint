@@ -1,0 +1,28 @@
+{
+  "id": "registry-362-6500359afd",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "ablj.org",
+    "journal_name": "American Bankruptcy Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://ablj.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "362",
+    "registry_names": "American Bankruptcy Law Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_paywall",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/ablj.org/url_6500359afd26",
+    "status_reason": "probe_paywall_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://ablj.org/"
+  ]
+}

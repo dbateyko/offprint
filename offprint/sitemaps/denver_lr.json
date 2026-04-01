@@ -1,0 +1,7 @@
+{
+  "id": "denver_lr",
+  "start_urls": [
+    "https://digitalcommons.du.edu/dlr/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

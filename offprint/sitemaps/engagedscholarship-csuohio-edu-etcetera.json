@@ -1,0 +1,14 @@
+{
+  "id": "engagedscholarship-csuohio-edu-etcetera",
+  "start_urls": [
+    "https://engagedscholarship.csuohio.edu/etcetera/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Cleveland State Law Review Et Cetera",
+    "platform": "digitalcommons",
+    "url": "https://engagedscholarship.csuohio.edu/etcetera/",
+    "created_date": "2026-03-01",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

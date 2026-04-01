@@ -1,0 +1,15 @@
+{
+  "id": "texaslawreview-org",
+  "start_urls": [
+    "https://texaslawreview.org/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Texas Law Review",
+    "platform": "WordPress",
+    "url": "https://texaslawreview.org/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "notes": "WordPress site. Uses WordPressAcademicBaseAdapter to discover posts from REST API and sitemap."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.wne.edu/lawreview/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Western New England Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.wne.edu/lawreview/",
+    "domain": "digitalcommons.law.wne.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.wne.edu/lawreview/sitemap.xml"
+  ]
+}

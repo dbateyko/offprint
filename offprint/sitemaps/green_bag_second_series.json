@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "domain": "www.greenbag.org",
+    "journal": "Green Bag (Second Series)",
+    "notes": "Manual override: archive tables of contents.",
+    "original_url": "https://www.greenbag.org/",
+    "platform": "Custom/Unknown",
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/greenbag/runs/smoke_one_pdf_20260304T041009Z.json",
+    "status_reason": "adapter_validated",
+    "status_updated_at": "2026-03-04T04:10:18Z"
+  },
+  "sitemap_url": null,
+  "url": "https://www.greenbag.org/archive/green_bag_tables_of_contents.html"
+}

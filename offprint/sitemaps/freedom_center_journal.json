@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.uc.edu/fcj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Freedom Center Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.uc.edu/fcj/",
+    "domain": "scholarship.law.uc.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.uc.edu/fcj/sitemap.xml"
+  ]
+}

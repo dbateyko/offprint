@@ -1,0 +1,14 @@
+{
+  "url": "https://scholar.smu.edu/lbra/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Law and Business Review of the Americas",
+    "platform": "digitalcommons",
+    "original_url": "https://scholar.smu.edu/lbra/",
+    "domain": "scholar.smu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholar.smu.edu/lbra/sitemap.xml"
+  ]
+}

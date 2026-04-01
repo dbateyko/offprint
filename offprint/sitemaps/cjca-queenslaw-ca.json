@@ -1,0 +1,13 @@
+{
+  "id": "cjca-queenslaw-ca",
+  "start_urls": [
+    "https://cjca.queenslaw.ca/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Canadian Journal of Commercial Arbitration",
+    "platform": "wordpress",
+    "url": "https://cjca.queenslaw.ca/",
+    "created_date": "2026-03-01"
+  }
+}

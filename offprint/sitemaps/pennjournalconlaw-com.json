@@ -1,0 +1,37 @@
+{
+  "id": "pennjournalconlaw-com",
+  "start_urls": [
+    "https://pennjournalconlaw.com/archive1.html"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Pennjournalconlaw",
+    "platform": "Wix",
+    "url": "https://pennjournalconlaw.com/jcl-online.html",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/vol-{N}-masthead.html",
+      "archive_path": "has archive link in header to /archive1.html",
+      "notes": "No pagination, WC classes from Wix, article info in heading tags and table rows, PDFs directly linked."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.wsite-multicol",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "cjil-uchicago-edu-online",
+  "start_urls": [
+    "https://cjil.uchicago.edu/cjil-online"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Chicago Journal of International Law Online",
+    "platform": "wordpress",
+    "url": "https://cjil.uchicago.edu/cjil-online",
+    "created_date": "2026-03-01"
+  }
+}

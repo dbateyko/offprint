@@ -1,0 +1,17 @@
+{
+  "id": "bclawreview-org",
+  "metadata": {
+    "created_date": "2025-12-14",
+    "journal_name": "Boston College Law Review",
+    "platform": "ojs",
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/smoke_one_pdf_20260310T040938Z.json",
+    "status_reason": "site_adapter_validated_smoke_pass_issue_archive_seed",
+    "status_updated_at": "2026-03-10T04:10:30Z",
+    "url": "https://bclawreview.bc.edu/issue/archive"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://bclawreview.bc.edu/issue/archive"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-wm-edu",
+  "start_urls": [
+    "https://scholarship.law.wm.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "William & Mary Law",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.wm.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include W&M Law Review and related journals. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

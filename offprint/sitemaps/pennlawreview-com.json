@@ -1,0 +1,44 @@
+{
+  "id": "pennlawreview-com",
+  "start_urls": [
+    "https://www.pennlawreview.com/print/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Penn Law Review",
+    "platform": "WordPress",
+    "url": "https://www.pennlawreview.com/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.pennlawreview.com/print/",
+      "notes": "WordPress site. Articles listed in .article-card elements. PDFs on article pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.article-card",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "p.author",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

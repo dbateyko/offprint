@@ -1,0 +1,13 @@
+{
+  "id": "washington_lr",
+  "metadata": {
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_washington_law_review_20260310_summary.json",
+    "status_reason": "site_adapter_validated_direct_http_probe",
+    "status_updated_at": "2026-03-10T04:45:38Z"
+  },
+  "source": "playbook_expansion",
+  "start_urls": [
+    "https://digitalcommons.law.uw.edu/wlr/all_issues.html"
+  ]
+}

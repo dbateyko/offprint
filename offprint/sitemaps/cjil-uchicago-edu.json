@@ -1,0 +1,13 @@
+{
+  "id": "cjil-uchicago-edu",
+  "start_urls": [
+    "https://chicagounbound.uchicago.edu/cjil/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Chicago Journal of International Law",
+    "platform": "digital_commons",
+    "url": "https://chicagounbound.uchicago.edu/cjil/",
+    "created_date": "2025-12-14"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "domain": "scholarship.law.vanderbilt.edu",
+    "journal": "Vanderbilt Journal of Entertainment & Technology Law",
+    "notes": "[Updated to XML sitemap on 2026-03-03]",
+    "original_url": "https://scholarship.law.vanderbilt.edu/jetlaw/",
+    "platform": "digitalcommons",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_vanderbilt_minnesota_20260310_summary.json",
+    "status_reason": "site_adapter_validated_smoke_pass_digital_commons",
+    "status_updated_at": "2026-03-10T01:18:43Z"
+  },
+  "sitemap_url": null,
+  "start_urls": [
+    "https://scholarship.law.vanderbilt.edu/jetlaw/sitemap.xml"
+  ],
+  "url": "https://scholarship.law.vanderbilt.edu/jetlaw/all_issues.html"
+}

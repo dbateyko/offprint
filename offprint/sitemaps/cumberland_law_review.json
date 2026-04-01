@@ -1,0 +1,19 @@
+{
+  "id": "cumberland-law-review",
+  "metadata": {
+    "canonicalized_at": "2026-03-02",
+    "domain": "www.cumberlandlawreview.com",
+    "journal_name": "Cumberland Law Review",
+    "notes": "Deep-probe confirmed direct issue/article PDF links on the primary journal site.",
+    "original_url": "https://cumberlandlawreview.com/",
+    "platform": "generic_web",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://www.cumberlandlawreview.com/masthead-archives"
+  ]
+}

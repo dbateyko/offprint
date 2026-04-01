@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/previous-issues",
+        "/vol-",
+        "/volume-"
+      ],
+      "extraction_mode": "direct_pdf",
+      "issue_path_prefixes": [
+        "/previous-issues",
+        "/vol-",
+        "/volume-",
+        "/issue-",
+        "/issues"
+      ]
+    },
+    "domain": "www.gwlr.org",
+    "journal": "George Washington Law Review",
+    "original_url": "https://www.gwlr.org/previous-issues/",
+    "platform": "WordPress",
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/smoke_one_pdf_20260310T020256Z.json",
+    "status_reason": "site_adapter_validated_smoke_pass_previous_issues_seed",
+    "status_updated_at": "2026-03-10T02:03:20Z"
+  },
+  "sitemap_url": null,
+  "url": "https://www.gwlr.org/previous-issues/"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "harvard-journal-law-public-policy",
+  "start_urls": [
+    "https://journals.law.harvard.edu/jlpp/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Harvard Journal of Law & Public Policy",
+    "platform": "wordpress",
+    "url": "https://journals.law.harvard.edu/jlpp/",
+    "created_date": "2026-03-02"
+  }
+}

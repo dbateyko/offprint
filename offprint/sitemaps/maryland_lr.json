@@ -1,0 +1,7 @@
+{
+  "id": "maryland_lr",
+  "start_urls": [
+    "https://digitalcommons.law.umaryland.edu/mlr/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

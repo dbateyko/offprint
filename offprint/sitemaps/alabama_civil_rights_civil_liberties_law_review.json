@@ -1,0 +1,15 @@
+{
+  "id": "alabama-civil-rights-civil-liberties-law-review",
+  "start_urls": [
+    "https://law.ua.edu/acrcl/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Alabama Civil Rights & Civil Liberties Law Review",
+    "original_url": "https://acrl.law.ua.edu/",
+    "domain": "law.ua.edu",
+    "platform": "unknown",
+    "canonicalized_at": "2026-02-03",
+    "notes": "Manual seed override: official ACRCL site (archive section on homepage)."
+  }
+}

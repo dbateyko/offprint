@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-seattleu-edu-sulr-supra",
+  "start_urls": [
+    "https://digitalcommons.law.seattleu.edu/sulr_supra/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Seattle University Law Review Supra",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.seattleu.edu/sulr_supra/",
+    "created_date": "2026-03-01",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

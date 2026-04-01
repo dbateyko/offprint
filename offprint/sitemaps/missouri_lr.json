@@ -1,0 +1,7 @@
+{
+  "id": "missouri_lr",
+  "start_urls": [
+    "https://scholarship.law.missouri.edu/mlr/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

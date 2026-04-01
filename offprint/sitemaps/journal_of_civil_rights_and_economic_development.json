@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.stjohns.edu/jcred/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Journal of Civil Rights and Economic Development",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.stjohns.edu/jcred/",
+    "domain": "scholarship.law.stjohns.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.stjohns.edu/jcred/sitemap.xml"
+  ]
+}

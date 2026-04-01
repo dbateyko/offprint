@@ -1,0 +1,19 @@
+{
+  "id": "fletcher-forum-of-world-affairs",
+  "metadata": {
+    "created_date": "2026-03-02",
+    "domain": "www.fletcherforum.org",
+    "journal_name": "Fletcher Forum of World Affairs",
+    "notes": "Top investigate queue seed from deep-probe follow-up.",
+    "original_url": "http://www.fletcherforum.org/",
+    "platform": "generic_web",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://www.fletcherforum.org/archives/2025/3/5/492-summer-2025"
+  ]
+}

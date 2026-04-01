@@ -1,0 +1,15 @@
+{
+  "id": "wlu-law-review",
+  "start_urls": [
+    "https://scholarlycommons.law.wlu.edu/wlulr/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "Washington and Lee Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarlycommons.law.wlu.edu/wlulr/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: digitalcommons"
+  }
+}

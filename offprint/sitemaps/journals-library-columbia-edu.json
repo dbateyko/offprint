@@ -1,0 +1,13 @@
+{
+  "id": "journals-library-columbia-edu",
+  "start_urls": [
+    "https://journals.library.columbia.edu/index.php/cjel"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Columbia Journal of Environmental Law",
+    "platform": "ojs",
+    "url": "https://journals.library.columbia.edu/index.php/cjel",
+    "created_date": "2025-12-14"
+  }
+}

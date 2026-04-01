@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarlycommons.law.hofstra.edu/hlr/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Hofstra Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://hofstralawreview.org/",
+    "domain": "scholarlycommons.law.hofstra.edu",
+    "notes": "Manual override: PDF archive hosted on Hofstra Digital Commons. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarlycommons.law.hofstra.edu/hlr/sitemap.xml"
+  ]
+}

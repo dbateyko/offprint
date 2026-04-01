@@ -1,0 +1,14 @@
+{
+  "id": "albany_lr",
+  "start_urls": [
+    "https://www.albanylawreview.org/issues"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "albany_lr",
+    "startUrl": [
+      "https://www.albanylawreview.org/issues"
+    ],
+    "selectors": []
+  }
+}

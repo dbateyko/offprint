@@ -1,0 +1,36 @@
+{
+  "id": "scholarworks-umt-edu",
+  "start_urls": [
+    "https://scholarworks.umt.edu/etd-journalism/sitemap.xml",
+    "https://scholarworks.umt.edu/faculty_barjournals/sitemap.xml",
+    "https://scholarworks.umt.edu/faculty_lawreviews/sitemap.xml",
+    "https://scholarworks.umt.edu/journalism_portfolios/sitemap.xml",
+    "https://scholarworks.umt.edu/lawschool_announcements/sitemap.xml",
+    "https://scholarworks.umt.edu/lawschool_announcements_asc/sitemap.xml",
+    "https://scholarworks.umt.edu/missoulawomenforpeace_oralhistory/sitemap.xml",
+    "https://scholarworks.umt.edu/mlr/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1884/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1889/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1972_context/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1972_memos/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1972_oralhistories/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1972_pamphlets/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1972_papers/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1972_proceedings/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1972_proposals/sitemap.xml",
+    "https://scholarworks.umt.edu/montanaconstitution1972_studies/sitemap.xml",
+    "https://scholarworks.umt.edu/mt_illegal_abortion_oralhistory/sitemap.xml",
+    "https://scholarworks.umt.edu/mtartistsjournalistsauthors_oralhistory/sitemap.xml",
+    "https://scholarworks.umt.edu/salish_kootenai_constitutions/sitemap.xml",
+    "https://scholarworks.umt.edu/salish_kootenai_courts/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of Montana (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://scholarworks.umt.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include Montana Law Review and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "www-husson-edu",
+  "start_urls": [
+    "https://www.husson.edu/college-of-business/publications-from-the-cob/assets/BusinessLawReview_GUIDELINES-2025.pdf"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.husson.edu/college-of-business/publications-from-the-cob/businesslawreview",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/college-of-business",
+        "/college-of-business/publications-from-the-cob"
+      ],
+      "issue_path_prefixes": [
+        "/college-of-business",
+        "/college-of-business/publications-from-the-cob",
+        "/college-of-business/assets"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

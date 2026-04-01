@@ -1,0 +1,13 @@
+{
+  "id": "ctcap-org",
+  "start_urls": [
+    "https://ctcap.org/the-journal/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Cape Town Convention Journal",
+    "platform": "wordpress",
+    "url": "https://ctcap.org/the-journal/",
+    "created_date": "2025-12-14"
+  }
+}

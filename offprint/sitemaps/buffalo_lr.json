@@ -1,0 +1,7 @@
+{
+  "id": "buffalo_lr",
+  "start_urls": [
+    "https://digitalcommons.law.buffalo.edu/buffalolawreview/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://researchrepository.wvu.edu/wvlr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "West Virginia Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://researchrepository.wvu.edu/wvlr/",
+    "domain": "researchrepository.wvu.edu",
+    "notes": "Manual override: WVU Research Repository all-issues page. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://researchrepository.wvu.edu/wvlr/sitemap.xml"
+  ]
+}

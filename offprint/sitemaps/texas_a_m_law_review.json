@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.tamu.edu/lawreview/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Texas A&M Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.tamu.edu/lawreview/",
+    "domain": "scholarship.law.tamu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.tamu.edu/lawreview/sitemap.xml"
+  ]
+}

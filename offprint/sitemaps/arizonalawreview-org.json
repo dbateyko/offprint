@@ -1,0 +1,13 @@
+{
+  "id": "arizonalawreview-org",
+  "start_urls": [
+    "https://arizonalawreview.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Arizona Law Review",
+    "platform": "wordpress",
+    "url": "https://arizonalawreview.org/",
+    "created_date": "2025-12-14"
+  }
+}

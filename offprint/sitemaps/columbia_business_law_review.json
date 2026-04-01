@@ -1,0 +1,15 @@
+{
+  "start_urls": [
+    "https://journals.library.columbia.edu/index.php/CBLR/issue/archive?page=[1-62]"
+  ],
+  "url": "https://journals.library.columbia.edu/index.php/cblr/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Columbia Business Law Review",
+    "platform": "OJS",
+    "original_url": "https://cblr.columbia.edu/",
+    "domain": "journals.library.columbia.edu",
+    "canonicalized_at": "2026-02-03",
+    "notes": "seed_audit: update domain via canonical URL"
+  }
+}

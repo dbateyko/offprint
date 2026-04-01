@@ -1,0 +1,13 @@
+{
+  "id": "scholarcommons-sc-edu",
+  "start_urls": [
+    "https://scholarcommons.sc.edu/sclr/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "South Carolina Law Review",
+    "platform": "unknown",
+    "url": "https://scholarcommons.sc.edu/sclr/",
+    "created_date": "2025-12-14"
+  }
+}

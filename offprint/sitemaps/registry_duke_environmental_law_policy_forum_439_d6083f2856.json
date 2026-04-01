@@ -1,0 +1,28 @@
+{
+  "id": "registry-439-d6083f2856",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "delpf.law.duke.edu",
+    "journal_name": "Duke Environmental Law & Policy Forum",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://delpf.law.duke.edu/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "80",
+    "registry_mainids": "439",
+    "registry_names": "Duke Environmental Law & Policy Forum",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_paywall",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/delpf.law.duke.edu/url_d6083f28566f",
+    "status_reason": "probe_paywall_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://delpf.law.duke.edu/"
+  ]
+}

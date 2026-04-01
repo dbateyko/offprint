@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "domain": "www.nyujll.com",
+    "journal": "New York University Journal of Law & Liberty",
+    "original_url": "https://www.nyujll.org/",
+    "platform": "Squarespace",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z"
+  },
+  "sitemap_url": "https://www.nyujll.com/sitemap.xml",
+  "url": "https://www.nyujll.com/archives"
+}

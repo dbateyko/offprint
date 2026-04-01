@@ -1,0 +1,13 @@
+{
+  "id": "cpilj-law-uconn-edu",
+  "start_urls": [
+    "https://cpilj.law.uconn.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Connecticut Public Interest Law Journal",
+    "platform": "unknown",
+    "url": "https://cpilj.law.uconn.edu/",
+    "created_date": "2025-12-14"
+  }
+}

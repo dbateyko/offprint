@@ -1,0 +1,46 @@
+{
+  "id": "ctlj-colorado-edu",
+  "metadata": {
+    "created_date": "2026-03-22",
+    "journal_name": "Ctlj.Colorado",
+    "navigation": {
+      "archive_path": "seed \u2192 click Issue link via category (e.g., Issue 1 via ?cat=50) \u2192 /?cat=50 lists all articles",
+      "notes": "Pages are rendered statically by WordPress. No built\u2011in pagination for issue pages \u2013 each issue page lists all its articles (6\u201310). PDFs appear only on article pages, linked as <a href=\"/wp-content/uploads/...pdf\">. Total volumes: 24 (vol 23 and 24 visible), each typically with two issues. The \"Print\" page lists recent articles but has no PDFs."
+    },
+    "platform": "WordPress",
+    "status": "ready_for_promotion",
+    "status_evidence_ref": "scripts/promote_sitemaps.py:20260323T014543Z",
+    "status_updated_at": "2026-03-23T01:45:49.531971+00:00",
+    "url": "https://ctlj.colorado.edu/"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "article",
+      "type": "SelectorElement"
+    },
+    {
+      "id": "title",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "h2",
+      "type": "SelectorText"
+    },
+    {
+      "id": "article_url",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a",
+      "type": "SelectorLink"
+    }
+  ],
+  "source": "llm_explore",
+  "start_urls": [
+    "https://ctlj.colorado.edu/?cat=50"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "slu-edu",
+  "start_urls": [
+    "https://www.slu.edu/law/academics/journals/aba-labor-employment-law/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "ABA Journal of Labor and Employment Law",
+    "platform": "unknown",
+    "url": "https://www.slu.edu/law/academics/journals/aba-labor-employment-law/",
+    "created_date": "2025-12-14"
+  }
+}

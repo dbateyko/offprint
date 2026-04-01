@@ -1,0 +1,14 @@
+{
+  "id": "jost-syr-edu",
+  "start_urls": [
+    "https://jost.syr.edu/category/publications/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Syracuse Science & Technology Law Reporter",
+    "platform": "wordpress",
+    "url": "https://jost.syr.edu/",
+    "created_date": "2026-03-02",
+    "notes": "Added from discovered_journals generic triage; publications category contains direct PDF links."
+  }
+}

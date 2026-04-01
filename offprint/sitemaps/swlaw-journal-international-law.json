@@ -1,0 +1,14 @@
+{
+  "id": "swlaw-journal-international-law",
+  "start_urls": [
+    "https://www.swlaw.edu/curriculum/law-review-journals/southwestern-journal-international-law"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Southwestern Journal of International Law",
+    "platform": "drupal",
+    "url": "https://www.swlaw.edu/curriculum/law-review-journals/southwestern-journal-international-law",
+    "created_date": "2026-03-02",
+    "notes": "Added from discovered_journals generic triage; updated to current SWLAW journal path."
+  }
+}

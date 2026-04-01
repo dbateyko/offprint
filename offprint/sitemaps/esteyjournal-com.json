@@ -1,0 +1,13 @@
+{
+  "id": "esteyjournal-com",
+  "start_urls": [
+    "https://esteyjournal.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Estey Journal of International Law and Trade Policy",
+    "platform": "wordpress",
+    "url": "https://esteyjournal.com/",
+    "created_date": "2026-03-01"
+  }
+}

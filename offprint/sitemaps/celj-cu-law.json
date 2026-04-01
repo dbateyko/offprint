@@ -1,0 +1,14 @@
+{
+  "id": "celj-cu-law",
+  "start_urls": [
+    "https://scholar.law.colorado.edu/celj/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Colorado Environmental Law Journal",
+    "platform": "digital_commons",
+    "url": "https://celj.cu.law/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: PDF archive hosted on CU Scholar Digital Commons."
+  }
+}

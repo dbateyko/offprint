@@ -1,0 +1,28 @@
+{
+  "id": "registry-928-5137b5ec3a",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "kluwerlawonline.com",
+    "journal_name": "Journal of International Arbitration",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://kluwerlawonline.com/Journals/Journal+of+International+Arbitration/4",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "928",
+    "registry_names": "Journal of International Arbitration",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/kluwerlawonline.com/url_5137b5ec3a17",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:21:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://kluwerlawonline.com/Journals/Journal+of+International+Arbitration/4"
+  ]
+}

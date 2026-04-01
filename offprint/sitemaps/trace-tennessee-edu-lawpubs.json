@@ -1,0 +1,14 @@
+{
+  "id": "trace-tennessee-edu-lawpubs",
+  "start_urls": [
+    "https://trace.tennessee.edu/journals/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Tennessee Law Review (TRACE Digital Commons)",
+    "platform": "digitalcommons",
+    "url": "https://trace.tennessee.edu/utk_lawpubs/",
+    "created_date": "2026-03-01",
+    "notes": "Content also available on tennesseelawreview.org (WordPress), but archival PDFs are in TRACE DC. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

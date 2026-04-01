@@ -1,0 +1,13 @@
+{
+  "id": "usd-edu",
+  "start_urls": [
+    "https://www.usd.edu/law/law-review"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "South Dakota Law Review",
+    "platform": "unknown",
+    "url": "https://www.usd.edu/law/law-review",
+    "created_date": "2025-12-14"
+  }
+}

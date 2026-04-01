@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.ou.edu/ailr/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "American Indian Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://law.ou.edu/faculty-scholarship/journals/american-indian-law-review",
+    "domain": "digitalcommons.law.ou.edu",
+    "notes": "Manual override: PDF archive hosted on OU Digital Commons. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.ou.edu/ailr/sitemap.xml"
+  ]
+}

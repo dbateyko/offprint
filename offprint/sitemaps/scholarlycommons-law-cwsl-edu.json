@@ -1,0 +1,14 @@
+{
+  "id": "scholarlycommons-law-cwsl-edu",
+  "start_urls": [
+    "https://scholarlycommons.law.cwsl.edu/cwilj/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "California Western International Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://scholarlycommons.law.cwsl.edu/cwilj/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

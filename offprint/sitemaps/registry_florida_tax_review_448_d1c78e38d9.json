@@ -1,0 +1,28 @@
+{
+  "id": "registry-448-d1c78e38d9",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "journals.upress.ufl.edu",
+    "journal_name": "Florida Tax Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://journals.upress.ufl.edu/ftr/index",
+    "platform": "ojs",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "448",
+    "registry_names": "Florida Tax Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "ojs",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "OJSAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/journals.upress.ufl.edu/url_d1c78e38d90a",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-14T03:47:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://journals.upress.ufl.edu/ftr/index"
+  ]
+}

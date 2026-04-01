@@ -1,0 +1,15 @@
+{
+  "id": "repository-uchastings-edu",
+  "start_urls": [
+    "https://repository.uclawsf.edu/hastings_business_law_journal/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Hastings Business Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://repository.uclawsf.edu/hastings_business_law_journal/all_issues.html",
+    "created_date": "2025-12-14",
+    "updated_at": "2026-02-24",
+    "notes": "Use current uclawsf host and all_issues archive for deterministic discovery. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

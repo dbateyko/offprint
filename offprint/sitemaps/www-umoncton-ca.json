@@ -1,0 +1,14 @@
+{
+  "id": "www-umoncton-ca",
+  "start_urls": [
+    "http://www.umoncton.ca/umcm-droit/node/34"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.umoncton.ca",
+    "platform": "drupal",
+    "url": "http://www.umoncton.ca/umcm-droit/node/34",
+    "created_date": "2026-03-25",
+    "status": "active"
+  }
+}

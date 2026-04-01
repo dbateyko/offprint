@@ -1,0 +1,13 @@
+{
+  "id": "jach-law-wisc-edu",
+  "start_urls": [
+    "https://jach.law.wisc.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of American Constitutional History",
+    "platform": "wordpress",
+    "url": "https://jach.law.wisc.edu/archive",
+    "created_date": "2026-03-01"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://via.library.depaul.edu/jhcl/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "DePaul Journal of Health Care Law",
+    "platform": "digitalcommons",
+    "original_url": "https://via.library.depaul.edu/jhcl/",
+    "domain": "via.library.depaul.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://via.library.depaul.edu/jhcl/sitemap.xml"
+  ]
+}

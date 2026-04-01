@@ -1,0 +1,13 @@
+{
+  "id": "harvardhrj-online",
+  "start_urls": [
+    "https://harvardhrj.com/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Harvard Human Rights Journal Online",
+    "platform": "wordpress",
+    "url": "https://harvardhrj.com/",
+    "created_date": "2026-03-01"
+  }
+}

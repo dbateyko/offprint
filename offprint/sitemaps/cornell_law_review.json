@@ -1,0 +1,21 @@
+{
+  "id": "cornell-law-review",
+  "start_urls": [
+    "https://publications.lawschool.cornell.edu/lawreview/archives/issues/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Cornell Law Review",
+    "platform": "wordpress",
+    "url": "https://publications.lawschool.cornell.edu/lawreview/",
+    "created_date": "2026-03-27",
+    "status": "active",
+    "status_evidence_ref": "artifacts/smoke/smoke_one_pdf_20260309T231108Z.json",
+    "status_reason": "reseeded_cornelllawreview_org_redirects_to_publications_lawschool_cornell_edu_registered_in_adapter_registry",
+    "status_updated_at": "2026-03-27T00:00:00Z",
+    "navigation": {
+      "archive_path": "/lawreview/archives/issues/ lists all issue volumes",
+      "notes": "cornelllawreview.org 301-redirects to publications.lawschool.cornell.edu/lawreview/. WordPress. Fixed trailing-comma JSON bug and registered publications.lawschool.cornell.edu in adapter registry 2026-03-27. Smoke HARD FAIL on metadata: PDF download works but WP adapter extracts no title/authors/volume/year — non-standard theme, needs selector investigation."
+    }
+  }
+}

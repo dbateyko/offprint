@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.ou.edu/olr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Oklahoma Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.ou.edu/olr/",
+    "domain": "digitalcommons.law.ou.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.ou.edu/olr/sitemap.xml"
+  ]
+}

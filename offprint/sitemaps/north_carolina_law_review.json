@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.unc.edu/nclr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "North Carolina Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.unc.edu/nclr/",
+    "domain": "scholarship.law.unc.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.unc.edu/nclr/sitemap.xml"
+  ]
+}

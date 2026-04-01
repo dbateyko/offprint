@@ -1,0 +1,23 @@
+{
+  "id": "registry-1355-40cdac8da5",
+  "start_urls": [
+    "https://ccjls.scholasticahq.com/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Criminology, Criminal Justice, Law & Society",
+    "platform": "scholastica",
+    "url": "",
+    "created_date": "2026-03-31",
+    "status": "todo_adapter",
+    "status_reason": "Scholastica site - handled by ScholasticaBaseAdapter",
+    "navigation": {
+      "archive_root": "/articles",
+      "volume_url_pattern": "none - flat article listing with section categorization",
+      "archive_path": "homepage -> /articles lists all articles by section/tag",
+      "pagination": "none - all articles listed on /articles",
+      "pdf_location": "article-detail-page",
+      "notes": "Scholastica platform. Articles listed on /articles with section categorization."
+    }
+  }
+}

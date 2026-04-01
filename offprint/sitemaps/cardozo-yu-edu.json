@@ -1,0 +1,14 @@
+{
+  "id": "cardozo-yu-edu",
+  "start_urls": [
+    "https://larc.cardozo.yu.edu/cardozoaelj/all_issues.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Cardozo Arts & Entertainment Law Journal",
+    "platform": "digital_commons",
+    "url": "https://cardozo.yu.edu/cardozo-arts-and-entertainment-law-journal",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: PDF archive hosted on LARC Digital Commons."
+  }
+}

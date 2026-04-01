@@ -1,0 +1,14 @@
+{
+  "id": "scholarlycommons-law-hofstra-edu",
+  "start_urls": [
+    "https://scholarlycommons.law.hofstra.edu/hlr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Hofstra Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarlycommons.law.hofstra.edu/hlr/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

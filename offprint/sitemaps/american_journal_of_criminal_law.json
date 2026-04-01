@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "domain": "ajcl.org",
+    "journal": "American Journal of Criminal Law",
+    "notes": "Journal migrated from Texas main site to ajcl.org. Archive requires depth=2.",
+    "original_url": "https://ajcl.org/",
+    "platform": "Custom/Static",
+    "status": "active",
+    "status_evidence_ref": "artifacts/site_fingerprints/ajcl.org",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-04T04:36:02Z"
+  },
+  "sitemap_url": null,
+  "url": "https://ajcl.org/archive"
+}

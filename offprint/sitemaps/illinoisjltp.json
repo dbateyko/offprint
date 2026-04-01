@@ -1,0 +1,79 @@
+{
+  "id": "illinoisjltp",
+  "start_urls": [
+    "https://illinoisjltp.com/journal-archive/page/[1-30]"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "illinoisjltp",
+    "startUrl": [
+      "https://illinoisjltp.com/journal-archive/page/[1-30]"
+    ],
+    "selectors": [
+      {
+        "id": "article",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.article-item-wrapper",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "a.article-item-title",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "volume",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "div.article-item-heading",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "div.article-item-author",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "link",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorLink",
+        "selector": "a.article-item-title",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "link"
+        ],
+        "type": "SelectorLink",
+        "selector": "a.profile-btn-wrapper",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      }
+    ]
+  }
+}

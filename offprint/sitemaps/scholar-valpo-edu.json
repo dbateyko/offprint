@@ -1,0 +1,19 @@
+{
+  "id": "scholar-valpo-edu",
+  "start_urls": [
+    "https://scholar.valpo.edu/journaloftolkienresearch/sitemap.xml",
+    "https://scholar.valpo.edu/law_fac_presentations/sitemap.xml",
+    "https://scholar.valpo.edu/law_fac_pubs/sitemap.xml",
+    "https://scholar.valpo.edu/law_forum/sitemap.xml",
+    "https://scholar.valpo.edu/law_stu_pubs/sitemap.xml",
+    "https://scholar.valpo.edu/law_theamicus/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Valparaiso University (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://scholar.valpo.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include Valparaiso Law Review and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

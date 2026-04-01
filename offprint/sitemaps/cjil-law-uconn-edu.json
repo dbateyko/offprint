@@ -1,0 +1,15 @@
+{
+  "id": "cjil-law-uconn-edu",
+  "start_urls": [
+    "https://cjil.law.uconn.edu/archive/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Connecticut Journal of International Law",
+    "platform": "unknown",
+    "url": "https://cjil.law.uconn.edu/archive/",
+    "created_date": "2025-12-14",
+    "updated_at": "2026-02-23",
+    "notes": "Archive URL from live site navigation and web search validation."
+  }
+}

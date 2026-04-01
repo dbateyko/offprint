@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.osgoode.yorku.ca/cllpj/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Comparative Labor Law & Policy Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://cllpj.law.illinois.edu/",
+    "domain": "digitalcommons.osgoode.yorku.ca",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.osgoode.yorku.ca/cllpj/sitemap.xml"
+  ]
+}

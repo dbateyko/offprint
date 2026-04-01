@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-edu",
+  "start_urls": [
+    "https://scholarship.law.edu/jchlp/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Contemporary Health Law and Policy",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.edu/jchlp/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

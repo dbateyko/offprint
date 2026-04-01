@@ -1,0 +1,26 @@
+{
+  "id": "nmlr-unm-edu",
+  "start_urls": [
+    "https://nmlr.unm.edu/article-submission.html"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://nmlr.unm.edu/",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/special-content",
+        "/special-content/special-issue.html"
+      ],
+      "issue_path_prefixes": [
+        "/special-content",
+        "/special-content/news",
+        "/news",
+        "/news/2017"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

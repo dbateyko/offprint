@@ -1,0 +1,47 @@
+{
+  "id": "aulawreview-org",
+  "metadata": {
+    "created_date": "2026-03-22",
+    "journal_name": "Aulawreview",
+    "navigation": {
+      "archive_path": "seed \u2192 navigation link for a specific volume/issue \u2192 /blog/category/volume-X-issue-Y/ lists article entries",
+      "notes": "Listing pages show 10 posts per page and have no direct PDF links; PDFs are linked only in individual article pages via an <a href=\"...pdf\"> link. Pagination is not present on volume pages; all posts of the issue appear on a single page. The forum category functions like a separate issue section. There is a full archive page at /by-volume/ that lists all volumes.",
+      "volume_url_pattern": "/blog/category/volume-{N}-issue-{M}/"
+    },
+    "platform": "WordPress",
+    "status": "ready_for_promotion",
+    "status_evidence_ref": "scripts/promote_sitemaps.py:20260323T012250Z",
+    "status_updated_at": "2026-03-23T01:23:42.793804+00:00",
+    "url": "https://aulawreview.org/blog/category/forum"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "div.post",
+      "type": "SelectorElement"
+    },
+    {
+      "id": "title",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "h3",
+      "type": "SelectorText"
+    },
+    {
+      "id": "article_url",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a",
+      "type": "SelectorLink"
+    }
+  ],
+  "source": "llm_explore",
+  "start_urls": [
+    "https://aulawreview.org/blog/category/volume-75-issue-1/"
+  ]
+}

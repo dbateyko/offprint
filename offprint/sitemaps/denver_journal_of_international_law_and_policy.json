@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.du.edu/djilp/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Denver Journal of International Law and Policy",
+    "platform": "digitalcommons",
+    "original_url": "https://djilp.org/",
+    "domain": "digitalcommons.du.edu",
+    "notes": "Manual override: PDF archive hosted on DU Digital Commons. [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.du.edu/djilp/sitemap.xml"
+  ]
+}

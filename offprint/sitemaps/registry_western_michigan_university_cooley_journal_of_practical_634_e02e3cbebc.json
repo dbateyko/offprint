@@ -1,0 +1,28 @@
+{
+  "id": "registry-634-e02e3cbebc",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "sites.google.com",
+    "journal_name": "Western Michigan University Cooley Journal of Practical and Clinical Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://sites.google.com/a/cooley.edu/journal-of-practical-and-clinical-law",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "634",
+    "registry_names": "Western Michigan University Cooley Journal of Practical and Clinical Law",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/sites.google.com/url_e02e3cbebc6d",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:05:31Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://sites.google.com/a/cooley.edu/journal-of-practical-and-clinical-law"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "registry-1023-498e39939a",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "moritzlaw.osu.edu",
+    "journal_name": "Ohio State Technology Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://moritzlaw.osu.edu/ostlj",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1023",
+    "registry_names": "Ohio State Technology Law Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DrupalAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "artifacts/reports/smoke_techlaw_20260313_final/smoke_one_pdf_20260313T143918Z.json",
+    "status_reason": "adapter_validated_smoke_pass_drupal",
+    "status_updated_at": "2026-03-13T14:39:18Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://moritzlaw.osu.edu/ostlj-volume21-2"
+  ]
+}

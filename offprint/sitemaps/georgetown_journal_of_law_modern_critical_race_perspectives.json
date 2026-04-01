@@ -1,0 +1,25 @@
+{
+  "url": "https://www.law.georgetown.edu/mcrp-journal/in-print/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Georgetown Journal of Law & Modern Critical Race Perspectives",
+    "platform": "WordPress",
+    "original_url": "https://www.law.georgetown.edu/mcrp-journal/",
+    "domain": "www.law.georgetown.edu",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_targeted_curl_investigation_20260310_georgetown_mcrp_batch4.json",
+    "status_reason": "in_print_article_pdf_paths_validated",
+    "status_updated_at": "2026-03-10T14:15:53Z",
+    "adapter_config": {
+      "issue_path_prefixes": [
+        "/mcrp-journal/in-print/"
+      ],
+      "author_selectors": [
+        ".published_author"
+      ],
+      "pdf_button_selectors": [
+        "a[href$='.pdf']"
+      ]
+    }
+  }
+}

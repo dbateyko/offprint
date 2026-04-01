@@ -1,0 +1,15 @@
+{
+  "id": "michigan-law-review-online",
+  "start_urls": [
+    "http://michiganlawreview.org/category/mlr-online"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "Michigan Law Review Online",
+    "platform": "wordpress",
+    "url": "http://michiganlawreview.org/category/mlr-online",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

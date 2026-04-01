@@ -1,0 +1,13 @@
+{
+  "id": "atlanticlawjournal-org",
+  "start_urls": [
+    "https://www.atlanticlawjournal.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Atlantic Law Journal",
+    "platform": "wordpress",
+    "url": "https://www.atlanticlawjournal.org/",
+    "created_date": "2026-03-01"
+  }
+}

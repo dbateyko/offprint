@@ -1,0 +1,15 @@
+{
+  "id": "emory-law-journal-online",
+  "start_urls": [
+    "https://scholarlycommons.law.emory.edu/elj/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Emory Law Journal Online",
+    "platform": "digitalcommons",
+    "original_url": "https://law.emory.edu/academics/journals/emory-law-journal/index.html",
+    "domain": "scholarlycommons.law.emory.edu",
+    "created_date": "2026-03-02",
+    "notes": "Deep-probe configure_now promotion from law.emory.edu to direct Digital Commons archive seed. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

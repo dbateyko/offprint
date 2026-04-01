@@ -1,0 +1,28 @@
+{
+  "id": "registry-685-2d3885e929",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "sites.suffolk.edu",
+    "journal_name": "Suffolk Journal of Trial & Appellate Advocacy",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://sites.suffolk.edu/jtaa",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "685",
+    "registry_names": "Suffolk Journal of Trial & Appellate Advocacy",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "scripts/promote_todo_adapter_seeds.py",
+    "status_reason": "bulk_promoted_from_todo_adapter",
+    "status_updated_at": "2026-03-16T21:03:58Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://sites.suffolk.edu/jtaa"
+  ]
+}

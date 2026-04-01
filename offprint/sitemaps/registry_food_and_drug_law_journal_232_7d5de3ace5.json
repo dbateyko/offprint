@@ -1,0 +1,28 @@
+{
+  "id": "registry-232-7d5de3ace5",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.fdli.org",
+    "journal_name": "Food and Drug Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.fdli.org/resources/food-drug-law-journal",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "232",
+    "registry_names": "Food and Drug Law Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.fdli.org/url_7d5de3ace51d",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:05:31Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.fdli.org/resources/food-drug-law-journal"
+  ]
+}

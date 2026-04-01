@@ -1,0 +1,13 @@
+{
+  "id": "rutgers-ilhr-journal-org",
+  "start_urls": [
+    "https://www.rutgers-ilhr-journal.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Rutgers International Law and Human Rights Journal",
+    "platform": "wordpress",
+    "url": "https://www.rutgers-ilhr-journal.org/",
+    "created_date": "2026-03-01"
+  }
+}

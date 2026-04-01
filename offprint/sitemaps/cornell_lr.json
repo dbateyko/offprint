@@ -1,0 +1,12 @@
+{
+  "id": "cornell_lr",
+  "start_urls": [
+    "https://www.lawschool.cornell.edu/"
+  ],
+  "source": "playbook_expansion",
+  "metadata": {
+    "domain": "www.lawschool.cornell.edu",
+    "canonicalized_at": "2026-02-03",
+    "notes": "seed_audit: update domain via canonical URL"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "openscholarship-wustl-edu",
+  "start_urls": [
+    "https://openscholarship.wustl.edu/ai_law/sitemap.xml",
+    "https://openscholarship.wustl.edu/csd_socialjustice/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_etds/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_globalstudies/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_journal_law_policy/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_jurisprudence/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_lawreview/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_lawreview_commentaries/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_scholarship/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_urbanlaw/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_urbanlaw_images/sitemap.xml",
+    "https://openscholarship.wustl.edu/law_wujlp_images/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Washington University in St. Louis (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://openscholarship.wustl.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include law_scholarship, law_lawreview_commentaries, etc. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

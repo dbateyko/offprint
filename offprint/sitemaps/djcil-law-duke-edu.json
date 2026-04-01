@@ -1,0 +1,15 @@
+{
+  "id": "djcil-law-duke-edu",
+  "start_urls": [
+    "https://scholarship.law.duke.edu/djcil/all_issues.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Duke Journal of Comparative and International Law",
+    "platform": "digital_commons",
+    "url": "https://scholarship.law.duke.edu/djcil/all_issues.html",
+    "original_url": "https://djcil.law.duke.edu/",
+    "updated_at": "2026-02-23",
+    "notes": "Canonical archive hosted on scholarship.law.duke.edu (Digital Commons)."
+  }
+}

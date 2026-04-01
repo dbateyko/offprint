@@ -1,0 +1,14 @@
+{
+  "id": "ir-law-utk-edu",
+  "start_urls": [
+    "https://ir.law.utk.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of Tennessee Law (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://ir.law.utk.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include Tennessee Law Review, TJLP, etc. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

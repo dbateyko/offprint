@@ -1,0 +1,14 @@
+{
+  "url": "https://chicagounbound.uchicago.edu/cjil/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Chicago Journal of International Law",
+    "platform": "digitalcommons",
+    "original_url": "https://chicagounbound.uchicago.edu/cjil/",
+    "domain": "chicagounbound.uchicago.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://chicagounbound.uchicago.edu/cjil/sitemap.xml"
+  ]
+}

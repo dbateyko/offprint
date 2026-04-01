@@ -1,0 +1,16 @@
+{
+  "id": "marquette-benefits-social-welfare-review",
+  "start_urls": [
+    "https://scholarship.law.marquette.edu/benefits/all_issues.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Marquette Benefits and Social Welfare Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.marquette.edu/benefits/",
+    "created_date": "2026-03-23",
+    "notes": "Digital Commons (BePress) journal. Continues Marquette Elder's Advisor (vol. 1-16, iss. 1). Current: vol. 26, iss. 2 (Spring 2025). Articles cover employee benefits, disability, elder, health, poverty, and social insurance law from civil rights and social justice perspectives.",
+    "previous_title": "Marquette Elder's Advisor",
+    "volume_range": "vol. 1 (2002) - vol. 26 (2025-)"
+  }
+}

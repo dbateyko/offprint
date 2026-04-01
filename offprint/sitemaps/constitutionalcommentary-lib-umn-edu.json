@@ -1,0 +1,14 @@
+{
+  "id": "constitutionalcommentary-lib-umn-edu",
+  "start_urls": [
+    "https://constitutionalcommentary.lib.umn.edu/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "constitutionalcommentary.lib.umn.edu",
+    "platform": "wordpress",
+    "url": "https://constitutionalcommentary.lib.umn.edu/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

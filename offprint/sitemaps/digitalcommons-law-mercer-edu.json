@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-mercer-edu",
+  "start_urls": [
+    "https://digitalcommons.law.mercer.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Mercer University Law (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.mercer.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include Mercer Law Review and related series. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

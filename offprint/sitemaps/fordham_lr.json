@@ -1,0 +1,7 @@
+{
+  "id": "fordham_lr",
+  "start_urls": [
+    "https://ir.lawnet.fordham.edu/flr/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

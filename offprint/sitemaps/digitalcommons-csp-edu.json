@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-csp-edu",
+  "start_urls": [
+    "https://digitalcommons.csp.edu/clr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Concordia Law Review",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.csp.edu/clr/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

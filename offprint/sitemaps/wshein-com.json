@@ -1,0 +1,13 @@
+{
+  "id": "wshein-com",
+  "start_urls": [
+    "https://www.wshein.com/catalog/100494/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Buddhism, Law & Society",
+    "platform": "wordpress",
+    "url": "https://www.wshein.com/catalog/100494/",
+    "created_date": "2025-12-14"
+  }
+}

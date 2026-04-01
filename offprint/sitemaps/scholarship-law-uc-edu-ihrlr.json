@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-uc-edu-ihrlr",
+  "start_urls": [
+    "https://scholarship.law.uc.edu/ihrlr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Immigration and Human Rights Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.uc.edu/ihrlr/",
+    "created_date": "2026-03-01",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

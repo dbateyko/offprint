@@ -1,0 +1,14 @@
+{
+  "id": "commons-law-famu-edu",
+  "start_urls": [
+    "https://commons.law.famu.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Florida A&M Law (multiple journals)",
+    "platform": "digitalcommons",
+    "url": "https://commons.law.famu.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include famulawreview and related series. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

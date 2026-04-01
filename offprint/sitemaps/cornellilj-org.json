@@ -1,0 +1,14 @@
+{
+  "id": "cornellilj-org",
+  "start_urls": [
+    "https://cornellilj.org/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "cornellilj.org",
+    "platform": "wordpress",
+    "url": "https://cornellilj.org/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

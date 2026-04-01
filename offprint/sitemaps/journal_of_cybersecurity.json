@@ -1,0 +1,14 @@
+{
+  "id": "journal-of-cybersecurity",
+  "start_urls": [
+    "https://academic.oup.com/cybersecurity/issue"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Cybersecurity",
+    "platform": "academic_oup",
+    "url": "https://academic.oup.com/cybersecurity/",
+    "created_date": "2026-03-15",
+    "notes": "Custom adapter required for Oxford University Press journals."
+  }
+}

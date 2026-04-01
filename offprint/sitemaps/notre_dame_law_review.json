@@ -1,0 +1,17 @@
+{
+  "id": "notre-dame-law-review",
+  "metadata": {
+    "created_date": "2026-03-02",
+    "journal_name": "Notre Dame Law Review",
+    "platform": "wordpress",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch6_20260310_summary.json",
+    "status_reason": "site_adapter_validated_shallow_pdf_check",
+    "status_updated_at": "2026-03-10T00:58:31Z",
+    "url": "https://ndlawreview.org/"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://ndlawreview.org/"
+  ]
+}

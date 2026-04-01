@@ -1,0 +1,28 @@
+{
+  "id": "registry-195-0416f8b341",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "law.utexas.edu",
+    "journal_name": "American Journal of Criminal Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://law.utexas.edu/publications/journals/american-journal-of-criminal-law",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "195",
+    "registry_names": "American Journal of Criminal Law",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/smoke/todo_known_platform_non_dc_20260315/runs/smoke_one_pdf_20260315T143057Z.json",
+    "status_reason": "adapter_validated_smoke",
+    "status_updated_at": "2026-03-15T14:41:57Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://law.utexas.edu/publications/journals/american-journal-of-criminal-law"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "journaloflaw-us",
+  "start_urls": [
+    "http://www.journaloflaw.us/"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Journaloflaw.Us",
+    "platform": "custom",
+    "url": "http://www.journaloflaw.us/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "notes": "No separate article pages or volume navigation. PDF files named with volume/issue and date in some cases. Author list appears in a paragraph element but no clear title. No pagination."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.style1",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

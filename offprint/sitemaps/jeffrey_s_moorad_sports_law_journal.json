@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.villanova.edu/mslj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Jeffrey S. Moorad Sports Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.villanova.edu/mslj/",
+    "domain": "digitalcommons.law.villanova.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.villanova.edu/mslj/sitemap.xml"
+  ]
+}

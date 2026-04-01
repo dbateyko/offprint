@@ -1,0 +1,28 @@
+{
+  "id": "registry-1701-a7312c374c",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "digitalcommons.law.buffalo.edu",
+    "journal_name": "Buffalo Law Review The Docket",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://digitalcommons.law.buffalo.edu/the_docket",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1701",
+    "registry_names": "Buffalo Law Review The Docket",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://digitalcommons.law.buffalo.edu/the_docket"
+  ]
+}

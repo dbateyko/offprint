@@ -1,0 +1,44 @@
+{
+  "id": "uclalawreview-org",
+  "start_urls": [
+    "https://www.uclalawreview.org/archive/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "UCLA Law Review",
+    "platform": "WordPress",
+    "url": "https://www.uclalawreview.org/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.uclalawreview.org/archive/",
+      "notes": "WordPress site with custom archive template. Articles listed flat under .issues_group divs."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".issues_group li",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "span",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

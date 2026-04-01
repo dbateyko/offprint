@@ -1,0 +1,26 @@
+{
+  "id": "nsuworks-nova-edu",
+  "start_urls": [
+    "https://nsuworks.nova.edu/fdla-journal/sitemap.xml",
+    "https://nsuworks.nova.edu/ilsajournal/sitemap.xml",
+    "https://nsuworks.nova.edu/law_commencement/sitemap.xml",
+    "https://nsuworks.nova.edu/law_coursecatalogs/sitemap.xml",
+    "https://nsuworks.nova.edu/law_facarticles/sitemap.xml",
+    "https://nsuworks.nova.edu/law_lcpseminar/sitemap.xml",
+    "https://nsuworks.nova.edu/law_slideshow/sitemap.xml",
+    "https://nsuworks.nova.edu/law_viewbook/sitemap.xml",
+    "https://nsuworks.nova.edu/lawreview_mastheads/sitemap.xml",
+    "https://nsuworks.nova.edu/lawreview_mastheads_images/sitemap.xml",
+    "https://nsuworks.nova.edu/nova_lawyer/sitemap.xml",
+    "https://nsuworks.nova.edu/nsudigital_nsujournal/sitemap.xml",
+    "https://nsuworks.nova.edu/nsudigital_preview16/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Nova Southeastern University (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://nsuworks.nova.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include law journals and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

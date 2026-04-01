@@ -1,0 +1,13 @@
+{
+  "id": "stjohns-edu",
+  "start_urls": [
+    "https://www.stjohns.edu/law/academics/co-curricular-programs/american-bankruptcy-institute-law-review"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "American Bankruptcy Institute Law Review",
+    "platform": "unknown",
+    "url": "https://www.stjohns.edu/law/academics/co-curricular-programs/american-bankruptcy-institute-law-review",
+    "created_date": "2025-12-14"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "journals-law-harvard-edu-crcl",
+  "start_urls": [
+    "https://journals.law.harvard.edu/crcl/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Harvard Civil Rights-Civil Liberties Law Review",
+    "platform": "wordpress",
+    "url": "https://journals.law.harvard.edu/crcl/",
+    "created_date": "2026-03-01",
+    "notes": "Smoke test passed 2026-03-01 via WordPressAcademicBaseAdapter."
+  }
+}

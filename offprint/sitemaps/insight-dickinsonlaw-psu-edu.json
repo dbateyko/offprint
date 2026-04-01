@@ -1,0 +1,14 @@
+{
+  "id": "insight-dickinsonlaw-psu-edu",
+  "start_urls": [
+    "https://insight.dickinsonlaw.psu.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Penn State Dickinson Law (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://insight.dickinsonlaw.psu.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include DLR, Arbitration Law Review, etc. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

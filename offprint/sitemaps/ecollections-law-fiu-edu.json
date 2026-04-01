@@ -1,0 +1,14 @@
+{
+  "id": "ecollections-law-fiu-edu",
+  "start_urls": [
+    "https://ecollections.law.fiu.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Florida International University Law (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://ecollections.law.fiu.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include lawreview and related symposia. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

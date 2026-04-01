@@ -1,0 +1,28 @@
+{
+  "id": "registry-2041-da199f686d",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "jlepp.org",
+    "journal_name": "Notre Dame Journal of Law, Ethics & Public Policy Online Supplement",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://jlepp.org/category/issue-archives/online-supplement",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "2041",
+    "registry_names": "Notre Dame Journal of Law, Ethics & Public Policy Online Supplement",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/jlepp.org/url_da199f686d72",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-14T03:47:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://jlepp.org/category/issue-archives/online-supplement"
+  ]
+}

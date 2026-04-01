@@ -1,0 +1,14 @@
+{
+  "id": "www-sandiego-edu",
+  "start_urls": [
+    "https://www.sandiego.edu/law/academics/journals/jcli"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.sandiego.edu",
+    "platform": "unknown",
+    "url": "https://www.sandiego.edu/law/academics/journals/jcli",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

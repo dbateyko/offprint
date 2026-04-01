@@ -1,0 +1,13 @@
+{
+  "id": "scholars-law-unlv-edu",
+  "start_urls": [
+    "https://scholars.law.unlv.edu/nlj/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Nevada Law Journal",
+    "platform": "unknown",
+    "url": "https://scholars.law.unlv.edu/nlj/",
+    "created_date": "2025-12-14"
+  }
+}

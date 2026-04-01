@@ -1,0 +1,13 @@
+{
+  "id": "cambridge-org",
+  "start_urls": [
+    "https://www.cambridge.org/core/journals/american-journal-of-law-and-medicine/all-issues"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "American Journal of Law & Medicine",
+    "platform": "publisher",
+    "url": "https://www.cambridge.org/core/journals/american-journal-of-law-and-medicine/all-issues",
+    "created_date": "2025-12-14"
+  }
+}

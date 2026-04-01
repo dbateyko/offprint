@@ -1,0 +1,14 @@
+{
+  "url": "https://commons.und.edu/ndlr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "North Dakota Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://commons.und.edu/ndlr/",
+    "domain": "commons.und.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://commons.und.edu/ndlr/sitemap.xml"
+  ]
+}

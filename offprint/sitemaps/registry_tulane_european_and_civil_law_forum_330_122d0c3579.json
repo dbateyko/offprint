@@ -1,0 +1,28 @@
+{
+  "id": "registry-330-122d0c3579",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "law.tulane.edu",
+    "journal_name": "Tulane European and Civil Law Forum",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://law.tulane.edu/teclf",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "330",
+    "registry_names": "Tulane European and Civil Law Forum",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DrupalAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_login",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/law.tulane.edu/url_122d0c35791c",
+    "status_reason": "probe_login_required",
+    "status_updated_at": "2026-03-15T14:02:19Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://law.tulane.edu/teclf"
+  ]
+}

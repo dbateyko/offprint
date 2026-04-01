@@ -1,0 +1,13 @@
+{
+  "id": "businesslawreview-uchicago-edu",
+  "start_urls": [
+    "https://businesslawreview.uchicago.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Chicago Business Law Review",
+    "platform": "wordpress",
+    "url": "https://businesslawreview.uchicago.edu/",
+    "created_date": "2026-03-01"
+  }
+}

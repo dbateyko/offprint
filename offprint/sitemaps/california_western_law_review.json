@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarlycommons.law.cwsl.edu/cwlr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "California Western Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarlycommons.law.cwsl.edu/cwlr/",
+    "domain": "scholarlycommons.law.cwsl.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarlycommons.law.cwsl.edu/cwlr/sitemap.xml"
+  ]
+}

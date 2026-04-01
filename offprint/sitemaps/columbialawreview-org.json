@@ -1,0 +1,47 @@
+{
+  "id": "columbialawreview-org",
+  "start_urls": [
+    "https://columbialawreview.org/content/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Columbia Law Review",
+    "platform": "wordpress",
+    "url": "https://columbialawreview.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "PDFs are on article detail pages, not listing page. Uses custom theme with article.loop-item containers. Title extraction requires handling nested <a> tag within <h2>."
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.loop-item",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h2.loop-item-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "span.author",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "issue",
+      "type": "SelectorText",
+      "selector": "li.category.issue",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h2.loop-item-title a",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

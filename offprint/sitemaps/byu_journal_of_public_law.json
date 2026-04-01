@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.byu.edu/jpl/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "BYU Journal of Public Law",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.byu.edu/jpl/",
+    "domain": "digitalcommons.law.byu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.byu.edu/jpl/sitemap.xml"
+  ]
+}

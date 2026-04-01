@@ -1,0 +1,14 @@
+{
+  "name": "University of Cincinnati Law Review",
+  "url": "https://scholarship.law.uc.edu/uclr",
+  "platform": "Digital Commons",
+  "base_url": "https://scholarship.law.uc.edu/uclr",
+  "rss_feed": "https://scholarship.law.uc.edu/uclr/recent.rss",
+  "all_issues_url": "https://scholarship.law.uc.edu/uclr/all_issues.html",
+  "adapter": "DigitalCommonsIssueArticleHopAdapter",
+  "pattern": {
+    "volume_base": "/uclr/vol{vol}/",
+    "issue_base": "/uclr/vol{vol}/iss{issue}/"
+  },
+  "notes": "Digital Commons site with volumes 74-94 (2011-2026). Uses ir_journal template."
+}

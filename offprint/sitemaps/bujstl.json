@@ -1,0 +1,67 @@
+{
+  "id": "bujstl",
+  "start_urls": [
+    "https://www.bu.edu/jostl/archives/"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "bujstl",
+    "startUrl": [
+      "https://www.bu.edu/jostl/archives/"
+    ],
+    "selectors": [
+      {
+        "id": "link",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorLink",
+        "selector": ".bu_collapsible_section a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "drive_link",
+        "parentSelectors": [
+          "link"
+        ],
+        "type": "SelectorHTML",
+        "selector": ".post-1113 p:nth-of-type(1)",
+        "multiple": false,
+        "regex": "https:\\/\\/drive\\.google\\.com\\/file\\/d\\/([^\\/]+)\\/preview"
+      },
+      {
+        "id": "article",
+        "parentSelectors": [
+          "link"
+        ],
+        "type": "SelectorElement",
+        "selector": "p",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "title_author",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "_parent_",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

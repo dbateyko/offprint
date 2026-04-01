@@ -1,0 +1,15 @@
+{
+  "id": "notre-dame-law-review",
+  "start_urls": [
+    "https://ndlawreview.org/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "Notre Dame Law Review",
+    "platform": "wordpress",
+    "url": "https://ndlawreview.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

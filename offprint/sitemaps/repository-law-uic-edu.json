@@ -1,0 +1,14 @@
+{
+  "id": "repository-law-uic-edu",
+  "start_urls": [
+    "https://repository.law.uic.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "UIC Law (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://repository.law.uic.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include lawreview, RIPL, etc. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

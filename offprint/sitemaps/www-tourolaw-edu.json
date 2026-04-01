@@ -1,0 +1,26 @@
+{
+  "id": "www-tourolaw-edu",
+  "start_urls": [
+    "https://www.tourolaw.edu/academics/pastissues"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.tourolaw.edu/Academics/1160",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/academics",
+        "/academics/pastissues"
+      ],
+      "issue_path_prefixes": [
+        "/academics",
+        "/studentresources",
+        "/academics/2023-2024-lawreview",
+        "/academics/2023-2024-masthead"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

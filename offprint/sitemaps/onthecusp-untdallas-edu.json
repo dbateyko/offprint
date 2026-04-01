@@ -1,0 +1,13 @@
+{
+  "id": "onthecusp-untdallas-edu",
+  "start_urls": [
+    "https://onthecusp.untdallas.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "On the Cusp",
+    "platform": "wordpress",
+    "url": "https://onthecusp.untdallas.edu/",
+    "created_date": "2026-03-01"
+  }
+}

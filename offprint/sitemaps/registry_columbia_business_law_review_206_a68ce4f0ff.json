@@ -1,0 +1,28 @@
+{
+  "id": "registry-206-a68ce4f0ff",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "journals.library.columbia.edu",
+    "journal_name": "Columbia Business Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://journals.library.columbia.edu/index.php/cblr",
+    "platform": "ojs",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "206",
+    "registry_names": "Columbia Business Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "ojs",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "OJSAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "scripts/promote_todo_adapter_seeds.py",
+    "status_reason": "bulk_promoted_from_todo_adapter",
+    "status_updated_at": "2026-03-16T21:03:58Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://journals.library.columbia.edu/index.php/cblr"
+  ]
+}

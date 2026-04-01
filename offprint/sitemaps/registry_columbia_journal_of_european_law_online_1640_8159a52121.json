@@ -1,0 +1,28 @@
+{
+  "id": "registry-1640-8159a52121",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.cjel.net",
+    "journal_name": "Columbia Journal of European Law Online",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.cjel.net/online",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "1640",
+    "registry_names": "Columbia Journal of European Law Online",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_404",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.cjel.net/url_8159a521214c",
+    "status_reason": "probe_http_404",
+    "status_updated_at": "2026-03-14T04:05:31Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://www.cjel.net/online"
+  ]
+}

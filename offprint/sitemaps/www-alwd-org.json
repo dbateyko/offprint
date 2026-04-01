@@ -1,0 +1,28 @@
+{
+  "id": "www-alwd-org",
+  "start_urls": [
+    "https://www.alwd.org/images/resources/ALWD_Bylaws_August_2025.pdf"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.alwd.org/aboutlcr",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/lcr-archives",
+        "/lcr-archives/fall-2025-volume-22",
+        "/lcr-archives/jalwd-blog",
+        "/home"
+      ],
+      "issue_path_prefixes": [
+        "/resources",
+        "/resources/publication-digests",
+        "/home",
+        "/home/news"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

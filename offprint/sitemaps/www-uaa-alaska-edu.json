@@ -1,0 +1,25 @@
+{
+  "id": "www-uaa-alaska-edu",
+  "start_urls": [
+    "https://www.uaa.alaska.edu/academics/college-of-health/departments/justice-center/alaska-justice-forum/index.cshtml"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.uaa.alaska.edu/academics/college-of-health/departments/justice-center/alaska-justice-forum/index.cshtml",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/browse",
+        "/news",
+        "/news/archive-listing.cshtml"
+      ],
+      "issue_path_prefixes": [
+        "/about",
+        "/about/initiative"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

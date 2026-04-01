@@ -1,0 +1,13 @@
+{
+  "id": "yjil-org",
+  "start_urls": [
+    "https://www.yjil.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "The Yale Journal of International Law",
+    "platform": "wordpress",
+    "url": "https://www.yjil.org/",
+    "created_date": "2025-12-14"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "registry-1812-fd7a860af9",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.law.uw.edu",
+    "journal_name": "Washington Law Review Online",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.law.uw.edu/wlr/online-edition",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "84",
+    "registry_mainids": "1812",
+    "registry_names": "Washington Law Review Online",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_other",
+    "status_evidence_ref": "artifacts/top50_washington_law_review_20260310_summary.json",
+    "status_reason": "legacy_seed_redirects_to_washingtonlawreview_org_online_unmapped",
+    "status_updated_at": "2026-03-10T04:45:38Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.law.uw.edu/wlr/online-edition"
+  ]
+}

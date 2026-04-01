@@ -1,0 +1,18 @@
+{
+  "id": "wakeforestlawreview-com",
+  "start_urls": [
+    "https://wakeforestlawreview.com/category/online/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Wake Forest Law Review Online",
+    "platform": "wordpress",
+    "url": "https://wakeforestlawreview.com/category/online/",
+    "created_date": "2026-03-27",
+    "status": "active",
+    "navigation": {
+      "archive_path": "/category/online/",
+      "notes": "Action-list re-onboard seed. Smoke PASS on 2026-03-27 with WordPressAcademicBaseAdapter; title+2 metadata fields present."
+    }
+  }
+}

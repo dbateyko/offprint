@@ -1,0 +1,13 @@
+{
+  "id": "hrlr-law-columbia-edu",
+  "start_urls": [
+    "https://hrlr.law.columbia.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Columbia Human Rights Law Review",
+    "platform": "unknown",
+    "url": "https://hrlr.law.columbia.edu/",
+    "created_date": "2025-12-14"
+  }
+}

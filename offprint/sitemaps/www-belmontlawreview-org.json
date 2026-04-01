@@ -1,0 +1,14 @@
+{
+  "id": "www-belmontlawreview-org",
+  "start_urls": [
+    "https://www.belmontlawreview.org/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.belmontlawreview.org",
+    "platform": "wordpress",
+    "url": "https://www.belmontlawreview.org/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

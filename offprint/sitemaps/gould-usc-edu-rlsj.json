@@ -1,0 +1,14 @@
+{
+  "id": "gould-usc-edu-rlsj",
+  "start_urls": [
+    "https://gould.usc.edu/students/journals/rlsj/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Southern California Review of Law and Social Justice",
+    "platform": "wordpress",
+    "url": "https://gould.usc.edu/students/journals/rlsj/",
+    "created_date": "2026-03-02",
+    "notes": "Added from discovered_journals generic triage; validated with direct issue PDF links."
+  }
+}

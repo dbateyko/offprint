@@ -1,0 +1,20 @@
+{
+  "id": "law-utexas-edu",
+  "metadata": {
+    "created_date": "2025-12-14",
+    "journal_name": "American Journal of Criminal Law",
+    "notes": "Primary archive appears to be hosted on ajcl.org.",
+    "original_url": "https://law.utexas.edu/publications/journals/american-journal-of-criminal-law/",
+    "platform": "custom",
+    "status": "active",
+    "status_evidence_ref": "artifacts/site_fingerprints/ajcl.org",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-04T04:36:02Z",
+    "updated_at": "2026-02-23",
+    "url": "https://ajcl.org/archive/"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://ajcl.org/archive/"
+  ]
+}

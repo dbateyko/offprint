@@ -1,0 +1,25 @@
+{
+  "id": "commons-stmarytx-edu",
+  "start_urls": [
+    "https://commons.stmarytx.edu/goldblue_law/sitemap.xml",
+    "https://commons.stmarytx.edu/lawlibphotos/sitemap.xml",
+    "https://commons.stmarytx.edu/lawnotes/sitemap.xml",
+    "https://commons.stmarytx.edu/lawpages/sitemap.xml",
+    "https://commons.stmarytx.edu/lawschoolphproject/sitemap.xml",
+    "https://commons.stmarytx.edu/lawtina2022/sitemap.xml",
+    "https://commons.stmarytx.edu/lawtina2023/sitemap.xml",
+    "https://commons.stmarytx.edu/lawtina2024/sitemap.xml",
+    "https://commons.stmarytx.edu/lawtina2025/sitemap.xml",
+    "https://commons.stmarytx.edu/legalbeagle/sitemap.xml",
+    "https://commons.stmarytx.edu/legalminute/sitemap.xml",
+    "https://commons.stmarytx.edu/thestmaryslawjournal/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "St. Mary's University (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://commons.stmarytx.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include law journals and related collections. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

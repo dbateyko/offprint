@@ -1,0 +1,15 @@
+{
+  "id": "northwestern-law-review",
+  "start_urls": [
+    "https://northwesternlawreview.org/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "Northwestern University Law Review",
+    "platform": "wordpress",
+    "url": "https://northwesternlawreview.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

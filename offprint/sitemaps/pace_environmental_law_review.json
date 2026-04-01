@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.pace.edu/pelr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Pace Environmental Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.pace.edu/pelr/",
+    "domain": "digitalcommons.pace.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.pace.edu/pelr/sitemap.xml"
+  ]
+}

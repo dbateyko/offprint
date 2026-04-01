@@ -1,0 +1,25 @@
+{
+  "url": "https://www.law.georgetown.edu/public-policy-journal/in-print-2/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Georgetown Journal of Law & Public Policy",
+    "platform": "WordPress",
+    "original_url": "https://www.law.georgetown.edu/public-policy-journal/",
+    "domain": "www.law.georgetown.edu",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_targeted_curl_investigation_20260310_georgetown_batch2.json",
+    "status_reason": "in_print_article_pdf_paths_validated",
+    "status_updated_at": "2026-03-10T14:15:53Z",
+    "adapter_config": {
+      "issue_path_prefixes": [
+        "/public-policy-journal/in-print-2/"
+      ],
+      "author_selectors": [
+        ".published_author"
+      ],
+      "pdf_button_selectors": [
+        "a[href$='.pdf']"
+      ]
+    }
+  }
+}

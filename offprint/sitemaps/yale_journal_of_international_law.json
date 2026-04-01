@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "domain": "openyls.law.yale.edu",
+    "journal": "Yale Journal of International Law",
+    "original_url": "https://yjil.yale.edu/",
+    "platform": "OpenYLS",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z"
+  },
+  "sitemap_url": null,
+  "url": "https://openyls.law.yale.edu/collections/"
+}

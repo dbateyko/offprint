@@ -1,0 +1,15 @@
+{
+  "id": "akademiai-com-loi-2052",
+  "start_urls": [
+    "https://akademiai.com/loi/2052"
+  ],
+  "metadata": {
+    "journal_name": "Acta Juridica Hungarica",
+    "platform": "akademiai",
+    "status": "paused_waf",
+    "created_at": "2026-03-25"
+  },
+  "navigation": {
+    "notes": "WAF BLOCKED - Site returns CloudFront 403 Forbidden error. Unable to explore and extract selectors. This is a placeholder seed file. Requires alternative scraping approach (e.g., different user-agent, proxy, or API access) before selectors can be added."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.nd.edu/ndjlepp/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Notre Dame Journal of Law, Ethics & Public Policy",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.nd.edu/ndjlepp/",
+    "domain": "scholarship.law.nd.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.nd.edu/ndjlepp/sitemap.xml"
+  ]
+}

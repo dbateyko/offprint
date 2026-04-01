@@ -1,0 +1,14 @@
+{
+  "id": "uc-law-journal",
+  "start_urls": [
+    "https://repository.uclawsf.edu/hastings_law_journal/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "UC Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://repository.uclawsf.edu/hastings_law_journal/",
+    "notes": "Formerly Hastings Law Journal (1949-2023). [Updated to XML sitemap on 2026-03-03]",
+    "created_date": "2026-03-02"
+  }
+}

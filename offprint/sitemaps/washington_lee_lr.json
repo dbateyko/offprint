@@ -1,0 +1,7 @@
+{
+  "id": "washington_lee_lr",
+  "start_urls": [
+    "https://lawreview.wlulaw.wlu.edu/"
+  ],
+  "source": "playbook_expansion"
+}

@@ -1,0 +1,28 @@
+{
+  "id": "registry-328-3435d87ee6",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "tlcp.law.uiowa.edu",
+    "journal_name": "Transnational Law & Contemporary Problems",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://tlcp.law.uiowa.edu/",
+    "platform": "drupal",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "328",
+    "registry_names": "Transnational Law & Contemporary Problems",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "drupal",
+    "registry_run_status": "in_progress",
+    "registry_suggested_adapter": "TLCPAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "docs/registry/input/url_capture_summary.csv",
+    "status_reason": "seed_repoint_to_online_edition",
+    "status_updated_at": "2026-03-16T20:30:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://tlcp.law.uiowa.edu/online-edition"
+  ]
+}

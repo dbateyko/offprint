@@ -1,0 +1,14 @@
+{
+  "id": "georgialawreview-org",
+  "start_urls": [
+    "https://digitalcommons.law.uga.edu/glr/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Georgia Law Review",
+    "platform": "wordpress",
+    "url": "https://georgialawreview.org/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: PDF archive hosted on UGA Digital Commons."
+  }
+}

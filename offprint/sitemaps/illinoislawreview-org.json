@@ -1,0 +1,14 @@
+{
+  "id": "illinoislawreview-org",
+  "start_urls": [
+    "https://publish.illinois.edu/lawreview/archives/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Illinois Law Review",
+    "platform": "wordpress",
+    "url": "https://illinoislawreview.org/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: official archives page on publish.illinois.edu."
+  }
+}

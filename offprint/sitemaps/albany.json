@@ -1,0 +1,138 @@
+{
+  "id": "albany",
+  "start_urls": [
+    "https://www.albanylawscitech.org/issues"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "albany",
+    "startUrl": [
+      "https://www.albanylawscitech.org/issues"
+    ],
+    "selectors": [
+      {
+        "id": "open_years",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElementClick",
+        "clickActionType": "real",
+        "clickElementSelector": "span.year",
+        "clickElementUniquenessType": "uniqueText",
+        "clickType": "clickOnce",
+        "delay": 1000,
+        "discardInitialElements": "do-not-discard",
+        "multiple": true,
+        "selector": "span.year"
+      },
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": ".issue-unit",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "link",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "article",
+        "parentSelectors": [
+          "link"
+        ],
+        "type": "SelectorLink",
+        "selector": "a.header-img",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "scholastica-markdown div",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "vol_issue",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "a.issue-link",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "date",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "tk-timestamp span",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "span.author-name",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "stats",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.metrics-wrapper",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "views",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "li:nth-of-type(1) span.number",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "pdf_downloads",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "li:nth-of-type(2) span.number",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

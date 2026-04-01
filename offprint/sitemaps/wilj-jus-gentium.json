@@ -1,0 +1,13 @@
+{
+  "id": "wilj-jus-gentium",
+  "start_urls": [
+    "https://wilj.law.wisc.edu/jus-gentium/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Jus Gentium",
+    "platform": "wordpress",
+    "url": "https://wilj.law.wisc.edu/jus-gentium/",
+    "created_date": "2026-03-01"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "domain": "lawreview.uchicago.edu",
+    "journal": "University of Chicago Law Review",
+    "notes": "Manual override: online archive landing page.",
+    "original_url": "https://lawreview.uchicago.edu/",
+    "platform": "Custom/Unknown",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch1_20260310_summary.json",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-10T00:46:33Z"
+  },
+  "sitemap_url": null,
+  "url": "https://lawreview.uchicago.edu/online-archive/welcome"
+}

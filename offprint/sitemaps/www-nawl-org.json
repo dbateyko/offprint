@@ -1,0 +1,25 @@
+{
+  "id": "www-nawl-org",
+  "start_urls": [
+    "https://nawl.memberclicks.net/women-lawyers-journal-archives"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.nawl.org/p/cm/ld/fid=82",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/women-lawyers-journal-archives"
+      ],
+      "issue_path_prefixes": [
+        "/2025-annual-meeting",
+        "/2025-general-counsel-institute",
+        "/2026-annual-meeting",
+        "/2026-annual-meeting-other-happenings"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

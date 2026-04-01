@@ -1,0 +1,13 @@
+{
+  "id": "via-library-depaul-edu",
+  "start_urls": [
+    "https://via.library.depaul.edu/bclj/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "DePaul Business & Commercial Law Journal",
+    "platform": "unknown",
+    "url": "https://via.library.depaul.edu/bclj/",
+    "created_date": "2025-12-14"
+  }
+}

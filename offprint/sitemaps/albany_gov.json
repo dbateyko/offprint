@@ -1,0 +1,14 @@
+{
+  "id": "albany_gov",
+  "start_urls": [
+    "https://www.albanygovernmentlawreview.org/issues"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "albany_gov",
+    "startUrl": [
+      "https://www.albanygovernmentlawreview.org/issues"
+    ],
+    "selectors": []
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "digitalcommons-fairfield-edu",
+  "start_urls": [
+    "https://digitalcommons.fairfield.edu/asrvideos-jesuitsocialjustice/sitemap.xml",
+    "https://digitalcommons.fairfield.edu/asrvideos-socialjustice/sitemap.xml",
+    "https://digitalcommons.fairfield.edu/foodjusticeresearch/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Fairfield University (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.fairfield.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include law-related journals and series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

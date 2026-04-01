@@ -1,0 +1,69 @@
+{
+  "id": "fordhamlawreview-org",
+  "start_urls": [
+    "https://ir.lawnet.fordham.edu/flr/all_issues.html"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "Fordham Law Review",
+    "platform": "DigitalCommons",
+    "url": "https://fordhamlawreview.org/",
+    "created_date": "2026-03-26",
+    "status": "active",
+    "navigation": {
+      "archive_path": "All Issues -> https://ir.lawnet.fordham.edu/flr/all_issues.html -> /flr/vol{N}/iss{M}/ issue pages",
+      "volume_url_pattern": "https://ir.lawnet.fordham.edu/flr/vol\\d+/iss\\d+/",
+      "notes": "The live fordhamlawreview.org front-end is intermittently 403/WAF-blocked from this environment. The reliable archive is the Fordham Digital Commons collection at ir.lawnet.fordham.edu, where issue pages expose article links and direct PDF links through /cgi/viewcontent.cgi?article=...&context=flr."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "h3.issue a",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.doc",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "div.doc > p:not(.pdf) > a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "div.doc > p:not(.pdf) > a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "span.auth",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "p.pdf a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

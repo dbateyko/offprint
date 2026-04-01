@@ -1,0 +1,13 @@
+{
+  "id": "tiplj-org",
+  "start_urls": [
+    "https://tiplj.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Texas Intellectual Property Law Journal",
+    "platform": "wordpress",
+    "url": "https://tiplj.org/",
+    "created_date": "2025-12-14"
+  }
+}

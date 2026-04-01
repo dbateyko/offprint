@@ -1,0 +1,18 @@
+{
+  "id": "rutgersracelawreview-org",
+  "start_urls": [
+    "https://www.rutgersracelawreview.org/issues"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Rutgers Race & the Law Review",
+    "platform": "wix",
+    "url": "https://www.rutgersracelawreview.org/issues",
+    "created_date": "2026-03-27",
+    "status": "active_partial_metadata",
+    "navigation": {
+      "archive_path": "/issues",
+      "notes": "Wix-hosted issue listing with direct PDF links under /_files/ugd/. 2026-03-27 loop: Wix issue seed PASS with title and 1/3 metadata fields; keep partial until authors/year improve. Short-loop run 2026-03-27: stable SOFT_FAIL across 3 loops; missing article_volume/article_year."
+    }
+  }
+}

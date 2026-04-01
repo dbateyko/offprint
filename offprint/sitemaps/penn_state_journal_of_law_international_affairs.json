@@ -1,0 +1,15 @@
+{
+  "url": "https://insight.dickinsonlaw.psu.edu/jlia/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Penn State Journal of Law & International Affairs",
+    "platform": "digitalcommons",
+    "original_url": "https://elibrary.law.psu.edu/jlia/",
+    "domain": "insight.dickinsonlaw.psu.edu",
+    "canonicalized_at": "2026-02-23",
+    "notes": "seed correction: journal-specific landing page for direct PDF candidates [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://insight.dickinsonlaw.psu.edu/jlia/sitemap.xml"
+  ]
+}

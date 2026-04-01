@@ -1,0 +1,89 @@
+{
+  "id": "ufjtlp",
+  "metadata": {
+    "domain": "scholarship.law.ufl.edu",
+    "journal": "Journal of Technology Law & Policy",
+    "original_url": "https://scholarship.law.ufl.edu/jtlp/",
+    "platform": "digitalcommons",
+    "status": "active",
+    "status_reason": "adapter_validated_smoke_pass_digital_commons",
+    "status_evidence_ref": "artifacts/reports/smoke_techlaw_20260313/smoke_one_pdf_20260313T142854Z.json",
+    "status_updated_at": "2026-03-13T14:28:54Z"
+  },
+  "start_urls": [
+    "https://scholarship.law.ufl.edu/jtlp/all_issues.html"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "ufjtlp",
+    "startUrl": [
+      "https://scholarship.law.ufl.edu/jtlp/all_issues.html"
+    ],
+    "selectors": [
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "volumes"
+        ],
+        "type": "SelectorLink",
+        "selector": ".issue a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "articles",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.doc",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorLink",
+        "selector": ".pdf a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorText",
+        "selector": "span",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorText",
+        "selector": "p:nth-of-type(2) a",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "volumes",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.item",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      }
+    ]
+  }
+}

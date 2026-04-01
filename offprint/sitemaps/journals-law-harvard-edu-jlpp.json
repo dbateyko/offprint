@@ -1,0 +1,57 @@
+{
+  "id": "journals-law-harvard-edu-jlpp",
+  "start_urls": [
+    "https://journals.law.harvard.edu/jlpp/archive/"
+  ],
+  "start_urls_note": "Archive page lists all volumes (49+) via <details> blocks with wp-block-button links to individual issue pages. Issue pages carry direct PDF links. Use depth>=2 to reach issue pages from archive.",
+  "source": "claude_code_skill",
+  "replaces": "harvard_journal_of_law_and_public_policy.json",
+  "metadata": {
+    "journal_name": "Harvard Journal of Law & Public Policy",
+    "platform": "WordPress",
+    "url": "https://journals.law.harvard.edu/jlpp/",
+    "created_date": "2026-03-31",
+    "status": "active_partial_metadata",
+    "navigation": {
+      "archive_root": "https://journals.law.harvard.edu/jlpp/archive/",
+      "volume_url_pattern": "/volume-{N}/ for vols 13–46; /volume-{N}-issue-{word}/ for vols 39–49 (e.g. /volume-47-issue-one/, /volume-48-issue-two/); /volume-49-2/ for vol 49 issue 1",
+      "archive_path": "archive/ -> a.wp-block-button__link (issue pages) -> a[href$='.pdf'] (direct PDF links on issue page)",
+      "pagination": "none",
+      "pagination_url_template": null,
+      "total_volumes_estimated": 49,
+      "pdf_location": "direct-on-issue-page",
+      "needs_headless": false,
+      "notes": "Original domain harvard-jlpp.com is dead (404); canonical URL is journals.law.harvard.edu/jlpp/. PDFs served from /wp-content/uploads/sites/90/. Two layout formats: (1) vols 47+: h3.wp-block-heading>a[href$='.pdf'] + p>strong>em for author; (2) vols 13-46: figure.wp-block-table table td a[href$='.pdf'] with author in last td. Both formats link PDFs directly on issue pages. Jetpack sitemap at /sitemap-1.xml lists 277 URLs including all volume/issue pages and some individual article pages. Smoke soft-fail: IssueArchiveEnumeratorAdapter downloaded 507 KB PDF successfully but extracted title as 'READ HERE' (homepage featured-article button text) rather than the article title from the issue page; author/volume/year not captured. Full metadata requires a site-specific adapter or selector-driven extraction from issue pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".entry-content h3.wp-block-heading, .entry-content figure.wp-block-table tr",
+      "parentSelectors": ["_root"],
+      "comment": "Two formats: recent vols use h3 headings per article; older vols use table rows. Both contain direct PDF links."
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href$=\".pdf\"], a[href*=\"/wp-content/uploads/\"]",
+      "parentSelectors": ["article_container"],
+      "comment": "Title is the link text of the PDF anchor."
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "em",
+      "parentSelectors": ["article_container"],
+      "comment": "Recent vols: author in p>strong>em following the h3. Older vols: author in last td of the table row, wrapped in <em>."
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"], a[href*=\"/wp-content/uploads/\"]",
+      "parentSelectors": ["_root"],
+      "comment": "PDFs are in /wp-content/uploads/sites/90/. Pattern: {vol}.{AuthorName}.pdf for recent; {vol}_{iss}_{n}-{AuthorName}-Final.pdf for older vols."
+    }
+  ]
+}

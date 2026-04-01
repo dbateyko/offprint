@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-tamu-edu",
+  "start_urls": [
+    "https://scholarship.law.tamu.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Texas A&M Law (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.tamu.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include TAMU law journals and related series. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

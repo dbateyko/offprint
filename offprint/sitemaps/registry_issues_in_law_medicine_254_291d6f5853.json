@@ -1,0 +1,28 @@
+{
+  "id": "registry-254-291d6f5853",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "issuesinlawandmedicine.com",
+    "journal_name": "Issues in Law & Medicine",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://issuesinlawandmedicine.com/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "254",
+    "registry_names": "Issues in Law & Medicine",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "active",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/smoke/todo_known_platform_non_dc_20260315/runs/smoke_one_pdf_20260315T144204Z.json",
+    "status_reason": "adapter_validated_smoke",
+    "status_updated_at": "2026-03-15T14:52:30Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://issuesinlawandmedicine.com/"
+  ]
+}

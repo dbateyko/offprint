@@ -1,0 +1,13 @@
+{
+  "id": "samford-edu",
+  "start_urls": [
+    "https://www.samford.edu/cumberlandlaw/law-review"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Cumberland Law Review",
+    "platform": "unknown",
+    "url": "https://www.samford.edu/cumberlandlaw/law-review",
+    "created_date": "2025-12-14"
+  }
+}

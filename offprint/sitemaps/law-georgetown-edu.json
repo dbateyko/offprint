@@ -1,0 +1,17 @@
+{
+  "id": "law-georgetown-edu",
+  "start_urls": [
+    "https://www.law.georgetown.edu/american-criminal-law-review/in-print/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "American Criminal Law Review",
+    "platform": "unknown",
+    "url": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/",
+    "created_date": "2025-12-14",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_targeted_curl_investigation_20260310_georgetown_batch2.json",
+    "status_reason": "in_print_article_pdf_paths_validated",
+    "status_updated_at": "2026-03-10T14:15:53Z"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "id": "catholic_u_lr",
+  "start_urls": [
+    "https://scholarship.law.edu/lawreview/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

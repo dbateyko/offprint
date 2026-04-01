@@ -1,0 +1,28 @@
+{
+  "id": "registry-472-50e247a1c6",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.law.northwestern.edu",
+    "journal_name": "Northwestern Journal of International Law & Business",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.law.northwestern.edu/jilb",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "472",
+    "registry_names": "Northwestern Journal of International Law & Business",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_paywall",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.law.northwestern.edu/url_50e247a1c66f",
+    "status_reason": "probe_paywall_detected",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://www.law.northwestern.edu/jilb"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "michigan-journal-race-law",
+  "start_urls": [
+    "https://mjrl.org/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "Michigan Journal of Race & Law",
+    "platform": "wordpress",
+    "url": "https://mjrl.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

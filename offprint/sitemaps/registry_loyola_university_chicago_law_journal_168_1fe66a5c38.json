@@ -1,0 +1,28 @@
+{
+  "id": "registry-168-1fe66a5c38",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "blogs.luc.edu",
+    "journal_name": "Loyola University Chicago Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://blogs.luc.edu/lawjournal",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "168",
+    "registry_names": "Loyola University Chicago Law Journal",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_404",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/blogs.luc.edu/url_1fe66a5c3800",
+    "status_reason": "probe_http_404",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://blogs.luc.edu/lawjournal"
+  ]
+}

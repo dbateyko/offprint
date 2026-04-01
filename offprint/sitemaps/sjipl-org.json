@@ -1,0 +1,13 @@
+{
+  "id": "sjipl-org",
+  "start_urls": [
+    "https://sjipl.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Student Journal of Information Privacy Law",
+    "platform": "wordpress",
+    "url": "https://sjipl.org/",
+    "created_date": "2026-03-01"
+  }
+}

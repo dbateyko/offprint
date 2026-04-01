@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-schulichlaw-dal-ca",
+  "start_urls": [
+    "https://digitalcommons.schulichlaw.dal.ca/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Schulich School of Law (multiple journals)",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.schulichlaw.dal.ca/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include DLJ, DJLS, CJLT and related series. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

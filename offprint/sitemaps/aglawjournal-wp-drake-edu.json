@@ -1,0 +1,13 @@
+{
+  "id": "aglawjournal-wp-drake-edu",
+  "start_urls": [
+    "https://aglawjournal.wp.drake.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Drake Journal of Agricultural Law",
+    "platform": "unknown",
+    "url": "https://aglawjournal.wp.drake.edu/",
+    "created_date": "2025-12-14"
+  }
+}

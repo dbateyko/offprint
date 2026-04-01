@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.lmu.edu/llr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Loyola of Los Angeles Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.lmu.edu/llr/",
+    "domain": "digitalcommons.lmu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.lmu.edu/llr/sitemap.xml"
+  ]
+}

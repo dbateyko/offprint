@@ -1,0 +1,14 @@
+{
+  "url": "https://commons.law.famu.edu/famulawreview/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Florida A & M University Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://commons.law.famu.edu/famulawreview/",
+    "domain": "commons.law.famu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://commons.law.famu.edu/famulawreview/sitemap.xml"
+  ]
+}

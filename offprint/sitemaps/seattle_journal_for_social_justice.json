@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.seattleu.edu/sjsj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Seattle Journal for Social Justice",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.seattleu.edu/sjsj/",
+    "domain": "digitalcommons.law.seattleu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.seattleu.edu/sjsj/sitemap.xml"
+  ]
+}

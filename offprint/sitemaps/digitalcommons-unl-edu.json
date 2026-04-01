@@ -1,0 +1,39 @@
+{
+  "id": "digitalcommons-unl-edu",
+  "start_urls": [
+    "https://digitalcommons.unl.edu/acutajournal/sitemap.xml",
+    "https://digitalcommons.unl.edu/ajacourtreview/sitemap.xml",
+    "https://digitalcommons.unl.edu/ejasljournal/sitemap.xml",
+    "https://digitalcommons.unl.edu/journalismcampusvoices/sitemap.xml",
+    "https://digitalcommons.unl.edu/journalismdiss/sitemap.xml",
+    "https://digitalcommons.unl.edu/journalismfacpub/sitemap.xml",
+    "https://digitalcommons.unl.edu/journalismpresent/sitemap.xml",
+    "https://digitalcommons.unl.edu/journalismprojects/sitemap.xml",
+    "https://digitalcommons.unl.edu/journalismstuad/sitemap.xml",
+    "https://digitalcommons.unl.edu/journalismstudent/sitemap.xml",
+    "https://digitalcommons.unl.edu/journalismundergrad/sitemap.xml",
+    "https://digitalcommons.unl.edu/lawbooks/sitemap.xml",
+    "https://digitalcommons.unl.edu/lawfacpub/sitemap.xml",
+    "https://digitalcommons.unl.edu/lawlibrary/sitemap.xml",
+    "https://digitalcommons.unl.edu/lawwater/sitemap.xml",
+    "https://digitalcommons.unl.edu/mcnairjournal/sitemap.xml",
+    "https://digitalcommons.unl.edu/nchcjournal/sitemap.xml",
+    "https://digitalcommons.unl.edu/nebraskaconstitution/sitemap.xml",
+    "https://digitalcommons.unl.edu/publicpolicypublications/sitemap.xml",
+    "https://digitalcommons.unl.edu/publicpolicyshank/sitemap.xml",
+    "https://digitalcommons.unl.edu/publicpolicytomkins/sitemap.xml",
+    "https://digitalcommons.unl.edu/r-journal/sitemap.xml",
+    "https://digitalcommons.unl.edu/spacelaw/sitemap.xml",
+    "https://digitalcommons.unl.edu/spacelawdocs/sitemap.xml",
+    "https://digitalcommons.unl.edu/spacelawthesis/sitemap.xml",
+    "https://digitalcommons.unl.edu/usjusticematls/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of Nebraska - Lincoln (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.unl.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include law-related journals and series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

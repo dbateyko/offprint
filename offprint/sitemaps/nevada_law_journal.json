@@ -1,0 +1,14 @@
+{
+  "url": "https://scholars.law.unlv.edu/nlj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Nevada Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://scholars.law.unlv.edu/nlj/",
+    "domain": "scholars.law.unlv.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholars.law.unlv.edu/nlj/sitemap.xml"
+  ]
+}

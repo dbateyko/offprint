@@ -1,0 +1,32 @@
+{
+  "id": "www-aila-org",
+  "start_urls": [
+    "https://www.aila.org/books-and-publications/read-the-aila-law-journal"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.aila.org/publications/aila-law-journal",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/library",
+        "/library/featured-issue-citizenship-and-protections-for-dreamers-and-others-without-permanent-status",
+        "/featured-issues",
+        "/library/featured-issue-fy2027-h-1b-cap-season"
+      ],
+      "issue_path_prefixes": [
+        "/library",
+        "/library/client-flyer-fiscal-year-2027-h-1b-lottery",
+        "/library/dos-updates-on-2026-diversity-visa-program-for-entrants-from-cuba-and-great-britain",
+        "/library/family-section-newsletter-november-2025"
+      ],
+      "article_path_prefixes": [
+        "/library",
+        "/library/aila-law-journal-member"
+      ],
+      "extraction_mode": "article_then_pdf"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "start_urls": [
+    "https://jolt.law.harvard.edu/volumes"
+  ],
+  "url": "https://jolt.law.harvard.edu/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Harvard Journal of Law & Technology",
+    "platform": "Law School Custom",
+    "original_url": "https://jolt.law.harvard.edu/",
+    "domain": "jolt.law.harvard.edu",
+    "notes": "Manual override: /articles is bot-blocked; /volumes resolves to current archive index."
+  }
+}

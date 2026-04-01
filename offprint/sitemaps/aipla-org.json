@@ -1,0 +1,45 @@
+{
+  "id": "aipla-org",
+  "start_urls": [
+    "https://www.aipla.org/detail/journal-issue/quarterly-journal-volume-54--issue-1"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Aipla",
+    "platform": "Sitefinity",
+    "url": "https://www.aipla.org/home/news-publications/journal-issues",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/detail/journal-issue/quarterly-journal-<vol>--issue-<issue>",
+      "archive_path": "seed page lists volumes via links with pattern /detail/journal-issue/quarterly-journal-<vol>--issue-<issue> (sometimes single dash variant)",
+      "notes": "Site uses Sitefinity CMS; navigation visible as list of issue links on listing page. Pagination is present but not necessary for selector extraction. No login wall."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.accordion",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a:first-child",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "www-loyno-lawreview-com",
+  "start_urls": [
+    "http://www.loyno-lawreview.com/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.loyno-lawreview.com",
+    "platform": "squarespace",
+    "url": "http://www.loyno-lawreview.com/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

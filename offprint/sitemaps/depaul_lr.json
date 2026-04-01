@@ -1,0 +1,7 @@
+{
+  "id": "depaul_lr",
+  "start_urls": [
+    "https://via.library.depaul.edu/law-review/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

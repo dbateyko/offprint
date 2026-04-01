@@ -1,0 +1,28 @@
+{
+  "id": "registry-335-da28ed59ad",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "escholarship.org",
+    "journal_name": "UCLA Women's Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://escholarship.org/uc/uclalaw_wlj",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "72",
+    "registry_mainids": "335",
+    "registry_names": "UCLA Women's Law Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://escholarship.org/uc/uclalaw_wlj"
+  ]
+}

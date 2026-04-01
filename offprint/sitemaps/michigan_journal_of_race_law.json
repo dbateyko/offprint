@@ -1,0 +1,14 @@
+{
+  "url": "https://repository.law.umich.edu/mjrl/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Michigan Journal of Race & Law",
+    "platform": "digitalcommons",
+    "original_url": "https://repository.law.umich.edu/mjrl/",
+    "domain": "repository.law.umich.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://repository.law.umich.edu/mjrl/sitemap.xml"
+  ]
+}

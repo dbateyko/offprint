@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.missouri.edu/mlr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Missouri Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.missouri.edu/mlr/",
+    "domain": "scholarship.law.missouri.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.missouri.edu/mlr/sitemap.xml"
+  ]
+}

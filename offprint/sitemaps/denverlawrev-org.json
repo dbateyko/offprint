@@ -1,0 +1,19 @@
+{
+  "id": "denverlawrev-org",
+  "start_urls": [
+    "https://www.denverlawrev.org/volume103"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Denverlawrev",
+    "platform": "Wix.com Website Builder",
+    "url": "https://www.denverlawrev.org/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/volume{N}",
+      "archive_path": "Volume links in header navigation",
+      "notes": "No pagination. Article entries are <div class=\"TmK0x\"> with title, authors, and PDF link directly inside. Volume links appear in header menu."
+    }
+  }
+}

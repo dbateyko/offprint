@@ -1,0 +1,53 @@
+{
+  "id": "business-law-review-law-miami-edu",
+  "metadata": {
+    "created_date": "2026-03-22",
+    "journal_name": "University of Miami Business Law Review",
+    "navigation": {
+      "archive_path": "seed \u2192 'Archive' link in nav \u2192 https://business-law-review.law.miami.edu/issues/archive/ lists all volumes \u2192 https://business-law-review.law.miami.edu/volume-XX-issue-YY/ lists articles",
+      "notes": "The site is a WordPress 6.8.3 blog. Each volume page (e.g., /volume-34-issue-2/) contains the full issue layout. Articles are listed inside an <article> element. The article detail page is linked via the article title and typically contains the PDF download link (a tag with href ending in .pdf). Pagination is not present as volumes show a fixed number of articles. There is no separate online\u2011only archive. PDF links are not found on the volume page itself but on the individual article pages. 2026-03-27 loop: issue/archive seed produced PASS with title and 2/3 metadata fields (volume + year).",
+      "volume_url_pattern": "/volume-{V}-issue-{I}/"
+    },
+    "platform": "wordpress",
+    "status": "active",
+    "url": "https://business-law-review.law.miami.edu/"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "div.entry-content p:has(a[href*=\"repository.law.miami.edu\"])",
+      "type": "SelectorElement"
+    },
+    {
+      "id": "title",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a",
+      "type": "SelectorText"
+    },
+    {
+      "id": "article_url",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a",
+      "type": "SelectorLink"
+    },
+    {
+      "id": "pdf_link",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "a#pdf, a.download-link, a[href*=\"viewcontent\"]",
+      "type": "SelectorLink"
+    }
+  ],
+  "source": "llm_explore",
+  "start_urls": [
+    "https://business-law-review.law.miami.edu/issues/archive/"
+  ]
+}

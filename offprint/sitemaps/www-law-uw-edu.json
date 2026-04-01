@@ -1,0 +1,14 @@
+{
+  "id": "www-law-uw-edu",
+  "start_urls": [
+    "https://www.law.uw.edu/wlr"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.law.uw.edu",
+    "platform": "wordpress",
+    "url": "https://www.law.uw.edu/wlr",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

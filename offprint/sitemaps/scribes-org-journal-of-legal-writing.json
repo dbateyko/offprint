@@ -1,0 +1,14 @@
+{
+  "id": "scribes-org-journal-of-legal-writing",
+  "start_urls": [
+    "https://www.scribes.org/the-scribes-journal-of-legal-writing"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Scribes Journal of Legal Writing",
+    "platform": "wordpress",
+    "url": "https://www.scribes.org/the-scribes-journal-of-legal-writing",
+    "created_date": "2026-03-02",
+    "notes": "Added from discovered_journals generic triage; validated with direct PDF links."
+  }
+}

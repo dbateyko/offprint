@@ -1,0 +1,17 @@
+{
+  "id": "harvard-law-review-forum",
+  "metadata": {
+    "created_date": "2026-03-02",
+    "journal_name": "Harvard Law Review Forum",
+    "platform": "wordpress",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_ranked_batch1_20260310_summary.json",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-10T00:46:33Z",
+    "url": "https://harvardlawreview.org/forum/"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://harvardlawreview.org/forum/"
+  ]
+}

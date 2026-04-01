@@ -1,0 +1,18 @@
+{
+  "id": "telj-org",
+  "start_urls": [
+    "https://www.telj.org/current-issue-vol-56.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Texas Environmental Law Journal",
+    "platform": "custom",
+    "url": "https://www.telj.org/current-issue-vol-56.html",
+    "created_date": "2026-03-27",
+    "status": "paused_other",
+    "navigation": {
+      "archive_path": "/current-issue-vol-56.html",
+      "notes": "Action-list re-onboard seed; smoke found no PDF candidates on current issue and root pages on 2026-03-27. Evidence update 2026-03-27: telj.org pages expose no direct PDF links, but crawl found numerous journal PDFs on linked texenrls.org WordPress uploads; requires host migration/adaptation."
+    }
+  }
+}

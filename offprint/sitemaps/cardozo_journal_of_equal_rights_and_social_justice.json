@@ -1,0 +1,15 @@
+{
+  "url": "https://larc.cardozo.yu.edu/cardozoersj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Cardozo Journal of Equal Rights and Social Justice",
+    "platform": "digitalcommons",
+    "original_url": "https://cardozoersj.com/",
+    "domain": "larc.cardozo.yu.edu",
+    "canonicalized_at": "2026-02-03",
+    "notes": "seed_audit: update domain via canonical URL [Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://larc.cardozo.yu.edu/cardozoersj/sitemap.xml"
+  ]
+}

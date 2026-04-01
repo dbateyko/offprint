@@ -1,0 +1,37 @@
+{
+  "id": "law-adelaide-edu-au",
+  "start_urls": ["https://law.adelaide.edu.au/adelaide-law-review"],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Adelaide Law Review",
+    "platform": "custom",
+    "url": "https://law.adelaide.edu.au/adelaide-law-review",
+    "created_date": "2026-03-23",
+    "status": "active_partial_metadata",
+    "navigation": {
+      "volume_url_pattern": "none",
+      "archive_path": "single JS-rendered page with accordion listing all volumes; each accordion item expands to reveal individual article PDF links under 'Articles', 'Comments', 'Review Essays', 'Case Notes', 'Book Reviews' sections",
+      "notes": "REQUIRES Playwright headless for discovery — page is fully JS-rendered (accordion built client-side). Legacy TLS (unsafe renegotiation) + self-signed cert chain; requests library needs ssl.OP_LEGACY_SERVER_CONNECT + verify=False. PDF URLs: /ua/media/{id}/alr_{vol}-{issue}_{seq}_{authors}.pdf. Full-issue PDFs also present: alr_{vol}-{issue}.pdf (skip these). Title = link text. Author not captured by adapter selector. Volume and year visible in accordion heading text but not as CSS field on article links. Site note: 'currently undergoing restructuring' per 2026-03 banner."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "li[role='tab']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href*='/ua/media/'][href$='.pdf']",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/ua/media/'][href$='.pdf']",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

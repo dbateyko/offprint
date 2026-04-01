@@ -1,0 +1,24 @@
+{
+  "id": "civicresearchinstitute-com",
+  "start_urls": [
+    "https://civicresearchinstitute.com/online/article.php?pid=6&iid=1010"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://civicresearchinstitute.com/online/issue.php?pid=6",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/online",
+        "/online/issue.php"
+      ],
+      "issue_path_prefixes": [
+        "/online",
+        "/online/article.php"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

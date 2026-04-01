@@ -1,0 +1,14 @@
+{
+  "url": "https://digital.sandiego.edu/ilj/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "San Diego International Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://digital.sandiego.edu/ilj/",
+    "domain": "digital.sandiego.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digital.sandiego.edu/ilj/sitemap.xml"
+  ]
+}

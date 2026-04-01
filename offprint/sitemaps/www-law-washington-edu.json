@@ -1,0 +1,14 @@
+{
+  "id": "www-law-washington-edu",
+  "start_urls": [
+    "https://www.law.washington.edu/winlj"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.law.washington.edu",
+    "platform": "unknown",
+    "url": "https://www.law.washington.edu/winlj",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

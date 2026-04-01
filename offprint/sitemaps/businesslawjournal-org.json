@@ -1,0 +1,14 @@
+{
+  "id": "businesslawjournal-org",
+  "start_urls": [
+    "http://businesslawjournal.org/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "businesslawjournal.org",
+    "platform": "wordpress",
+    "url": "http://businesslawjournal.org/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

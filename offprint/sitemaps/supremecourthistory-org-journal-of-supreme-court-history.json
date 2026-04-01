@@ -1,0 +1,14 @@
+{
+  "id": "supremecourthistory-org-journal-of-supreme-court-history",
+  "start_urls": [
+    "https://supremecourthistory.org/journal-of-supreme-court-history/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Supreme Court History",
+    "platform": "wordpress",
+    "url": "https://supremecourthistory.org/journal-of-supreme-court-history/",
+    "created_date": "2026-03-02",
+    "notes": "Added from discovered_journals generic triage; validated with direct PDF links."
+  }
+}

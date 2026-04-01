@@ -1,0 +1,13 @@
+{
+  "id": "scholarlycommons-pacific-edu",
+  "start_urls": [
+    "https://scholarlycommons.pacific.edu/mlr/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "McGeorge Law Review",
+    "platform": "unknown",
+    "url": "https://scholarlycommons.pacific.edu/mlr/",
+    "created_date": "2025-12-14"
+  }
+}

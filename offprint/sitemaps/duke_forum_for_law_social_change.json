@@ -1,0 +1,14 @@
+{
+  "url": "https://scholarship.law.duke.edu/dflsc/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Duke Forum for Law & Social Change",
+    "platform": "digitalcommons",
+    "original_url": "https://scholarship.law.duke.edu/dflsc/",
+    "domain": "scholarship.law.duke.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://scholarship.law.duke.edu/dflsc/sitemap.xml"
+  ]
+}

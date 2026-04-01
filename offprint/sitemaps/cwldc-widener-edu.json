@@ -1,0 +1,14 @@
+{
+  "id": "cwldc-widener-edu",
+  "start_urls": [
+    "https://cwldc.widener.edu/facscholarship/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Widener Commonwealth Law School",
+    "platform": "digitalcommons",
+    "url": "https://cwldc.widener.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include wclr and related collections. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

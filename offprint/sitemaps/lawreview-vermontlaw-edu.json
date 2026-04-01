@@ -1,0 +1,14 @@
+{
+  "id": "lawreview-vermontlaw-edu",
+  "start_urls": [
+    "https://lawreview.vermontlaw.edu/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "lawreview.vermontlaw.edu",
+    "platform": "wordpress",
+    "url": "https://lawreview.vermontlaw.edu/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

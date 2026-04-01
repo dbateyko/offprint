@@ -1,0 +1,14 @@
+{
+  "id": "law-laverne-edu-law-review",
+  "start_urls": [
+    "https://law.laverne.edu/students/law-review/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of La Verne Law Review",
+    "platform": "wordpress",
+    "url": "https://law.laverne.edu/students/law-review/",
+    "created_date": "2026-03-02",
+    "notes": "Added from discovered_journals generic triage; validated with direct PDF links."
+  }
+}

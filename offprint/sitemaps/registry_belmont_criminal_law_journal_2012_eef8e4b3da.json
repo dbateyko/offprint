@@ -1,0 +1,28 @@
+{
+  "id": "registry-2012-eef8e4b3da",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.belmontcriminallaw.com",
+    "journal_name": "Belmont Criminal Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://www.belmontcriminallaw.com/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "2012",
+    "registry_names": "Belmont Criminal Law Journal",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.belmontcriminallaw.com/url_eef8e4b3daae",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:05:31Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://www.belmontcriminallaw.com/"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "digitalcommons-law-ou-edu-host",
+  "start_urls": [
+    "https://digitalcommons.law.ou.edu/okjolt/sitemap.xml",
+    "https://digitalcommons.law.ou.edu/onej/sitemap.xml",
+    "https://digitalcommons.law.ou.edu/onej-symposium/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Oklahoma (Additional Journals)",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.ou.edu/",
+    "created_date": "2026-03-03",
+    "notes": "Added OKJOLT and ONEJ journals. [XML sitemaps]"
+  }
+}

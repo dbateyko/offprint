@@ -1,0 +1,13 @@
+{
+  "id": "lawforbusiness-usc-edu",
+  "start_urls": [
+    "https://lawforbusiness.usc.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "USC Gould's Business Law Digest",
+    "platform": "wordpress",
+    "url": "https://lawforbusiness.usc.edu/",
+    "created_date": "2026-03-01"
+  }
+}

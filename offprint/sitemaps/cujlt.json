@@ -1,0 +1,68 @@
+{
+  "id": "cujlt",
+  "start_urls": [
+    "https://scholarship.law.edu/jlt/all_issues.html"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "cujlt",
+    "startUrl": [
+      "https://scholarship.law.edu/jlt/all_issues.html"
+    ],
+    "selectors": [
+      {
+        "id": "issues",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorLink",
+        "selector": ".issue a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "articles",
+        "parentSelectors": [
+          "issues"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.doc",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorText",
+        "selector": "p:nth-of-type(2) a",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorText",
+        "selector": "span",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "pdf_link",
+        "parentSelectors": [
+          "articles"
+        ],
+        "type": "SelectorLink",
+        "selector": ".pdf a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "url": "https://www.bu.edu/rbfl/issues/",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Review of Banking and Financial Law",
+    "platform": "WordPress",
+    "original_url": "https://www.bu.edu/rbfl/",
+    "domain": "www.bu.edu",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_targeted_curl_investigation_20260310_bu_bc_batch3.json",
+    "status_reason": "issues_pages_expose_in_host_pdf_links_under_rbfl_files",
+    "status_updated_at": "2026-03-10T14:15:53Z",
+    "adapter_config": {
+      "issue_path_prefixes": [
+        "/rbfl/issues/"
+      ],
+      "pdf_button_selectors": [
+        "a[href$='.pdf']"
+      ]
+    }
+  }
+}

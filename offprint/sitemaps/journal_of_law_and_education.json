@@ -1,0 +1,19 @@
+{
+  "id": "journal-of-law-and-education",
+  "metadata": {
+    "created_date": "2026-03-02",
+    "domain": "sc.edu",
+    "journal_name": "Journal of Law & Education",
+    "notes": "Top investigate queue seed from deep-probe follow-up.",
+    "original_url": "https://sc.edu/study/colleges_schools/law/student_life/journals/jled/index.php",
+    "platform": "generic_web",
+    "status": "active",
+    "status_evidence_ref": "artifacts/site_fingerprints/sc.edu",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-04T04:36:02Z"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://sc.edu/study/colleges_schools/law/student_life/journals/jled/index.php"
+  ]
+}

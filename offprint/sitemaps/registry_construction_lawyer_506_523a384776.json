@@ -1,0 +1,28 @@
+{
+  "id": "registry-506-523a384776",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "shop.americanbar.org",
+    "journal_name": "Construction Lawyer",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://shop.americanbar.org/eBus/Store/ProductDetails.aspx?productId=215638",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "506",
+    "registry_names": "Construction Lawyer",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/shop.americanbar.org/url_523a38477644",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-14T04:21:32Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://shop.americanbar.org/eBus/Store/ProductDetails.aspx?productId=215638"
+  ]
+}

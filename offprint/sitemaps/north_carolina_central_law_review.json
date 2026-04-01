@@ -1,0 +1,14 @@
+{
+  "url": "https://archives.law.nccu.edu/ncclr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "North Carolina Central Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://archives.law.nccu.edu/ncclr/",
+    "domain": "archives.law.nccu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://archives.law.nccu.edu/ncclr/sitemap.xml"
+  ]
+}

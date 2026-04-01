@@ -1,0 +1,42 @@
+{
+  "id": "ahrlj-up-ac-za",
+  "start_urls": [
+    "https://www.ahrlj.up.ac.za/issues/2025/volume-25-no-2-2025",
+    "https://www.ahrlj.up.ac.za/issues/2025/volume-25-no-1-2025",
+    "https://www.ahrlj.up.ac.za/issues/2024/volume-24-no-2-2024",
+    "https://www.ahrlj.up.ac.za/issues/2024/volume-24-no-1-2024"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "African Human Rights Law Journal",
+    "platform": "Joomla",
+    "url": "https://www.ahrlj.up.ac.za/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/issues/{year}/volume-{N}-no-{N}-{year}",
+      "archive_root": "https://www.ahrlj.up.ac.za/issues",
+      "notes": "Joomla site. Articles are listed flat in the body. Using volume pages as start URLs. Title inferred from PDF filename as they are flat siblings."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.com-content-article__body > p:has(a[href*=\"/images/ahrlj/\"])",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href$=\"pdf\"]",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\"pdf\"]",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "jle-aals-org",
+  "start_urls": [
+    "https://jle.aals.org/home"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "jle.aals.org",
+    "platform": "digitalcommons",
+    "url": "https://jle.aals.org/home",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

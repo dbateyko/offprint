@@ -1,0 +1,61 @@
+{
+  "id": "archives-law-nccu-edu",
+  "start_urls": [
+    "https://archives.law.nccu.edu/ncclr/all_issues.html"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "North Carolina Central Law Review",
+    "platform": "Digital Commons",
+    "url": "https://archives.law.nccu.edu/ncclr/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://archives.law.nccu.edu/ncclr/all_issues.html",
+      "pdf_location": "direct-on-issue-page",
+      "notes": "Digital Commons site. Selectors found for standard DC issue pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.doc",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "span.doctitle a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "span.auth",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "p.pdf a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "span.doctitle a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

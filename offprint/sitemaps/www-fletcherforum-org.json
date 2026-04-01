@@ -1,0 +1,28 @@
+{
+  "id": "www-fletcherforum-org",
+  "start_urls": [
+    "https://www.fletcherforum.org/archives/2025/3/5/492-summer-2025"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "http://www.fletcherforum.org/",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/archives",
+        "/archives/2022",
+        "/archives/2020",
+        "/archives/2021"
+      ],
+      "issue_path_prefixes": [
+        "/home",
+        "/podcast",
+        "/the-rostrum",
+        "/podcast/2025"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

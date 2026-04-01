@@ -1,0 +1,15 @@
+{
+  "id": "university-of-memphis-law-review",
+  "start_urls": [
+    "https://www.memphis.edu/law/programs/lawreview.php"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of Memphis Law Review",
+    "platform": "generic_web",
+    "original_url": "https://www.memphis.edu/law/programs/lawreview.php",
+    "domain": "www.memphis.edu",
+    "created_date": "2026-03-02",
+    "notes": "Top investigate queue seed from deep-probe follow-up."
+  }
+}

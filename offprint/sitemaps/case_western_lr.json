@@ -1,0 +1,7 @@
+{
+  "id": "case_western_lr",
+  "start_urls": [
+    "https://scholarlycommons.law.case.edu/caselrev/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

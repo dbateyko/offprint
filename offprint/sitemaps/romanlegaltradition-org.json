@@ -1,0 +1,18 @@
+{
+  "id": "romanlegaltradition-org",
+  "start_urls": [
+    "https://www.romanlegaltradition.org/articles"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Roman Legal Tradition",
+    "platform": "custom",
+    "url": "https://www.romanlegaltradition.org/",
+    "created_date": "2026-03-27",
+    "status": "active",
+    "navigation": {
+      "archive_path": "/articles",
+      "notes": "Smoke run on 2026-03-27 downloaded a PDF and extracted title, but article_authors/article_volume/article_year were all missing (HARD_FAIL per onboarding gate); needs adapter metadata enrichment. 2026-03-27 adapter update inferred volume/year from PDF URL; smoke PASS with >=2/3 metadata fields."
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "journals-library-columbia-edu-jlsp",
+  "start_urls": [
+    "https://journals.library.columbia.edu/index.php/jlsp/issue/archive"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "The Common Law",
+    "platform": "ojs",
+    "url": "https://journals.library.columbia.edu/index.php/jlsp",
+    "created_date": "2026-03-01"
+  }
+}

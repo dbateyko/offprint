@@ -1,0 +1,102 @@
+{
+  "id": "STLR",
+  "start_urls": [
+    "https://law.stanford.edu/stanford-technology-law-review-stlr/stlr-archive/?_paged=[1-13]"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "STLR",
+    "startUrl": [
+      "https://law.stanford.edu/stanford-technology-law-review-stlr/stlr-archive/?_paged=[1-13]"
+    ],
+    "selectors": [
+      {
+        "id": "element",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": "article[itemtype='https://schema.org/ScholarlyArticle']",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "element"
+        ],
+        "type": "SelectorText",
+        "selector": "a[itemprop='url sameAs']",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "authors",
+        "parentSelectors": [
+          "element"
+        ],
+        "type": "SelectorText",
+        "selector": ".li-left-wrap ul.li-meta:nth-of-type(1)",
+        "multiple": true,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "url",
+        "parentSelectors": [
+          "element"
+        ],
+        "type": "SelectorLink",
+        "selector": "a[itemprop='url workExample']",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "element"
+        ],
+        "type": "SelectorText",
+        "selector": "span[itemprop='issueNumber']",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "page",
+        "parentSelectors": [
+          "element"
+        ],
+        "type": "SelectorText",
+        "selector": ".ptp-meta li:nth-of-type(3) > span",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "date",
+        "parentSelectors": [
+          "element"
+        ],
+        "type": "SelectorText",
+        "selector": "time",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "volume",
+        "parentSelectors": [
+          "element"
+        ],
+        "type": "SelectorText",
+        "selector": "span[itemprop='volumeNumber']",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

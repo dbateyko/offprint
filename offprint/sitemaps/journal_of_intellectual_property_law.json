@@ -1,0 +1,14 @@
+{
+  "url": "https://digitalcommons.law.uga.edu/jipl/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Journal of Intellectual Property Law",
+    "platform": "digitalcommons",
+    "original_url": "https://digitalcommons.law.uga.edu/jipl/",
+    "domain": "digitalcommons.law.uga.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://digitalcommons.law.uga.edu/jipl/sitemap.xml"
+  ]
+}

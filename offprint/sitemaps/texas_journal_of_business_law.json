@@ -1,0 +1,19 @@
+{
+  "id": "texas-journal-of-business-law",
+  "metadata": {
+    "created_date": "2026-03-02",
+    "domain": "www.texasbusinesslaw.org",
+    "journal_name": "Texas Journal of Business Law",
+    "notes": "Deep-probe configure_now seed; issue pages expose direct PDF links.",
+    "original_url": "https://www.texasbusinesslaw.org/resources/texas-business-law-journal",
+    "platform": "generic_web",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://www.texasbusinesslaw.org/resources/texas-business-law-journal"
+  ]
+}

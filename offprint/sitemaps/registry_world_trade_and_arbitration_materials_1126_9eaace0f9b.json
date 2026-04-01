@@ -1,0 +1,28 @@
+{
+  "id": "registry-1126-9eaace0f9b",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "kluwerlawonline.com",
+    "journal_name": "World Trade and Arbitration Materials",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://kluwerlawonline.com/Journals/World+Trade+and+Arbitration+Materials/410",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "1126",
+    "registry_names": "World Trade and Arbitration Materials",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/kluwerlawonline.com/url_9eaace0f9b1f",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T14:02:19Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://kluwerlawonline.com/Journals/World+Trade+and+Arbitration+Materials/410"
+  ]
+}

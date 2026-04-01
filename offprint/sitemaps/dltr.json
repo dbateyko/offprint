@@ -1,0 +1,79 @@
+{
+  "id": "dltr",
+  "start_urls": [
+    "https://scholarship.law.duke.edu/dltr/all_issues.html"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "dltr",
+    "startUrl": [
+      "https://scholarship.law.duke.edu/dltr/all_issues.html"
+    ],
+    "selectors": [
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorLink",
+        "selector": "h3:nth-of-type(1) a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "article",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.doc",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorLink",
+        "selector": ".pdf a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "a.doctitle",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "span",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "date",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "p.index_date",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      }
+    ]
+  }
+}

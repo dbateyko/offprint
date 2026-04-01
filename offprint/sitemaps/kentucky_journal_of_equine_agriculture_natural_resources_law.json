@@ -1,0 +1,14 @@
+{
+  "url": "https://uknowledge.uky.edu/kjeanrl/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Kentucky Journal of Equine, Agriculture, & Natural Resources Law",
+    "platform": "digitalcommons",
+    "original_url": "https://uknowledge.uky.edu/kjeanrl/",
+    "domain": "uknowledge.uky.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://uknowledge.uky.edu/kjeanrl/sitemap.xml"
+  ]
+}

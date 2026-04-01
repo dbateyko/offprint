@@ -1,0 +1,17 @@
+{
+  "id": "open-mitchellhamline-edu",
+  "start_urls": [
+    "https://open.mitchellhamline.edu/dri_participants_lawstudents/sitemap.xml",
+    "https://open.mitchellhamline.edu/lawandpractice/sitemap.xml",
+    "https://open.mitchellhamline.edu/lawraza/sitemap.xml",
+    "https://open.mitchellhamline.edu/policypractice/sitemap.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "Mitchell Hamline School of Law",
+    "platform": "digitalcommons",
+    "url": "https://open.mitchellhamline.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include MHLR, Cybaris, WMLR, etc. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+  }
+}

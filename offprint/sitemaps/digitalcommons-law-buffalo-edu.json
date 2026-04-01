@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-buffalo-edu",
+  "start_urls": [
+    "https://digitalcommons.law.buffalo.edu/belj/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Buffalo Environmental Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.buffalo.edu/belj/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

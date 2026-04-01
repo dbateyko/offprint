@@ -1,0 +1,29 @@
+{
+  "id": "cardozociclr-com",
+  "start_urls": [
+    "https://www.cardozociclr.com/ciclr-volume-7"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Cardozociclr",
+    "platform": "Wix",
+    "url": "https://www.cardozociclr.com/",
+    "created_date": "2026-03-22",
+    "status": "active",
+    "navigation": {
+      "volume_url_pattern": "/ciclr-volume-{N}",
+      "archive_path": "home has volume links in header -> /ciclr-volume-7 (or similar)",
+      "notes": "Volume links in header; article containers are div.ikjXKb with PDF links as sibling <a> tags. No separate article pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.ikjXKb",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
+}

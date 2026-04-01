@@ -1,0 +1,17 @@
+{
+  "id": "cllpj-dispatches",
+  "start_urls": [
+    "https://cllpj.law.illinois.edu/dispatches"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Comparative Labor Law and Policy Journal Dispatches",
+    "platform": "wordpress",
+    "url": "https://cllpj.law.illinois.edu/dispatches",
+    "created_date": "2026-03-01",
+    "status": "paused_other",
+    "status_reason": "Dispatches seed emits many external non-journal citation PDFs (e.g., corrs.com.au)",
+    "status_updated_at": "2026-03-05T00:00:00Z",
+    "status_evidence_ref": "ops-triage-2026-03-05"
+  }
+}

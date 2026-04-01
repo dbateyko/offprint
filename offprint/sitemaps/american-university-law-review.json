@@ -1,0 +1,15 @@
+{
+  "id": "american-university-law-review",
+  "start_urls": [
+    "https://aulawreview.org/by-volume/"
+  ],
+  "source": "registry_batch",
+  "metadata": {
+    "journal_name": "American University Law Review",
+    "platform": "wordpress",
+    "url": "https://aulawreview.org/by-volume/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "notes": "Auto-onboarded from registry. Platform: wordpress"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "url": "https://surface.syr.edu/jilc/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Syracuse Journal of International Law and Commerce",
+    "platform": "digitalcommons",
+    "original_url": "https://surface.syr.edu/jilc/",
+    "domain": "surface.syr.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://surface.syr.edu/jilc/sitemap.xml"
+  ]
+}

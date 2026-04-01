@@ -1,0 +1,80 @@
+{
+  "id": "vjolt3of4",
+  "start_urls": [
+    "https://www.vjolt.org/volume-26-202223-1"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "vjolt3of4",
+    "startUrl": [
+      "https://www.vjolt.org/volume-26-202223-1"
+    ],
+    "selectors": [
+      {
+        "id": "issues",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.user-items-list",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "issue_year",
+        "parentSelectors": [
+          "issues"
+        ],
+        "type": "SelectorText",
+        "selector": ".list-section-title p",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "article",
+        "parentSelectors": [
+          "issues"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.list-item-content",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "h2",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "div.list-item-content__description",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "pdf",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      }
+    ]
+  }
+}

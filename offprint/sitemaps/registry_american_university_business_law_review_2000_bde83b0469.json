@@ -1,0 +1,28 @@
+{
+  "id": "registry-2000-bde83b0469",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "www.aublr.org",
+    "journal_name": "American University Business Law Review",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://www.aublr.org/",
+    "platform": "wordpress",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "96",
+    "registry_mainids": "2000",
+    "registry_names": "American University Business Law Review",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "wordpress",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_paywall",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.aublr.org/url_bde83b04692b",
+    "status_reason": "probe_paywall_detected",
+    "status_updated_at": "2026-03-14T04:05:31Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://www.aublr.org/"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-utulsa-edu",
+  "start_urls": [
+    "https://digitalcommons.law.utulsa.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "University of Tulsa Law (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.utulsa.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include TLR and related series. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

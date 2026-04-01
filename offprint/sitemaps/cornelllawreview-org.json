@@ -1,0 +1,15 @@
+{
+  "id": "cornelllawreview-org",
+  "start_urls": [
+    "https://publications.lawschool.cornell.edu/lawreview/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Cornell Law Review",
+    "platform": "WordPress",
+    "url": "https://cornelllawreview.org/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "notes": "WordPress site hosted on publications.lawschool.cornell.edu. Uses WordPressAcademicBaseAdapter."
+  }
+}

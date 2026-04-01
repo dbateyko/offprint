@@ -1,0 +1,14 @@
+{
+  "id": "scholarship-law-umn-edu",
+  "start_urls": [
+    "https://scholarship.law.umn.edu/concomm/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Constitutional Commentary",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.umn.edu/concomm/",
+    "created_date": "2025-12-14",
+    "notes": " [Updated to XML sitemap on 2026-03-03]"
+  }
+}

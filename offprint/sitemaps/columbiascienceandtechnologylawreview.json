@@ -1,0 +1,100 @@
+{
+  "id": "ColumbiaScienceandTechnologyLawReview",
+  "start_urls": [
+    "https://journals.library.columbia.edu/index.php/stlr/issue/archive/[1-2]"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "ColumbiaScienceandTechnologyLawReview",
+    "startUrl": [
+      "https://journals.library.columbia.edu/index.php/stlr/issue/archive/[1-2]"
+    ],
+    "selectors": [
+      {
+        "id": "pdf_link",
+        "parentSelectors": [
+          "pdf_download"
+        ],
+        "type": "SelectorLink",
+        "selector": ".pdf-download-button a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "volume",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.card-body",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "date",
+        "parentSelectors": [
+          "volume"
+        ],
+        "type": "SelectorText",
+        "selector": "p.issue-summary-date",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "issue",
+        "parentSelectors": [
+          "volume"
+        ],
+        "type": "SelectorLink",
+        "selector": "a",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "article",
+        "parentSelectors": [
+          "issue"
+        ],
+        "type": "SelectorElement",
+        "selector": "div.article-summary",
+        "multiple": true,
+        "scroll": false,
+        "elementLimit": 0
+      },
+      {
+        "id": "author",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": "div.article-summary-authors",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "title",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorText",
+        "selector": ".article-summary-title a",
+        "multiple": false,
+        "regex": "",
+        "multipleType": "singleColumn"
+      },
+      {
+        "id": "pdf_download",
+        "parentSelectors": [
+          "article"
+        ],
+        "type": "SelectorLink",
+        "selector": "a.btn",
+        "multiple": false,
+        "linkType": "linkFromHref"
+      }
+    ]
+  }
+}

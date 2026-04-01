@@ -1,0 +1,13 @@
+{
+  "id": "chapman-edu",
+  "start_urls": [
+    "https://www.chapman.edu/law/events-publications/chapman-law-review.aspx"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Chapman Law Review",
+    "platform": "unknown",
+    "url": "https://www.chapman.edu/law/events-publications/chapman-law-review.aspx",
+    "created_date": "2025-12-14"
+  }
+}

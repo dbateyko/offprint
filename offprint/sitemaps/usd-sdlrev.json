@@ -1,0 +1,14 @@
+{
+  "id": "usd-sdlrev",
+  "start_urls": [
+    "https://red.library.usd.edu/sdlrev/all_issues.html"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "South Dakota Law Review",
+    "platform": "bepress_digital_commons",
+    "url": "https://red.library.usd.edu/sdlrev/",
+    "created_date": "2025-12-14",
+    "notes": "South Dakota Law Review published on University of South Dakota Digital Commons (bepress platform). Uses DigitalCommonsAdapter to extract articles and PDFs from all issues."
+  }
+}

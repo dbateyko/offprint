@@ -1,0 +1,17 @@
+{
+  "id": "jtl-columbia-edu",
+  "metadata": {
+    "created_date": "2025-12-14",
+    "journal_name": "Columbia Journal of Transnational Law",
+    "platform": "unknown",
+    "status": "active",
+    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
+    "status_reason": "adapter_registered",
+    "status_updated_at": "2026-03-04T03:40:25Z",
+    "url": "https://www.jtl.columbia.edu/"
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://www.jtl.columbia.edu/"
+  ]
+}

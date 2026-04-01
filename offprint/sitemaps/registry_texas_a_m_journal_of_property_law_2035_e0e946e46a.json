@@ -1,0 +1,28 @@
+{
+  "id": "registry-2035-e0e946e46a",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "scholarship.law.tamu.edu",
+    "journal_name": "Texas A&M Journal of Property Law",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://scholarship.law.tamu.edu/journal-of-property-law",
+    "platform": "digital_commons",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "99",
+    "registry_mainids": "2035",
+    "registry_names": "Texas A&M Journal of Property Law",
+    "registry_needs_adapter": false,
+    "registry_predicted_platform": "digital_commons",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_working_host_only": false,
+    "status": "todo_adapter",
+    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
+    "status_reason": "registry_pending_validation",
+    "status_updated_at": "2026-03-04T05:10:53Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://scholarship.law.tamu.edu/journal-of-property-law"
+  ]
+}

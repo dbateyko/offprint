@@ -1,0 +1,14 @@
+{
+  "url": "https://repository.uclawsf.edu/hastings_constitutional_law_quaterly/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Hastings Constitutional Law Quarterly",
+    "platform": "digitalcommons",
+    "original_url": "https://repository.uclawsf.edu/hastings_constitutional_law_quaterly/",
+    "domain": "repository.uclawsf.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://repository.uclawsf.edu/hastings_constitutional_law_quaterly/sitemap.xml"
+  ]
+}

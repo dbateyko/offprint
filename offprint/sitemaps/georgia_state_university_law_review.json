@@ -1,0 +1,14 @@
+{
+  "url": "https://readingroom.law.gsu.edu/gsulr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Georgia State University Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://readingroom.law.gsu.edu/gsulr/",
+    "domain": "readingroom.law.gsu.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://readingroom.law.gsu.edu/gsulr/sitemap.xml"
+  ]
+}

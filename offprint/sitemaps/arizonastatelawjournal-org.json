@@ -1,0 +1,13 @@
+{
+  "id": "arizonastatelawjournal-org",
+  "start_urls": [
+    "https://arizonastatelawjournal.org/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Arizona State Law Journal",
+    "platform": "wordpress",
+    "url": "https://arizonastatelawjournal.org/",
+    "created_date": "2025-12-14"
+  }
+}

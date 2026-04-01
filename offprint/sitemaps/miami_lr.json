@@ -1,0 +1,7 @@
+{
+  "id": "miami_lr",
+  "start_urls": [
+    "https://repository.law.miami.edu/umlr/all_issues.html"
+  ],
+  "source": "playbook_expansion"
+}

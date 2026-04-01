@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "canonicalized_at": "2026-02-03",
+    "domain": "pennlawreview.com",
+    "journal": "University of Pennsylvania Law Review",
+    "notes": "seed_audit: update domain via canonical URL",
+    "original_url": "https://www.pennlawreview.com/",
+    "platform": "WordPress",
+    "status": "active",
+    "status_evidence_ref": "artifacts/top50_batch5_20260310_summary.json",
+    "status_reason": "site_adapter_validated_smoke_pass",
+    "status_updated_at": "2026-03-10T00:13:40Z"
+  },
+  "sitemap_url": null,
+  "url": "https://pennlawreview.com/"
+}

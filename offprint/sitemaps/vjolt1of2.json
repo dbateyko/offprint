@@ -1,0 +1,40 @@
+{
+  "id": "vjolt1of2",
+  "start_urls": [
+    "https://www.vjolt.org/work"
+  ],
+  "source": "csv",
+  "raw_sitemap": {
+    "_id": "vjolt1of2",
+    "startUrl": [
+      "https://www.vjolt.org/work"
+    ],
+    "selectors": [
+      {
+        "id": "pdf_link_author",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorLink",
+        "selector": ".menu-item-title a",
+        "multiple": true,
+        "linkType": "linkFromHref"
+      },
+      {
+        "id": "issue_id",
+        "parentSelectors": [
+          "_root"
+        ],
+        "type": "SelectorElementClick",
+        "clickActionType": "real",
+        "clickElementSelector": "label",
+        "clickElementUniquenessType": "uniqueText",
+        "clickType": "clickOnce",
+        "delay": 2000,
+        "discardInitialElements": "do-not-discard",
+        "multiple": true,
+        "selector": "label"
+      }
+    ]
+  }
+}

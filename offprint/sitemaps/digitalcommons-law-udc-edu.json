@@ -1,0 +1,14 @@
+{
+  "id": "digitalcommons-law-udc-edu",
+  "start_urls": [
+    "https://digitalcommons.law.udc.edu/siteindex.xml"
+  ],
+  "source": "lawreviewcommons",
+  "metadata": {
+    "journal_name": "UDC Law (multiple collections)",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.udc.edu/",
+    "created_date": "2026-02-26",
+    "notes": "Domain-root seed to include UDCLR and related series. [Updated to XML sitemap on 2026-03-03]"
+  }
+}

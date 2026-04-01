@@ -1,0 +1,26 @@
+{
+  "id": "www-luc-edu",
+  "start_urls": [
+    "https://www.luc.edu/law/academics/journals-publications/annalsofhealthlaw/index.shtml"
+  ],
+  "source": "auto_enumerator_config",
+  "metadata": {
+    "journal_name": "",
+    "platform": "issue_archive_enumerator",
+    "url": "https://www.luc.edu/law/academics/journals-publications/annalsofhealthlaw/index.cfm",
+    "created_date": "2026-03-01",
+    "adapter_config": {
+      "archive_path_prefixes": [
+        "/law",
+        "/law/academics",
+        "/media",
+        "/media/lucedu"
+      ],
+      "issue_path_prefixes": [
+        "/media",
+        "/media/lucedu"
+      ],
+      "extraction_mode": "direct_pdf"
+    }
+  }
+}

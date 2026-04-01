@@ -1,0 +1,14 @@
+{
+  "url": "https://repository.uclawsf.edu/hastings_comm_ent_law_journal/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Hastings Communications and Entertainment Law Journal",
+    "platform": "digitalcommons",
+    "original_url": "https://repository.uclawsf.edu/hastings_comm_ent_law_journal/",
+    "domain": "repository.uclawsf.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://repository.uclawsf.edu/hastings_comm_ent_law_journal/sitemap.xml"
+  ]
+}

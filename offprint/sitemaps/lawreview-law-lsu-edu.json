@@ -1,0 +1,14 @@
+{
+  "id": "lawreview-law-lsu-edu",
+  "start_urls": [
+    "https://lawreview.law.lsu.edu/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "lawreview.law.lsu.edu",
+    "platform": "wordpress",
+    "url": "https://lawreview.law.lsu.edu/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

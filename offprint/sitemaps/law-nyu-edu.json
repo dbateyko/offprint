@@ -1,0 +1,13 @@
+{
+  "id": "law-nyu-edu",
+  "start_urls": [
+    "https://www.law.nyu.edu/journals/clinicallawreview"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Clinical Law Review",
+    "platform": "unknown",
+    "url": "https://www.law.nyu.edu/journals/clinicallawreview",
+    "created_date": "2025-12-14"
+  }
+}

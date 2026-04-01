@@ -1,0 +1,14 @@
+{
+  "id": "jgrj-law-uiowa-edu",
+  "start_urls": [
+    "https://jgrj.law.uiowa.edu/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Journal of Gender Race & Justice",
+    "platform": "drupal",
+    "url": "https://jgrj.law.uiowa.edu/",
+    "created_date": "2026-03-02",
+    "notes": "Added from discovered_journals generic triage; validated reachable with Drupal PDF paths."
+  }
+}

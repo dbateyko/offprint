@@ -1,0 +1,14 @@
+{
+  "id": "elr-info",
+  "start_urls": [
+    "https://www.elr.info/articles/elr-articles"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Environmental Law Reporter",
+    "platform": "unknown",
+    "url": "https://www.elr.info/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: ELR articles index (access may be restricted)."
+  }
+}

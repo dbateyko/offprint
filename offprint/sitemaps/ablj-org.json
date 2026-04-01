@@ -1,0 +1,14 @@
+{
+  "id": "ablj-org",
+  "start_urls": [
+    "https://ablj.org/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "ablj.org",
+    "platform": "wordpress",
+    "url": "https://ablj.org/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

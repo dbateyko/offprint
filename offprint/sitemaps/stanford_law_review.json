@@ -1,0 +1,78 @@
+{
+  "id": "stanford_law_review",
+  "start_urls": [
+    "https://www.stanfordlawreview.org/online-archive/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Stanford Law Review",
+    "platform": "wordpress",
+    "url": "https://www.stanfordlawreview.org/",
+    "created_date": "2026-03-31",
+    "status": "active",
+    "status_reason": "selectors_discovered",
+    "status_updated_at": "2026-03-31T00:00:00Z",
+    "navigation": {
+      "archive_root": "https://www.stanfordlawreview.org/online-archive/",
+      "volume_url_pattern": "none - flat archive with pagination",
+      "archive_path": "homepage -> /online-archive/ -> paginated list -> article detail page -> PDF",
+      "pagination": "html-next-link",
+      "pagination_url_template": "https://www.stanfordlawreview.org/online-archive/page/{N}/",
+      "total_volumes_estimated": "13 pages on archive",
+      "pdf_location": "article-detail-page",
+      "needs_headless": "false",
+      "notes": "WordPress site. PDFs linked on article detail pages via 'Download the PDF' button. 13 pages of online articles."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article > figure",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3.li-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "h5.li-meta em",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "notes": "First <em> element in h5.li-meta contains author name"
+    },
+    {
+      "id": "date",
+      "type": "SelectorText",
+      "selector": "h5.li-meta time em",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h3.li-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "next_page",
+      "type": "SelectorLink",
+      "selector": "a[rel=\"next\"]",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "cumberlandlawreview-com",
+  "start_urls": [
+    "https://www.cumberlandlawreview.com/2022-symposium"
+  ],
+  "source": "llm_explore",
+  "metadata": {
+    "journal_name": "Cumberlandlawreview",
+    "platform": "Wix",
+    "url": "https://www.cumberlandlawreview.com/",
+    "created_date": "2026-03-22",
+    "status": "active_partial_metadata",
+    "navigation": {
+      "volume_url_pattern": "https://www.cumberlandlawreview.com/volume-\\d+(-|/).*",
+      "archive_path": "volume links in header navigation",
+      "notes": "Canonical host migration from samford.edu/cumberlandlawreview; smoke passes on cumberlandlawreview.com, but current accessible PDFs are masthead/article-spotlight artifacts and still do not meet the 2/3 metadata gate. Short-loop run 2026-03-27: issue seed weak, volume/article seeds PASS with metadata_fields_present=2; promoted to active_partial_metadata using article/volume seed."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.T5UMT5",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h2",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

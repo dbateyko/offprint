@@ -1,0 +1,14 @@
+{
+  "id": "www-baylor-edu",
+  "start_urls": [
+    "https://www.baylor.edu/law/review/index.php?id=933862"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.baylor.edu",
+    "platform": "unknown",
+    "url": "https://www.baylor.edu/law/review/index.php?id=933862",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

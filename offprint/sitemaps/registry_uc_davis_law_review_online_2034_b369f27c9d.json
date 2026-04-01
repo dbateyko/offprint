@@ -1,0 +1,28 @@
+{
+  "id": "registry-2034-b369f27c9d",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "lawreview.law.ucdavis.edu",
+    "journal_name": "UC Davis Law Review Online",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://lawreview.law.ucdavis.edu/online",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "2034",
+    "registry_names": "UC Davis Law Review Online",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "artifacts/top50_batch5_20260310_summary.json",
+    "status_reason": "cloudflare_403_challenge_detected",
+    "status_updated_at": "2026-03-10T00:13:41Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://lawreview.law.ucdavis.edu/online"
+  ]
+}

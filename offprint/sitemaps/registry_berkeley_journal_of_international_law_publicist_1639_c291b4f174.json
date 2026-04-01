@@ -1,0 +1,28 @@
+{
+  "id": "registry-1639-c291b4f174",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "bjil.typepad.com",
+    "journal_name": "Berkeley Journal of International Law Publicist",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://bjil.typepad.com/publicist/2009/03/introducing-publicist.html",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "1639",
+    "registry_names": "Berkeley Journal of International Law Publicist",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/bjil.typepad.com/url_c291b4f17451",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://bjil.typepad.com/publicist/2009/03/introducing-publicist.html"
+  ]
+}

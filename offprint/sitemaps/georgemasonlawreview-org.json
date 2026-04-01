@@ -1,0 +1,14 @@
+{
+  "id": "georgemasonlawreview-org",
+  "start_urls": [
+    "https://lawreview.gmu.edu/archive/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "George Mason Law Review",
+    "platform": "wordpress",
+    "url": "https://georgemasonlawreview.org/",
+    "created_date": "2025-12-14",
+    "notes": "Manual override: GMU Law Review archive page."
+  }
+}

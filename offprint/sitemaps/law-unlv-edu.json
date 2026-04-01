@@ -1,0 +1,14 @@
+{
+  "id": "law-unlv-edu",
+  "start_urls": [
+    "https://law.unlv.edu/nevada-law-journal"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "law.unlv.edu",
+    "platform": "drupal",
+    "url": "https://law.unlv.edu/nevada-law-journal",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}

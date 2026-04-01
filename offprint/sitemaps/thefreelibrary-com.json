@@ -1,0 +1,14 @@
+{
+  "id": "www-thefreelibrary-com",
+  "start_urls": [
+    "https://www.thefreelibrary.com/The+%22E-Cambrian.-a0258817433"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.thefreelibrary.com",
+    "platform": "unknown",
+    "url": "https://www.thefreelibrary.com/The+%22E-Cambrian.-a0258817433",
+    "created_date": "2026-03-25",
+    "status": "active"
+  }
+}

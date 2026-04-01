@@ -1,0 +1,28 @@
+{
+  "id": "registry-687-3a8a8fa3ca",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "tax.cchgroup.com",
+    "journal_name": "Taxes - The Tax Magazine",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "http://tax.cchgroup.com/Store/Products/Product+Detail.htm?cs_id=CCE%2DCCH%2D591%28CCE%29&cs_catalog=TADS",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "687",
+    "registry_names": "Taxes - The Tax Magazine",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/tax.cchgroup.com/url_3a8a8fa3ca66",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-15T13:55:54Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "http://tax.cchgroup.com/Store/Products/Product+Detail.htm?cs_id=CCE%2DCCH%2D591%28CCE%29&cs_catalog=TADS"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "registry-235-11a90fc3f9",
+  "metadata": {
+    "created_date": "2026-03-04",
+    "domain": "crlj.org",
+    "journal_name": "George Mason University Civil Rights Law Journal",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "original_url": "https://crlj.org/",
+    "platform": "unknown",
+    "registry_confirmed_working_exact": false,
+    "registry_fingerprint_confidence": "0",
+    "registry_mainids": "235",
+    "registry_names": "George Mason University Civil Rights Law Journal",
+    "registry_needs_adapter": true,
+    "registry_predicted_platform": "unknown",
+    "registry_run_status": "untested",
+    "registry_suggested_adapter": "GenericAdapter",
+    "registry_working_host_only": false,
+    "status": "paused_waf",
+    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/crlj.org/url_11a90fc3f9b4",
+    "status_reason": "probe_waf_marker_detected",
+    "status_updated_at": "2026-03-04T05:34:00Z"
+  },
+  "source": "registry_import",
+  "start_urls": [
+    "https://crlj.org/"
+  ]
+}

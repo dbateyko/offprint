@@ -1,0 +1,13 @@
+{
+  "id": "nclawreview-forum",
+  "start_urls": [
+    "https://nclawreview.org/forum/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "North Carolina Law Review Forum",
+    "platform": "wordpress",
+    "url": "https://nclawreview.org/forum/",
+    "created_date": "2026-03-01"
+  }
+}

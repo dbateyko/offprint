@@ -1,0 +1,14 @@
+{
+  "url": "https://open.mitchellhamline.edu/mhlr/all_issues.html",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Mitchell Hamline Law Review",
+    "platform": "digitalcommons",
+    "original_url": "https://open.mitchellhamline.edu/mhlr/",
+    "domain": "open.mitchellhamline.edu",
+    "notes": "[Updated to XML sitemap on 2026-03-03]"
+  },
+  "start_urls": [
+    "https://open.mitchellhamline.edu/mhlr/sitemap.xml"
+  ]
+}

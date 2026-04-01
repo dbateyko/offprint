@@ -1,0 +1,14 @@
+{
+  "id": "www-repository-law-indiana-edu",
+  "start_urls": [
+    "https://www.repository.law.indiana.edu/ilj/"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.repository.law.indiana.edu",
+    "platform": "digitalcommons",
+    "url": "https://www.repository.law.indiana.edu/ilj/",
+    "created_date": "2026-03-26",
+    "status": "active"
+  }
+}
