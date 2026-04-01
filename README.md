@@ -1,10 +1,12 @@
 <p align="center">
-  <img src="offprint.png" width="600" alt="Offprint Logo">
+  <img src="./offprint.png" width="600" alt="Offprint Logo" />
 </p>
 
-# Offprint
+# Offprint V0.1
 
-*The law-journal corpus pipeline: crawl, normalize, and extract research-ready text and citations.*
+*Offprint* *(noun)*: a reprint of an article that originally appeared as part of a larger publication.
+
+This repository catalogs law review journals and gathers downloadable PDFs for personal use.
 
 `875 domains tracked` | `112,264 PDFs landed` | `W&L Top-50: 48/50`
 
