@@ -8,10 +8,71 @@
     "status_evidence_ref": "artifacts/top50_ranked_batch1_20260310_summary.json",
     "status_reason": "site_adapter_validated_smoke_pass",
     "status_updated_at": "2026-03-10T00:46:33Z",
-    "url": "https://harvardlawreview.org/forum/"
+    "url": "https://harvardlawreview.org/forum/",
+    "navigation": {
+      "archive_root": "https://harvardlawreview.org/forum/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /forum/ -> paginated list -> article detail page -> PDF",
+      "pagination": "html-next-link",
+      "pagination_url_template": "https://harvardlawreview.org/forum/page/{N}/",
+      "pdf_location": "article-detail-page",
+      "needs_headless": "false",
+      "notes": "WordPress site. PDFs linked on article detail pages. Archive is paginated using a.next.page-numbers."
+    }
   },
   "source": "manual",
   "start_urls": [
     "https://harvardlawreview.org/forum/"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.post-card",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h2.post-card__title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "a.post-card__author",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h2.post-card__title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": [
+        "_root"
+      ],
+      "notes": "PDF on article detail page"
+    },
+    {
+      "id": "next_page",
+      "type": "SelectorLink",
+      "selector": "a.next.page-numbers",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
   ]
 }
