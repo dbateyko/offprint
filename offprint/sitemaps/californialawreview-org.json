@@ -10,6 +10,38 @@
     "url": "https://www.californialawreview.org/",
     "created_date": "2026-04-01",
     "status": "active",
-    "notes": "Squarespace site. Archive at /print with category filters for volumes."
-  }
+    "navigation": {
+      "archive_root": "https://www.californialawreview.org/print",
+      "volume_url_pattern": "/category/Volume+{N}",
+      "archive_path": "homepage -> /print?category=Volume+X lists articles",
+      "pdf_location": "article-detail-page",
+      "notes": "Squarespace site. Articles are listed on the /print page. New articles (post-2018) are on Squarespace; older ones link to Digital Commons."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.entry",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1.blog-title",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h1.blog-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "date",
+      "type": "SelectorText",
+      "selector": "time.blog-date",
+      "parentSelectors": ["article_container"]
+    }
+  ]
 }

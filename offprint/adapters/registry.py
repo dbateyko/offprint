@@ -167,6 +167,10 @@ register("www.law.uchicago.edu", DrupalAdapter)
 register("www.law.uw.edu", WordPressAcademicBaseAdapter)
 register("suffolk.edu", WordPressAcademicBaseAdapter)
 register("archives.law.nccu.edu", DigitalCommonsIssueArticleHopAdapter)
+register("www.yalelawjournal.org", YaleLawJournalAdapter)
+register("yalelawjournal.org", YaleLawJournalAdapter)
+register("northwesternlawreview.org", WordPressAcademicBaseAdapter)
+register("www.northwesternlawreview.org", WordPressAcademicBaseAdapter)
 
 # Recent onboarded hosts that were still missing explicit routing.
 register_many(

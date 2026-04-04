@@ -1,14 +1,74 @@
 {
-  "url": "https://scholarlycommons.law.northwestern.edu/nulr/all_issues.html",
-  "sitemap_url": null,
-  "metadata": {
-    "journal": "Northwestern University Law Review",
-    "platform": "digitalcommons",
-    "original_url": "https://scholarlycommons.law.northwestern.edu/nulr/",
-    "domain": "scholarlycommons.law.northwestern.edu",
-    "notes": "[Updated to XML sitemap on 2026-03-03]"
-  },
+  "id": "northwestern-law-review",
   "start_urls": [
-    "https://scholarlycommons.law.northwestern.edu/nulr/sitemap.xml"
+    "https://northwesternlawreview.org/issues/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Northwestern University Law Review",
+    "platform": "WordPress",
+    "url": "https://northwesternlawreview.org/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://northwesternlawreview.org/issues/",
+      "volume_url_pattern": "none - chronological list with pagination",
+      "archive_path": "homepage -> /issues/ lists articles with links to Digital Commons landing pages",
+      "pagination": "url-pattern",
+      "pagination_url_template": "https://northwesternlawreview.org/issues/page/{N}/",
+      "pdf_location": "direct-on-issue-page",
+      "needs_headless": "false",
+      "notes": "WordPress frontend that links to Digital Commons PDFs. Using selectors to extract metadata directly from the list page."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".IssueMini",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": ".IssueMini-title",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": ".IssueMini-attribution-creator",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "date",
+      "type": "SelectorText",
+      "selector": ".IssueMini-attribution-date",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": ".IssueMini-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.IssueMini-actions-action",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
   ]
 }

@@ -1,18 +1,56 @@
 {
   "id": "lawreview-uchicago-edu",
-  "metadata": {
-    "created_date": "2025-12-14",
-    "journal_name": "University of Chicago Law Review",
-    "notes": "Manual override: online archive landing page.",
-    "platform": "unknown",
-    "status": "active",
-    "status_evidence_ref": "artifacts/top50_ranked_batch1_20260310_summary.json",
-    "status_reason": "site_adapter_validated_smoke_pass",
-    "status_updated_at": "2026-03-10T00:46:33Z",
-    "url": "https://lawreview.uchicago.edu/"
-  },
-  "source": "manual",
   "start_urls": [
-    "https://lawreview.uchicago.edu/online-archive/welcome"
+    "https://lawreview.uchicago.edu/print-archive",
+    "https://lawreview.uchicago.edu/online-archive"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "University of Chicago Law Review",
+    "platform": "Drupal",
+    "url": "https://lawreview.uchicago.edu/",
+    "created_date": "2025-12-14",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://lawreview.uchicago.edu/print-archive",
+      "volume_url_pattern": "none-listing",
+      "archive_path": "homepage -> /print-archive lists articles as nodes",
+      "pdf_location": "article-detail-page",
+      "notes": "Drupal site. Articles are listed on the archive pages. PDFs are direct on the article node page in field-link-pdf."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.node--type-publication",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": ".field--name-title",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a[rel='bookmark']",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": ".author--name",
+      "parentSelectors": ["_root"],
+      "notes": "Scoped to article detail page"
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["_root"],
+      "notes": "PDF in the field-link-pdf or abstract section"
+    }
   ]
 }

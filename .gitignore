@@ -235,6 +235,7 @@ pdfs/
 *.pdf
 *.xlsx
 */*/*.html
+/*.html
 */*/*.txt
 */*/*.docx
 */*/*.doc
@@ -246,7 +247,6 @@ results.tsv
 hf/
 
 # Directories removed from tracking for public release
-tests/
 research/
 sherlock_runpack/
 tmp/

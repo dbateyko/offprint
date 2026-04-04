@@ -10,6 +10,38 @@
     "url": "https://www.law.georgetown.edu/georgetown-law-journal/",
     "created_date": "2026-04-01",
     "status": "active",
-    "notes": "WordPress site. Uses WordPressAcademicBaseAdapter to decode pdf-embedder links."
-  }
+    "navigation": {
+      "archive_root": "https://www.law.georgetown.edu/georgetown-law-journal/in-print/",
+      "volume_url_pattern": "/volume-{N}/",
+      "archive_path": "homepage -> /in-print/ -> volume links -> article pages -> pdf-embedder",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPressAcademic site. Articles are listed on Volume pages as paragraphs. PDFs are embedded via pdf-embedder plugin on article detail pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "volume_link",
+      "type": "SelectorLink",
+      "selector": "a.sub_nav_link[href*='volume-']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".page_copy h3 + p, .page_copy h3 ~ p",
+      "parentSelectors": ["volume_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": ["article_container"]
+    }
+  ]
 }

@@ -1,0 +1,54 @@
+{
+  "id": "hofstralawreview-org",
+  "start_urls": [
+    "https://hofstralawreview.org/archive/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Hofstra Law Review",
+    "platform": "WordPress",
+    "url": "https://hofstralawreview.org/",
+    "created_date": "2026-04-04",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://hofstralawreview.org/archive/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /archive/ -> volume/issue links -> article pages -> PDF link",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress site. Archive page contains volume/issue links. PDFs are located on individual article pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": ".archive-issue-link, a[href*='/volume-']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.post",
+      "parentSelectors": ["issue_link", "_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1.entry-title, h2.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h2.entry-title a, h1.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["article_container", "_root"],
+      "notes": "Direct PDF link on article page."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "id": "mttlr-org",
+  "start_urls": [
+    "https://mttlr.org/archive/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Michigan Technology Law Review",
+    "platform": "WordPress",
+    "url": "https://mttlr.org/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://mttlr.org/archive/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /archive/ -> volume tables -> article PDFs",
+      "pdf_location": "archive-page",
+      "notes": "WordPress/Divi site. Archive page contains direct PDF links in a tabular format. Author names are in adjacent cells."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "tr:has(a[href$='.pdf'])",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "td:nth-child(2)",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

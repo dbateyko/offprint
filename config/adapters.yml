@@ -1,0 +1,25 @@
+# Prototype Configuration Driven Adapters for Offprint
+# Instead of 60 individual Python files, basic journals can be described via selectors.
+
+adapters:
+  example_journal:
+    base_url: "https://example.edu/law-review"
+    type: "selector_driven"
+    selectors:
+      issue_links: "div.issue-archive a.issue-link"
+      article_links: "div.toc-article a.title-link"
+      pdf_links: "a.pdf-download-btn"
+    metadata_selectors:
+      title: "h1.article-title"
+      author: "span.author-name"
+      date: "span.publication-date"
+    pagination:
+      type: "url_param"
+      param: "page"
+      
+  another_simple_site:
+    base_url: "https://journals.school.edu/simple"
+    type: "ojs_base" # Inheriting from a predefined base strategy
+    options:
+      bypass_cloudflare: true
+      delay_ms: 2000

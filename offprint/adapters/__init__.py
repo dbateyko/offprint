@@ -58,6 +58,10 @@ register("law.stanford.edu", StanfordSTLRAdapter)
 # Register Georgetown Law Technology Review
 register("georgetownlawtechreview.org", GeorgetownGLTRAdapter)
 
+# Register Yale Law Journal
+register("www.yalelawjournal.org", YaleLawJournalAdapter)
+register("yalelawjournal.org", YaleLawJournalAdapter)
+
 # Register DigitalCommons/Scholarship repositories
 register("digitalcommons.law.umaryland.edu", DigitalCommonsIssueArticleHopAdapter)  # Maryland JBTL
 register("digitalcommons.law.uw.edu", DigitalCommonsIssueArticleHopAdapter)  # Washington WJLTA

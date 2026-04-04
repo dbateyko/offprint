@@ -3,42 +3,46 @@
   "start_urls": [
     "https://www.templelawreview.org/archive/"
   ],
-  "source": "llm_explore",
+  "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Templelawreview",
+    "journal_name": "Temple Law Review",
     "platform": "WordPress",
-    "url": "http://www.templelawreview.org/",
-    "created_date": "2026-03-22",
+    "url": "https://www.templelawreview.org/",
+    "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_path": "seed has archive link in header -> /archive/ page lists articles",
-      "notes": "Site uses WordPress; article entries are in div.collapse containing title, author, date, volume/issue in text, and PDF link. No distinct volume or issue sub-pages; all content on archive page. No pagination (the page contains all entries)."
+      "archive_root": "https://www.templelawreview.org/archive/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /archive/ -> accordion issue links -> article detail -> PDF link",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress site. Archive page contains issue links in an accordion. PDFs are on detail pages."
     }
   },
   "selectors": [
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "div.collapse",
-      "parentSelectors": [
-        "_root"
-      ]
+      "selector": "article.post",
+      "parentSelectors": ["_root"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "a:first-child",
-      "parentSelectors": [
-        "article_container"
-      ]
+      "selector": "h1.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h1.entry-title a",
+      "parentSelectors": ["article_container"]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "a[href$=\".pdf\"]",
-      "parentSelectors": [
-        "article_container"
-      ]
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["_root"],
+      "notes": "PDF on article detail page"
     }
   ]
 }

@@ -1,17 +1,55 @@
 {
   "id": "yalelawjournal-org",
   "start_urls": [
-    "https://www.yalelawjournal.org/issue"
+    "https://yalelawjournal.org/issue"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Yale Law Journal",
-    "platform": "custom",
-    "url": "https://www.yalelawjournal.org/",
-    "created_date": "2026-03-31",
-    "status": "todo_adapter",
-    "status_reason": "Custom platform with 1100+ articles on single /issue page. Requires custom adapter implementation.",
-    "status_updated_at": "2026-03-31T21:26:29Z",
-    "notes": "SPA-like structure but links are in HTML. Not WordPress/OJS/Scholastica. Needs custom YaleLawJournalAdapter."
-  }
+    "platform": "unknown",
+    "url": "https://yalelawjournal.org/",
+    "created_date": "2026-03-04",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://yalelawjournal.org/issue",
+      "volume_url_pattern": "none-toc-accordion",
+      "archive_path": "homepage -> /issue (Print Archive) -> accordion volumes -> TOC items -> article detail -> /pdf/ path discovery",
+      "pdf_location": "article-detail-page",
+      "notes": "Custom site. Uses YaleLawJournalAdapter for discovery. The /issue page contains the full print archive in nested containers."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".toc_item",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3 a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h3 a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": ".author",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
 }

@@ -1,57 +1,53 @@
 {
   "id": "harvardlawreview-org",
   "start_urls": [
-    "https://harvardlawreview.org/category/articles/"
+    "https://harvardlawreview.org/explore-by-volume-issue/"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Harvard Law Review",
     "platform": "wordpress",
     "url": "https://harvardlawreview.org/",
-    "created_date": "2026-03-31",
+    "created_date": "2026-04-01",
     "status": "active",
-    "notes": "Custom WordPress theme with post-card structure. PDFs on article detail pages."
+    "navigation": {
+      "archive_root": "https://harvardlawreview.org/explore-by-volume-issue/",
+      "volume_url_pattern": "none-listing",
+      "archive_path": "homepage -> /explore-by-volume-issue/ -> issue links -> article pages -> PDF link",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress site. Articles are listed on issue pages. PDFs are direct on the article landing pages via a download button."
+    }
   },
   "selectors": [
     {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "a.issue-card__link",
+      "parentSelectors": ["_root"]
+    },
+    {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post",
-      "parentSelectors": [
-        "_root"
-      ]
+      "selector": "article.post-card",
+      "parentSelectors": ["issue_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h2.post-card__title a",
-      "parentSelectors": [
-        "article_container"
-      ]
-    },
-    {
-      "id": "author",
-      "type": "SelectorText",
-      "selector": "a.post-card__author",
-      "parentSelectors": [
-        "article_container"
-      ]
-    },
-    {
-      "id": "issue",
-      "type": "SelectorText",
-      "selector": "span.post-card__issue",
-      "parentSelectors": [
-        "article_container"
-      ]
+      "selector": "h3.post-card__title a",
+      "parentSelectors": ["article_container"]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h2.post-card__title a",
-      "parentSelectors": [
-        "article_container"
-      ]
+      "selector": "h3.post-card__title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["_root"]
     }
   ]
 }

@@ -57,6 +57,14 @@ COMMANDS: dict[str, dict[str, CommandSpec]] = {
             "scripts/processing/build_hf_dataset.py",
             "Build Hugging Face parquet datasets",
         ),
+        "extract-footnotes-docling": CommandSpec(
+            "scripts/processing/extract_footnotes_from_docling.py",
+            "Extract footnotes from PDFs using docling",
+        ),
+        "run-olmocr": CommandSpec(
+            "scripts/processing/run_olmocr_dual_gpu.py",
+            "Run olmOCR extraction (dual GPU)",
+        ),
     },
     "quality": {
         "check-layout": CommandSpec(

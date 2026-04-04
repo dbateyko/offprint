@@ -10,6 +10,38 @@
     "url": "https://virginialawreview.org/",
     "created_date": "2026-04-01",
     "status": "active",
-    "notes": "WordPress site. Uses custom post type 'articles'. WordPressAcademicBaseAdapter will discover from REST API and homepage."
-  }
+    "navigation": {
+      "archive_root": "https://virginialawreview.org/",
+      "volume_url_pattern": "none-wp-rest-api",
+      "archive_path": "homepage -> WP REST API or discover from home",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPressAcademic site with REST API active. Articles have 'By ...' in .article-authors and direct PDF links."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": ".article-authors",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["article_container"]
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 {
   "id": "texaslawreview-org",
   "start_urls": [
-    "https://texaslawreview.org/"
+    "https://texaslawreview.org/archive/"
   ],
   "source": "claude_code_skill",
   "metadata": {
@@ -10,6 +10,58 @@
     "url": "https://texaslawreview.org/",
     "created_date": "2026-04-01",
     "status": "active",
-    "notes": "WordPress site. Uses WordPressAcademicBaseAdapter to discover posts from REST API and sitemap."
-  }
+    "navigation": {
+      "archive_root": "https://texaslawreview.org/archive/",
+      "volume_url_pattern": "archive/volume-{N}/",
+      "archive_path": "homepage -> /archive/ -> volume/issue links -> article pages -> PDF link",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress site. Archive lists volumes and issues. Articles have direct PDF links on the article landing pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "volume_link",
+      "type": "SelectorLink",
+      "selector": "h3 a[href*='/archive/volume-']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": ".archive-issue-list li a",
+      "parentSelectors": ["volume_link"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.entry",
+      "parentSelectors": ["issue_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": ".entry-title",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h3 a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": ".meta",
+      "parentSelectors": ["article_container"],
+      "notes": "Contains 'Article by ...' or 'Note by ...'"
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["_root"],
+      "notes": "PDF link on the article detail page"
+    }
+  ]
 }
