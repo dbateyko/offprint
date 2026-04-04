@@ -1,14 +1,54 @@
 {
   "id": "lawreview-vermontlaw-edu",
   "start_urls": [
-    "https://lawreview.vermontlaw.edu/"
+    "https://lawreview.vermontlaw.edu/past-issues/"
   ],
-  "source": "auto_onboard",
+  "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "lawreview.vermontlaw.edu",
-    "platform": "wordpress",
+    "journal_name": "Vermont Law Review",
+    "platform": "WordPress",
     "url": "https://lawreview.vermontlaw.edu/",
-    "created_date": "2026-03-26",
-    "status": "active"
-  }
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://lawreview.vermontlaw.edu/past-issues/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /past-issues/ -> individual books -> article detail -> PDF link",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress site. Archive lists past books/issues. PDFs are direct on article detail pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": ".entry-content a[href*='/past-issues/volume-']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.post, .entry-content",
+      "parentSelectors": ["issue_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1.entry-title, h2.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h2.entry-title a, h1.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["_root"],
+      "notes": "PDF on article detail page"
+    }
+  ]
 }

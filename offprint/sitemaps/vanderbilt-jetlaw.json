@@ -1,35 +1,35 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "vanderbilt-jetlaw",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://www.vanderbilt.edu/jetlaw/past-volumes/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
+    "journal_name": "Vanderbilt Journal of Entertainment and Technology Law",
     "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "url": "https://www.vanderbilt.edu/jetlaw/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
+      "archive_root": "https://www.vanderbilt.edu/jetlaw/past-volumes/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "archive_path": "homepage -> /past-volumes/ -> individual volumes -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
+      "notes": "WordPress site. Volumes and issues are listed. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
     {
-      "id": "issue_link",
+      "id": "volume_link",
       "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
+      "selector": ".menu-item a[href*='/volume-'], a[href*='/volume/']",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post",
-      "parentSelectors": ["issue_link"]
+      "selector": "article.post, .sqs-block-content",
+      "parentSelectors": ["volume_link"]
     },
     {
       "id": "title",

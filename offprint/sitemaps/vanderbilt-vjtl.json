@@ -1,17 +1,17 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "vanderbilt-vjtl",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://www.vanderbilt.edu/vjtl/archives/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
+    "journal_name": "Vanderbilt Journal of Transnational Law",
     "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "url": "https://www.vanderbilt.edu/vjtl/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
+      "archive_root": "https://www.vanderbilt.edu/vjtl/archives/",
       "volume_url_pattern": "none-list",
       "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",

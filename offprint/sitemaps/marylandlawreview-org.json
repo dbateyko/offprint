@@ -1,0 +1,48 @@
+{
+  "id": "marylandlawreview-org",
+  "start_urls": [
+    "https://www.marylandlawreview.org/issues/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Maryland Law Review",
+    "platform": "Squarespace",
+    "url": "https://www.marylandlawreview.org/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.marylandlawreview.org/issues/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /issues/ -> blog-like issue pages -> PDF links",
+      "pdf_location": "issue-page",
+      "notes": "Squarespace site. Issues are listed as blog posts. PDF links are located on individual issue detail pages."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": ".blog-item-title a, .blog-more-link",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article",
+      "parentSelectors": ["issue_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1.entry-title, h2.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["article_container", "issue_link"],
+      "notes": "Direct PDF on article/issue page."
+    }
+  ]
+}

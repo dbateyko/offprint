@@ -1,46 +1,46 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "law-uark-edu-alr",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://law.uark.edu/alr/archives.php"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
-    "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "journal_name": "Arkansas Law Review",
+    "platform": "Custom/PHP",
+    "url": "https://law.uark.edu/alr/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
+      "archive_root": "https://law.uark.edu/alr/archives.php",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "archive_path": "homepage -> /archives.php -> volume links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
+      "notes": "University-hosted PHP site. Archive lists volumes. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
     {
-      "id": "issue_link",
+      "id": "volume_link",
       "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
+      "selector": "a[href*='volume-']",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post",
-      "parentSelectors": ["issue_link"]
+      "selector": ".article-list-item, .content",
+      "parentSelectors": ["volume_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
+      "selector": "h1, h2, h3",
       "parentSelectors": ["article_container"]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
+      "selector": "a[href*='article']",
       "parentSelectors": ["article_container"]
     },
     {

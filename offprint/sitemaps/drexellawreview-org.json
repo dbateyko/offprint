@@ -1,19 +1,19 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "drexellawreview-org",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://drexellawreview.org/archive/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
+    "journal_name": "Drexel Law Review",
     "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "url": "https://drexellawreview.org/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
+      "archive_root": "https://drexellawreview.org/archive/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "archive_path": "homepage -> /archive/ -> current issue -> previous volumes -> volume/issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
       "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
     }
@@ -22,13 +22,13 @@
     {
       "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
+      "selector": ".archive-issue a, a[href*='/volume-'], a[href*='/v-']",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post",
+      "selector": "article.post, .entry-content",
       "parentSelectors": ["issue_link"]
     },
     {

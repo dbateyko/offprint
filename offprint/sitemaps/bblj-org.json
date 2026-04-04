@@ -1,19 +1,19 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "bblj-org",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://www.bblj.org/archive/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
+    "journal_name": "Berkeley Business Law Journal",
     "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "url": "https://www.bblj.org/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
+      "archive_root": "https://www.bblj.org/archive/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "archive_path": "homepage -> /archive/ -> volume/issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
       "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
     }

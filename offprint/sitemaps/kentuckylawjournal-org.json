@@ -1,44 +1,54 @@
 {
   "id": "kentuckylawjournal-org",
   "start_urls": [
-    "https://www.kentuckylawjournal.org/online-originals"
+    "https://www.kentuckylawjournal.org/archives/"
   ],
-  "source": "llm_explore",
+  "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Kentuckylawjournal",
-    "platform": "Squarespace",
+    "journal_name": "Kentucky Law Journal",
+    "platform": "WordPress",
     "url": "https://www.kentuckylawjournal.org/",
-    "created_date": "2026-03-22",
+    "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_path": "(seed has 'Print Archive' link) → https://www.kentuckylawjournal.org/print-archive",
-      "notes": "Squarespace site, pagination via ?offset param, article pages contain PDF links"
+      "archive_root": "https://www.kentuckylawjournal.org/archives/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
     {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": ".archive-issue a, a[href*='/volume-']",
+      "parentSelectors": ["_root"]
+    },
+    {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article",
-      "parentSelectors": [
-        "_root"
-      ]
+      "selector": "article.post",
+      "parentSelectors": ["issue_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": ".entry-title",
-      "parentSelectors": [
-        "article_container"
-      ]
+      "selector": "h1.entry-title, h2.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h2.entry-title a, h1.entry-title a",
+      "parentSelectors": ["article_container"]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "a[href$=\".pdf\"]",
-      "parentSelectors": [
-        "article_container"
-      ]
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["_root"],
+      "notes": "PDF on article detail page"
     }
   ]
 }

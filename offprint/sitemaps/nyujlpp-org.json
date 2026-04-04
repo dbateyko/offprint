@@ -1,17 +1,17 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "nyujlpp-org",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://nyujlpp.org/archives/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
+    "journal_name": "New York University Journal of Legislation and Public Policy",
     "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "url": "https://nyujlpp.org/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
+      "archive_root": "https://nyujlpp.org/archives/",
       "volume_url_pattern": "none-list",
       "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
@@ -48,7 +48,7 @@
       "type": "SelectorLink",
       "selector": "a[href$='.pdf']",
       "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
+      "notes": "PDF link on article page."
     }
   ]
 }

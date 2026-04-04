@@ -1,19 +1,19 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "harvardjlg-com",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://harvardjlg.com/archive/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
+    "journal_name": "Harvard Journal of Law & Gender",
     "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "url": "https://harvardjlg.com/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
+      "archive_root": "https://harvardjlg.com/archive/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "archive_path": "homepage -> /archive/ -> volume/issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
       "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
     }

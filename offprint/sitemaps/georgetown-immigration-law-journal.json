@@ -1,46 +1,46 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "georgetown-immigration-law-journal",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://www.law.georgetown.edu/immigration-law-journal/in-print/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
-    "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "journal_name": "Georgetown Immigration Law Journal",
+    "platform": "Custom/WordPress",
+    "url": "https://www.law.georgetown.edu/immigration-law-journal/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
+      "archive_root": "https://www.law.georgetown.edu/immigration-law-journal/in-print/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "archive_path": "homepage -> /in-print/ -> volume/issue pages -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
+      "notes": "Georgetown-hosted site. Issues are listed as subpages. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
+      "selector": ".entry-content a[href*='/volume-'], .entry-content a[href*='/issue-']",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post",
+      "selector": "article.post, .node-article",
       "parentSelectors": ["issue_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
+      "selector": "h1, h2 a",
       "parentSelectors": ["article_container"]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
+      "selector": "h2 a, h1 a",
       "parentSelectors": ["article_container"]
     },
     {
@@ -48,7 +48,7 @@
       "type": "SelectorLink",
       "selector": "a[href$='.pdf']",
       "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
+      "notes": "PDF link on article page."
     }
   ]
 }

@@ -1,18 +1,48 @@
 {
   "id": "wakeforestlawreview-com",
   "start_urls": [
-    "https://wakeforestlawreview.com/category/online/"
+    "https://wakeforestlawreview.com/category/articles/"
   ],
-  "source": "manual",
+  "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Wake Forest Law Review Online",
-    "platform": "wordpress",
-    "url": "https://wakeforestlawreview.com/category/online/",
-    "created_date": "2026-03-27",
+    "journal_name": "Wake Forest Law Review",
+    "platform": "WordPress",
+    "url": "https://wakeforestlawreview.com/",
+    "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_path": "/category/online/",
-      "notes": "Action-list re-onboard seed. Smoke PASS on 2026-03-27 with WordPressAcademicBaseAdapter; title+2 metadata fields present."
+      "archive_root": "https://wakeforestlawreview.com/category/articles/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /category/articles/ -> article detail -> PDF link",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress site. Articles are categorized under 'articles'. PDFs are direct on article detail pages."
     }
-  }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.post",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1.entry-title, h2.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h2.entry-title a, h1.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["_root"],
+      "notes": "PDF on article detail page"
+    }
+  ]
 }

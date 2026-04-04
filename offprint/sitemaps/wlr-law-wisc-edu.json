@@ -1,28 +1,28 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "wlr-law-wisc-edu",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://wlr.law.wisc.edu/past-issues/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
+    "journal_name": "Wisconsin Law Review",
     "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "url": "https://wlr.law.wisc.edu/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "archive_root": "https://wlr.law.wisc.edu/past-issues/",
+      "volume_url_pattern": "/volume-\\d+/",
+      "archive_path": "homepage -> /past-issues/ -> issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
+      "notes": "WordPress site. Issues are listed as separate pages or categories. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
+      "selector": "a[href*='/volume-']",
       "parentSelectors": ["_root"]
     },
     {

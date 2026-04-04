@@ -1,14 +1,48 @@
 {
   "id": "djclpp-law-duke-edu",
   "start_urls": [
-    "https://scholarship.law.duke.edu/djclpp/sitemap.xml"
+    "https://djclpp.law.duke.edu/"
   ],
-  "source": "manual",
+  "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Duke Journal of Constitutional Law & Public Policy",
-    "platform": "digitalcommons",
-    "url": "https://scholarship.law.duke.edu/djclpp/",
-    "created_date": "2025-12-14",
-    "notes": "Updated to Digital Commons archive; WP landing page at djclpp.law.duke.edu has only current issue. [Updated to XML sitemap on 2026-03-03]"
-  }
+    "platform": "WordPress",
+    "url": "https://djclpp.law.duke.edu/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://djclpp.law.duke.edu/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> article detail -> PDF link",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress site. Uses Elegant Themes/Divi. Articles are posted as WP posts. Main archive links to Digital Commons, but discovery can happen via homepage/categories."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.post",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1.entry-title, h2.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h2.entry-title a, h1.entry-title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["_root"],
+      "notes": "PDF on article detail page"
+    }
+  ]
 }

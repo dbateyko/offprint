@@ -1,46 +1,46 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "law-loyno-edu-loyola-law-review",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://law.loyno.edu/loyola-law-review/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
-    "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "journal_name": "Loyola Law Review",
+    "platform": "Custom/Drupal",
+    "url": "https://law.loyno.edu/loyola-law-review/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
+      "archive_root": "https://law.loyno.edu/loyola-law-review/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "archive_path": "homepage -> issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
+      "notes": "University-hosted site. Issues are listed as separate pages or nodes. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
+      "selector": "a[href*='/volume-'], a[href*='/issue-']",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post",
+      "selector": ".node-article, .field-items",
       "parentSelectors": ["issue_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
+      "selector": "h1.title, h2.title a",
       "parentSelectors": ["article_container"]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
+      "selector": "h2.title a, h1.title a",
       "parentSelectors": ["article_container"]
     },
     {
@@ -48,7 +48,7 @@
       "type": "SelectorLink",
       "selector": "a[href$='.pdf']",
       "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
+      "notes": "PDF link on article page."
     }
   ]
 }

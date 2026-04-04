@@ -1,28 +1,28 @@
 {
-  "id": "nmlr-unm-edu",
+  "id": "law-uci-edu-lawreview",
   "start_urls": [
-    "https://nmlr.unm.edu/archives/"
+    "https://www.law.uci.edu/lawreview/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "New Mexico Law Review",
+    "journal_name": "U.C. Irvine Law Review",
     "platform": "WordPress",
-    "url": "https://nmlr.unm.edu/",
+    "url": "https://www.law.uci.edu/lawreview/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://nmlr.unm.edu/archives/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
+      "archive_root": "https://www.law.uci.edu/lawreview/",
+      "volume_url_pattern": "/vol-\\d+-issue-\\d+/",
+      "archive_path": "homepage -> issue/volume links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
+      "notes": "WordPress site. Issues are listed as separate pages. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
+      "selector": "a[href*='/vol-']",
       "parentSelectors": ["_root"]
     },
     {

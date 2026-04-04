@@ -1,0 +1,48 @@
+{
+  "id": "uwyo-edu-law-wyoming-law-review",
+  "start_urls": [
+    "https://www.uwyo.edu/law/wyoming-law-review/archives/index.html"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Wyoming Law Review",
+    "platform": "Custom/HTML",
+    "url": "https://www.uwyo.edu/law/wyoming-law-review/",
+    "created_date": "2026-04-01",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.uwyo.edu/law/wyoming-law-review/archives/index.html",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /archives/index.html -> individual volume pages -> PDF links",
+      "pdf_location": "volume-page-or-detail",
+      "notes": "University-hosted site. Archive links to volume-specific pages which contain direct PDF links."
+    }
+  },
+  "selectors": [
+    {
+      "id": "volume_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='volume-'], a[href*='vol-']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "li, p, .article",
+      "parentSelectors": ["volume_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "strong, b, span",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["article_container"],
+      "notes": "Direct PDF link in the list"
+    }
+  ]
+}
