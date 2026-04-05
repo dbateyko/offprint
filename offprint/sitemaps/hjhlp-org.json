@@ -1,28 +1,28 @@
 {
-  "id": "vlbr-org",
+  "id": "hjhlp-org",
   "start_urls": [
-    "http://www.vlbr.org/past-issues/"
+    "https://www.hjhlp.org/past-issues/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Virginia Law & Business Review",
+    "journal_name": "Houston Journal of Health Law & Policy",
     "platform": "WordPress",
-    "url": "http://www.vlbr.org/",
+    "url": "https://www.hjhlp.org/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "http://www.vlbr.org/past-issues/",
+      "archive_root": "https://www.hjhlp.org/past-issues/",
       "volume_url_pattern": "none-list",
       "archive_path": "homepage -> /past-issues/ -> individual volumes -> article list -> PDF link",
       "pdf_location": "volume-page-or-detail",
-      "notes": "WordPress site. Archive lists past volumes. PDFs are often direct in the volume list."
+      "notes": "WordPress/Custom site. Archive lists past volumes. PDFs are often direct in the volume list."
     }
   },
   "selectors": [
     {
       "id": "volume_link",
       "type": "SelectorLink",
-      "selector": ".entry-content a[href*='/volume-']",
+      "selector": ".entry-content a[href*='/volume-'], .entry-content a[href*='/issue-']",
       "parentSelectors": ["_root"]
     },
     {

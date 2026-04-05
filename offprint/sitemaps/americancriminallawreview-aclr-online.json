@@ -1,13 +1,57 @@
 {
   "id": "americancriminallawreview-aclr-online",
-  "start_urls": [
-    "https://www.law.georgetown.edu/american-criminal-law-review/aclr-online/"
-  ],
-  "source": "manual",
   "metadata": {
+    "created_date": "2026-03-01",
     "journal_name": "ACLR Online",
     "platform": "wordpress",
+    "status": "active",
     "url": "https://www.law.georgetown.edu/american-criminal-law-review/aclr-online/",
-    "created_date": "2026-03-01"
-  }
+    "navigation": {
+      "archive_root": "https://www.law.georgetown.edu/american-criminal-law-review/aclr-online/",
+      "article_path": "homepage -> /aclr-online -> Volume Page -> Article PDF/HTML",
+      "pdf_location": "article-link",
+      "notes": "Georgetown Law site. Articles are listed on the main ACLR Online page and volume-specific pages. Some are direct PDFs, others are HTML posts."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://www.law.georgetown.edu/american-criminal-law-review/aclr-online/",
+    "https://www.law.georgetown.edu/american-criminal-law-review/aclr-online/volume-63/",
+    "https://www.law.georgetown.edu/american-criminal-law-review/aclr-online/volume-62/",
+    "https://www.law.georgetown.edu/american-criminal-law-review/aclr-online/volume-61/"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "p:has(a[href*='/volume-']), p:has(a[href*='wp-content/uploads/'])",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
 }

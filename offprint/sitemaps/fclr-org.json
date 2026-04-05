@@ -1,52 +1,52 @@
 {
-  "id": "vjil-org",
+  "id": "fclr-org",
   "start_urls": [
-    "https://vjil.org/archive/"
+    "https://www.fclr.org/fclr/index.php/fclr/issue/archive"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Virginia Journal of International Law",
-    "platform": "WordPress",
-    "url": "https://vjil.org/",
+    "journal_name": "Federal Courts Law Review",
+    "platform": "OJS",
+    "url": "https://www.fclr.org/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://vjil.org/archive/",
+      "archive_root": "https://www.fclr.org/fclr/index.php/fclr/issue/archive",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archive/ -> individual volumes -> article detail -> PDF link",
+      "archive_path": "homepage -> /fclr/ -> /issue/archive -> individual issues -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
+      "notes": "OJS-based site. Archive contains issue links. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
     {
-      "id": "volume_link",
+      "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".entry-content a[href*='/volume-']",
+      "selector": ".obj_issue_summary a.title, a[href*='/issue/view/']",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post, .entry-content",
-      "parentSelectors": ["volume_link"]
+      "selector": ".obj_article_summary",
+      "parentSelectors": ["issue_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
+      "selector": ".title a",
       "parentSelectors": ["article_container"]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
+      "selector": ".title a",
       "parentSelectors": ["article_container"]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
+      "selector": "a.obj_galley_link.pdf",
       "parentSelectors": ["_root"],
       "notes": "PDF on article detail page"
     }

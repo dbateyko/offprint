@@ -1,17 +1,17 @@
 {
-  "id": "vjil-org",
+  "id": "bjil-org",
   "start_urls": [
-    "https://vjil.org/archive/"
+    "https://www.bjil.org/archive/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Virginia Journal of International Law",
+    "journal_name": "Berkeley Journal of International Law",
     "platform": "WordPress",
-    "url": "https://vjil.org/",
+    "url": "https://www.bjil.org/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://vjil.org/archive/",
+      "archive_root": "https://www.bjil.org/archive/",
       "volume_url_pattern": "none-list",
       "archive_path": "homepage -> /archive/ -> individual volumes -> article detail -> PDF link",
       "pdf_location": "article-detail-page",

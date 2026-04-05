@@ -1,0 +1,38 @@
+{
+  "id": "animallawreview-lclark-edu",
+  "metadata": {
+    "created_date": "2026-04-04",
+    "journal_name": "Animal Law Review",
+    "platform": "custom-university",
+    "status": "active",
+    "url": "https://law.lclark.edu/law_reviews/animal_law_review/",
+    "navigation": {
+      "archive_root": "https://law.lclark.edu/law_reviews/animal_law_review/issues/",
+      "article_path": "homepage -> Issues -> Volume Page -> Article PDF",
+      "pdf_location": "article-link",
+      "notes": "Animal Law Review at Lewis & Clark. Custom university CMS. Issue index lists volume links. Each volume page lists articles with direct PDF links to law.lclark.edu/live/files/."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://law.lclark.edu/law_reviews/animal_law_review/issues/"
+  ],
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/issues/volume']",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "article_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/live/files/']",
+      "parentSelectors": [
+        "issue_link"
+      ]
+    }
+  ]
+}

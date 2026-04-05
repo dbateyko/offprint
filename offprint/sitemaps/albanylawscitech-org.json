@@ -1,13 +1,20 @@
 {
   "id": "albanylawscitech-org",
-  "start_urls": [
-    "https://www.albanylawscitech.org/"
-  ],
-  "source": "manual",
   "metadata": {
+    "created_date": "2025-12-14",
     "journal_name": "Albany Law Journal of Science & Technology",
-    "platform": "wordpress",
+    "platform": "scholastica",
+    "status": "active",
     "url": "https://www.albanylawscitech.org/",
-    "created_date": "2025-12-14"
-  }
+    "navigation": {
+      "archive_root": "https://www.albanylawscitech.org/articles",
+      "article_path": "homepage -> /articles lists all articles by section/tag",
+      "platform": "scholastica",
+      "notes": "Scholastica platform. Discovery handled via window.JOURNAL extraction."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://www.albanylawscitech.org/articles"
+  ]
 }

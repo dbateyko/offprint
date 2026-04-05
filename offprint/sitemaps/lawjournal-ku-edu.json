@@ -1,19 +1,19 @@
 {
-  "id": "vjil-org",
+  "id": "lawjournal-ku-edu",
   "start_urls": [
-    "https://vjil.org/archive/"
+    "https://lawjournal.ku.edu/archives/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Virginia Journal of International Law",
+    "journal_name": "Kansas Journal of Law & Public Policy",
     "platform": "WordPress",
-    "url": "https://vjil.org/",
+    "url": "https://lawjournal.ku.edu/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://vjil.org/archive/",
+      "archive_root": "https://lawjournal.ku.edu/archives/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archive/ -> individual volumes -> article detail -> PDF link",
+      "archive_path": "homepage -> /archives/ -> individual volumes -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
       "notes": "WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
     }

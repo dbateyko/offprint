@@ -1,19 +1,55 @@
 {
   "id": "american-journal-of-comparative-law",
   "metadata": {
-    "canonicalized_at": "2026-02-03",
-    "domain": "academic.oup.com",
+    "created_date": "2026-04-04",
     "journal_name": "American Journal of Comparative Law",
-    "notes": "Manual seed override: OUP issue browse (subscription access likely required).",
-    "original_url": "https://academic.oup.com/ajcl",
-    "platform": "unknown",
-    "status": "paused_waf",
-    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/academic.oup.com/url_dbc7e147e20f",
-    "status_reason": "probe_waf_marker_detected",
-    "status_updated_at": "2026-03-04T05:34:00Z"
+    "platform": "silverchair",
+    "status": "active",
+    "url": "https://academic.oup.com/ajcl/issue",
+    "navigation": {
+      "archive_root": "https://academic.oup.com/ajcl/issue-archive",
+      "article_path": "homepage -> Issue Archive -> Issue Page -> Article PDF",
+      "pdf_location": "article-link",
+      "needs_headless": "true",
+      "notes": "Oxford Academic / Silverchair platform. Protected by WAF; requires headless browser or specific headers. Articles are listed in 'al-article-items' blocks."
+    }
   },
   "source": "manual",
   "start_urls": [
     "https://academic.oup.com/ajcl/issue"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.al-article-items",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h5.item-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h5.item-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.al-link.pdf",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
   ]
 }

@@ -1,13 +1,54 @@
 {
   "id": "aglawjournal-wp-drake-edu",
-  "start_urls": [
-    "https://aglawjournal.wp.drake.edu/"
-  ],
-  "source": "manual",
   "metadata": {
+    "created_date": "2025-12-14",
     "journal_name": "Drake Journal of Agricultural Law",
-    "platform": "unknown",
+    "platform": "wordpress",
+    "status": "active",
     "url": "https://aglawjournal.wp.drake.edu/",
-    "created_date": "2025-12-14"
-  }
+    "navigation": {
+      "archive_root": "https://aglawjournal.wp.drake.edu/past-issues/",
+      "article_path": "homepage -> Past Issues -> Volume Page -> Article PDF",
+      "pdf_location": "article-link",
+      "notes": "WordPress. Volume pages contain a list of PDF links for each article. Titles are extracted from link text."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://aglawjournal.wp.drake.edu/past-issues/"
+  ],
+  "selectors": [
+    {
+      "id": "volume_link",
+      "type": "SelectorLink",
+      "selector": "li.page_item a[href*='/volume-']",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": [
+        "volume_link"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
 }

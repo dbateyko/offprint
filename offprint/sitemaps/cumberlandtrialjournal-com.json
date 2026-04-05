@@ -1,13 +1,19 @@
 {
   "id": "cumberlandtrialjournal-com",
-  "start_urls": [
-    "https://cumberlandtrialjournal.com/"
-  ],
-  "source": "manual",
   "metadata": {
+    "created_date": "2026-04-04",
     "journal_name": "American Journal of Trial Advocacy",
-    "platform": "wordpress",
+    "platform": "wordpress-com",
+    "status": "blocked",
     "url": "https://cumberlandtrialjournal.com/",
-    "created_date": "2025-12-14"
-  }
+    "navigation": {
+      "archive_root": "https://cumberlandtrialjournal.com/previews/",
+      "article_path": "N/A - no open-access article archive",
+      "pdf_location": "none",
+      "notes": "AJTA at Samford/Cumberland. WordPress.com blog-style site with only volume previews (table of contents). Full text available only through HeinOnline, Westlaw, LexisNexis. ScholarWorks (scholarworks.law.samford.edu) has broken TLS certificate. No open-access PDFs available for crawling."
+    }
+  },
+  "source": "manual",
+  "start_urls": [],
+  "selectors": []
 }

@@ -1,15 +1,56 @@
 {
   "id": "accessiblelaw-untdallas-edu",
-  "start_urls": [
-    "https://accessiblelaw.untdallas.edu/"
-  ],
-  "source": "manual",
   "metadata": {
-    "status": "paused_other",
-    "status_reason": "discovery_timeout_hang_2026-03-05",
+    "created_date": "2026-03-01",
     "journal_name": "Accessible Law",
-    "platform": "wordpress",
+    "platform": "wix",
+    "status": "active",
     "url": "https://accessiblelaw.untdallas.edu/",
-    "created_date": "2026-03-01"
-  }
+    "navigation": {
+      "archive_root": "https://accessiblelaw.untdallas.edu/current-issue-18",
+      "article_path": "homepage -> Issue Page -> Blog Post -> Full Issue PDF (optional)",
+      "pdf_location": "issue-page",
+      "needs_headless": "true",
+      "notes": "Wix site. Articles are blog posts. Full issue PDFs available on 'Issue' pages. Individual posts are mostly HTML."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://accessiblelaw.untdallas.edu/current-issue-18"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "a[href*='/post/']",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1, h2",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a[href*='/post/']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='_files/ugd/']",
+      "parentSelectors": [
+        "_root"
+      ],
+      "notes": "Full issue PDF on issue-specific pages"
+    }
+  ]
 }

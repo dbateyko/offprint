@@ -1,16 +1,55 @@
 {
   "id": "american-journal-of-jurisprudence",
-  "start_urls": [
-    "https://scholarship.law.nd.edu/ajj/all_issues.html"
-  ],
-  "source": "auto",
   "metadata": {
+    "created_date": "2026-04-04",
     "journal_name": "American Journal of Jurisprudence",
-    "original_url": "https://scholarship.law.nd.edu/ajj/",
-    "domain": "scholarship.law.nd.edu",
-    "platform": "digital_commons",
-    "canonicalized_at": "2026-02-03",
-    "evidence_dir": "webscraper_results_journal_metadata/scholarship.law.nd.edu/seed_canonicalization/20260203-201335",
-    "notes": ""
-  }
+    "platform": "silverchair",
+    "status": "active",
+    "url": "https://academic.oup.com/ajj",
+    "navigation": {
+      "archive_root": "https://academic.oup.com/ajj/issue-archive",
+      "article_path": "homepage -> Issue Archive -> Issue Page -> Article PDF",
+      "pdf_location": "article-link",
+      "needs_headless": "true",
+      "notes": "Oxford Academic / Silverchair platform. Protected by WAF; requires headless browser. Articles are listed in 'al-article-items' blocks."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://academic.oup.com/ajj/issue"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.al-article-items",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h5.item-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h5.item-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.al-link.pdf",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
 }

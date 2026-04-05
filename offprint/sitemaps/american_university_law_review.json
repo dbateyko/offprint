@@ -1,10 +1,57 @@
 {
-  "url": "https://aulawreview.org/",
-  "sitemap_url": null,
+  "id": "american-university-law-review",
   "metadata": {
-    "journal": "American University Law Review",
-    "platform": "WordPress",
-    "original_url": "https://aulawreview.org/",
-    "domain": "aulawreview.org"
-  }
+    "created_date": "2026-04-04",
+    "journal_name": "American University Law Review",
+    "platform": "wordpress",
+    "status": "active",
+    "url": "https://aulawreview.org/",
+    "navigation": {
+      "archive_root": "https://aulawreview.org/blog/",
+      "article_path": "homepage -> /blog -> Article Page -> PDF Viewer/Link",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress site using Beaver Builder. Articles are listed in 'pp-content-grid' blocks. PDF links may be direct or via a viewer (admin-ajax.php?action=get_viewer)."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://aulawreview.org/",
+    "https://aulawreview.org/blog/",
+    "https://aulawreview.org/blog/category/volume-75-issue-1/",
+    "https://aulawreview.org/blog/category/volume-74-issue-1/"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "h3.pp-content-grid-post-title",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf'], a[href*='get_viewer']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
 }

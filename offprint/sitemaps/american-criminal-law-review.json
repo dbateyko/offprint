@@ -1,21 +1,21 @@
 {
-  "id": "vjil-org",
+  "id": "american-criminal-law-review",
   "start_urls": [
-    "https://vjil.org/archive/"
+    "https://www.law.georgetown.edu/american-criminal-law-review/in-print/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Virginia Journal of International Law",
+    "journal_name": "American Criminal Law Review",
     "platform": "WordPress",
-    "url": "https://vjil.org/",
+    "url": "https://www.law.georgetown.edu/american-criminal-law-review/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://vjil.org/archive/",
+      "archive_root": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archive/ -> individual volumes -> article detail -> PDF link",
+      "archive_path": "homepage -> /in-print/ -> individual volumes -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
+      "notes": "Georgetown-hosted WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
@@ -28,19 +28,19 @@
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post, .entry-content",
+      "selector": "article.post, .node-article",
       "parentSelectors": ["volume_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
+      "selector": "h1, h2 a",
       "parentSelectors": ["article_container"]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
+      "selector": "h2 a, h1 a",
       "parentSelectors": ["article_container"]
     },
     {
@@ -48,7 +48,7 @@
       "type": "SelectorLink",
       "selector": "a[href$='.pdf']",
       "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
+      "notes": "PDF link on article page."
     }
   ]
 }

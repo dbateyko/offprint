@@ -1,10 +1,54 @@
 {
-  "url": "https://alr.law.duke.edu/",
-  "sitemap_url": null,
+  "id": "alaska_law_review",
   "metadata": {
-    "journal": "Alaska Law Review",
-    "platform": "WordPress",
-    "original_url": "https://alr.law.duke.edu/",
-    "domain": "alr.law.duke.edu"
-  }
+    "created_date": "2026-03-26",
+    "journal_name": "Alaska Law Review",
+    "platform": "wordpress",
+    "status": "active",
+    "url": "https://alr.law.duke.edu/",
+    "navigation": {
+      "archive_root": "https://alr.law.duke.edu/current-issue/",
+      "article_path": "homepage -> Current Issue -> Article PDF",
+      "pdf_location": "article-link",
+      "notes": "WordPress front-end at alr.law.duke.edu. Full archive is on Digital Commons (scholarship.law.duke.edu/alr/). This sitemap targets the current issue list on the WordPress site."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://alr.law.duke.edu/current-issue/"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.entry-content p:has(a[href*='/article/'])",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href*='/article/']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a[href*='/article/']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='scholarship.law.duke.edu/alr/vol']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
 }

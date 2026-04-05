@@ -1,27 +1,27 @@
 {
-  "id": "annualsurveyofamericanlaw-org",
+  "id": "arkansaslawreview-uark-edu",
   "metadata": {
     "created_date": "2026-04-04",
-    "journal_name": "New York University Annual Survey of American Law",
-    "platform": "wordpress",
+    "journal_name": "Arkansas Law Review",
+    "platform": "custom-university",
     "status": "active",
-    "url": "https://annualsurveyofamericanlaw.org/",
+    "url": "https://law.uark.edu/alr/",
     "navigation": {
-      "archive_root": "https://annualsurveyofamericanlaw.org/recent-issues/",
-      "article_path": "homepage -> Recent Issues -> Article PDF",
+      "archive_root": "https://law.uark.edu/alr/archive.php",
+      "article_path": "homepage -> Archive -> Article PDF",
       "pdf_location": "article-link",
-      "notes": "NYU Annual Survey of American Law. WordPress site with PDF links directly in the issue pages. Article titles and authors are in 'p' blocks."
+      "notes": "Arkansas Law Review. Custom university-hosted site. Single archive page lists all volumes/issues with direct PDF links. PDFs hosted on both law.uark.edu/alr/PDFs/ and scholarworks.uark.edu."
     }
   },
   "source": "manual",
   "start_urls": [
-    "https://annualsurveyofamericanlaw.org/recent-issues/"
+    "https://law.uark.edu/alr/archive.php"
   ],
   "selectors": [
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "p:has(a[href*='/wp-content/uploads/'])",
+      "selector": "p.title",
       "parentSelectors": [
         "_root"
       ]

@@ -1,19 +1,55 @@
 {
   "id": "american-journal-of-law-medicine",
-  "start_urls": [
-    "https://www.cambridge.org/core/journals/american-journal-of-law-and-medicine/all-issues"
-  ],
-  "source": "manual",
   "metadata": {
+    "created_date": "2026-04-04",
     "journal_name": "American Journal of Law & Medicine",
-    "original_url": "https://www.cambridge.org/core/journals/american-journal-of-law-and-medicine",
-    "domain": "www.cambridge.org",
-    "platform": "unknown",
-    "canonicalized_at": "2026-02-03",
-    "notes": "Manual seed override: Cambridge Core all-issues page (subscription access likely required).",
-    "status": "paused_other",
-    "status_evidence_ref": "artifacts/top50_targeted_curl_investigation_20260310_bu_bc_batch3.json",
-    "status_reason": "external_publisher_cambridge_core_requires_dedicated_handling",
-    "status_updated_at": "2026-03-10T14:15:53Z"
-  }
+    "platform": "silverchair",
+    "status": "active",
+    "url": "https://academic.oup.com/ajlm",
+    "navigation": {
+      "archive_root": "https://academic.oup.com/ajlm/issue-archive",
+      "article_path": "homepage -> Issue Archive -> Issue Page -> Article PDF",
+      "pdf_location": "article-link",
+      "needs_headless": "true",
+      "notes": "Oxford Academic / Silverchair platform. Protected by WAF; requires headless browser. Articles are listed in 'al-article-items' blocks."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://academic.oup.com/ajlm/issue"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.al-article-items",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h5.item-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h5.item-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.al-link.pdf",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
 }

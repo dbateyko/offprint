@@ -1,14 +1,64 @@
 {
   "id": "ablj-org",
-  "start_urls": [
-    "https://ablj.org/"
-  ],
-  "source": "auto_onboard",
   "metadata": {
-    "journal_name": "ablj.org",
-    "platform": "wordpress",
-    "url": "https://ablj.org/",
     "created_date": "2026-03-26",
-    "status": "active"
-  }
+    "journal_name": "American Bankruptcy Law Journal",
+    "platform": "wordpress",
+    "status": "active",
+    "url": "https://ablj.org/",
+    "navigation": {
+      "archive_root": "https://ablj.org/issues/searching-ablj-archives/",
+      "article_path": "homepage -> Archives -> Issue Page -> Article PDF Landing Page -> PDF",
+      "pdf_location": "article-detail-page",
+      "notes": "WordPress with Kadence blocks. Articles listed in rows on issue/archives pages. PDF landing pages contain the final PDF link."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://ablj.org/",
+    "https://ablj.org/issues/searching-ablj-archives/"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.kt-row-column-wrap:has(a[href*='-pdf/'])",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "div.inner-column-1 h6",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "div.inner-column-2 h6",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "div.inner-column-3 a[href*='-pdf/']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.kt-blocks-info-box-link-wrap, figure.wp-block-embed-pdf-viewer-pdf object",
+      "parentSelectors": [
+        "_root"
+      ],
+      "attr": "data"
+    }
+  ]
 }

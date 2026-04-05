@@ -1,25 +1,57 @@
 {
-  "url": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/",
-  "sitemap_url": null,
+  "id": "american_criminal_law_review",
   "metadata": {
-    "journal": "American Criminal Law Review",
-    "platform": "WordPress",
-    "original_url": "https://www.law.georgetown.edu/american-criminal-law-review/",
-    "domain": "www.law.georgetown.edu",
+    "created_date": "2026-03-01",
+    "journal_name": "American Criminal Law Review",
+    "platform": "wordpress",
     "status": "active",
-    "status_evidence_ref": "artifacts/top50_targeted_curl_investigation_20260310_georgetown_batch2.json",
-    "status_reason": "in_print_article_pdf_paths_validated",
-    "status_updated_at": "2026-03-10T14:15:53Z",
-    "adapter_config": {
-      "issue_path_prefixes": [
-        "/american-criminal-law-review/in-print/"
-      ],
-      "author_selectors": [
-        ".published_author"
-      ],
-      "pdf_button_selectors": [
-        "a[href$='.pdf']"
+    "url": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/",
+    "navigation": {
+      "archive_root": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/",
+      "article_path": "homepage -> /in-print -> Volume Page -> Article PDF/HTML",
+      "pdf_location": "article-link",
+      "notes": "Georgetown Law site. Main 'In Print' page lists the current issue's articles. Historical volumes are linked at the top."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://www.law.georgetown.edu/american-criminal-law-review/in-print/",
+    "https://www.law.georgetown.edu/american-criminal-law-review/in-print/volume-63-number-1/",
+    "https://www.law.georgetown.edu/american-criminal-law-review/in-print/volume-62-number-4-spring-2025/",
+    "https://www.law.georgetown.edu/american-criminal-law-review/in-print/volume-62-number-1-winter-2025/"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "p:has(a[href*='/volume-']), p:has(a[href*='wp-content/uploads/'])",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": [
+        "article_container"
       ]
     }
-  }
+  ]
 }

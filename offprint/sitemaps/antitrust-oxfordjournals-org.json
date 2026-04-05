@@ -1,14 +1,55 @@
 {
   "id": "antitrust-oxfordjournals-org",
-  "start_urls": [
-    "http://antitrust.oxfordjournals.org"
-  ],
-  "source": "auto_onboard",
   "metadata": {
-    "journal_name": "antitrust.oxfordjournals.org",
-    "platform": "unknown",
-    "url": "http://antitrust.oxfordjournals.org",
-    "created_date": "2026-03-25",
-    "status": "active"
-  }
+    "created_date": "2026-04-04",
+    "journal_name": "Antitrust Law Journal",
+    "platform": "silverchair",
+    "status": "active",
+    "url": "https://academic.oup.com/alj",
+    "navigation": {
+      "archive_root": "https://academic.oup.com/alj/issue-archive",
+      "article_path": "homepage -> Issue Archive -> Issue Page -> Article PDF",
+      "pdf_location": "article-link",
+      "needs_headless": "true",
+      "notes": "Oxford Academic / Silverchair platform (ABA publication). Protected by WAF; requires headless browser. Articles are listed in 'al-article-items' blocks."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://academic.oup.com/alj/issue"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.al-article-items",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h5.item-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h5.item-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.al-link.pdf",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
 }

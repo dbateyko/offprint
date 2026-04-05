@@ -1,0 +1,38 @@
+{
+  "id": "aria-law-columbia-edu",
+  "metadata": {
+    "created_date": "2026-04-04",
+    "journal_name": "American Review of International Arbitration",
+    "platform": "wordpress",
+    "status": "active",
+    "url": "https://aria.law.columbia.edu/",
+    "navigation": {
+      "archive_root": "https://aria.law.columbia.edu/issues/",
+      "article_path": "homepage -> Publications -> Our Issues -> Issue Page -> Article Link",
+      "pdf_location": "external-link",
+      "notes": "ARIA at Columbia Law. WordPress site. Issue pages list articles with links to arbitrationlaw.com for full text. Issue index has links like /issues/issues-36-2/."
+    }
+  },
+  "source": "manual",
+  "start_urls": [
+    "https://aria.law.columbia.edu/issues/"
+  ],
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/issues/']",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "article_link",
+      "type": "SelectorLink",
+      "selector": ".entry-content a[href*='arbitrationlaw.com']",
+      "parentSelectors": [
+        "issue_link"
+      ]
+    }
+  ]
+}

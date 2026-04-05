@@ -1,47 +1,39 @@
 {
   "id": "californialawreview-org",
+  "metadata": {
+    "created_date": "2026-04-04",
+    "journal_name": "California Law Review",
+    "platform": "squarespace",
+    "status": "active",
+    "url": "https://www.californialawreview.org/",
+    "needs_headless": true,
+    "navigation": {
+      "archive_root": "https://www.californialawreview.org/print",
+      "article_path": "homepage -> Print -> Volume Category -> Article Page -> PDF",
+      "pdf_location": "article-page",
+      "notes": "California Law Review. Squarespace site. Blog-style listing at /print with volume categories. Each article page has a PDF download link at /s/*.pdf. Articles are in blog-basic-grid containers."
+    }
+  },
+  "source": "manual",
   "start_urls": [
     "https://www.californialawreview.org/print"
   ],
-  "source": "claude_code_skill",
-  "metadata": {
-    "journal_name": "California Law Review",
-    "platform": "Squarespace",
-    "url": "https://www.californialawreview.org/",
-    "created_date": "2026-04-01",
-    "status": "active",
-    "navigation": {
-      "archive_root": "https://www.californialawreview.org/print",
-      "volume_url_pattern": "/category/Volume+{N}",
-      "archive_path": "homepage -> /print?category=Volume+X lists articles",
-      "pdf_location": "article-detail-page",
-      "notes": "Squarespace site. Articles are listed on the /print page. New articles (post-2018) are on Squarespace; older ones link to Digital Commons."
-    }
-  },
   "selectors": [
     {
-      "id": "article_container",
-      "type": "SelectorElement",
-      "selector": "article.entry",
-      "parentSelectors": ["_root"]
-    },
-    {
-      "id": "title",
-      "type": "SelectorText",
-      "selector": "h1.blog-title",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "article_url",
+      "id": "article_link",
       "type": "SelectorLink",
       "selector": "h1.blog-title a",
-      "parentSelectors": ["article_container"]
+      "parentSelectors": [
+        "_root"
+      ]
     },
     {
-      "id": "date",
-      "type": "SelectorText",
-      "selector": "time.blog-date",
-      "parentSelectors": ["article_container"]
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/s/']",
+      "parentSelectors": [
+        "article_link"
+      ]
     }
   ]
 }

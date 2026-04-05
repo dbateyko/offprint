@@ -1,19 +1,19 @@
 {
-  "id": "vlbr-org",
+  "id": "tjogel-org",
   "start_urls": [
-    "http://www.vlbr.org/past-issues/"
+    "https://tjogel.org/past-volumes/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Virginia Law & Business Review",
+    "journal_name": "Texas Journal of Oil, Gas, and Energy Law",
     "platform": "WordPress",
-    "url": "http://www.vlbr.org/",
+    "url": "https://tjogel.org/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "http://www.vlbr.org/past-issues/",
+      "archive_root": "https://tjogel.org/past-volumes/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /past-issues/ -> individual volumes -> article list -> PDF link",
+      "archive_path": "homepage -> /past-volumes/ -> individual volumes -> article list -> PDF link",
       "pdf_location": "volume-page-or-detail",
       "notes": "WordPress site. Archive lists past volumes. PDFs are often direct in the volume list."
     }

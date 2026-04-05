@@ -1,35 +1,35 @@
 {
-  "id": "vjil-org",
+  "id": "ojdr-osu-edu",
   "start_urls": [
-    "https://vjil.org/archive/"
+    "https://moritzlaw.osu.edu/ojdr/past-issues/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Virginia Journal of International Law",
+    "journal_name": "Ohio State Journal on Dispute Resolution",
     "platform": "WordPress",
-    "url": "https://vjil.org/",
+    "url": "https://moritzlaw.osu.edu/ojdr/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://vjil.org/archive/",
+      "archive_root": "https://moritzlaw.osu.edu/ojdr/past-issues/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archive/ -> individual volumes -> article detail -> PDF link",
+      "archive_path": "homepage -> /past-issues/ -> volume/issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
+      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
     }
   },
   "selectors": [
     {
-      "id": "volume_link",
+      "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".entry-content a[href*='/volume-']",
+      "selector": ".entry-content a[href*='/volume-'], .entry-content a[href*='/issue-']",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
       "selector": "article.post, .entry-content",
-      "parentSelectors": ["volume_link"]
+      "parentSelectors": ["issue_link"]
     },
     {
       "id": "title",

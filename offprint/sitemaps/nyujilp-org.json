@@ -1,19 +1,19 @@
 {
-  "id": "vjil-org",
+  "id": "nyujilp-org",
   "start_urls": [
-    "https://vjil.org/archive/"
+    "https://www.nyujilp.org/archives/"
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "Virginia Journal of International Law",
+    "journal_name": "NYU Journal of International Law and Politics",
     "platform": "WordPress",
-    "url": "https://vjil.org/",
+    "url": "https://www.nyujilp.org/",
     "created_date": "2026-04-01",
     "status": "active",
     "navigation": {
-      "archive_root": "https://vjil.org/archive/",
+      "archive_root": "https://www.nyujilp.org/archives/",
       "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archive/ -> individual volumes -> article detail -> PDF link",
+      "archive_path": "homepage -> /archives/ -> individual volumes -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
       "notes": "WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
     }
