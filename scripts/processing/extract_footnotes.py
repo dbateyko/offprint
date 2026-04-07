@@ -35,9 +35,9 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--ocr-workers", type=int, default=2, help="OCR worker count")
     parser.add_argument(
         "--ocr-backend",
-        choices=["olmocr"],
-        default="olmocr",
-        help="OCR backend (olmocr only)",
+        choices=["olmocr", "glmocr"],
+        default="glmocr",
+        help="OCR backend (olmocr or glmocr)",
     )
     parser.add_argument(
         "--ocr-mode",

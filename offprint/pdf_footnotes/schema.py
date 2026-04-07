@@ -35,7 +35,6 @@ def dependency_versions() -> dict[str, str]:
         "pdfplumber": _package_version("pdfplumber"),
         "pdfminer.six": _package_version("pdfminer.six"),
         "pymupdf": _package_version("PyMuPDF"),
-        "eyecite": _package_version("eyecite"),
         "spacy": _package_version("spacy"),
         "en_core_web_sm": _package_version("en-core-web-sm"),
         "olmocr": _package_version("olmocr"),
@@ -76,18 +75,29 @@ class NoteRecord:
     page_start: int
     page_end: int
     segments: list[NoteChunk] = field(default_factory=list)
-    context_sentence: str = ""
+    context_body: str = ""
     context_page: int = 0
-    citation_mentions: list[CitationMention] = field(default_factory=list)
     features: dict[str, Any] = field(default_factory=dict)
     confidence: float = 0.0
     quality_flags: list[str] = field(default_factory=list)
 
-    def to_dict(self) -> dict[str, Any]:
-        payload = asdict(self)
-        payload["segments"] = [asdict(segment) for segment in self.segments]
-        payload["citation_mentions"] = [citation.to_dict() for citation in self.citation_mentions]
-        payload["confidence"] = round(float(self.confidence), 3)
+    def to_dict(self, *, emit_segments: bool = False) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "text": self.text,
+            "page_start": self.page_start,
+            "page_end": self.page_end,
+            "context_body": self.context_body,
+            "context_page": self.context_page,
+        }
+        features = {k: v for k, v in self.features.items() if v}
+        if features:
+            payload["features"] = features
+        if emit_segments:
+            payload["segments"] = [asdict(s) for s in self.segments]
+        qc: dict[str, Any] = {"confidence": round(float(self.confidence), 3)}
+        if self.quality_flags:
+            qc["flags"] = list(self.quality_flags)
+        payload["_qc"] = qc
         return payload
 
 
@@ -144,19 +154,25 @@ class SidecarDocument:
     ordinality: OrdinalityReport | None = None
     document_metadata: dict[str, Any] | None = None
 
-    def to_dict(self) -> dict[str, Any]:
-        # Convert notes list to dict keyed by label for cleaner output
-        notes_dict: dict[str, Any] = {}
-        label_counts: dict[str, int] = {}
+    def to_dict(self, *, emit_segments: bool = False) -> dict[str, Any]:
+        # Merge duplicate labels: concatenate text/segments, union flags, keep first context.
+        merged: dict[str, NoteRecord] = {}
         for note in self.notes:
-            note_data = note.to_dict()
-            label = str(note_data.pop("label"))
-            # Remove ordinal from output - redundant with dict key
-            note_data.pop("ordinal", None)
-            count = label_counts.get(label, 0) + 1
-            label_counts[label] = count
-            key = label if count == 1 else f"{label}__dup{count}"
-            notes_dict[key] = note_data
+            label = str(note.label)
+            if label not in merged:
+                merged[label] = note
+            else:
+                existing = merged[label]
+                if note.text and note.text not in existing.text:
+                    existing.text = (existing.text + " " + note.text).strip()
+                existing.segments = existing.segments + note.segments
+                existing.page_end = max(existing.page_end, note.page_end)
+                existing.quality_flags = list(
+                    dict.fromkeys(existing.quality_flags + note.quality_flags)
+                )
+                existing.confidence = min(existing.confidence, note.confidence)
+
+        notes_dict = {label: note.to_dict(emit_segments=emit_segments) for label, note in merged.items()}
 
         return {
             "source_pdf_path": self.source_pdf_path,

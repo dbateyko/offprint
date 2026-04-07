@@ -1379,6 +1379,14 @@ def _run_download_from_manifest(
     }
 
 
+def _seed_counts_as_failure(result: SeedProcessResult, links_only: bool) -> bool:
+    """Classify whether a seed should increment domain failure streak."""
+    if result.status != "completed":
+        return True
+    if links_only:
+        return result.records_total == 0
+    return result.ok_total == 0
+
 def run_orchestrator(
     sitemaps_csv: Optional[str] = None,
     sitemaps_dir: Optional[str] = None,

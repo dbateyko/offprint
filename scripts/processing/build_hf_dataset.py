@@ -405,7 +405,6 @@ def _build_fulltext_row(
             for note in notes_list:
                 enrich_note_features(note, preset="legal")
             for idx, note in enumerate(notes_list, start=1):
-                citation_mentions = [cm.text for cm in note.citation_mentions]
                 footnote_rows.append(
                     {
                         "doc_id": doc_id,
@@ -415,13 +414,12 @@ def _build_fulltext_row(
                         "label": note.label,
                         "note_type": note.note_type,
                         "text": note.text,
-                        "context_sentence": note.context_sentence,
+                        "context_body": note.context_body,
                         "context_page": note.context_page,
                         "page_start": note.page_start,
                         "page_end": note.page_end,
                         "confidence": note.confidence,
                         "quality_flags": note.quality_flags,
-                        "citation_mentions": citation_mentions,
                         "pdf_relative_path": pdf_relative_path,
                         "domain": prepared.domain,
                         "doc_type": doc_decision.doc_type,
@@ -448,12 +446,6 @@ def _build_fulltext_row(
                 if not isinstance(note, dict):
                     continue
                 ordinal = note.get("ordinal") or idx
-                citations_payload = note.get("citation_mentions")
-                citation_mentions: list[str] = []
-                if isinstance(citations_payload, list):
-                    for item in citations_payload:
-                        if isinstance(item, dict) and item.get("text"):
-                            citation_mentions.append(str(item.get("text")))
                 footnote_rows.append(
                     {
                         "doc_id": doc_id,
@@ -463,13 +455,12 @@ def _build_fulltext_row(
                         "label": note.get("label"),
                         "note_type": note.get("note_type"),
                         "text": note.get("text"),
-                        "context_sentence": note.get("context_sentence"),
+                        "context_body": note.get("context_body"),
                         "context_page": note.get("context_page"),
                         "page_start": note.get("page_start"),
                         "page_end": note.get("page_end"),
-                        "confidence": note.get("confidence"),
-                        "quality_flags": note.get("quality_flags"),
-                        "citation_mentions": citation_mentions,
+                        "confidence": note.get("_qc", {}).get("confidence"),
+                        "quality_flags": note.get("_qc", {}).get("flags", []),
                         "pdf_relative_path": pdf_relative_path,
                         "domain": prepared.domain,
                         "doc_type": doc_decision.doc_type,

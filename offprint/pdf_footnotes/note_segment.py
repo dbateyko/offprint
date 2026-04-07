@@ -69,7 +69,12 @@ _TOC_DOT_LEADER_RE = re.compile(r"\.{3,}")
 _TOC_TRAILING_PAGE_RE = re.compile(r"\b\d{1,3}\s*$")
 _TABLE_OF_CONTENTS_RE = re.compile(r"\btable of contents\b", re.IGNORECASE)
 _FOOTNOTE_SEPARATOR_RE = re.compile(r"^[\-\u2010\u2011\u2012\u2013\u2014\u2015_]{10,}$")
-_EMBEDDED_NOTE_MARKER_RE = re.compile(r"(?<!\w)(\d{1,4})[\]\)\.,:;-]?\s+(?=[A-Z])")
+# Requires sentence-ending or clause-closing punctuation before the embedded label so that
+# inline citation numbers like "Blackstone, 2 Commentaries" or "84 Bost. L. Rev." are not
+# mistakenly split as new footnote starts. Matches only real merged-note breaks like "Id. 26 See".
+_EMBEDDED_NOTE_MARKER_RE = re.compile(
+    r"(?<=[.!?;:)\]\"\u201d\u2019'])\s+(\d{1,4})[\]\)\.,:;-]?\s+(?=[A-Z])"
+)
 _STATUTE_START_RE = re.compile(r"^\s*\d+\s+(?:U\.S\.C\.|C\.F\.R\.)", re.IGNORECASE)
 
 

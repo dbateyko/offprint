@@ -139,6 +139,7 @@ def _citation_key(citation: dict[str, Any]) -> tuple[str, str]:
 
 
 def _flatten_citations(notes: Iterable[dict[str, Any]]) -> set[tuple[str, str]]:
+    # citation_mentions removed from pipeline output; evaluation against gold data only.
     flattened: set[tuple[str, str]] = set()
     for note in notes:
         for citation in note.get("citation_mentions", []) or []:
@@ -250,8 +251,8 @@ def evaluate_predictions(gold_path: str) -> dict[str, Any]:
                 note_type_matches += 1
 
             context_total += 1
-            if _normalize(str(gold_note.get("context_sentence") or "")) == _normalize(
-                str(pred_note.get("context_sentence") or "")
+            if _normalize(str(gold_note.get("context_body") or "")) == _normalize(
+                str(pred_note.get("context_body") or "")
             ):
                 context_matches += 1
 
@@ -323,7 +324,7 @@ def evaluate_predictions(gold_path: str) -> dict[str, Any]:
         "note_boundary": boundary_metrics,
         "label_accuracy": round(_safe_div(label_matches, label_total), 4),
         "note_type_accuracy": round(_safe_div(note_type_matches, note_type_total), 4),
-        "context_sentence_accuracy": round(_safe_div(context_matches, context_total), 4),
+        "context_body_accuracy": round(_safe_div(context_matches, context_total), 4),
         "citation_extraction": citation_metrics,
         "citation_type_accuracy": round(_safe_div(citation_type_matches, citation_type_total), 4),
         "numbered_footnotes": {

@@ -37,7 +37,7 @@ def attach_context_sentence(note: NoteRecord, document: ExtractedDocument) -> No
     page_number = note.page_start
     page = next((item for item in document.pages if item.page_number == page_number), None)
     if page is None or not page.body_lines:
-        note.context_sentence = ""
+        note.context_body = ""
         note.context_page = 0
         note.quality_flags.append("missing_context")
         return
@@ -66,11 +66,8 @@ def attach_context_sentence(note: NoteRecord, document: ExtractedDocument) -> No
             chosen_line = all_lines[-1]
             note.quality_flags.append("ambiguous_context")
 
-    sentences = _split_sentences(chosen_line.text)
-    if not sentences:
-        note.context_sentence = chosen_line.text.strip()
-    else:
-        note.context_sentence = sentences[-1]
+    # Use the full line rather than sentence-splitting, which truncates at mid-line periods.
+    note.context_body = chosen_line.text.strip()
     note.context_page = context_page
 
 

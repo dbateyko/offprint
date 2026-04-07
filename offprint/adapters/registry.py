@@ -142,6 +142,8 @@ register("ahrlj.up.ac.za", SelectorDrivenAdapter)
 register("arizonajournal.org", SelectorDrivenAdapter)
 register("abdn.ac.uk", SelectorDrivenAdapter)
 register("www.abdn.ac.uk", SelectorDrivenAdapter)
+register("harvardlawreview.org", SelectorDrivenAdapter)
+register("www.harvardlawreview.org", SelectorDrivenAdapter)
 register("ctlj.colorado.edu", SelectorDrivenAdapter)
 register("georgetownlawtechreview.org", SelectorDrivenAdapter)
 register("www.stanfordlawreview.org", SelectorDrivenAdapter)
@@ -260,4 +262,31 @@ register_many(
     SelectorDrivenAdapter,
 )
 register("journals.indianapolis.iu.edu", OJSAdapter)
+register_many(
+    [
+        "aalj.org",
+        "bclawreview.bc.edu",
+        "cjal.columbia.edu",
+        "cjrl.columbia.edu",
+        "ecmi.de",
+        "epubs.utah.edu",
+        "fclr.org",
+        "jesp.org",
+        "jlc.law.pitt.edu",
+        "journal.law.uq.edu.au",
+        "journals.assaf.org.za",
+        "journals.iupui.edu",
+        "journals.library.columbia.edu",
+        "journals.upress.ufl.edu",
+        "lawandarts.org",
+        "lawreview.law.pitt.edu",
+        "ojs.deakin.edu.au",
+        "ojs.library.dal.ca",
+        "pjephl.law.pitt.edu",
+        "studzr.de",
+        "taxreview.law.pitt.edu",
+        "tlp.law.pitt.edu",
+    ],
+    OJSAdapter,
+)
 register("kb.osu.edu", DSpaceAdapter)

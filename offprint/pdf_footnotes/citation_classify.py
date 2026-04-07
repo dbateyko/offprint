@@ -4,7 +4,7 @@ import re
 from typing import Sequence
 from urllib.parse import urlparse
 
-from .schema import CITATION_TAXONOMY, CitationMention, NoteRecord
+from .schema import CitationMention, NoteRecord
 
 CASE_RE = re.compile(r"\b[A-Z][\w'’\.-]+(?:\s+[A-Z][\w'’\.-]+)*\s+v\.\s+[A-Z][\w'’\.-]+", re.I)
 STATUTE_RE = re.compile(r"\b\d+\s+U\.?S\.?C\.?\s*§+\s*[\w\.-]+", re.I)
@@ -71,6 +71,7 @@ def extract_urls(text: str) -> list[str]:
 
 
 def extract_citation_mentions(text: str) -> list[CitationMention]:
+    """Regex-only citation extraction. Eyecite is reserved for post-processing."""
     mentions: list[CitationMention] = []
     seen = set()
 
@@ -94,43 +95,6 @@ def extract_citation_mentions(text: str) -> list[CitationMention]:
             mentions.append(
                 CitationMention(text=value, citation_type=citation_type, source="regex")
             )
-
-    # Eyecite supplements case-style detection when installed.
-    try:
-        from eyecite import get_citations  # type: ignore
-
-        for item in get_citations(text or ""):
-            matched_text = ""
-            for attr in ("matched_text", "full_span", "text"):
-                value = getattr(item, attr, None)
-                if callable(value):
-                    try:
-                        value = value()
-                    except Exception:
-                        value = None
-                if isinstance(value, str) and value.strip():
-                    matched_text = value.strip()
-                    break
-            if not matched_text:
-                matched_text = str(item).strip()
-            if not matched_text:
-                continue
-            inferred = classify_citation_type(matched_text)
-            if inferred == "other":
-                inferred = "case"
-            key = (matched_text.lower(), inferred)
-            if key in seen:
-                continue
-            seen.add(key)
-            mentions.append(
-                CitationMention(
-                    text=matched_text,
-                    citation_type=inferred if inferred in CITATION_TAXONOMY else "other",
-                    source="eyecite",
-                )
-            )
-    except Exception:
-        pass
 
     return mentions
 
@@ -172,16 +136,18 @@ def _extract_entities(text: str) -> list[dict[str, str]]:
 
 
 def enrich_note_features(note: NoteRecord, preset: str) -> None:
-    note.features.setdefault("urls", [])
-    note.features.setdefault("emails", [])
-    note.features.setdefault("years", [])
-    note.features.setdefault("entities", [])
-
     if preset in {"legal", "all"}:
-        note.features["urls"] = extract_urls(note.text)
-        note.citation_mentions = extract_citation_mentions(note.text)
+        urls = extract_urls(note.text)
+        if urls:
+            note.features["urls"] = urls
+        years = extract_years(note.text)
+        if years:
+            note.features["years"] = years
 
     if preset == "all":
-        note.features["emails"] = extract_emails(note.text)
-        note.features["years"] = extract_years(note.text)
-        note.features["entities"] = _extract_entities(note.text)
+        emails = extract_emails(note.text)
+        if emails:
+            note.features["emails"] = emails
+        entities = _extract_entities(note.text)
+        if entities:
+            note.features["entities"] = entities

@@ -70,7 +70,7 @@ class BatchConfig:
     classifier_workers: int = 6
     ocr_workers: int = 2
     ocr_mode: str = "fallback"
-    ocr_backend: str = "olmocr"
+    ocr_backend: str = "glmocr"
     text_parser_mode: str = "footnote_optimized"
     include_pdf_sha256: bool = False
     report_detail: str = "summary"
@@ -93,6 +93,7 @@ class BatchConfig:
     ordinality_patch_max_pages: int = 20
     ordinality_patch_expand: int = 1
     ordinality_patch_ocr_escalation_passes: int = 1
+    emit_segments: bool = False
 
 
 def _utc_stamp() -> str:
@@ -133,38 +134,36 @@ def _write_jsonl_atomic(path: str, rows: list[dict[str, Any]]) -> None:
     os.replace(tmp, path)
 
 
-def _write_jsonl_sidecar_atomic(path: str, payload: dict[str, Any]) -> None:
+def _write_jsonl_sidecar_atomic(
+    path: str, payload: dict[str, Any], *, emit_segments: bool = False
+) -> None:
     parent = os.path.dirname(path)
     if parent:
         os.makedirs(parent, exist_ok=True)
     tmp = f"{path}.tmp"
     with open(tmp, "w", encoding="utf-8") as handle:
-        # Create metadata copy without notes
+        # Line 1: document-level metadata (no notes/author_notes)
         meta = {k: v for k, v in payload.items() if k not in ("notes", "author_notes")}
         meta["type"] = "metadata"
         handle.write(json.dumps(meta, sort_keys=True) + "\n")
 
-        # Write author notes
+        # Author notes (*, †, ‡ markers)
         author_notes = payload.get("author_notes") or []
         for an in author_notes:
             an_row = dict(an)
             an_row["type"] = "author_note"
             handle.write(json.dumps(an_row, sort_keys=True) + "\n")
 
-        # Write numbered notes
+        # Numbered footnotes — one record per label, segments stripped unless requested
         notes = payload.get("notes") or {}
-        if isinstance(notes, dict):
-            # Preserving labels from dict keys if they were normalized
-            for label, note_data in notes.items():
-                note_row = dict(note_data)
-                note_row["type"] = "footnote"
-                note_row["label"] = label
-                handle.write(json.dumps(note_row, sort_keys=True) + "\n")
-        elif isinstance(notes, list):
-            for note in notes:
-                note_row = dict(note)
-                note_row["type"] = "footnote"
-                handle.write(json.dumps(note_row, sort_keys=True) + "\n")
+        items = notes.items() if isinstance(notes, dict) else enumerate(notes)
+        for label, note_data in items:
+            note_row = dict(note_data)
+            note_row["type"] = "footnote"
+            note_row["label"] = str(label)
+            if not emit_segments:
+                note_row.pop("segments", None)
+            handle.write(json.dumps(note_row, sort_keys=True) + "\n")
 
     os.replace(tmp, path)
 
@@ -451,15 +450,12 @@ def _note_confidence(note: Any) -> float:
     else:
         score -= 0.1
 
-    if note.context_sentence:
+    if note.context_body:
         score += 0.1
     else:
         score -= 0.15
 
     if note.page_end > note.page_start:
-        score += 0.05
-
-    if note.citation_mentions:
         score += 0.05
 
     for flag in note.quality_flags:
@@ -1097,7 +1093,15 @@ def _extract_for_pdf(
 
     if config.ocr_mode == "always" and ocr_pool is not None:
         ocr_primary_attempted = True
-        ocr_document, ocr_warnings = ocr_pool.extract_document(pdf_path, page_numbers=None)
+        # Ensure all pages are processed in 'always' mode.
+        try:
+            reader = PdfReader(pdf_path)
+            total_pages = len(reader.pages)
+            page_numbers = list(range(1, total_pages + 1))
+        except Exception:
+            page_numbers = None
+
+        ocr_document, ocr_warnings = ocr_pool.extract_document(pdf_path, page_numbers=page_numbers)
         warnings.extend(ocr_warnings)
         if ocr_document is not None:
             document = ocr_document
@@ -1494,7 +1498,6 @@ def _extract_for_pdf(
             enrich_note_features(note, preset=config.features)
         elif config.features == "core":
             note.features = {}
-            note.citation_mentions = []
         else:
             raise ValueError(f"Unsupported features preset: {config.features}")
         note.confidence = _note_confidence(note)
@@ -1513,7 +1516,7 @@ def _extract_for_pdf(
         notes=notes,
         author_notes=author_notes,
         ordinality=ordinality,
-    ).to_dict()
+    ).to_dict(emit_segments=config.emit_segments)
 
     primary_numeric_count = _numeric_note_count(payload.get("notes"))
     if primary_numeric_count == 0 and len(payload.get("notes", {}) or {}) <= 2:
@@ -1580,7 +1583,9 @@ def _extract_for_pdf(
     # Preserve note insertion order in sidecars so downstream evaluation can
     # compare ordered streams accurately.
     _write_json_atomic(sidecar_path, payload, sort_keys=False)
-    _write_jsonl_sidecar_atomic(f"{pdf_path}.footnotes.jsonl", payload)
+    _write_jsonl_sidecar_atomic(
+        f"{pdf_path}.footnotes.jsonl", payload, emit_segments=config.emit_segments
+    )
 
     payload_notes = payload.get("notes")
     payload_author_notes = payload.get("author_notes")
@@ -1756,8 +1761,8 @@ def run_batch(config: BatchConfig) -> dict[str, Any]:
         ocr_pool = OCRWorkerPool(workers=config.ocr_workers, backend=config.ocr_backend)
         if not ocr_pool.available():
             raise RuntimeError(
-                "OCR mode is enabled but olmocr is unavailable. "
-                "Install olmocr or run with --ocr-mode off."
+                f"OCR mode is enabled but {config.ocr_backend} is unavailable. "
+                f"Install {config.ocr_backend} or run with --ocr-mode off."
             )
 
     def _consume_extract_result(result: dict[str, Any]) -> None:

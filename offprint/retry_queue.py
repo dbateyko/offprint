@@ -15,7 +15,8 @@ from .mcp_browser_download import (
     BrowserDownloadResult,
     CAMOUFOX_AVAILABLE,
 )
-from .orchestrator import _append_jsonl, _classify_error, _is_retryable, _utc_now_iso
+from .pipeline.io import _append_jsonl, _utc_now_iso
+from .pipeline.network import _classify_error, _is_retryable
 from .polite_requests import PoliteRequestsSession
 
 

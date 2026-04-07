@@ -477,13 +477,11 @@ def _note_confidence(note: Any) -> float:
         score += 0.1
     else:
         score -= 0.1
-    if note.context_sentence:
+    if note.context_body:
         score += 0.1
     else:
         score -= 0.15
     if note.page_end > note.page_start:
-        score += 0.05
-    if note.citation_mentions:
         score += 0.05
     for flag in note.quality_flags:
         if flag in {"ambiguous_context", "missing_context"}:
