@@ -180,6 +180,16 @@ _LITEPARSE_KERNING_SPLIT_RE = re.compile(
     r"|\b([iI])\s+(d\b)"
 )
 
+# Liteparse-specific: small-caps mangling where the first (full-size) letter of
+# each word is separated by a space from the rest (smaller-cap glyphs).
+# Matches a single uppercase letter followed by a space and 3+ uppercase letters
+# (or 2 uppercase + punctuation like "EV.").  The 3-char minimum avoids false
+# positives with real words ("I AM", "A IS").
+# E.g. "C ONSUMER" → "CONSUMER", "P IERCE" → "PIERCE", "R EV." → "REV.".
+_LITEPARSE_SMALLCAPS_SPLIT_RE = re.compile(
+    r"(?<![A-Za-z])([A-Z]) ([A-Z]{3,}|[A-Z]{2}(?=[.\-',]))"
+)
+
 
 def _normalize_docling_text(text: str) -> str:
     """Clean systematic spacing artifacts produced by Docling's OCR/layout engine.
@@ -228,6 +238,9 @@ def _normalize_liteparse_text(text: str) -> str:
         return "".join(parts)
 
     text = _LITEPARSE_KERNING_SPLIT_RE.sub(_rejoin, text)
+    # Small-caps repair: rejoin a single uppercase letter separated from an
+    # uppercase word fragment (e.g. "C ONSUMER" → "CONSUMER", "P IERCE" → "PIERCE").
+    text = _LITEPARSE_SMALLCAPS_SPLIT_RE.sub(r"\1\2", text)
     # Collapse any double spaces introduced by the merge
     text = re.sub(r"  +", " ", text)
     return text.strip()
@@ -300,6 +313,98 @@ def _low_font_variance(lines: list[ExtractedLine]) -> bool:
     if len(sizes) < 6:
         return False
     return max(sizes) - min(sizes) <= 1.25
+
+
+def _merge_smallcaps_textitems(words: list[dict]) -> list[dict]:
+    """Merge single-uppercase-letter textItems with their adjacent word fragment.
+
+    Small-caps fonts in PDFs render the first letter at full size and subsequent
+    letters as smaller uppercase glyphs. liteparse emits these as separate
+    textItems with different fontSize values, which causes the first letter to
+    end up on a different line (due to y-position variance) and get dropped.
+
+    This function detects a single uppercase letter that is horizontally
+    adjacent to an uppercase word fragment (possibly at a different y due to
+    font-size difference), and merges them into one textItem so they cluster
+    onto the same line.
+    """
+    if len(words) < 2:
+        return words
+
+    consumed: set[int] = set()
+    merged: list[dict] = []
+
+    for i, item in enumerate(words):
+        if i in consumed:
+            continue
+        txt = str(item.get("text", "")).strip()
+        if len(txt) != 1 or not txt.isupper():
+            merged.append(item)
+            continue
+
+        # Find the best right-adjacent candidate: closest item whose x0 is
+        # near this item's x1 and whose y overlaps (within tolerance).
+        item_x1 = float(item.get("x1", 0.0))
+        item_top = float(item.get("top", 0.0))
+        item_bottom = float(item.get("bottom", 0.0))
+        item_size = float(item.get("size", 0.0) or 0.0)
+
+        best_j: int | None = None
+        best_gap = float("inf")
+        for j, cand in enumerate(words):
+            if j == i or j in consumed:
+                continue
+            cand_txt = str(cand.get("text", "")).strip()
+            if not cand_txt or not cand_txt[0].isupper():
+                continue
+            cand_x0 = float(cand.get("x0", 0.0))
+            cand_top = float(cand.get("top", 0.0))
+            cand_bottom = float(cand.get("bottom", 0.0))
+            cand_size = float(cand.get("size", 0.0) or 0.0)
+
+            # Must be to the right and horizontally close.
+            gap = cand_x0 - item_x1
+            if gap < -2.0:  # allow tiny overlap
+                continue
+            max_size = max(item_size, cand_size, 6.0)
+            if gap > max_size * 0.6:
+                continue
+
+            # y-ranges must overlap or be very close (small-caps baseline shift).
+            y_tolerance = max_size * 0.5
+            if item_top > cand_bottom + y_tolerance or cand_top > item_bottom + y_tolerance:
+                continue
+
+            # Prefer font-size difference (small-caps hallmark) or very tight gap.
+            sizes_differ = (
+                item_size > 0 and cand_size > 0 and abs(item_size - cand_size) > 0.5
+            )
+            if not sizes_differ and gap >= 1.0:
+                continue
+
+            if gap < best_gap:
+                best_gap = gap
+                best_j = j
+
+        if best_j is not None:
+            nxt = words[best_j]
+            nxt_txt = str(nxt.get("text", "")).strip()
+            nxt_size = float(nxt.get("size", 0.0) or 0.0)
+            consumed.add(best_j)
+            merged.append({
+                "text": txt + nxt_txt,
+                "x0": float(item.get("x0", 0.0)),
+                "x1": float(nxt.get("x1", 0.0)),
+                "top": min(item_top, float(nxt.get("top", 0.0))),
+                "bottom": max(item_bottom, float(nxt.get("bottom", 0.0))),
+                "size": max(item_size, nxt_size) if item_size and nxt_size else (
+                    item_size or nxt_size
+                ),
+            })
+        else:
+            merged.append(item)
+
+    return merged
 
 
 def _cluster_words_to_lines(words: list[dict], page_number: int) -> list[ExtractedLine]:
@@ -950,6 +1055,7 @@ def _extract_with_liteparse(
                 }
             )
 
+        words = _merge_smallcaps_textitems(words)
         lines = _cluster_words_to_lines(words, page_number=page_no)
         for line in lines:
             line.source = "liteparse"

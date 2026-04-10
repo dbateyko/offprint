@@ -519,8 +519,6 @@ def _likely_continuation(text: str) -> bool:
         return False
     if _marker_match(value):
         return False
-    if len(value) <= 2:
-        return False
     return True
 
 
