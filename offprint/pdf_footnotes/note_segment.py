@@ -226,7 +226,7 @@ def _rescue_from_body_lines(
     return rescued
 
 
-DEFAULT_GAP_TOLERANCE = 2
+DEFAULT_GAP_TOLERANCE = 0
 DEFAULT_GAP_RATIO_THRESHOLD = 0.35
 
 

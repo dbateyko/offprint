@@ -175,6 +175,24 @@ def _parse_args() -> argparse.Namespace:
         default=1,
         help="Force OCR evaluation after unresolved native patch pass when > 0.",
     )
+    parser.add_argument(
+        "--skip-classification",
+        default=False,
+        action=argparse.BooleanOptionalAction,
+        help="Skip document classification and extract all PDFs directly (default: off).",
+    )
+    parser.add_argument(
+        "--shuffle",
+        default=False,
+        action=argparse.BooleanOptionalAction,
+        help="Randomize PDF processing order for broader domain coverage per run (default: off).",
+    )
+    parser.add_argument(
+        "--shuffle-seed",
+        type=int,
+        default=None,
+        help="Seed for shuffle RNG (default: random). Use a fixed seed for reproducible ordering.",
+    )
     return parser.parse_args()
 
 
@@ -221,6 +239,9 @@ def main() -> None:
         ordinality_patch_ocr_escalation_passes=max(
             0, int(args.ordinality_patch_ocr_escalation_passes)
         ),
+        shuffle=bool(args.shuffle),
+        shuffle_seed=args.shuffle_seed,
+        skip_classification=bool(args.skip_classification),
     )
     summary = run_batch(config)
     print(json.dumps(summary, indent=2, sort_keys=True))

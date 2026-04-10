@@ -44,7 +44,7 @@ def _build_extract_cmd(
 ) -> list[str]:
     cmd = [
         str(python_bin),
-        str((ROOT / "scripts" / "extract_footnotes.py").resolve()),
+        str((ROOT / "scripts" / "processing" / "extract_footnotes.py").resolve()),
         "--pdf-root",
         args.pdf_root,
         "--features",
@@ -58,7 +58,7 @@ def _build_extract_cmd(
         "--ocr-backend",
         "olmocr",
         "--ocr-mode",
-        "always",
+        getattr(args, "ocr_mode", "always"),
         "--text-parser-mode",
         args.text_parser_mode,
         "--report-out",
@@ -78,6 +78,13 @@ def _build_extract_cmd(
         cmd.extend(["--doc-policy", args.doc_policy])
     if args.limit and args.limit > 0:
         cmd.extend(["--limit", str(args.limit)])
+    if getattr(args, "skip_classification", False):
+        cmd.append("--skip-classification")
+    if getattr(args, "shuffle", False):
+        cmd.append("--shuffle")
+    shuffle_seed = getattr(args, "shuffle_seed", None)
+    if shuffle_seed is not None:
+        cmd.extend(["--shuffle-seed", str(shuffle_seed)])
     return cmd
 
 
@@ -124,7 +131,31 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--report-dir", default=DEFAULT_RUNS_DIR)
     parser.add_argument("--log-dir", default="artifacts/logs")
     parser.add_argument("--olmocr-timeout-seconds", type=int, default=900)
+    parser.add_argument(
+        "--ocr-mode",
+        choices=["off", "fallback", "always"],
+        default="always",
+        help="OCR strategy: always (default for dual-GPU), fallback, or off.",
+    )
     parser.add_argument("--no-endpoint-check", action="store_true")
+    parser.add_argument(
+        "--skip-classification",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Skip document classification and extract all PDFs directly.",
+    )
+    parser.add_argument(
+        "--shuffle",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Randomize PDF processing order for broader domain coverage per run.",
+    )
+    parser.add_argument(
+        "--shuffle-seed",
+        type=int,
+        default=None,
+        help="Seed for shuffle RNG (default: random).",
+    )
     return parser.parse_args()
 
 

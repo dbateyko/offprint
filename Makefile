@@ -1,4 +1,4 @@
-.PHONY: help production-help production production-resume production-monitored production-monitored-resume production-delta production-retry production-overnight production-overnight-resume production-dc pull pull-siu qc-quarantine extract-footnotes extract-footnotes-olmocr-dual evaluate-footnotes adapter-policy-check repo-layout-check quality-check critical-path-tests promote-run site-status metadata-quality-report
+.PHONY: help production-help production production-resume production-monitored production-monitored-resume production-delta production-retry production-overnight production-overnight-resume production-dc pull pull-siu qc-quarantine extract-footnotes extract-footnotes-overnight extract-footnotes-olmocr-dual diagnose-footnotes evaluate-footnotes adapter-policy-check repo-layout-check quality-check critical-path-tests promote-run site-status metadata-quality-report
 
 PY ?= python3
 SITEMAPS_DIR ?= offprint/sitemaps
@@ -289,6 +289,9 @@ extract-footnotes:
 		--respect-qc-exclusions true \
 		$(if $(QC_MANIFEST),--qc-exclusion-manifest $(QC_MANIFEST),)
 
+extract-footnotes-overnight:
+	@bash scripts/processing/run_overnight_footnotes.sh
+
 extract-footnotes-olmocr-dual:
 	$(PY) scripts/processing/run_olmocr_dual_gpu.py \
 		--pdf-root $(PDF_ROOT) \
@@ -305,6 +308,11 @@ extract-footnotes-olmocr-dual:
 		--olmocr-timeout-seconds $(OLMOCR_TIMEOUT_SECONDS) \
 		--respect-qc-exclusions true \
 		$(if $(QC_MANIFEST),--qc-exclusion-manifest $(QC_MANIFEST),)
+
+diagnose-footnotes:
+	$(PY) scripts/quality/diagnose_footnote_corpus.py \
+		--pdf-root $(PDF_ROOT) \
+		$(if $(DIAG_REPORT),--report-out $(DIAG_REPORT),)
 
 evaluate-footnotes:
 	$(PY) scripts/quality/evaluate_footnotes.py --gold $(FOOTNOTE_GOLD)

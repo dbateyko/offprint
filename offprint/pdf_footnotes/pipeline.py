@@ -94,6 +94,9 @@ class BatchConfig:
     ordinality_patch_expand: int = 1
     ordinality_patch_ocr_escalation_passes: int = 1
     emit_segments: bool = False
+    shuffle: bool = False
+    shuffle_seed: int | None = None
+    skip_classification: bool = False
 
 
 def _utc_stamp() -> str:
@@ -294,6 +297,8 @@ def _discover_pdfs(
     *,
     shard_count: int = 1,
     shard_index: int = 0,
+    shuffle: bool = False,
+    shuffle_seed: int | None = None,
 ) -> list[str]:
     discovered: list[str] = []
     for root, _dirs, files in os.walk(pdf_root):
@@ -304,6 +309,11 @@ def _discover_pdfs(
             if _path_in_shard(pdf_path, shard_count=shard_count, shard_index=shard_index):
                 discovered.append(pdf_path)
     discovered.sort()
+    if shuffle:
+        import random as _rng
+
+        rng = _rng.Random(shuffle_seed)
+        rng.shuffle(discovered)
     if limit and limit > 0:
         return discovered[:limit]
     return discovered
@@ -1259,7 +1269,7 @@ def _extract_for_pdf(
         config.ordinality_patch
         and document is not None
         and ordinality is not None
-        and str(getattr(ordinality, "status", "") or "") == "invalid"
+        and str(getattr(ordinality, "status", "") or "") in ("invalid", "valid_with_gaps")
     ):
         gaps = [int(g) for g in (getattr(ordinality, "gaps", []) or []) if int(g) > 0]
         patch_pages = _select_ordinality_patch_pages(
@@ -1491,6 +1501,71 @@ def _extract_for_pdf(
                     ocr_used = True
                     warnings.append("selected_ocr_output")
 
+    # Second-pass ordinality patch: if fallback OCR was selected but still has
+    # gaps, attempt the patch again on the OCR-derived output.
+    if (
+        config.ordinality_patch
+        and document is not None
+        and ordinality is not None
+        and str(getattr(ordinality, "status", "") or "") in ("invalid", "valid_with_gaps")
+        and not ordinality_patch_attempted
+    ):
+        gaps = [int(g) for g in (getattr(ordinality, "gaps", []) or []) if int(g) > 0]
+        patch_pages = _select_ordinality_patch_pages(
+            notes=notes,
+            gaps=gaps,
+            page_count=int(getattr(document, "page_count", 0) or 0),
+            expand=max(0, int(config.ordinality_patch_expand)),
+            max_pages=max(1, int(config.ordinality_patch_max_pages)),
+        )
+        if patch_pages:
+            ordinality_patch_attempted = True
+            ordinality_patch_pages = patch_pages
+            warnings.append("ordinality_patch_attempted")
+            warnings.append(f"ordinality_patch_pages={','.join(str(p) for p in patch_pages)}")
+            patch_pdf_path, page_map = _build_patch_pdf(pdf_path, patch_pages)
+            if patch_pdf_path and page_map:
+                try:
+                    patch_doc = _extract_document_with_mode(
+                        patch_pdf_path,
+                        parser_mode=parser_mode,
+                        note_cutoff_ratio_override=0.95,
+                    )
+                    if patch_doc is not None:
+                        patch_doc = _remap_patch_pages(patch_doc, page_map)
+                        patch_notes, _pan, _pord, _pwarn = segment_document_notes_extended(
+                            patch_doc,
+                            gap_tolerance=profile.gap_tolerance if profile else 6,
+                            strict_label_filter=profile.strict_label_filter if profile else False,
+                        )
+                        existing_labels = {int(n.label) for n in notes if n.label.isdigit()}
+                        patch_candidates = [
+                            n for n in patch_notes
+                            if n.label.isdigit() and int(n.label) in set(gaps) and int(n.label) not in existing_labels
+                        ]
+                        if patch_candidates:
+                            notes.extend(patch_candidates)
+                            notes.sort(key=lambda n: (int(n.label) if n.label.isdigit() else 0))
+                            ordinality_patch_added = len(patch_candidates)
+                            warnings.append(f"ordinality_patch_added={ordinality_patch_added}")
+                            merged_labels = [
+                                int(n.label) for n in notes if n.label.isdigit()
+                            ]
+                            ordinality = validate_ordinality(
+                                merged_labels,
+                                gap_tolerance=profile.gap_tolerance if profile else 6,
+                            )
+                            if str(getattr(ordinality, "status", "")) != "invalid":
+                                ordinality_patch_resolved = True
+                                warnings.append("ordinality_patch_resolved")
+                            else:
+                                warnings.append("ordinality_patch_unresolved")
+                finally:
+                    try:
+                        os.unlink(patch_pdf_path)
+                    except OSError:
+                        pass
+
     attach_context_batch(notes, document)
 
     for note in notes:
@@ -1668,6 +1743,8 @@ def run_batch(config: BatchConfig) -> dict[str, Any]:
         limit=0,
         shard_count=int(config.shard_count),
         shard_index=int(config.shard_index),
+        shuffle=bool(config.shuffle),
+        shuffle_seed=config.shuffle_seed,
     )
     dependency_versions_payload = dependency_versions()
     report_detail = (config.report_detail or "summary").strip().lower()
@@ -1817,72 +1894,39 @@ def run_batch(config: BatchConfig) -> dict[str, Any]:
             summary["results"].append(result)
 
     try:
-        with ThreadPoolExecutor(
-            max_workers=max(1, int(config.classifier_workers))
-        ) as classify_executor:
+        if config.skip_classification:
+            # Bypass classification — treat all PDFs as articles.
+            default_decision = DocDecision(
+                doc_type="article",
+                include=True,
+                reason_codes=["skip_classification"],
+                confidence=1.0,
+                platform_family="unknown",
+                domain="unknown",
+                ocr_candidate=False,
+            )
+            summary["classify_candidates"] = len(classify_targets)
+            summary["classify_processed"] = len(classify_targets)
+            summary["eligible_pdfs"] = len(classify_targets)
             with ThreadPoolExecutor(max_workers=max(1, int(config.workers))) as extract_executor:
-                classify_futures: dict[Future[tuple[str, DocDecision]], str] = {
-                    classify_executor.submit(
-                        _classify_pdf_path,
-                        pdf_path,
-                        pdf_root=pdf_root,
-                        doc_policy=config.doc_policy,
-                        rules=rules,
-                    ): pdf_path
-                    for pdf_path in classify_targets
-                }
                 pending_extract: set[Future[dict[str, Any]]] = set()
                 max_inflight_extract = max(8, max(1, int(config.workers)) * 2)
-
-                classify_progress = tqdm(
-                    as_completed(classify_futures),
-                    total=len(classify_futures),
-                    desc="Classifying PDFs",
-                    unit="pdf",
-                    mininterval=2.0,
-                )
-                for classify_future in classify_progress:
-                    pdf_path, decision = classify_future.result()
-                    summary["classify_processed"] += 1
-                    if decision.include:
-                        summary["eligible_pdfs"] += 1
-                        pending_extract.add(
-                            extract_executor.submit(
-                                _extract_for_pdf,
-                                pdf_path,
-                                config,
-                                ocr_pool,
-                                dependency_versions_payload,
-                                decision,
-                                text_cache,
-                            )
+                for pdf_path in classify_targets:
+                    pending_extract.add(
+                        extract_executor.submit(
+                            _extract_for_pdf,
+                            pdf_path,
+                            config,
+                            ocr_pool,
+                            dependency_versions_payload,
+                            default_decision,
+                            text_cache,
                         )
-                    else:
-                        if decision.doc_type in excluded_counts:
-                            excluded_counts[decision.doc_type] += 1
-                        excluded_rows.append(
-                            {
-                                "created_at": utc_now_iso(),
-                                "source_pdf_path": pdf_path,
-                                "domain": decision.domain,
-                                "platform_family": decision.platform_family,
-                                "doc_type": decision.doc_type,
-                                "decision": "exclude",
-                                "reason_codes": list(decision.reason_codes),
-                                "rule_confidence": decision.confidence,
-                                "ocr_candidate": decision.ocr_candidate,
-                                "doc_policy": config.doc_policy,
-                                "doc_rules_path": rules_path or "",
-                            }
-                        )
-
+                    )
                     while len(pending_extract) >= max_inflight_extract:
                         done, pending_extract = wait(pending_extract, return_when=FIRST_COMPLETED)
                         for future in done:
                             _consume_extract_result(future.result())
-
-                classify_progress.close()
-
                 if pending_extract:
                     extract_progress = tqdm(
                         as_completed(pending_extract),
@@ -1894,6 +1938,84 @@ def run_batch(config: BatchConfig) -> dict[str, Any]:
                     for future in extract_progress:
                         _consume_extract_result(future.result())
                     extract_progress.close()
+        else:
+            with ThreadPoolExecutor(
+                max_workers=max(1, int(config.classifier_workers))
+            ) as classify_executor:
+                with ThreadPoolExecutor(max_workers=max(1, int(config.workers))) as extract_executor:
+                    classify_futures: dict[Future[tuple[str, DocDecision]], str] = {
+                        classify_executor.submit(
+                            _classify_pdf_path,
+                            pdf_path,
+                            pdf_root=pdf_root,
+                            doc_policy=config.doc_policy,
+                            rules=rules,
+                        ): pdf_path
+                        for pdf_path in classify_targets
+                    }
+                    pending_extract_c: set[Future[dict[str, Any]]] = set()
+                    max_inflight_extract = max(8, max(1, int(config.workers)) * 2)
+
+                    classify_progress = tqdm(
+                        as_completed(classify_futures),
+                        total=len(classify_futures),
+                        desc="Classifying PDFs",
+                        unit="pdf",
+                        mininterval=2.0,
+                    )
+                    for classify_future in classify_progress:
+                        pdf_path, decision = classify_future.result()
+                        summary["classify_processed"] += 1
+                        if decision.include:
+                            summary["eligible_pdfs"] += 1
+                            pending_extract_c.add(
+                                extract_executor.submit(
+                                    _extract_for_pdf,
+                                    pdf_path,
+                                    config,
+                                    ocr_pool,
+                                    dependency_versions_payload,
+                                    decision,
+                                    text_cache,
+                                )
+                            )
+                        else:
+                            if decision.doc_type in excluded_counts:
+                                excluded_counts[decision.doc_type] += 1
+                            excluded_rows.append(
+                                {
+                                    "created_at": utc_now_iso(),
+                                    "source_pdf_path": pdf_path,
+                                    "domain": decision.domain,
+                                    "platform_family": decision.platform_family,
+                                    "doc_type": decision.doc_type,
+                                    "decision": "exclude",
+                                    "reason_codes": list(decision.reason_codes),
+                                    "rule_confidence": decision.confidence,
+                                    "ocr_candidate": decision.ocr_candidate,
+                                    "doc_policy": config.doc_policy,
+                                    "doc_rules_path": rules_path or "",
+                                }
+                            )
+
+                        while len(pending_extract_c) >= max_inflight_extract:
+                            done, pending_extract_c = wait(pending_extract_c, return_when=FIRST_COMPLETED)
+                            for future in done:
+                                _consume_extract_result(future.result())
+
+                    classify_progress.close()
+
+                    if pending_extract_c:
+                        extract_progress = tqdm(
+                            as_completed(pending_extract_c),
+                            total=len(pending_extract_c),
+                            desc="Extracting footnotes",
+                            unit="pdf",
+                            mininterval=2.0,
+                        )
+                        for future in extract_progress:
+                            _consume_extract_result(future.result())
+                        extract_progress.close()
     finally:
         if ocr_pool is not None:
             ocr_pool.close()
