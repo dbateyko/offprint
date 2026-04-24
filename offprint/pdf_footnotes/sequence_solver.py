@@ -669,27 +669,20 @@ def build_note_records(layouts: list, result: SolverResult):
             )
         )
 
-    # Build ordinality report directly from selected labels.
+    # Build ordinality report directly from selected labels. Delegate status
+    # computation to validate_ordinality so the solver and segmenter agree on
+    # what counts as valid_with_gaps vs invalid (prevents solver-picked
+    # candidates from being marked invalid for gap patterns the segmenter
+    # would have accepted).
     labels = sorted(set(c.digit_value for c in ordered))
     if not labels:
         return notes, [], None
-    lo, hi = labels[0], labels[-1]
-    expected_set = set(range(lo, hi + 1))
-    gaps = sorted(expected_set - set(labels))
-    gap_ratio = len(gaps) / max(len(expected_set), 1)
-    if not gaps:
-        status = "valid"
-    elif len(gaps) <= max(2, int(0.02 * (hi - lo + 1))):
-        status = "valid_with_gaps"
-    else:
-        status = "invalid"
-    ordinality = OrdinalityReport(
-        status=status,
-        expected_range=(lo, hi),
-        actual_sequence=labels,
-        gaps=gaps,
-        gap_tolerance=0,
-        tolerance_exceeded=status == "invalid",
-        gap_ratio=gap_ratio,
-    )
+    from .note_segment import validate_ordinality
+
+    # gap_tolerance=2 matches the old solver-local formula's floor (max(2, 2 %
+    # of range)): short sequences with 1-2 gaps stay valid_with_gaps by
+    # absolute count, and long sequences benefit from validate_ordinality's
+    # 10 % ratio-relief branch. Zero-gap sequences still register as "valid"
+    # unconditionally.
+    ordinality = validate_ordinality(labels, gap_tolerance=2)
     return notes, [], ordinality

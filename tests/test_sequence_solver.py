@@ -1,6 +1,7 @@
 """Tests for the sequence-solver footnote extractor."""
 from __future__ import annotations
 
+from offprint.pdf_footnotes.note_segment import validate_ordinality
 from offprint.pdf_footnotes.sequence_solver import (
     LabelCandidate,
     SolverResult,
@@ -384,3 +385,35 @@ def test_build_note_records_records_ordinality_status_with_gaps():
     assert ordinality.status == "valid_with_gaps"
     assert len(notes) == 3
     assert [n.label for n in notes] == ["1", "3", "4"]
+
+
+def test_validate_ordinality_ratio_relief_keeps_long_sparse_gaps_as_valid_with_gaps():
+    """A 400-note article with 5 gaps (~1 %) used to flip to "invalid" because
+    the absolute gap_tolerance=2 was exceeded. The ratio-relief branch keeps
+    such docs in valid_with_gaps — their extraction quality is obviously high.
+    """
+    nums = list(range(1, 401))
+    # Remove 5 arbitrary labels to simulate minor extraction losses.
+    for missing in (17, 112, 203, 298, 355):
+        nums.remove(missing)
+    report = validate_ordinality(nums, gap_tolerance=2)
+    assert len(report.gaps) == 5
+    assert report.gap_ratio < 0.02
+    assert report.tolerance_exceeded is True
+    assert report.status == "valid_with_gaps"
+
+
+def test_validate_ordinality_high_ratio_stays_invalid():
+    """A 20-note sequence with 10 gaps (50 %) should remain invalid —
+    ratio-relief only rescues low-density-gap cases."""
+    nums = [1, 2, 5, 6, 9, 10, 13, 14, 17, 18]
+    report = validate_ordinality(nums, gap_tolerance=2)
+    assert report.gap_ratio > 0.35
+    assert report.status == "invalid"
+
+
+def test_validate_ordinality_clean_sequence_still_valid():
+    """Ratio relief must not demote strict-valid sequences."""
+    report = validate_ordinality(list(range(1, 50)), gap_tolerance=2)
+    assert report.status == "valid"
+    assert report.gaps == []

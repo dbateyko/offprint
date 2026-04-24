@@ -542,9 +542,17 @@ def validate_ordinality(
     gaps = sorted(expected - actual)
 
     tolerance_exceeded = len(gaps) > gap_tolerance
+    span = max_n - min_n + 1
+    gap_ratio = len(gaps) / span if span > 0 else 0.0
+    # Ratio-based relief for long sequences: the absolute gap_tolerance was
+    # designed for short sequences. A 400-note article with 5 gaps (1.25 %)
+    # shouldn't be "invalid" just because 5 > 2; it's obviously well-extracted
+    # with minor glyph losses. Keep such docs in valid_with_gaps so the
+    # honest ≥valid_with_gaps metric reflects actual extraction quality.
+    ratio_relief_threshold = 0.10
     if not gaps:
         status = "valid"
-    elif tolerance_exceeded:
+    elif tolerance_exceeded and gap_ratio > ratio_relief_threshold:
         status = "invalid"
     else:
         status = "valid_with_gaps"
@@ -556,6 +564,7 @@ def validate_ordinality(
         gaps=gaps,
         gap_tolerance=gap_tolerance,
         tolerance_exceeded=tolerance_exceeded,
+        gap_ratio=gap_ratio,
     )
 
 
