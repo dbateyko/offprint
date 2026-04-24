@@ -3,11 +3,12 @@ from __future__ import annotations
 from offprint.pdf_footnotes.note_segment import validate_ordinality
 from offprint.pdf_footnotes.pipeline import (
     FootnoteProfile,
+    _hydrate_or_segment_document_notes,
     _liteparse_candidate_score,
     _promote_liteparse_body_gap_markers,
     _select_liteparse_candidate_document,
 )
-from offprint.pdf_footnotes.schema import NoteRecord
+from offprint.pdf_footnotes.schema import NoteRecord, OrdinalityReport
 from offprint.pdf_footnotes.text_extract import ExtractedDocument, ExtractedLine, ExtractedPage
 
 
@@ -145,3 +146,69 @@ def test_select_liteparse_candidate_prefers_valid_over_higher_scoring_gappy_stre
 
     assert selected is not None
     assert selected.metadata["liteparse_selected_candidate"] == "valid_with_duplicates"
+
+
+def test_hydrate_prefers_precomputed_solver_payload_over_segmenter() -> None:
+    """When the selector attached sequence_solver_precomputed metadata, the
+    hydrator must return those notes directly instead of re-running the
+    segmenter. A downstream segmenter pass would re-apply
+    _is_likely_false_positive over solver-accepted labels and produce
+    "selected=258, notes=4"-style disagreement — the whole point of the
+    precomputed path is that the solver's decisions are authoritative.
+    """
+    precomputed_notes = [_note(1), _note(2), _note(3), _note(4), _note(5)]
+    ordinality = OrdinalityReport(
+        status="valid",
+        expected_range=(1, 5),
+        actual_sequence=[1, 2, 3, 4, 5],
+        gaps=[],
+        gap_tolerance=0,
+        tolerance_exceeded=False,
+    )
+
+    # Build a document where the segmenter would find something different
+    # (note lines whose markers are shaped to be treated as false-positive).
+    doc = _doc(
+        "sequence_solver",
+        note_lines=[
+            "99. Garbled text that the segmenter would struggle with.",
+        ],
+    )
+    doc.metadata = dict(doc.metadata or {})
+    doc.metadata["sequence_solver_precomputed"] = {
+        "notes": precomputed_notes,
+        "author_notes": [],
+        "ordinality": ordinality,
+    }
+
+    notes, author_notes, returned_ordinality, warnings = _hydrate_or_segment_document_notes(
+        doc,
+        profile=FootnoteProfile(gap_tolerance=0, strict_label_filter=True),
+    )
+
+    assert len(notes) == 5
+    assert [n.label for n in notes] == ["1", "2", "3", "4", "5"]
+    assert returned_ordinality is ordinality
+    assert "sequence_solver_segmenter_bypassed" in warnings
+    assert author_notes == []
+
+
+def test_hydrate_falls_back_to_segmenter_without_precomputed_payload() -> None:
+    doc = _doc(
+        "default",
+        note_lines=[
+            "1. See first authority.",
+            "2. See second authority.",
+            "3. See third authority.",
+        ],
+    )
+    # No sequence_solver_precomputed key on metadata.
+
+    notes, _author_notes, ordinality, warnings = _hydrate_or_segment_document_notes(
+        doc,
+        profile=FootnoteProfile(gap_tolerance=0, strict_label_filter=True),
+    )
+
+    assert len(notes) == 3
+    assert ordinality is not None
+    assert "sequence_solver_segmenter_bypassed" not in warnings

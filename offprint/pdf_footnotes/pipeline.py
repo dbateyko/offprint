@@ -1407,6 +1407,37 @@ def _collect_native_gap_candidates(
     return rescued
 
 
+def _hydrate_or_segment_document_notes(
+    document: Any,
+    *,
+    profile: Any,
+) -> tuple[list[Any], list[Any], Any, list[str]]:
+    """Return notes/author_notes/ordinality/warnings for a document, preferring
+    the solver's precomputed payload when present.
+
+    When the liteparse selector picked the sequence_solver candidate, it
+    already hydrated ``document.metadata["sequence_solver_precomputed"]`` with
+    NoteRecord/OrdinalityReport built directly from the solver's label
+    selection. Re-running segment_document_notes_extended here throws that
+    away and replays _is_likely_false_positive over solver-accepted labels,
+    producing "selected=258, notes=4" style disagreement. Bypass when we can.
+    """
+    precomputed = None
+    meta = getattr(document, "metadata", None)
+    if isinstance(meta, dict):
+        precomputed = meta.get("sequence_solver_precomputed")
+    if precomputed:
+        notes = list(precomputed.get("notes") or [])
+        author_notes = list(precomputed.get("author_notes") or [])
+        ordinality = precomputed.get("ordinality")
+        return notes, author_notes, ordinality, ["sequence_solver_segmenter_bypassed"]
+    return segment_document_notes_extended(
+        document,
+        gap_tolerance=profile.gap_tolerance,
+        strict_label_filter=profile.strict_label_filter,
+    )
+
+
 def _extract_for_pdf(
     pdf_path: str,
     config: BatchConfig,
@@ -1578,26 +1609,10 @@ def _extract_for_pdf(
     warnings.extend(document.warnings)
     profile = _profile_for(document)
 
-    # When the liteparse selector picked the sequence_solver candidate, its
-    # precomputed NoteRecord/OrdinalityReport payload is authoritative — the
-    # selector already hydrated it instead of running the segmenter. Running
-    # segment_document_notes_extended again here throws that away and replays
-    # _is_likely_false_positive over solver-accepted labels, which produced
-    # the "selected=258, notes=4" pathology in the corpus audit.
-    precomputed_payload = None
-    if isinstance(document.metadata, dict):
-        precomputed_payload = document.metadata.get("sequence_solver_precomputed")
-    if precomputed_payload:
-        notes = list(precomputed_payload.get("notes") or [])
-        author_notes = list(precomputed_payload.get("author_notes") or [])
-        ordinality = precomputed_payload.get("ordinality")
-        note_warnings = ["sequence_solver_segmenter_bypassed"]
-    else:
-        notes, author_notes, ordinality, note_warnings = segment_document_notes_extended(
-            document,
-            gap_tolerance=profile.gap_tolerance,
-            strict_label_filter=profile.strict_label_filter,
-        )
+    notes, author_notes, ordinality, note_warnings = _hydrate_or_segment_document_notes(
+        document,
+        profile=profile,
+    )
     warnings.extend(note_warnings)
     parser_used = parser_used or document.parser or ""
 
