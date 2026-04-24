@@ -26,6 +26,24 @@ _DC_WRAPPER_RE = re.compile(
     r")",
     re.IGNORECASE,
 )
+_NON_ARTICLE_FILENAME_RE = re.compile(
+    r"(?:"
+    r"coversheet|bibliography|announce(?:ment)?|notice|staff(?:[-_ ]?(?:member|app(?:lication)?|writer))?|"
+    r"program|picture|non[-_ ]?discrimination|"
+    r"brochure|bulletin|blueprint|view(?:book|piece)|ebriefing|"
+    r"one[-_ ]?pager|\d+[-_ ]?pager|weekly[-_ ]?report|testimony|application|"
+    r"call[-_ ]?for[-_ ]?papers|rules[-_ ]of[-_ ]procedure|"
+    r"eprs[-_ ]stu|icct[-_ ]report|summary[-_ ]?charts?|"
+    r"tax[-_ ]?(?:checklist|estimate)|opening[-_ ]remarks|"
+    r"case[-_ ]brief|land[-_ ]?acknowledgment|"
+    r"jd[-_ ]?brochure|employer[-_ ]certification|lrap|"
+    r"(?:^|[-_])transcript(?:[-_]|$)|"
+    r"info[-_ ]?sheet|book[-_ ]?review|"
+    r"(?:^|[-_])online[-_ ]?(?:supplement|symposium|essay|appendix|edition)"
+    r")",
+    re.IGNORECASE,
+)
+_ROUNDTABLE_FILENAME_RE = re.compile(r"round[-_ ]?table|roundtable", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -239,6 +257,42 @@ def classify_pdf(
             reason_codes.append("manual_or_guidelines")
             confidence = 0.98
             strong_frontmatter = True
+        elif _NON_ARTICLE_FILENAME_RE.search(filename_l):
+            doc_type = "other"
+            reason_codes.append("non_article_filename")
+            confidence = 0.96
+            strong_frontmatter = True
+        elif _ROUNDTABLE_FILENAME_RE.search(filename_l):
+            doc_type = "issue_compilation" if signals.page_count >= 20 else "other"
+            reason_codes.append("roundtable_filename")
+            confidence = 0.92
+            strong_frontmatter = True
+        elif signals.page_count > 200:
+            # Docs over 200 pages are almost always issue compilations, books,
+            # or government/institutional reports. Single law-review articles
+            # essentially never reach this length in the corpus.
+            doc_type = "issue_compilation"
+            reason_codes.append("long_doc_page_count")
+            confidence = 0.90
+            strong_frontmatter = True
+        elif (
+            signals.page_count > 120
+            and signals.footnote_marker_count < 3
+            and not signals.metadata_article_fields
+        ):
+            # 120+ pp with essentially no footnote markers on the first page AND
+            # no scraped article metadata is consistent with a report or
+            # institutional document. Real articles have footnote markers on
+            # their opening pages.
+            doc_type = "issue_compilation"
+            reason_codes.append("long_doc_no_notes_no_metadata")
+            confidence = 0.80
+            strong_frontmatter = True
+        elif signals.page_count <= 3 and signals.footnote_marker_count < 3:
+            doc_type = "frontmatter"
+            reason_codes.append("short_doc_without_footnotes")
+            confidence = 0.9
+            strong_frontmatter = True
         elif platform_family == "digital_commons" and signals.page_count <= 5 and _DC_WRAPPER_RE.search(
             text_l
         ):
@@ -246,10 +300,24 @@ def classify_pdf(
             reason_codes.append("dc_repository_wrapper")
             confidence = 0.98
             strong_frontmatter = True
-        elif re.search(r"\b(editorial\s*board|masthead|inside[-\s]?cover|dedication)\b", filename_l + " " + text_l):
+        elif re.search(
+            r"\b(editorial\s*board|masthead|inside[-\s]?cover|dedication|"
+            r"foreword|preface|prolog(?:ue)?|errat[ao]|in\s+memoriam|memorial|"
+            r"letter\s+from|front[-\s]?matter|back[-\s]?cover|front[-\s]?cover)\b",
+            filename_l + " " + text_l,
+        ):
             doc_type = "frontmatter"
             reason_codes.append("frontmatter_marker")
             confidence = 0.96
+            strong_frontmatter = True
+        elif re.search(
+            r"(?:^|[-_])(?:fm|bm)[-_]|symposium[-_](?:agenda|program|color|schedule)|"
+            r"\btribute\b|\bforum\b(?!.*article)",
+            filename_l,
+        ) and signals.footnote_marker_count < 5:
+            doc_type = "frontmatter"
+            reason_codes.append("frontmatter_filename_weak_signal")
+            confidence = 0.9
             strong_frontmatter = True
         elif "table of contents" in text_l or re.search(r"\b(toc|contents)\b", filename_l):
             doc_type = "issue_compilation" if signals.page_count > 6 else "frontmatter"
@@ -262,11 +330,17 @@ def classify_pdf(
             confidence = 0.98
             strong_frontmatter = True
 
-    article_like = (
-        signals.metadata_article_fields
-        or signals.citation_pattern_count >= 2
-        or signals.footnote_marker_count >= 2
+    # Short docs (covers, tributes, agendas) often carry scraped metadata but
+    # lack the body signals of a real article. Require corroborating content
+    # signals beyond metadata alone before labeling as article.
+    short_doc = signals.page_count > 0 and signals.page_count < 6
+    strong_body_signals = (
+        signals.citation_pattern_count >= 2
+        or signals.footnote_marker_count >= 5
         or ("abstract" in text_l and "introduction" in text_l)
+    )
+    article_like = strong_body_signals or (
+        signals.metadata_article_fields and not short_doc and signals.footnote_marker_count >= 2
     )
     if not strong_frontmatter and article_like:
         doc_type = "article"

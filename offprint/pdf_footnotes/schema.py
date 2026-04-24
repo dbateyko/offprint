@@ -23,6 +23,12 @@ def utc_now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _note_label_sort_key(label: str) -> tuple[int, int | str, str]:
+    if label.isdigit():
+        return (0, int(label), label)
+    return (1, label, "")
+
+
 def _package_version(name: str) -> str:
     try:
         return importlib_metadata.version(name)
@@ -172,7 +178,10 @@ class SidecarDocument:
                 )
                 existing.confidence = min(existing.confidence, note.confidence)
 
-        notes_dict = {label: note.to_dict(emit_segments=emit_segments) for label, note in merged.items()}
+        notes_dict = {
+            label: note.to_dict(emit_segments=emit_segments)
+            for label, note in sorted(merged.items(), key=lambda item: _note_label_sort_key(item[0]))
+        }
 
         return {
             "source_pdf_path": self.source_pdf_path,

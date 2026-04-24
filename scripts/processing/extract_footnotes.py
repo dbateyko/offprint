@@ -172,7 +172,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--ordinality-patch-ocr-escalation-passes",
         type=int,
-        default=1,
+        default=2,
         help="Force OCR evaluation after unresolved native patch pass when > 0.",
     )
     parser.add_argument(

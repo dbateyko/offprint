@@ -248,6 +248,14 @@ hf/
 
 # Directories removed from tracking for public release
 research/
+# Tracked: corpus-audit aggregator and benchmarks (source of truth for audit manifests)
+!scripts/research/
+!scripts/research/aggregate_corpus_audit.py
+!scripts/research/solver_poc.py
+!scripts/research/solver_1k.py
+!scripts/research/solver_integration_1k.py
+!scripts/research/solver_triage.py
+!scripts/research/end_to_end_1k.py
 sherlock_runpack/
 tmp/
 autoresearch/

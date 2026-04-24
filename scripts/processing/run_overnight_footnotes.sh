@@ -80,6 +80,17 @@ check_health() {
 if check_health $PORT_A && check_health $PORT_B; then
     echo "[$(date -Iseconds)] Both vLLM endpoints already healthy -- reusing existing servers"
 else
+    # Kill stale vLLM processes that may be hogging GPU memory without
+    # serving on the expected ports (e.g. leftover manual sessions).
+    echo "[$(date -Iseconds)] Clearing stale vLLM processes to free GPU memory..."
+    pkill -f "vllm serve" 2>/dev/null || true
+    sleep 5
+    # Force-kill EngineCore children that may linger after parent exits
+    pkill -9 -f "VLLM::EngineCore" 2>/dev/null || true
+    sleep 3
+    echo "[$(date -Iseconds)] GPU memory after cleanup:"
+    nvidia-smi --query-gpu=index,memory.used,memory.free --format=csv 2>/dev/null || true
+
     echo "[$(date -Iseconds)] Starting vLLM server on GPU 0, port $PORT_A"
     CUDA_VISIBLE_DEVICES=0 "$VLLM_BIN" serve "$MODEL" \
         --host "$HOST" --port "$PORT_A" \

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import math
 import re
 import statistics
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from eyecite import get_citations
 from eyecite.models import FullCaseCitation, FullLawCitation
@@ -22,6 +23,7 @@ SECTION_HEADING_ROMANS = frozenset({"i", "ii", "iii", "iv", "v", "vi", "vii", "v
 # Minimum text length after label to be considered a real footnote
 # (unless it matches a known short citation pattern)
 MIN_FOOTNOTE_TEXT_LENGTH = 15
+MAX_NOTE_TEXT_CHARS = 8000
 
 # Short citation patterns that are valid even if under MIN_FOOTNOTE_TEXT_LENGTH
 # These are common legal short forms like "Id.", "Id. at 123", "Ibid.", etc.
@@ -75,7 +77,27 @@ _FOOTNOTE_SEPARATOR_RE = re.compile(r"^[\-\u2010\u2011\u2012\u2013\u2014\u2015_]
 _EMBEDDED_NOTE_MARKER_RE = re.compile(
     r"(?<=[.!?;:)\]\"\u201d\u2019'])\s+(\d{1,4})[\]\)\.,:;-]?\s+(?=[A-Z])"
 )
+_EMBEDDED_NOTE_MARKER_RELAXED_RE = re.compile(
+    r"(?<!\d)\s+(\d{1,4})[\]\)\.,:;-]?\s+"
+    r"(?=(?:See|Cf\.|But|Id\.|Ibid\.|Compare|Accord|Note|Supra|Infra|[A-Z][a-z]+\s+v\.))"
+)
 _STATUTE_START_RE = re.compile(r"^\s*\d+\s+(?:U\.S\.C\.|C\.F\.R\.)", re.IGNORECASE)
+_OCR_REPOSITORY_BANNER_RE = re.compile(
+    r"\bvol\.?\s*\d+\s*,?\s*iss\.?\s*\d+\b.*?\bart\.?\s*\d+\b",
+    re.IGNORECASE,
+)
+_OCR_REPOSITORY_URL_RE = re.compile(
+    r"https?://\S*(?:scholarship\.|heinonline\.|digitalcommons\.)\S*",
+    re.IGNORECASE,
+)
+# Reporters / pincites that mark a line as a real legal citation even when it
+# is short and ends in digits (defeats the TOC-trailing-page heuristic).
+_CITATION_REPORTER_OR_PINCITE_RE = re.compile(
+    r"\b(?:U\.S\.|F\.\s*(?:2d|3d|4th|Supp)|S\.\s*Ct\.|L\.\s*Ed\.|"
+    r"(?:\d+(?:st|nd|d|rd|th)\s+)?Cir\.|[A-Z][A-Za-z\.]*\s+v\.\s+|"
+    r"\d{1,4}[,–\-]\s*\d{1,4})",
+    re.IGNORECASE,
+)
 
 
 def _find_body_separator_cutoff(
@@ -301,6 +323,8 @@ def _is_likely_false_positive(
         _TOC_TRAILING_PAGE_RE.search(text_stripped)
         and len(words) <= 12
         and not SHORT_CITATION_RE.match(text_stripped)
+        and not _CITATION_REPORTER_OR_PINCITE_RE.search(text_stripped)
+        and not has_strong_signal
     ):
         return True
 
@@ -312,6 +336,12 @@ def _is_likely_false_positive(
         and not SHORT_CITATION_RE.match(text_stripped)
         and not has_strong_signal
     ):
+        return True
+
+    # Reject non-numeric labels for numbered notes. In practice, this catches
+    # OCR/body fragments like "civil", "Id", or stray roman numerals that
+    # start runaway note merges.
+    if not label.isdigit() and not is_author_marker(label):
         return True
 
     # Reject short Roman numerals that are likely section headings
@@ -333,8 +363,14 @@ def _is_likely_false_positive(
 
     # Reject if text is too short to be a real footnote
     # UNLESS it's a recognized short citation form like "Id." or "Id. at 123"
+    # or a reporter/statute/pincite short-form like "752 F.2d 1019." or "§ 2702(a)."
     if len(text_stripped) < MIN_FOOTNOTE_TEXT_LENGTH:
-        if not SHORT_CITATION_RE.match(text_stripped) and not has_citation_signal:
+        if (
+            not SHORT_CITATION_RE.match(text_stripped)
+            and not has_citation_signal
+            and not _CITATION_REPORTER_OR_PINCITE_RE.search(text_stripped)
+            and not re.match(r"^\s*(?:§§?|[Ss]ection)\s", text_stripped)
+        ):
             return True
 
     # Reject if text looks like just a continuation fragment
@@ -389,6 +425,78 @@ def is_author_marker(label: str) -> bool:
     return label.strip() in AUTHOR_MARKERS
 
 
+def _trim_stray_label_outliers(sorted_nums: list[int]) -> list[int]:
+    """Drop isolated outlier labels (citation fragments mistaken for footnotes).
+
+    A law-review footnote sequence is dense: the delta between consecutive labels
+    should usually be 1–3. We iteratively trim tail/head outliers whose delta to
+    the neighbour is much larger than the median delta across the rest of the
+    sequence. Falls back to the original absolute-jump guard when the remaining
+    sequence is too short to compute a meaningful median.
+    """
+    import statistics as _stat
+
+    if len(sorted_nums) < 3:
+        return sorted_nums
+    trimmed = list(sorted_nums)
+
+    def _deltas(seq: list[int]) -> list[int]:
+        return [seq[i + 1] - seq[i] for i in range(len(seq) - 1)]
+
+    # Trim tail outliers
+    while len(trimmed) >= 4:
+        top, second = trimmed[-1], trimmed[-2]
+        jump = top - second
+        rest_deltas = _deltas(trimmed[:-1])
+        if not rest_deltas:
+            break
+        median_delta = max(1, int(_stat.median(rest_deltas)))
+        # Stray if jump dominates the median delta of the rest of the sequence.
+        # Require both absolute and relative signals so dense long sequences
+        # (e.g. an article whose last legit note is 100 and previous was 88
+        # due to 12 middle gaps) are not falsely trimmed.
+        if jump >= max(8, 5 * median_delta) and jump > (top * 0.15):
+            trimmed.pop()
+        else:
+            break
+    # Fallback: preserve the legacy absolute-jump rule for very short sequences
+    count = len(trimmed)
+    while len(trimmed) >= 3:
+        top, second = trimmed[-1], trimmed[-2]
+        jump = top - second
+        if jump > max(5, count // 2) and jump > (top * 0.25):
+            trimmed.pop()
+        else:
+            break
+    # Trim head outliers (labels at or below 0, or an isolated low number)
+    while len(trimmed) >= 4:
+        low, nxt = trimmed[0], trimmed[1]
+        if low <= 0:
+            trimmed.pop(0)
+            continue
+        jump = nxt - low
+        rest_deltas = _deltas(trimmed[1:])
+        if not rest_deltas:
+            break
+        median_delta = max(1, int(_stat.median(rest_deltas)))
+        if jump >= max(8, 5 * median_delta) and jump > (nxt * 0.15):
+            trimmed.pop(0)
+        else:
+            break
+    count = len(trimmed)
+    while len(trimmed) >= 3:
+        low, nxt = trimmed[0], trimmed[1]
+        if low <= 0:
+            trimmed.pop(0)
+            continue
+        jump = nxt - low
+        if jump > max(5, count // 2) and jump > (nxt * 0.25):
+            trimmed.pop(0)
+        else:
+            break
+    return trimmed
+
+
 def validate_ordinality(
     footnote_numbers: list[int],
     gap_tolerance: int = DEFAULT_GAP_TOLERANCE,
@@ -418,7 +526,16 @@ def validate_ordinality(
             tolerance_exceeded=False,
         )
 
-    sorted_nums = sorted(set(footnote_numbers))
+    sorted_nums = _trim_stray_label_outliers(sorted(set(footnote_numbers)))
+    if not sorted_nums:
+        return OrdinalityReport(
+            status="valid",
+            expected_range=(0, 0),
+            actual_sequence=[],
+            gaps=[],
+            gap_tolerance=gap_tolerance,
+            tolerance_exceeded=False,
+        )
     min_n, max_n = sorted_nums[0], sorted_nums[-1]
     expected = set(range(min_n, max_n + 1))
     actual = set(sorted_nums)
@@ -450,12 +567,20 @@ class _OpenNote:
     segments: list[NoteChunk]
     page_start: int
     page_end: int
+    quality_flags: list[str] = field(default_factory=list)
+    total_chars: int = 0
 
     def append(self, page: int, text: str, source: str) -> None:
         clean_text = " ".join(text.split())
+        clean_text = _strip_ocr_repository_artifacts(clean_text)
         if not clean_text:
             return
+        if self.total_chars + len(clean_text) > MAX_NOTE_TEXT_CHARS:
+            if "note_max_chars_truncated" not in self.quality_flags:
+                self.quality_flags.append("note_max_chars_truncated")
+            return
         self.text_parts.append(clean_text)
+        self.total_chars += len(clean_text)
         self.segments.append(NoteChunk(page=page, text=clean_text, source=source))
         self.page_end = max(self.page_end, page)
 
@@ -471,11 +596,19 @@ class _OpenNote:
             page_start=self.page_start,
             page_end=self.page_end,
             segments=list(self.segments),
+            quality_flags=list(self.quality_flags),
         )
 
 
 def _clean_line_text(text: str) -> str:
     return " ".join((text or "").split())
+
+
+def _strip_ocr_repository_artifacts(text: str) -> str:
+    cleaned = _OCR_REPOSITORY_BANNER_RE.sub(" ", text or "")
+    cleaned = _OCR_REPOSITORY_URL_RE.sub(" ", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned
 
 
 def _marker_match(text: str) -> re.Match[str] | None:
@@ -516,6 +649,10 @@ def _validated_marker_match(
 def _likely_continuation(text: str) -> bool:
     value = _clean_line_text(text)
     if not value:
+        return False
+    if _OCR_REPOSITORY_BANNER_RE.search(value):
+        return False
+    if _OCR_REPOSITORY_URL_RE.search(value) and not re.search(r"\b(?:available|retrieved)\s+at\b", value, re.IGNORECASE):
         return False
     if _marker_match(value):
         return False
@@ -558,6 +695,7 @@ def _split_embedded_note_markers(
     *,
     strict_label_filter: bool,
     max_label: int,
+    expected_next_label: int | None = None,
 ) -> tuple[str, list[tuple[str, str]]]:
     """Split continuation text that embeds additional numeric note markers.
 
@@ -569,7 +707,21 @@ def _split_embedded_note_markers(
         return "", []
 
     marker_positions: list[int] = []
-    for match in _EMBEDDED_NOTE_MARKER_RE.finditer(value):
+    seen_positions: set[int] = set()
+    marker_iter = list(_EMBEDDED_NOTE_MARKER_RE.finditer(value))
+    # Fallback for OCR-heavy merged lines that lose sentence punctuation before
+    # the next marker. Keep it conservative and only enable for long lines.
+    if not marker_iter and len(value) >= 160:
+        marker_iter = list(_EMBEDDED_NOTE_MARKER_RELAXED_RE.finditer(value))
+    if expected_next_label is not None:
+        expected_re = re.compile(
+            rf"(?<!\d)\s+{re.escape(str(expected_next_label))}[\]\)\.,:;-]?\s+"
+        )
+        marker_iter.extend(expected_re.finditer(value))
+        marker_iter = sorted(marker_iter, key=lambda match: int(match.start()))
+
+    expected = expected_next_label
+    for match in marker_iter:
         pos = int(match.start())
         if pos <= 0:
             continue
@@ -582,7 +734,15 @@ def _split_embedded_note_markers(
         label = str(validated.group("label") or "")
         if not label.isdigit():
             continue
+        numeric_label = int(label)
+        if expected is not None and numeric_label != expected:
+            continue
+        if pos in seen_positions:
+            continue
         marker_positions.append(pos)
+        seen_positions.add(pos)
+        if expected is not None:
+            expected += 1
 
     if not marker_positions:
         return value, []
@@ -601,6 +761,12 @@ def _split_embedded_note_markers(
     return continuation, chunks
 
 
+def _expected_next_numeric_label(open_note: _OpenNote | None) -> int | None:
+    if open_note is None or not open_note.label.isdigit():
+        return None
+    return int(open_note.label) + 1
+
+
 def _iter_note_lines(document: ExtractedDocument) -> list[ExtractedLine]:
     lines: list[ExtractedLine] = []
     for page in document.pages:
@@ -615,7 +781,14 @@ def _iter_note_lines(document: ExtractedDocument) -> list[ExtractedLine]:
             note_lines = note_lines[separator_idx + 1 :]
 
         for line in note_lines:
-            if _clean_line_text(line.text):
+            text = _clean_line_text(line.text)
+            if not text:
+                continue
+            if _OCR_REPOSITORY_BANNER_RE.search(text):
+                continue
+            if _OCR_REPOSITORY_URL_RE.search(text):
+                continue
+            if text:
                 lines.append(line)
     return lines
 
@@ -629,22 +802,37 @@ def _collect_endnote_start_pages(document: ExtractedDocument) -> set[int]:
                 starts.add(page.page_number)
 
     if starts:
-        return starts
+        # Guard against early body headings like "Notes" that are section
+        # titles, not true endnote sections.
+        min_endnote_page = max(2, int(math.ceil(page_count * 0.60)))
+        starts = {page_no for page_no in starts if page_no >= min_endnote_page}
+        if starts:
+            return starts
 
     if page_count < 2:
         return starts
 
     def _has_headingless_endnote_sequence(body_lines: list[str]) -> bool:
         numeric_markers: list[int] = []
+        marker_lines = 0
         for raw_line in body_lines:
-            marker = _marker_match(raw_line)
+            marker = _validated_marker_match(
+                raw_line,
+                strict_label_filter=True,
+                max_label=max(120, len(body_lines) * 6),
+            )
             if marker is None:
                 continue
             label = marker.group("label")
             if label.isdigit():
                 numeric_markers.append(int(label))
+                marker_lines += 1
 
-        if len(numeric_markers) < 3:
+        # Headingless endnotes should dominate the page region, not be a few
+        # incidental body lines that happen to begin with numbers.
+        if len(numeric_markers) < 6:
+            return False
+        if marker_lines / max(len(body_lines), 1) < 0.30:
             return False
 
         # Require an explicit sequence that starts near 1 to avoid dense citation
@@ -790,7 +978,10 @@ def segment_document_notes_extended(
                 page_end=line.page_number,
             )
             cont, embedded = _split_embedded_note_markers(
-                rest, strict_label_filter=strict_label_filter, max_label=max_label
+                rest,
+                strict_label_filter=strict_label_filter,
+                max_label=max_label,
+                expected_next_label=int(label) + 1 if label.isdigit() else None,
             )
             if cont:
                 open_note.append(page=line.page_number, text=cont, source=line.source)
@@ -809,7 +1000,10 @@ def segment_document_notes_extended(
 
         if open_note and _likely_continuation(text):
             cont, embedded = _split_embedded_note_markers(
-                text, strict_label_filter=strict_label_filter, max_label=max_label
+                text,
+                strict_label_filter=strict_label_filter,
+                max_label=max_label,
+                expected_next_label=_expected_next_numeric_label(open_note),
             )
             if cont:
                 open_note.append(page=line.page_number, text=cont, source=line.source)
@@ -866,13 +1060,8 @@ def segment_document_notes_extended(
     for index, record in enumerate(numbered_notes, start=1):
         record.ordinal = index
 
-    # Check for non-monotonic labels (existing behavior)
+    # Check ordinality for numeric footnotes.
     numeric_labels = [int(note.label) for note in numbered_notes if note.label.isdigit()]
-    if numeric_labels and any(b < a for a, b in zip(numeric_labels, numeric_labels[1:])):
-        warnings.append("non_monotonic_labels")
-        for record in numbered_notes:
-            if "non_monotonic_labels" not in record.quality_flags:
-                record.quality_flags.append("non_monotonic_labels")
 
     # Compute ordinality report for numeric footnotes
     ordinality_report: OrdinalityReport | None = None

@@ -50,7 +50,10 @@ def _normalize_url(url: str) -> str:
     trimmed = (url or "").strip().rstrip(".,;:)")
     if not trimmed:
         return ""
-    parsed = urlparse(trimmed)
+    try:
+        parsed = urlparse(trimmed)
+    except ValueError:
+        return ""
     if parsed.scheme not in {"http", "https"}:
         return ""
     return trimmed

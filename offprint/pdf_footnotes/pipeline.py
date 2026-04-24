@@ -43,9 +43,16 @@ from .ocr_worker import OCRWorkerPool
 from .qc_filter import latest_qc_manifest, load_excluded_paths
 from .schema import NoteChunk, NoteRecord, SidecarDocument, dependency_versions, utc_now_iso
 from .text_cache import TextExtractionCache
-from .text_extract import extract_document_text, ocr_fallback_recommended
+from .text_extract import (
+    ExtractedDocument,
+    ExtractedLine,
+    ExtractedPage,
+    extract_document_text,
+    extract_liteparse_candidate_documents,
+    ocr_fallback_recommended,
+)
 
-EXTRACTOR_VERSION = "0.2.0"
+EXTRACTOR_VERSION = "0.3.0"
 
 
 @dataclass(frozen=True)
@@ -92,7 +99,7 @@ class BatchConfig:
     ordinality_patch: bool = True
     ordinality_patch_max_pages: int = 20
     ordinality_patch_expand: int = 1
-    ordinality_patch_ocr_escalation_passes: int = 1
+    ordinality_patch_ocr_escalation_passes: int = 2
     emit_segments: bool = False
     shuffle: bool = False
     shuffle_seed: int | None = None
@@ -108,7 +115,27 @@ def _bool_to_status(value: bool) -> str:
 
 
 def _sidecar_path(pdf_path: str) -> str:
-    return f"{pdf_path}.footnotes.json"
+    return _augmented_sidecar_path(pdf_path, ".footnotes.json")
+
+
+def _augmented_sidecar_path(pdf_path: str, suffix: str) -> str:
+    # ext4 caps basenames at 255 bytes. We append up to suffix + ".tmp" during
+    # atomic writes, so budget against the longer of the two. Hash-truncate
+    # only when needed so existing sidecars keep their names.
+    directory = os.path.dirname(pdf_path)
+    base = os.path.basename(pdf_path)
+    worst = base + suffix + ".tmp"
+    if len(worst.encode("utf-8")) <= 250:
+        return f"{pdf_path}{suffix}"
+    import hashlib
+
+    digest = hashlib.sha1(base.encode("utf-8")).hexdigest()[:12]
+    # Keep a readable prefix of the original filename for eyeballing.
+    keep = 200 - len(suffix) - len(".tmp") - len(digest) - 2
+    keep = max(keep, 20)
+    stem = base[:keep].rstrip(".-_ ")
+    new_base = f"{stem}.{digest}{suffix}"
+    return os.path.join(directory, new_base) if directory else new_base
 
 
 def _write_json_atomic(
@@ -140,6 +167,12 @@ def _write_jsonl_atomic(path: str, rows: list[dict[str, Any]]) -> None:
 def _write_jsonl_sidecar_atomic(
     path: str, payload: dict[str, Any], *, emit_segments: bool = False
 ) -> None:
+    def _note_label_sort_key(raw_label: Any) -> tuple[int, Any, str]:
+        label = str(raw_label).split("__dup", 1)[0]
+        if label.isdigit():
+            return (0, int(label), label)
+        return (1, label, label)
+
     parent = os.path.dirname(path)
     if parent:
         os.makedirs(parent, exist_ok=True)
@@ -159,7 +192,11 @@ def _write_jsonl_sidecar_atomic(
 
         # Numbered footnotes — one record per label, segments stripped unless requested
         notes = payload.get("notes") or {}
-        items = notes.items() if isinstance(notes, dict) else enumerate(notes)
+        items = (
+            sorted(notes.items(), key=lambda item: _note_label_sort_key(item[0]))
+            if isinstance(notes, dict)
+            else enumerate(notes)
+        )
         for label, note_data in items:
             note_row = dict(note_data)
             note_row["type"] = "footnote"
@@ -471,8 +508,6 @@ def _note_confidence(note: Any) -> float:
     for flag in note.quality_flags:
         if flag in {"ambiguous_context", "missing_context"}:
             score -= 0.1
-        if flag == "non_monotonic_labels":
-            score -= 0.05
 
     return max(0.0, min(1.0, score))
 
@@ -514,8 +549,6 @@ def _note_sequence_quality_score(
     else:
         score -= 80.0
 
-    if "non_monotonic_labels" in warnings:
-        score -= 60.0
     if "ordinality_invalid" in warnings:
         score -= 80.0
     if "ordinality_gaps" in warnings:
@@ -527,6 +560,344 @@ def _note_sequence_quality_score(
 
     score -= duplicate_numeric_labels * 8.0
     return round(score, 3)
+
+
+@dataclass
+class _LiteparseCandidateResult:
+    document: ExtractedDocument
+    notes: list[Any]
+    author_notes: list[Any]
+    ordinality: Any
+    warnings: list[str]
+    score: float
+    metrics: dict[str, Any]
+
+
+def _liteparse_candidate_metrics(
+    notes: list[Any], ordinality: Any, warnings: list[str]
+) -> dict[str, Any]:
+    numeric_labels = [
+        int(getattr(note, "label", 0))
+        for note in notes
+        if str(getattr(note, "label", "") or "").isdigit()
+    ]
+    unique_labels = set(numeric_labels)
+    gaps = list(getattr(ordinality, "gaps", []) or []) if ordinality is not None else []
+    status = str(getattr(ordinality, "status", "") or "") if ordinality is not None else ""
+    return {
+        "status": status,
+        "notes": len(notes),
+        "numeric_labels": len(numeric_labels),
+        "unique_numeric_labels": len(unique_labels),
+        "duplicate_numeric_labels": max(0, len(numeric_labels) - len(unique_labels)),
+        "gap_count": len(gaps),
+        "gap_ratio": float(getattr(ordinality, "gap_ratio", 0.0) or 0.0)
+        if ordinality is not None
+        else 1.0,
+        "warnings": sorted({str(w) for w in warnings if str(w).strip()}),
+    }
+
+
+def _liteparse_candidate_score(
+    notes: list[Any], ordinality: Any, warnings: list[str]
+) -> tuple[float, dict[str, Any]]:
+    metrics = _liteparse_candidate_metrics(notes, ordinality, warnings)
+    score = _note_sequence_quality_score(notes, ordinality, warnings)
+    status = str(metrics["status"])
+    gap_count = int(metrics["gap_count"])
+    duplicate_count = int(metrics["duplicate_numeric_labels"])
+    unique_count = int(metrics["unique_numeric_labels"])
+
+    if status == "valid" and duplicate_count == 0:
+        score += 250.0
+    elif status == "valid":
+        score += 120.0
+    elif status == "valid_with_gaps":
+        score += 80.0
+    elif status == "invalid":
+        score -= 80.0
+
+    score -= gap_count * 25.0
+    score -= duplicate_count * 20.0
+    if unique_count:
+        duplicate_ratio = duplicate_count / max(unique_count, 1)
+        score -= min(500.0, duplicate_ratio * 500.0)
+    else:
+        score -= 250.0
+
+    if "reversed_word_order_suspected" in warnings:
+        score -= 50.0
+    return round(score, 3), metrics
+
+
+def _liteparse_candidate_selection_key(result: _LiteparseCandidateResult) -> tuple[Any, ...]:
+    """Rank LiteParse candidates by ordinal quality first, then score.
+
+    The sequence_solver candidate is preferred when it produces a non-empty
+    valid or valid_with_gaps result — on the 1K benchmark the solver reaches
+    ~69 % strict-valid vs. ~33 % for any single heuristic candidate, so
+    defaulting to it and falling back to the heuristic ensemble only when the
+    solver abstains is a strict net win (~+30 pp strict-valid overall).
+
+    When the solver abstains (status=invalid/empty), fall back to the legacy
+    ranking: status → gap count → duplicate ratio → raw score.
+
+    Raw score still breaks ties, but it should not let a noisy valid-with-gaps
+    stream beat a complete valid stream. Duplicates are retained as a secondary
+    penalty because over-wide splits can manufacture repeated labels.
+    """
+    metrics = result.metrics
+    status = str(metrics.get("status") or "")
+    duplicate_count = int(metrics.get("duplicate_numeric_labels", 0) or 0)
+    unique_count = int(metrics.get("unique_numeric_labels", 0) or 0)
+    gap_count = int(metrics.get("gap_count", 0) or 0)
+    notes_count = int(metrics.get("notes", 0) or 0)
+    candidate_name = str((result.document.metadata or {}).get("liteparse_candidate") or "")
+    is_solver = candidate_name.startswith("sequence_solver")
+    solver_usable = is_solver and status in ("valid", "valid_with_gaps") and notes_count >= 3
+    status_rank = {
+        "valid": 4,
+        "valid_with_gaps": 3,
+        "invalid": 2,
+    }.get(status, 0)
+    duplicate_ratio = duplicate_count / max(unique_count, 1)
+
+    # First key element: solver preference. Solver-usable candidates outrank
+    # everything else; when the solver abstains, the remaining candidates fall
+    # through to the legacy ranking on equal footing.
+    return (
+        1 if solver_usable else 0,
+        status_rank,
+        -gap_count,
+        -duplicate_ratio,
+        -duplicate_count,
+        unique_count,
+        result.score,
+        notes_count,
+    )
+
+
+def _clone_extracted_document(document: ExtractedDocument) -> ExtractedDocument:
+    return ExtractedDocument.from_dict(document.to_dict())
+
+
+def _line_supports_gap_promotion(
+    *,
+    line: ExtractedLine,
+    label: int,
+    page_height: float,
+    notes: list[Any],
+) -> bool:
+    if page_height > 0 and float(line.top or 0.0) / page_height >= 0.52:
+        return True
+
+    bounds = _numeric_note_page_bounds(notes)
+    observed = sorted(bounds)
+    lower = max((n for n in observed if n < label), default=None)
+    upper = min((n for n in observed if n > label), default=None)
+    page_num = int(getattr(line, "page_number", 0) or 0)
+    if lower is not None and upper is not None:
+        lo = min(bounds[lower][0], bounds[upper][0]) - 1
+        hi = max(bounds[lower][1], bounds[upper][1]) + 1
+        return lo <= page_num <= hi
+    if lower is not None:
+        lo = bounds[lower][0] - 1
+        hi = bounds[lower][1] + 2
+        return lo <= page_num <= hi
+    if upper is not None:
+        lo = bounds[upper][0] - 2
+        hi = bounds[upper][1] + 1
+        return lo <= page_num <= hi
+    return False
+
+
+def _promote_liteparse_body_gap_markers(
+    document: ExtractedDocument,
+    notes: list[Any],
+    ordinality: Any,
+    *,
+    strict_label_filter: bool,
+) -> ExtractedDocument | None:
+    gaps = {int(g) for g in (getattr(ordinality, "gaps", []) or []) if int(g) > 0}
+    if not gaps:
+        return None
+
+    promoted = _clone_extracted_document(document)
+    max_label = max(120, promoted.page_count * 6)
+    promoted_count = 0
+
+    for page in promoted.pages:
+        new_body: list[ExtractedLine] = []
+        new_notes = list(page.note_lines)
+        body_lines = list(page.body_lines)
+        idx = 0
+        while idx < len(body_lines):
+            line = body_lines[idx]
+            text = _clean_line_text(line.text)
+            marker = _validated_marker_match(
+                text,
+                strict_label_filter=strict_label_filter,
+                max_label=max_label,
+            )
+            if marker is None or not str(marker.group("label") or "").isdigit():
+                new_body.append(line)
+                idx += 1
+                continue
+
+            label = int(marker.group("label"))
+            if label not in gaps or not _line_supports_gap_promotion(
+                line=line,
+                label=label,
+                page_height=float(page.height or 0.0),
+                notes=notes,
+            ):
+                new_body.append(line)
+                idx += 1
+                continue
+
+            new_notes.append(line)
+            promoted_count += 1
+            scan_idx = idx + 1
+            continuation_count = 0
+            while scan_idx < len(body_lines) and continuation_count < 2:
+                next_line = body_lines[scan_idx]
+                next_text = _clean_line_text(next_line.text)
+                if _validated_marker_match(
+                    next_text,
+                    strict_label_filter=strict_label_filter,
+                    max_label=max_label,
+                ):
+                    break
+                if not _likely_continuation(next_text):
+                    break
+                new_notes.append(next_line)
+                promoted_count += 1
+                continuation_count += 1
+                scan_idx += 1
+            idx = scan_idx
+
+        page.body_lines = new_body
+        page.note_lines = sorted(new_notes, key=lambda ln: (float(ln.top or 0.0), ln.text))
+
+    if promoted_count <= 0:
+        return None
+    metadata = dict(promoted.metadata or {})
+    metadata["liteparse_candidate"] = f"{metadata.get('liteparse_candidate', 'unknown')}+body_marker_promotion"
+    metadata["liteparse_body_marker_promotions"] = promoted_count
+    promoted.metadata = metadata
+    promoted.warnings = sorted(
+        set(list(promoted.warnings or []) + ["liteparse_body_marker_promotion_used"])
+    )
+    return promoted
+
+
+def _select_liteparse_candidate_document(
+    documents: list[ExtractedDocument],
+    *,
+    profile_for: Any,
+) -> ExtractedDocument | None:
+    results: list[_LiteparseCandidateResult] = []
+    for document in documents:
+        profile = profile_for(document)
+        # Solver candidate: trust its precomputed NoteRecord + OrdinalityReport
+        # instead of re-running the heuristic segmenter (which re-applies
+        # _is_likely_false_positive over solver-accepted labels and produces
+        # disagreement — see artifacts/runs/solver_integration_1k.json for the
+        # ~24pp drop that segmenter re-validation causes on the 1K benchmark).
+        meta = document.metadata or {}
+        precomputed = meta.get("sequence_solver_precomputed") if isinstance(meta, dict) else None
+        if precomputed:
+            notes = list(precomputed.get("notes") or [])
+            author_notes = list(precomputed.get("author_notes") or [])
+            ordinality = precomputed.get("ordinality")
+            note_warnings = ["sequence_solver_segmenter_bypassed"]
+        else:
+            notes, author_notes, ordinality, note_warnings = segment_document_notes_extended(
+                document,
+                gap_tolerance=profile.gap_tolerance,
+                strict_label_filter=profile.strict_label_filter,
+            )
+        candidate_warnings = list(document.warnings or []) + list(note_warnings)
+        score, metrics = _liteparse_candidate_score(notes, ordinality, candidate_warnings)
+        results.append(
+            _LiteparseCandidateResult(
+                document=document,
+                notes=notes,
+                author_notes=author_notes,
+                ordinality=ordinality,
+                warnings=candidate_warnings,
+                score=score,
+                metrics=metrics,
+            )
+        )
+
+        promoted = _promote_liteparse_body_gap_markers(
+            document,
+            notes,
+            ordinality,
+            strict_label_filter=profile.strict_label_filter,
+        )
+        if promoted is not None:
+            promoted_profile = profile_for(promoted)
+            promoted_notes, promoted_author_notes, promoted_ordinality, promoted_note_warnings = (
+                segment_document_notes_extended(
+                    promoted,
+                    gap_tolerance=promoted_profile.gap_tolerance,
+                    strict_label_filter=promoted_profile.strict_label_filter,
+                )
+            )
+            promoted_warnings = list(promoted.warnings or []) + list(promoted_note_warnings)
+            promoted_score, promoted_metrics = _liteparse_candidate_score(
+                promoted_notes,
+                promoted_ordinality,
+                promoted_warnings,
+            )
+            results.append(
+                _LiteparseCandidateResult(
+                    document=promoted,
+                    notes=promoted_notes,
+                    author_notes=promoted_author_notes,
+                    ordinality=promoted_ordinality,
+                    warnings=promoted_warnings,
+                    score=promoted_score,
+                    metrics=promoted_metrics,
+                )
+            )
+
+    if not results:
+        return None
+
+    best = max(results, key=_liteparse_candidate_selection_key)
+    score_payload: dict[str, Any] = {}
+    for result in results:
+        name = str((result.document.metadata or {}).get("liteparse_candidate") or "unknown")
+        score_payload[name] = {"score": result.score, **result.metrics}
+
+    selected = _clone_extracted_document(best.document)
+    selected_name = str((selected.metadata or {}).get("liteparse_candidate") or "unknown")
+    metadata = dict(selected.metadata or {})
+    metadata["liteparse_selected_candidate"] = selected_name
+    metadata["liteparse_candidate_scores"] = score_payload
+    metadata["liteparse_duplicate_numeric_labels"] = best.metrics.get(
+        "duplicate_numeric_labels", 0
+    )
+    # Note: sequence_solver_precomputed remains on metadata so downstream
+    # consumers can hydrate NoteRecord/OrdinalityReport without re-running the
+    # segmenter. _write_json_atomic's caller strips it before serialization
+    # (see _extract_for_pdf).
+    selected.metadata = metadata
+    selected.warnings = sorted(
+        set(
+            list(selected.warnings or [])
+            + [f"liteparse_candidate_selected={selected_name}"]
+            + (
+                ["liteparse_duplicate_labels_detected"]
+                if int(best.metrics.get("duplicate_numeric_labels", 0) or 0) > 0
+                else []
+            )
+        )
+    )
+    return selected
 
 
 def _numeric_note_page_bounds(notes: list[Any]) -> dict[int, tuple[int, int]]:
@@ -626,6 +997,20 @@ def _build_patch_pdf(pdf_path: str, pages: list[int]) -> tuple[str | None, dict[
     with tmp:
         writer.write(tmp)
     return tmp_path, page_map
+
+
+def _remap_patch_pages(document: Any, page_map: dict[int, int]) -> Any:
+    """Rewrite page_number fields on a patch-PDF ExtractedDocument back to source pages."""
+    for page in getattr(document, "pages", []) or []:
+        src = page_map.get(int(getattr(page, "page_number", 0) or 0))
+        if src:
+            page.page_number = src
+        for attr in ("body_lines", "note_lines"):
+            for line in getattr(page, attr, []) or []:
+                src_line = page_map.get(int(getattr(line, "page_number", 0) or 0))
+                if src_line:
+                    line.page_number = src_line
+    return document
 
 
 def _remap_note_to_source_pages(note: Any, page_map: dict[int, int]) -> None:
@@ -1044,6 +1429,29 @@ def _extract_for_pdf(
             "ocr_review_reasons": [],
         }
 
+    # When the caller used --skip-classification, the passed-in decision is a
+    # placeholder (`reason_codes=["skip_classification"]`). Run classification
+    # inline here so the sidecar still gets an honest doc_type — without a
+    # separate classifier pre-pass that stalls on slow pypdf first-page reads.
+    if (
+        doc_decision is None
+        or (doc_decision.reason_codes or []) == ["skip_classification"]
+    ):
+        try:
+            rules = getattr(config, "_doc_rules_payload", {}) or {}
+            pdf_root = getattr(config, "pdf_root", "") or ""
+            _pdf_path_ignored, real_decision = _classify_pdf_path(
+                pdf_path,
+                pdf_root=pdf_root,
+                doc_policy=config.doc_policy,
+                rules=rules,
+            )
+            doc_decision = real_decision
+        except Exception:
+            # If classification itself errors, keep the placeholder so the doc
+            # at least gets a sidecar rather than being dropped.
+            pass
+
     warnings: list[str] = []
     pdf_sha256: str | None = None
     if config.include_pdf_sha256:
@@ -1128,20 +1536,38 @@ def _extract_for_pdf(
             parser_mode=parser_mode, cached_parser=str(getattr(cached, "parser", "") or "")
         ):
             cached = None
+        if (
+            cached is not None
+            and parser_mode in {"liteparse_only", "footnote_optimized"}
+            and str(getattr(cached, "parser", "") or "").strip().lower() == "liteparse"
+            and not (getattr(cached, "metadata", {}) or {}).get("liteparse_selected_candidate")
+        ):
+            cached = None
         if cached is not None:
             document = cached
         else:
-            if note_cutoff_ratio_override is None:
-                document = _extract_document_with_mode(
+            if parser_mode in {"liteparse_only", "footnote_optimized"}:
+                liteparse_candidates = extract_liteparse_candidate_documents(
                     pdf_path,
-                    parser_mode=parser_mode,
-                )
-            else:
-                document = _extract_document_with_mode(
-                    pdf_path,
-                    parser_mode=parser_mode,
                     note_cutoff_ratio=note_cutoff_ratio_override,
                 )
+                if liteparse_candidates:
+                    document = _select_liteparse_candidate_document(
+                        liteparse_candidates,
+                        profile_for=_profile_for,
+                    )
+            if document is None:
+                if note_cutoff_ratio_override is None:
+                    document = _extract_document_with_mode(
+                        pdf_path,
+                        parser_mode=parser_mode,
+                    )
+                else:
+                    document = _extract_document_with_mode(
+                        pdf_path,
+                        parser_mode=parser_mode,
+                        note_cutoff_ratio=note_cutoff_ratio_override,
+                    )
             if text_cache:
                 text_cache.put(pdf_path, document)
         if ocr_primary_failed:
@@ -1152,11 +1578,26 @@ def _extract_for_pdf(
     warnings.extend(document.warnings)
     profile = _profile_for(document)
 
-    notes, author_notes, ordinality, note_warnings = segment_document_notes_extended(
-        document,
-        gap_tolerance=profile.gap_tolerance,
-        strict_label_filter=profile.strict_label_filter,
-    )
+    # When the liteparse selector picked the sequence_solver candidate, its
+    # precomputed NoteRecord/OrdinalityReport payload is authoritative — the
+    # selector already hydrated it instead of running the segmenter. Running
+    # segment_document_notes_extended again here throws that away and replays
+    # _is_likely_false_positive over solver-accepted labels, which produced
+    # the "selected=258, notes=4" pathology in the corpus audit.
+    precomputed_payload = None
+    if isinstance(document.metadata, dict):
+        precomputed_payload = document.metadata.get("sequence_solver_precomputed")
+    if precomputed_payload:
+        notes = list(precomputed_payload.get("notes") or [])
+        author_notes = list(precomputed_payload.get("author_notes") or [])
+        ordinality = precomputed_payload.get("ordinality")
+        note_warnings = ["sequence_solver_segmenter_bypassed"]
+    else:
+        notes, author_notes, ordinality, note_warnings = segment_document_notes_extended(
+            document,
+            gap_tolerance=profile.gap_tolerance,
+            strict_label_filter=profile.strict_label_filter,
+        )
     warnings.extend(note_warnings)
     parser_used = parser_used or document.parser or ""
 
@@ -1367,14 +1808,62 @@ def _extract_for_pdf(
                 if current_gaps:
                     warnings.append("ordinality_patch_ocr_attempted")
                     attempts = max(1, int(config.ordinality_patch_ocr_escalation_passes))
-                    for _ in range(attempts):
+                    doc_page_count = int(getattr(document, "page_count", 0) or 0)
+                    attempted_ocr_pages: set[int] = set()
+                    for pass_index in range(attempts):
                         current_gaps = [
                             int(g) for g in (getattr(ordinality, "gaps", []) or []) if int(g) > 0
                         ]
                         if not current_gaps:
                             break
+                        # Reselect pages for the CURRENT gap set, not the initial one.
+                        # Dynamic cap scales with gap density so long articles with
+                        # many gaps aren't starved by a static 20-page limit.
+                        dynamic_max = max(
+                            int(config.ordinality_patch_max_pages),
+                            min(
+                                max(1, doc_page_count),
+                                max(20, (len(current_gaps) * 3) // 2),
+                            ),
+                        )
+                        reselected_pages = _select_ordinality_patch_pages(
+                            notes=notes,
+                            gaps=current_gaps,
+                            page_count=doc_page_count,
+                            expand=max(1, int(config.ordinality_patch_expand)),
+                            max_pages=dynamic_max,
+                        )
+                        # If gap density is very high (>30% of expected range) AND
+                        # a prior pass already failed to converge, escalate to the
+                        # full document. Gated to pass 2+ so a single dynamic-window
+                        # pass gets a chance first — bounds OCR cost on the common case.
+                        expected_span = 0
+                        if ordinality is not None:
+                            er = getattr(ordinality, "expected_range", None)
+                            if er and len(er) == 2 and er[1] >= er[0]:
+                                expected_span = int(er[1]) - int(er[0]) + 1
+                        if (
+                            pass_index >= 1
+                            and expected_span
+                            and len(current_gaps) / expected_span > 0.30
+                            and doc_page_count > 0
+                        ):
+                            reselected_pages = list(range(1, doc_page_count + 1))
+                            if "ordinality_patch_ocr_whole_doc" not in warnings:
+                                warnings.append("ordinality_patch_ocr_whole_doc")
+                        # Prefer pages we haven't OCR'd yet; only fall back to
+                        # reprocessing if no new pages were selected.
+                        fresh_pages = [p for p in reselected_pages if p not in attempted_ocr_pages]
+                        ocr_target_pages = fresh_pages or reselected_pages
+                        if not ocr_target_pages:
+                            break
+                        attempted_ocr_pages.update(ocr_target_pages)
+                        # Keep patch_pages updated so downstream fallback OCR sees
+                        # the full set of pages we've touched.
+                        patch_pages = sorted(attempted_ocr_pages)
+                        ordinality_patch_pages = patch_pages
                         ocr_patch_document, ocr_patch_warnings = ocr_pool.extract_document(
-                            pdf_path, page_numbers=patch_pages
+                            pdf_path, page_numbers=ocr_target_pages
                         )
                         warnings.extend(ocr_patch_warnings)
                         if ocr_patch_document is None:
@@ -1486,9 +1975,31 @@ def _extract_for_pdf(
                 )
                 # Keep OCR output when explicitly requested or when it produces a
                 # cleaner ordered footnote stream than the base extraction.
-                if ocr_sequence_quality_score > sequence_quality_score or (
-                    ocr_sequence_quality_score == sequence_quality_score
-                    and len(ocr_notes) > len(notes)
+                #
+                # Bias toward OCR when native is hopeless: low font variance
+                # typically means a scanned PDF where pdfplumber extracts junk
+                # labels. If native produced fewer than 5 notes or was marked
+                # invalid, accept OCR whenever it found more numeric labels.
+                native_hopeless = (
+                    "low_font_variance_detected" in warnings
+                    or "reversed_word_order_suspected" in warnings
+                ) and (
+                    len(notes) < 5
+                    or str(getattr(ordinality, "status", "") or "") == "invalid"
+                )
+                ocr_numeric_count = sum(
+                    1 for n in ocr_notes if str(getattr(n, "label", "") or "").isdigit()
+                )
+                native_numeric_count = sum(
+                    1 for n in notes if str(getattr(n, "label", "") or "").isdigit()
+                )
+                if (
+                    ocr_sequence_quality_score > sequence_quality_score
+                    or (
+                        ocr_sequence_quality_score == sequence_quality_score
+                        and len(ocr_notes) > len(notes)
+                    )
+                    or (native_hopeless and ocr_numeric_count > native_numeric_count)
                 ):
                     document = ocr_document
                     profile = ocr_profile
@@ -1529,7 +2040,7 @@ def _extract_for_pdf(
                     patch_doc = _extract_document_with_mode(
                         patch_pdf_path,
                         parser_mode=parser_mode,
-                        note_cutoff_ratio_override=0.95,
+                        note_cutoff_ratio=0.95,
                     )
                     if patch_doc is not None:
                         patch_doc = _remap_patch_pages(patch_doc, page_map)
@@ -1591,6 +2102,7 @@ def _extract_for_pdf(
         notes=notes,
         author_notes=author_notes,
         ordinality=ordinality,
+        document_metadata=dict(getattr(document, "metadata", {}) or {}),
     ).to_dict(emit_segments=config.emit_segments)
 
     primary_numeric_count = _numeric_note_count(payload.get("notes"))
@@ -1655,11 +2167,30 @@ def _extract_for_pdf(
         metadata["ocr_review_reasons"] = list(ocr_review_reasons)
         payload["document_metadata"] = metadata
 
+    if doc_decision is not None:
+        payload.setdefault("doc_type", doc_decision.doc_type or "")
+        payload.setdefault("doc_policy", config.doc_policy)
+        payload.setdefault("platform_family", doc_decision.platform_family or "")
+    payload["doc_type"] = payload.get("doc_type") or (doc_decision.doc_type if doc_decision else "")
+    payload["doc_policy"] = payload.get("doc_policy") or config.doc_policy
+    payload["platform_family"] = payload.get("platform_family") or (
+        doc_decision.platform_family if doc_decision else ""
+    )
+
+    # Strip in-process-only metadata that carries non-JSON-serializable
+    # dataclass instances (solver NoteRecord/OrdinalityReport). They were kept
+    # on the document so the selector could hydrate without re-running the
+    # segmenter, but they must not hit disk.
+    dm = payload.get("document_metadata")
+    if isinstance(dm, dict):
+        dm.pop("sequence_solver_precomputed", None)
     # Preserve note insertion order in sidecars so downstream evaluation can
     # compare ordered streams accurately.
     _write_json_atomic(sidecar_path, payload, sort_keys=False)
     _write_jsonl_sidecar_atomic(
-        f"{pdf_path}.footnotes.jsonl", payload, emit_segments=config.emit_segments
+        _augmented_sidecar_path(pdf_path, ".footnotes.jsonl"),
+        payload,
+        emit_segments=config.emit_segments,
     )
 
     payload_notes = payload.get("notes")

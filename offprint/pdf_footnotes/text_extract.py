@@ -27,6 +27,14 @@ _LEGAL_FOOTNOTE_SIGNAL_RE = re.compile(
     r"\b(?:v\.|u\.s\.|f\.\d|s\. ct\.|id\.|supra|infra|§)\b",
     re.IGNORECASE,
 )
+_STRICT_FOOTNOTE_SIGNAL_RE = re.compile(
+    r"(?<![A-Za-z])(?:"
+    r"see|see also|but see|cf\.|compare|accord|contra|id\.|ibid\.|supra|infra|"
+    r"u\.s\.|f\.\s?(?:2d|3d|supp)|s\.\s?ct\.|l\.\s?ed\.|u\.s\.c\.|c\.f\.r\.|"
+    r"restatement|e\.g\.|§"
+    r")(?![A-Za-z])",
+    re.IGNORECASE,
+)
 _OPENDATALOADER_EXCLUDED_TYPES = {"header", "footer"}
 _FRONTMATTER_TEXT_RE = re.compile(
     r"\b(?:table of contents|contents|editorial board|masthead|inside cover|volume|issue)\b",
@@ -40,6 +48,12 @@ _RUNNING_HEAD_JOURNAL_CITE_RE = re.compile(
     r"^\s*(?:\d{1,4}\s+)?[A-Za-z][A-Za-z.\s&'-]{2,80}"
     r"L\.\s*Rev\.\s+\d{2,4}\s+\(\d{4}\)(?:\s+\d{2,4})?\s*$",
     re.IGNORECASE,
+)
+_SECTION_HEADING_LINE_RE = re.compile(
+    r"^\s*(?:"
+    r"(?:[IVXLCDM]{1,8}|[A-Z]|\d{1,3})[\.\)]\s+)?"
+    r"[A-Z][A-Z0-9\s,.'&:-]{8,120}"
+    r"$"
 )
 _OPENING_TOKENS = {
     "a",
@@ -139,6 +153,7 @@ class ExtractedDocument:
     pages: list[ExtractedPage] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
     parser: str = ""
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
     def total_text_chars(self) -> int:
@@ -154,6 +169,7 @@ class ExtractedDocument:
             "pages": [page.to_dict() for page in self.pages],
             "warnings": list(self.warnings),
             "parser": self.parser,
+            "metadata": dict(self.metadata),
         }
 
     @classmethod
@@ -163,7 +179,21 @@ class ExtractedDocument:
             pages=[ExtractedPage.from_dict(p) for p in d.get("pages", [])],
             warnings=d.get("warnings", []),
             parser=d.get("parser", ""),
+            metadata=dict(d.get("metadata") or {}),
         )
+
+
+@dataclass(frozen=True)
+class _LiteparsePageLayout:
+    page_number: int
+    width: float
+    height: float
+    raw_text: str
+    lines: tuple[ExtractedLine, ...]
+    # Raw textItems (dicts with keys: text, x, y, width, height, fontSize) so
+    # candidates that need glyph-level precision (e.g. the sequence_solver) can
+    # work directly on liteparse output without re-parsing.
+    raw_items: tuple[dict, ...] = ()
 
 
 _REPORTER_SPACED_RE = re.compile(r"\b([A-Z])\.\s+(\d)\s+([a-z])\b")
@@ -410,11 +440,70 @@ def _merge_smallcaps_textitems(words: list[dict]) -> list[dict]:
 def _cluster_words_to_lines(words: list[dict], page_number: int) -> list[ExtractedLine]:
     if not words:
         return []
+    column_split = _detect_word_column_split(words)
+    if column_split is not None:
+        left_words = [
+            word
+            for word in words
+            if _word_x_center(word) < column_split
+        ]
+        right_words = [
+            word
+            for word in words
+            if _word_x_center(word) >= column_split
+        ]
+        if left_words and right_words:
+            return _cluster_words_to_lines_single_column(
+                left_words, page_number=page_number
+            ) + _cluster_words_to_lines_single_column(right_words, page_number=page_number)
+    return _cluster_words_to_lines_single_column(words, page_number=page_number)
+
+
+def _word_x_center(word: dict) -> float:
+    return (float(word.get("x0", 0.0)) + float(word.get("x1", 0.0))) / 2.0
+
+
+def _detect_word_column_split(words: list[dict]) -> float | None:
+    if len(words) < 12:
+        return None
+
+    centers = sorted(_word_x_center(word) for word in words)
+    if not centers:
+        return None
+    x_span = centers[-1] - centers[0]
+    if x_span < 250.0:
+        return None
+
+    gaps = [
+        (centers[idx + 1] - centers[idx], idx)
+        for idx in range(len(centers) - 1)
+    ]
+    positive_gaps = [gap for gap, _idx in gaps if gap > 0.0]
+    if not positive_gaps:
+        return None
+
+    largest_gap, split_idx = max(gaps, key=lambda item: item[0])
+    median_gap = statistics.median(positive_gaps)
+    if largest_gap < max(55.0, median_gap * 4.0):
+        return None
+
+    left_count = split_idx + 1
+    right_count = len(centers) - left_count
+    min_side = max(4, int(len(centers) * 0.20))
+    if left_count < min_side or right_count < min_side:
+        return None
+
+    split_x = (centers[split_idx] + centers[split_idx + 1]) / 2.0
+    if not (centers[0] + x_span * 0.30 <= split_x <= centers[0] + x_span * 0.70):
+        return None
+    return split_x
+
+
+def _group_words_by_y_band(words: list[dict], *, tolerance: float = 2.5) -> list[list[dict]]:
     sorted_words = sorted(
         words, key=lambda word: (float(word.get("top", 0.0)), float(word.get("x0", 0.0)))
     )
     bins: list[list[dict]] = []
-    tolerance = 2.5
     for word in sorted_words:
         top = float(word.get("top", 0.0))
         if not bins:
@@ -425,9 +514,97 @@ def _cluster_words_to_lines(words: list[dict], page_number: int) -> list[Extract
             bins[-1].append(word)
         else:
             bins.append([word])
+    return bins
 
+
+def _text_fidelity_score_for_word_pages(word_pages: Sequence[list[dict]]) -> float | None:
+    """Cheap coordinate proxy for text fidelity after column-aware clustering.
+
+    ExtractedLine currently stores line text and y/font metadata, not per-token
+    x positions. That means exact per-note "first 10 words are x-monotonic"
+    scoring is not available once notes are segmented. Instead, score page
+    y-bands before line construction: a band is good when it is single-column,
+    or when a detected two-column split lets clustering handle each side
+    independently. This conservatively penalizes only obvious cross-column
+    mixing risk and remains deterministic/cheap.
+    """
+    good = 0
+    total = 0
+    for words in word_pages:
+        page_words = [word for word in words if str(word.get("text", "")).strip()]
+        if len(page_words) < 2:
+            continue
+        split = _detect_word_column_split(page_words)
+        for band in _group_words_by_y_band(page_words):
+            if len(band) < 2:
+                continue
+            total += 1
+            if split is None:
+                if not _y_band_has_unresolved_column_gap(band):
+                    good += 1
+                continue
+            left = [word for word in band if _word_x_center(word) < split]
+            right = [word for word in band if _word_x_center(word) >= split]
+            if left and right:
+                # The main line builder clusters each side separately, so a
+                # same-y two-column band should not be emitted as one mixed line.
+                good += 1
+            else:
+                good += 1
+    if total == 0:
+        return None
+    return round(good / total, 4)
+
+
+def _y_band_has_unresolved_column_gap(words: list[dict]) -> bool:
+    centers = sorted(_word_x_center(word) for word in words)
+    if len(centers) < 4:
+        return False
+    x_span = centers[-1] - centers[0]
+    if x_span < 250.0:
+        return False
+    gaps = [(centers[idx + 1] - centers[idx], idx) for idx in range(len(centers) - 1)]
+    positive_gaps = [gap for gap, _idx in gaps if gap > 0.0]
+    if not positive_gaps:
+        return False
+    largest_gap, split_idx = max(gaps, key=lambda item: item[0])
+    median_gap = statistics.median(positive_gaps)
+    if largest_gap < max(55.0, median_gap * 4.0):
+        return False
+    return split_idx + 1 >= 2 and len(centers) - (split_idx + 1) >= 2
+
+
+def _raw_items_to_word_dicts(raw_items: Sequence[dict]) -> list[dict]:
+    words: list[dict] = []
+    for item in raw_items:
+        text = str(item.get("text", "") or "").strip()
+        if not text:
+            continue
+        x = float(item.get("x", 0.0) or 0.0)
+        y = float(item.get("y", 0.0) or 0.0)
+        width = float(item.get("width", 0.0) or 0.0)
+        height = float(item.get("height", 0.0) or 0.0)
+        if height <= 0.0:
+            height = float(item.get("fontSize", 0.0) or 0.0)
+        words.append(
+            {
+                "text": text,
+                "x0": x,
+                "x1": x + width,
+                "top": y,
+                "bottom": y + height if height > 0.0 else y,
+                "size": float(item.get("fontSize", 0.0) or 0.0) or None,
+            }
+        )
+    return words
+
+
+def _cluster_words_to_lines_single_column(
+    words: list[dict], page_number: int
+) -> list[ExtractedLine]:
     lines: list[ExtractedLine] = []
-    for grouped_words in bins:
+    for grouped_words in _group_words_by_y_band(words):
+        grouped_words = sorted(grouped_words, key=lambda word: float(word.get("x0", 0.0)))
         texts = [str(word.get("text", "")).strip() for word in grouped_words]
         line_text = _join_word_text(texts)
         if not line_text:
@@ -448,6 +625,21 @@ def _cluster_words_to_lines(words: list[dict], page_number: int) -> list[Extract
             )
         )
     return lines
+
+
+def _clone_line(line: ExtractedLine) -> ExtractedLine:
+    return ExtractedLine(
+        text=line.text,
+        page_number=line.page_number,
+        top=line.top,
+        bottom=line.bottom,
+        font_size=line.font_size,
+        source=line.source,
+    )
+
+
+def _clone_lines(lines: list[ExtractedLine] | tuple[ExtractedLine, ...]) -> list[ExtractedLine]:
+    return [_clone_line(line) for line in lines]
 
 
 def _find_footnote_separator(page: Any) -> float | None:
@@ -628,6 +820,7 @@ def _extract_with_pdfplumber(
         with pdfplumber.open(pdf_path) as pdf:
             low_font_variance_detected = False
             reversed_word_order_detected = False
+            word_pages: list[list[dict]] = []
             for idx, page in enumerate(pdf.pages, start=1):
                 width = float(getattr(page, "width", 0.0) or 0.0)
                 height = float(getattr(page, "height", 0.0) or 0.0)
@@ -644,6 +837,7 @@ def _extract_with_pdfplumber(
                     )
                 except Exception:
                     warnings.append(f"word extraction failed on page {idx}")
+                word_pages.append(words)
 
                 raw_text = ""
                 try:
@@ -687,7 +881,13 @@ def _extract_with_pdfplumber(
     if reversed_word_order_detected:
         warnings.append("reversed_word_order_suspected")
 
-    return ExtractedDocument(pdf_path=pdf_path, pages=pages, warnings=warnings)
+    metadata: dict[str, Any] = {}
+    text_fidelity_score = _text_fidelity_score_for_word_pages(word_pages)
+    if text_fidelity_score is not None:
+        metadata["text_fidelity_score"] = text_fidelity_score
+        metadata["text_fidelity_score_method"] = "page_y_band_column_proxy_v1"
+
+    return ExtractedDocument(pdf_path=pdf_path, pages=pages, warnings=warnings, metadata=metadata)
 
 
 def _extract_with_pypdf(pdf_path: str) -> ExtractedDocument | None:
@@ -880,21 +1080,276 @@ def _classify_opendataloader_note_candidates(
     return [], [], False
 
 
+_LITEPARSE_DASH_CHARS = frozenset("-–—―_‒⸺⸻~")
+
+
+def _is_dash_only_line(text: str) -> bool:
+    non_space = [c for c in (text or "") if not c.isspace()]
+    if len(non_space) < 6:
+        return False
+    return sum(1 for c in non_space if c in _LITEPARSE_DASH_CHARS) / len(non_space) >= 0.9
+
+
+def _find_liteparse_dash_separator(
+    lines: list[ExtractedLine], *, page_height: float
+) -> float | None:
+    """Return the top-y of a dashed-glyph separator line when one appears in
+    the bottom half of the page. Some law review PDFs render the footnote
+    separator as a run of dash glyphs (rather than a vector line), which
+    liteparse surfaces as an ordinary text item."""
+    if page_height <= 0:
+        return None
+    for line in lines:
+        if not _is_dash_only_line(line.text or ""):
+            continue
+        if float(line.top) / page_height < 0.4:
+            continue
+        return float(line.top)
+    return None
+
+
+def _bimodal_font_split(
+    lines: list[ExtractedLine], *, page_height: float
+) -> float | None:
+    """Detect a bimodal font-size distribution per page and return the top-y
+    boundary above which body text lies and below which footnotes lie.
+
+    Returns None when the page is not cleanly bimodal, when the smaller
+    cluster is too small relative to the body, or when the candidate boundary
+    sits in the upper half of the page."""
+    sized = [ln for ln in lines if ln.font_size is not None]
+    if len(sized) < 10 or page_height <= 0:
+        return None
+    from collections import Counter
+
+    # Bucket at 1-pt granularity so that line-median jitter (e.g. body sizes
+    # of 9.9/10.0/10.1/10.2 produced by slightly noisy PDFs) collapse into a
+    # single cluster. Finer bucketing scattered such distributions across
+    # multiple sub-12% buckets and caused the rail to abstain on real bimodal
+    # pages.
+    buckets = Counter(int(round(float(ln.font_size))) for ln in sized)
+    if len(buckets) < 2:
+        return None
+    total = len(sized)
+    # Any bucket carrying >=12% mass is a "real" cluster. Pick the extremes by
+    # value rather than by rank so that note-heavy pages (where the small
+    # cluster outnumbers the body) still identify the larger value as body.
+    significant = sorted(s for s, c in buckets.items() if c / total >= 0.12)
+    if len(significant) < 2:
+        return None
+    small_size = float(significant[0])
+    big_size = float(significant[-1])
+    if big_size <= 0 or small_size / big_size > 0.9:
+        return None
+    threshold = (big_size + small_size) / 2.0
+    # Walk from the bottom of the page upward; extend the "notes region" as
+    # long as at least 70 % of lines at-or-below the boundary are small-font.
+    sorted_lines = sorted(sized, key=lambda ln: float(ln.top), reverse=True)
+    best_y: float | None = None
+    small_count = 0
+    total_region = 0
+    for line in sorted_lines:
+        total_region += 1
+        is_small = line.font_size is not None and line.font_size <= threshold
+        if is_small:
+            small_count += 1
+        if total_region >= 4 and (small_count / total_region) >= 0.70:
+            if is_small:
+                best_y = float(line.top)
+        elif total_region >= 4:
+            break
+    if best_y is None or small_count < 3:
+        return None
+    if best_y / page_height < 0.4:
+        return None
+    return best_y
+
+
+def _low_variance_density_split(
+    lines: list[ExtractedLine], *, page_height: float
+) -> float | None:
+    """Find a footnote boundary when font size cannot separate body and notes."""
+    if len(lines) < 6 or page_height <= 0:
+        return None
+
+    ordered = sorted(lines, key=lambda line: float(line.top))
+    for idx, line in enumerate(ordered):
+        rel_top = float(line.top) / page_height
+        if rel_top < 0.50:
+            continue
+        below = ordered[idx:]
+        if len(below) < 3 or len(below) > max(5, int(len(ordered) * 0.60)):
+            continue
+
+        first_three = [" ".join((ln.text or "").split()) for ln in below[:3]]
+        starts_with_marker = sum(1 for text in first_three if _NOTE_LIKE_RE.match(text))
+        if starts_with_marker == 0:
+            continue
+
+        note_like = 0
+        legal_cue = 0
+        short_id = 0
+        for candidate in below:
+            text = " ".join((candidate.text or "").split())
+            if _NOTE_LIKE_RE.match(text):
+                note_like += 1
+            if _LEGAL_FOOTNOTE_SIGNAL_RE.search(text):
+                legal_cue += 1
+            if _SHORT_ID_NOTE_RE.match(text):
+                short_id += 1
+
+        signal = note_like + (0.6 * legal_cue) + (0.8 * short_id)
+        density = signal / max(len(below), 1)
+        if note_like >= 2 and density >= 0.45:
+            return float(line.top)
+        if note_like >= 1 and legal_cue >= 2 and density >= 0.55:
+            return float(line.top)
+    return None
+
+
+def _marker_density_split(
+    lines: list[ExtractedLine], *, page_height: float
+) -> float | None:
+    if len(lines) < 6 or page_height <= 0:
+        return None
+
+    ordered = sorted(lines, key=lambda line: float(line.top))
+    for idx, line in enumerate(ordered):
+        rel_top = float(line.top) / page_height
+        if rel_top < 0.45:
+            continue
+        below = ordered[idx:]
+        if len(below) < 2 or len(below) > max(6, int(len(ordered) * 0.70)):
+            continue
+        note_like = 0
+        legal_cue = 0
+        for candidate in below:
+            text = " ".join((candidate.text or "").split())
+            if _NOTE_LIKE_RE.match(text):
+                note_like += 1
+            if _LEGAL_FOOTNOTE_SIGNAL_RE.search(text):
+                legal_cue += 1
+        density = (note_like + (0.5 * legal_cue)) / max(len(below), 1)
+        if note_like >= 2 and density >= 0.35:
+            return float(line.top)
+    return None
+
+
+def _pattern_density_strict_split(
+    lines: list[ExtractedLine], *, page_height: float
+) -> float | None:
+    if len(lines) < 8 or page_height <= 0:
+        return None
+
+    ordered = sorted(lines, key=lambda line: float(line.top))
+    for idx, line in enumerate(ordered):
+        rel_top = float(line.top) / page_height
+        if rel_top < 0.40:
+            continue
+        window = ordered[idx : idx + 8]
+        below = ordered[idx:]
+        if len(window) < 5 or len(below) > max(8, int(len(ordered) * 0.75)):
+            continue
+
+        strong = 0
+        starts = 0
+        for candidate in window:
+            text = " ".join((candidate.text or "").split())
+            if _NOTE_LIKE_RE.match(text):
+                starts += 1
+                strong += 1
+            elif _STRICT_FOOTNOTE_SIGNAL_RE.search(text):
+                strong += 1
+
+        if strong >= 5 and starts >= 2:
+            return float(line.top)
+    return None
+
+
+def _line_is_body_like_for_liberal_notes(
+    line: ExtractedLine,
+    *,
+    page_height: float,
+    median_size: float | None,
+) -> bool:
+    text = " ".join((line.text or "").split())
+    if not text:
+        return True
+    rel_top = float(line.top) / page_height if page_height > 0 else 0.0
+    if rel_top >= 0.92 and re.fullmatch(r"\d{1,4}", text):
+        return True
+    if _RUNNING_HEAD_JOURNAL_CITE_RE.match(text):
+        return True
+    if _SECTION_HEADING_LINE_RE.match(text):
+        return True
+    if (
+        median_size
+        and line.font_size is not None
+        and float(line.font_size) >= median_size * 1.12
+        and not _NOTE_LIKE_RE.match(text)
+        and not _STRICT_FOOTNOTE_SIGNAL_RE.search(text)
+    ):
+        return True
+    return False
+
+
+def _liberal_notes_split(
+    lines: list[ExtractedLine], *, page_height: float
+) -> tuple[list[ExtractedLine], list[ExtractedLine], bool]:
+    if len(lines) < 4 or page_height <= 0:
+        return [], [], False
+
+    sizes = [float(line.font_size) for line in lines if line.font_size is not None]
+    median_size = statistics.median(sizes) if sizes else None
+    body: list[ExtractedLine] = []
+    notes: list[ExtractedLine] = []
+    for line in lines:
+        rel_top = float(line.top) / page_height if page_height > 0 else 0.0
+        if rel_top < 0.40 or _line_is_body_like_for_liberal_notes(
+            line, page_height=page_height, median_size=median_size
+        ):
+            body.append(line)
+        else:
+            notes.append(line)
+
+    if not body or len(notes) < 2:
+        return [], [], False
+    note_like = sum(1 for line in notes if _NOTE_LIKE_RE.match(" ".join((line.text or "").split())))
+    signal = sum(1 for line in notes if _STRICT_FOOTNOTE_SIGNAL_RE.search(line.text or ""))
+    if note_like < 1 and signal < 2:
+        return [], [], False
+    if len(notes) > max(6, int(len(lines) * 0.85)):
+        return [], [], False
+    return body, notes, True
+
+
+def _split_lines_at_y(
+    lines: list[ExtractedLine], sep_y: float
+) -> tuple[list[ExtractedLine], list[ExtractedLine]]:
+    body = [ln for ln in lines if float(ln.top) < sep_y]
+    notes = [
+        ln
+        for ln in lines
+        if float(ln.top) >= sep_y and not _is_dash_only_line(ln.text or "")
+    ]
+    return body, notes
+
+
 def _classify_liteparse_note_candidates(
     lines: list[ExtractedLine], *, page_height: float
 ) -> tuple[list[ExtractedLine], list[ExtractedLine], bool]:
     """
     LiteParse-specific classifier for separating body and footnote lines.
 
-    liteparse provides dense spatial text lines with per-word font sizes captured
-    by _cluster_words_to_lines.  Unlike pdfplumber we have no access to physical
-    separator lines/rects, so classification relies on:
-      1. Running-head / frontmatter pre-filter for pages 1-3.
-      2. Font size ratio: lines whose median font size is < 90 % of the page
-         median are likely footnotes regardless of vertical position.
-      3. Position + citation-signal scoring: note-like markers and legal cues in
-         the bottom 40 % of the page.
-      4. Pathological guard: if no body lines remain, fall back to _classify_lines.
+    Prefers two deterministic rails when the page supports them:
+      1. **Dashed-glyph separator** — some PDFs render the footnote rule as
+         a row of dashes, which liteparse emits as a text item.
+      2. **Bimodal font split** — per-page k=2 clustering on font size; the
+         smaller cluster defines the footnote region when both clusters carry
+         significant mass and their ratio is <= 0.9.
+
+    Falls back to position + citation-signal scoring when neither rail
+    applies (homogeneous pages, title pages, low-variance scans).
     """
     if not lines or page_height <= 0:
         return [], [], False
@@ -915,10 +1370,37 @@ def _classify_liteparse_note_candidates(
     if not filtered:
         return [], [], False
 
-    # --- Font size median for ratio check ---
+    low_variance = _low_font_variance(filtered)
+
+    # --- Deterministic rails ---
+    sep_y = _find_liteparse_dash_separator(filtered, page_height=page_height)
+    if sep_y is None:
+        sep_y = _bimodal_font_split(filtered, page_height=page_height)
+    if sep_y is None and low_variance:
+        sep_y = _low_variance_density_split(filtered, page_height=page_height)
+    if sep_y is not None:
+        body_det = [ln for ln in filtered if float(ln.top) < sep_y]
+        notes_det = [
+            ln
+            for ln in filtered
+            if float(ln.top) >= sep_y and not _is_dash_only_line(ln.text or "")
+        ]
+        has_note_signal = any(
+            _NOTE_LIKE_RE.match(" ".join((ln.text or "").split()))
+            or _LEGAL_FOOTNOTE_SIGNAL_RE.search(ln.text or "")
+            for ln in notes_det
+        )
+        if (
+            body_det
+            and notes_det
+            and len(notes_det) <= max(4, int(len(filtered) * 0.8))
+            and (has_note_signal or len(notes_det) >= 3)
+        ):
+            return body_det, notes_det, True
+
+    # --- Scoring fallback ---
     sizes = [line.font_size for line in filtered if line.font_size is not None]
     median_size = statistics.median(sizes) if sizes else None
-    low_variance = _low_font_variance(filtered)
 
     notes: list[ExtractedLine] = []
     for line in filtered:
@@ -976,9 +1458,68 @@ def _classify_liteparse_note_candidates(
     return [], [], False
 
 
-def _extract_with_liteparse(
-    pdf_path: str, *, note_cutoff_ratio: float | None = None
-) -> ExtractedDocument | None:
+def _classify_liteparse_candidate_lines(
+    lines: list[ExtractedLine],
+    *,
+    page_height: float,
+    candidate_name: str,
+    note_cutoff_ratio: float | None = None,
+) -> tuple[list[ExtractedLine], list[ExtractedLine], bool]:
+    if candidate_name == "default":
+        return _classify_liteparse_note_candidates(lines, page_height=page_height)
+    if candidate_name == "marker_density":
+        sep_y = _marker_density_split(lines, page_height=page_height)
+        if sep_y is not None:
+            body, notes = _split_lines_at_y(lines, sep_y)
+            if body and notes:
+                return body, notes, True
+        return [], [], False
+    if candidate_name == "low_variance_density":
+        sep_y = _low_variance_density_split(lines, page_height=page_height)
+        if sep_y is not None:
+            body, notes = _split_lines_at_y(lines, sep_y)
+            if body and notes:
+                return body, notes, True
+        return [], [], False
+    if candidate_name == "pattern_density_strict":
+        sep_y = _pattern_density_strict_split(lines, page_height=page_height)
+        if sep_y is not None:
+            body, notes = _split_lines_at_y(lines, sep_y)
+            if body and notes:
+                return body, notes, True
+        return [], [], False
+    if candidate_name == "liberal_notes":
+        return _liberal_notes_split(lines, page_height=page_height)
+    if candidate_name == "bottom_60":
+        body, notes, _low_variance = _classify_lines(
+            lines, page_height=page_height, note_cutoff_ratio=0.60
+        )
+        return body, notes, True
+    if candidate_name == "bottom_72":
+        body, notes, _low_variance = _classify_lines(
+            lines, page_height=page_height, note_cutoff_ratio=0.72
+        )
+        return body, notes, True
+    return _classify_lines(
+        lines,
+        page_height=page_height,
+        note_cutoff_ratio=note_cutoff_ratio,
+    )
+
+
+_LITEPARSE_CANDIDATE_NAMES = (
+    "default",
+    "marker_density",
+    "low_variance_density",
+    "pattern_density_strict",
+    "liberal_notes",
+    "bottom_60",
+    "bottom_72",
+    "sequence_solver",
+)
+
+
+def _load_liteparse_page_layouts(pdf_path: str) -> list[_LiteparsePageLayout] | None:
     try:
         from liteparse import LiteParse  # type: ignore
     except Exception:
@@ -1019,10 +1560,7 @@ def _extract_with_liteparse(
     except Exception:
         return None
 
-    pages: list[ExtractedPage] = []
-    warnings: list[str] = []
-    low_font_variance_detected = False
-    reversed_word_order_detected = False
+    layouts: list[_LiteparsePageLayout] = []
 
     for parsed_page in list(getattr(result, "pages", []) or []):
         page_no = int(getattr(parsed_page, "pageNum", 0) or 0)
@@ -1070,30 +1608,159 @@ def _extract_with_liteparse(
                 default=0.0,
             )
 
-        body_lines, note_lines, used_custom = _classify_liteparse_note_candidates(
-            lines, page_height=height
+        raw_items: list[dict] = []
+        for item in list(getattr(parsed_page, "textItems", []) or []):
+            t = " ".join(str(getattr(item, "text", "") or "").split())
+            if not t:
+                continue
+            raw_items.append({
+                "text": t,
+                "x": float(getattr(item, "x", 0.0) or 0.0),
+                "y": float(getattr(item, "y", 0.0) or 0.0),
+                "width": float(getattr(item, "width", 0.0) or 0.0),
+                "height": float(getattr(item, "height", 0.0) or 0.0),
+                "fontSize": float(getattr(item, "fontSize", 0.0) or 0.0),
+            })
+        layouts.append(
+            _LiteparsePageLayout(
+                page_number=page_no,
+                width=width,
+                height=height,
+                raw_text=raw_text,
+                lines=tuple(lines),
+                raw_items=tuple(raw_items),
+            )
         )
-        if used_custom:
-            page_low_font_variance = _low_font_variance(lines)
-        else:
+
+    return layouts
+
+
+def _build_liteparse_candidate_document(
+    pdf_path: str,
+    layouts: list[_LiteparsePageLayout],
+    *,
+    candidate_name: str,
+    note_cutoff_ratio: float | None = None,
+) -> ExtractedDocument:
+    text_fidelity_score = _text_fidelity_score_for_word_pages(
+        [_raw_items_to_word_dicts(layout.raw_items) for layout in layouts]
+    )
+    base_metadata: dict[str, Any] = {}
+    if text_fidelity_score is not None:
+        base_metadata["text_fidelity_score"] = text_fidelity_score
+        base_metadata["text_fidelity_score_method"] = "page_y_band_column_proxy_v1"
+
+    # The sequence_solver candidate is global: it reasons over all pages' raw
+    # textItems at once, picks label positions that form the longest
+    # monotonically-increasing sequence, and returns per-page y cutoffs.
+    if candidate_name == "sequence_solver":
+        from .sequence_solver import solve_document, build_note_records
+
+        result = solve_document(layouts)
+        precomputed_notes, precomputed_author_notes, precomputed_ordinality = build_note_records(
+            layouts, result
+        )
+        pages: list[ExtractedPage] = []
+        warnings: list[str] = []
+        low_font_variance_detected = False
+        reversed_word_order_detected = False
+        page_rails: dict[str, int] = {}
+        for layout in layouts:
+            lines = _clone_lines(layout.lines)
+            cutoff = result.page_cutoffs.get(layout.page_number)
+            if cutoff is None:
+                body_lines = list(lines)
+                note_lines: list[ExtractedLine] = []
+                page_rails["no_split"] = page_rails.get("no_split", 0) + 1
+            else:
+                body_lines = [ln for ln in lines if float(ln.top) < cutoff - 0.5]
+                note_lines = [ln for ln in lines if float(ln.top) >= cutoff - 0.5]
+                page_rails["solver_split"] = page_rails.get("solver_split", 0) + 1
+            low_font_variance_detected = low_font_variance_detected or _low_font_variance(lines)
+            reversed_word_order_detected = (
+                reversed_word_order_detected or _reversed_word_order_suspected(note_lines)
+            )
+            pages.append(
+                ExtractedPage(
+                    page_number=layout.page_number,
+                    width=layout.width,
+                    height=layout.height,
+                    body_lines=body_lines,
+                    note_lines=note_lines,
+                    raw_text=layout.raw_text,
+                    source="liteparse",
+                )
+            )
+        if not pages:
+            warnings.append("liteparse_no_pages")
+        if low_font_variance_detected:
+            warnings.append("low_font_variance_detected")
+        if reversed_word_order_detected:
+            warnings.append("reversed_word_order_suspected")
+        metadata: dict[str, Any] = {
+            **base_metadata,
+            "liteparse_candidate": candidate_name,
+            "liteparse_page_rails": page_rails,
+            "sequence_solver_selected_labels": list(result.selected_labels),
+            "sequence_solver_candidate_count": result.candidate_count,
+        }
+        # Stash precomputed NoteRecord + OrdinalityReport so the selector can
+        # bypass segmenter re-validation for the solver candidate. The solver's
+        # label decisions are authoritative; running _is_likely_false_positive
+        # etc. over solver output just re-rejects valid labels.
+        if precomputed_notes is not None and precomputed_ordinality is not None:
+            metadata["sequence_solver_precomputed"] = {
+                "notes": precomputed_notes,
+                "author_notes": precomputed_author_notes,
+                "ordinality": precomputed_ordinality,
+            }
+        return ExtractedDocument(
+            pdf_path=pdf_path,
+            pages=pages,
+            warnings=warnings,
+            parser="liteparse",
+            metadata=metadata,
+        )
+
+    pages: list[ExtractedPage] = []
+    warnings: list[str] = []
+    low_font_variance_detected = False
+    reversed_word_order_detected = False
+    page_rails: dict[str, int] = {}
+
+    for layout in layouts:
+        lines = _clone_lines(layout.lines)
+        body_lines, note_lines, used_custom = _classify_liteparse_note_candidates(
+            lines, page_height=layout.height
+        ) if candidate_name == "default" else _classify_liteparse_candidate_lines(
+            lines,
+            page_height=layout.height,
+            candidate_name=candidate_name,
+            note_cutoff_ratio=note_cutoff_ratio,
+        )
+        rail_name = candidate_name if used_custom else "classify_lines"
+        if not used_custom:
             body_lines, note_lines, page_low_font_variance = _classify_lines(
                 lines,
-                page_height=height,
+                page_height=layout.height,
                 note_cutoff_ratio=note_cutoff_ratio,
             )
+        else:
+            page_low_font_variance = _low_font_variance(lines)
 
         low_font_variance_detected = low_font_variance_detected or page_low_font_variance
         reversed_word_order_detected = (
             reversed_word_order_detected or _reversed_word_order_suspected(note_lines)
         )
+        page_rails[rail_name] = page_rails.get(rail_name, 0) + 1
         pages.append(
             ExtractedPage(
-                page_number=page_no,
-                width=width,
-                height=height,
+                page_number=layout.page_number,
+                width=layout.width,
+                height=layout.height,
                 body_lines=body_lines,
                 note_lines=note_lines,
-                raw_text=raw_text,
+                raw_text=layout.raw_text,
                 source="liteparse",
             )
         )
@@ -1109,7 +1776,41 @@ def _extract_with_liteparse(
         pages=pages,
         warnings=warnings,
         parser="liteparse",
+        metadata={
+            **base_metadata,
+            "liteparse_candidate": candidate_name,
+            "liteparse_page_rails": page_rails,
+        },
     )
+
+
+def extract_liteparse_candidate_documents(
+    pdf_path: str, *, note_cutoff_ratio: float | None = None
+) -> list[ExtractedDocument]:
+    layouts = _load_liteparse_page_layouts(pdf_path)
+    if layouts is None:
+        return []
+    candidates = [
+        _build_liteparse_candidate_document(
+            pdf_path,
+            layouts,
+            candidate_name=name,
+            note_cutoff_ratio=note_cutoff_ratio,
+        )
+        for name in _LITEPARSE_CANDIDATE_NAMES
+    ]
+    return candidates
+
+
+def _extract_with_liteparse(
+    pdf_path: str, *, note_cutoff_ratio: float | None = None
+) -> ExtractedDocument | None:
+    candidates = extract_liteparse_candidate_documents(
+        pdf_path, note_cutoff_ratio=note_cutoff_ratio
+    )
+    if not candidates:
+        return None
+    return candidates[0]
 
 
 def _parse_opendataloader_json(
@@ -1570,6 +2271,6 @@ def ocr_fallback_recommended(document: ExtractedDocument, note_count: int) -> bo
         return True
     if "reversed_word_order_suspected" in document.warnings:
         return True
-    if "low_font_variance_detected" in document.warnings and note_count < 5:
+    if "low_font_variance_detected" in document.warnings:
         return True
     return False

@@ -67,6 +67,8 @@ class DocStats:
     junk_signals: list[dict[str, str]] = field(default_factory=list)
     note_lengths: list[int] = field(default_factory=list)
     page_count_approx: int = 0  # max page_end across notes
+    doc_type: str = ""  # article|issue_compilation|frontmatter|other (from doc_policy)
+    platform_family: str = ""
 
 
 def _extract_domain(pdf_path: str) -> str:
@@ -140,6 +142,8 @@ def parse_sidecar(sidecar_path: str) -> DocStats | None:
             doc.domain = _extract_domain(doc.pdf_path)
             doc.document_confidence = row.get("document_confidence", 0.0)
             doc.warnings = row.get("warnings", [])
+            doc.doc_type = str(row.get("doc_type") or "")
+            doc.platform_family = str(row.get("platform_family") or "")
             ord_data = row.get("ordinality")
             if ord_data:
                 doc.ordinality_status = ord_data.get("status", "unknown")
@@ -377,6 +381,60 @@ def build_report(pdf_root: str) -> dict[str, Any]:
         "domains": domain_summaries,
     }
 
+    # ── By doc_type (article / frontmatter / issue_compilation / other / unknown) ──
+    #
+    # Article-scoped validity: frontmatter & non-articles with 0 notes count as valid.
+    # This is the headline metric for "real article coverage".
+    by_doc_type: dict[str, dict[str, int]] = collections.defaultdict(
+        lambda: {
+            "total": 0,
+            "valid": 0,
+            "valid_with_gaps": 0,
+            "invalid": 0,
+            "zero_note": 0,
+            "unknown_ord": 0,
+        }
+    )
+    for d in docs:
+        bucket = d.doc_type or "unknown"
+        by_doc_type[bucket]["total"] += 1
+        if d.note_count == 0:
+            by_doc_type[bucket]["zero_note"] += 1
+        status = d.ordinality_status or "unknown"
+        if status in ("valid", "valid_with_gaps", "invalid"):
+            by_doc_type[bucket][status] += 1
+        else:
+            by_doc_type[bucket]["unknown_ord"] += 1
+
+    article_total = by_doc_type.get("article", {}).get("total", 0)
+    article_valid = by_doc_type.get("article", {}).get("valid", 0)
+    article_valid_with_gaps = by_doc_type.get("article", {}).get("valid_with_gaps", 0)
+    article_invalid = by_doc_type.get("article", {}).get("invalid", 0)
+    article_zero_note = by_doc_type.get("article", {}).get("zero_note", 0)
+    # Numerator counts only strictly valid (no gaps, non-zero notes) articles.
+    # Denominator: all docs classified as article. Zero-note articles are NOT free.
+    article_strict_valid = article_valid - sum(
+        1
+        for d in docs
+        if d.doc_type == "article"
+        and d.ordinality_status == "valid"
+        and d.note_count == 0
+    )
+    article_validity_rate = (
+        round(article_strict_valid / article_total * 100, 2) if article_total else 0.0
+    )
+    # "Total validity" over all docs under article_only policy, where frontmatter/other
+    # zero-note docs are counted as valid (not a failure of extraction).
+    non_article_zero_note_valid = sum(
+        1 for d in docs if d.doc_type in {"frontmatter", "other"} and d.note_count == 0
+    )
+    total_valid_incl_frontmatter = article_strict_valid + non_article_zero_note_valid + sum(
+        by_doc_type[b]["valid"] for b in by_doc_type if b in {"issue_compilation"}
+    )
+    corpus_validity_rate = (
+        round(total_valid_incl_frontmatter / len(docs) * 100, 2) if docs else 0.0
+    )
+
     # ── Worst domains by invalid rate ────────────────────────────
     worst_domains = sorted(
         [
@@ -390,7 +448,110 @@ def build_report(pdf_root: str) -> dict[str, Any]:
         {"domain": d, "invalid_rate": r, "sidecars": c} for d, r, c in worst_domains
     ]
 
+    report["by_doc_type"] = {k: dict(v) for k, v in by_doc_type.items()}
+    report["article_scoped"] = {
+        "article_total": article_total,
+        "article_strict_valid": article_strict_valid,
+        "article_valid_with_gaps": article_valid_with_gaps,
+        "article_invalid": article_invalid,
+        "article_zero_note": article_zero_note,
+        "article_validity_rate_pct": article_validity_rate,
+        "corpus_validity_rate_pct": corpus_validity_rate,
+    }
+
     return report
+
+
+def _classify_failure(doc: DocStats) -> str:
+    """Tag non-frontmatter articles by their failure mode (in priority order)."""
+    warns = set(doc.warnings or [])
+    if doc.note_count == 0:
+        if "needs_ocr_review" in warns:
+            return "ocr_skipped_needs_review"
+        if "low_font_variance_detected" in warns:
+            return "low_font_variance_stuck"
+        if "selected_ocr_output" in warns:
+            return "ocr_ran_empty"
+        return "native_empty_no_escalation"
+    if doc.ordinality_status == "invalid":
+        if "ordinality_patch_unresolved" in warns or any(
+            "ordinality_patch" in w for w in warns
+        ):
+            return "patch_exhausted"
+        if "endnotes_detected" in warns:
+            return "endnotes_mishandled"
+        if "selected_ocr_output" in warns:
+            return "ocr_merged_still_invalid"
+        return "invalid_no_patch_attempted"
+    if doc.ordinality_status == "valid_with_gaps":
+        return "valid_with_gaps"
+    # Valid but has junk
+    if doc.junk_signals:
+        jtypes = {s["type"] for s in doc.junk_signals}
+        if "duplicate_text" in jtypes:
+            return "valid_but_duplicate_text"
+        return "valid_but_junk"
+    return "unclassified"
+
+
+def _write_failures_csv(pdf_root: str, out_path: str) -> None:
+    import csv
+
+    sidecars = _find_sidecars(pdf_root)
+    rows: list[dict[str, Any]] = []
+    for sc in sidecars:
+        d = parse_sidecar(sc)
+        if d is None:
+            continue
+        doc_type = (d.doc_type or "").lower()
+        # Focus on articles — frontmatter/other zero-note is acceptable
+        if doc_type and doc_type != "article":
+            continue
+        is_failure = (
+            d.note_count == 0
+            or d.ordinality_status == "invalid"
+            or d.ordinality_status == "valid_with_gaps"
+        )
+        if not is_failure:
+            continue
+        tag = _classify_failure(d)
+        rows.append(
+            {
+                "pdf_path": d.pdf_path,
+                "domain": d.domain,
+                "doc_type": d.doc_type or "unknown",
+                "platform_family": d.platform_family,
+                "ordinality_status": d.ordinality_status or "",
+                "note_count": d.note_count,
+                "expected_range": f"{d.expected_range[0]}-{d.expected_range[1]}",
+                "gap_count": d.gap_count,
+                "document_confidence": round(d.document_confidence, 3),
+                "failure_tag": tag,
+                "warnings": "|".join(sorted(set(d.warnings))),
+            }
+        )
+    out = Path(out_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with out.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=[
+                "pdf_path",
+                "domain",
+                "doc_type",
+                "platform_family",
+                "ordinality_status",
+                "note_count",
+                "expected_range",
+                "gap_count",
+                "document_confidence",
+                "failure_tag",
+                "warnings",
+            ],
+        )
+        writer.writeheader()
+        for r in rows:
+            writer.writerow(r)
 
 
 def _print_summary(report: dict[str, Any]) -> None:
@@ -442,6 +603,29 @@ def _print_summary(report: dict[str, Any]) -> None:
         print(f"    {jtype}: {count}")
     print()
 
+    bdt = report.get("by_doc_type", {})
+    asc = report.get("article_scoped", {})
+    if bdt:
+        print("BY DOC_TYPE (doc_policy classifier)")
+        for bucket in sorted(bdt.keys()):
+            stats = bdt[bucket]
+            print(
+                f"  {bucket:<20}  total={stats['total']:>5}  "
+                f"valid={stats['valid']:>4}  gaps={stats['valid_with_gaps']:>3}  "
+                f"invalid={stats['invalid']:>3}  zero_notes={stats['zero_note']:>3}"
+            )
+        print()
+    if asc:
+        print("ARTICLE-SCOPED VALIDITY (strict; zero-note articles not counted as valid)")
+        print(f"  article total:           {asc['article_total']}")
+        print(f"  strict valid:            {asc['article_strict_valid']}")
+        print(f"  valid_with_gaps:         {asc['article_valid_with_gaps']}")
+        print(f"  invalid:                 {asc['article_invalid']}")
+        print(f"  zero-note articles:      {asc['article_zero_note']}")
+        print(f"  article_validity_rate:   {asc['article_validity_rate_pct']}%")
+        print(f"  corpus_validity_rate:    {asc['corpus_validity_rate_pct']}% (frontmatter/other zero-note counted valid)")
+        print()
+
     worst = report.get("worst_domains_by_invalid_rate", [])
     if worst:
         print("WORST DOMAINS (by invalid ordinality rate, min 3 sidecars)")
@@ -474,9 +658,17 @@ def main() -> None:
         action="store_true",
         help="Suppress terminal summary, emit only JSON",
     )
+    parser.add_argument(
+        "--failures-out",
+        default="",
+        help="Optional CSV path: per-doc failure categorization for non-frontmatter articles",
+    )
     args = parser.parse_args()
 
     report = build_report(args.pdf_root)
+    if args.failures_out:
+        _write_failures_csv(args.pdf_root, args.failures_out)
+        print(f"Failures CSV written to: {args.failures_out}")
 
     if not args.json_only:
         _print_summary(report)
