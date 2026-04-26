@@ -1620,77 +1620,12 @@ def _build_liteparse_candidate_document(
     )
 
 
-def _detect_liteparse_layout_pathology(
-    layouts: list[_LiteparsePageLayout],
-) -> str | None:
-    """Detect liteparse layouts that should route to OCR rather than be parsed.
-
-    Returns a warning slug ("liteparse_zero_lines" or "liteparse_cmap_failure")
-    when the layouts exhibit a known font-encoding pathology that produces
-    silently-empty extractions. Returns None when layouts look healthy.
-    """
-    if not layouts:
-        return None
-
-    # Fix 1: zero-lines pathology. Some PDFs report nominal font sizes
-    # (e.g. 68.7/69pt) that liteparse's downstream filters drop, so every
-    # page ends up with zero clustered lines. The doc would otherwise return
-    # 0 notes silently; route to OCR instead.
-    total_lines = sum(len(layout.lines) for layout in layouts)
-    if total_lines == 0:
-        return "liteparse_zero_lines"
-
-    # Fix 2: cmap-failure pathology. Alegreya-style fonts whose cmap fails
-    # cause liteparse to emit Latin-1-supplement junk glyphs (©, ¬, ¯, etc.)
-    # at small body-text font sizes. Real labels get split/dropped. Detection:
-    # a sample page where many small-font textItems contain Latin-1 supplement
-    # junk glyphs.
-    sample_layouts = layouts[: min(len(layouts), 5)]
-    for layout in sample_layouts:
-        items = list(layout.raw_items or ())
-        small_items = [
-            it
-            for it in items
-            if float(it.get("fontSize") or 0.0) and float(it.get("fontSize") or 0.0) < 9.0
-        ]
-        if len(small_items) < 20:
-            continue
-
-        def _has_junk_glyph(text: str) -> bool:
-            return any(0xA0 <= ord(ch) <= 0xFF for ch in text)
-
-        junk_count = sum(
-            1 for it in small_items if _has_junk_glyph(str(it.get("text") or ""))
-        )
-        ratio = junk_count / max(1, len(small_items))
-        if ratio >= 0.08:
-            return "liteparse_cmap_failure"
-
-    return None
-
-
 def extract_liteparse_candidate_documents(
     pdf_path: str, *, note_cutoff_ratio: float | None = None
 ) -> list[ExtractedDocument]:
     layouts = _load_liteparse_page_layouts(pdf_path)
     if layouts is None:
         return []
-    pathology = _detect_liteparse_layout_pathology(layouts)
-    if pathology is not None:
-        # Return one empty-pages document per candidate slot so downstream
-        # selectors see the warning and route the doc to OCR fallback.
-        empty_docs: list[ExtractedDocument] = []
-        for name in _LITEPARSE_CANDIDATE_NAMES:
-            empty_docs.append(
-                ExtractedDocument(
-                    pdf_path=pdf_path,
-                    pages=[],
-                    warnings=[pathology],
-                    parser="liteparse",
-                    metadata={"liteparse_candidate": name, "liteparse_pathology": pathology},
-                )
-            )
-        return empty_docs
     candidates = [
         _build_liteparse_candidate_document(
             pdf_path,
