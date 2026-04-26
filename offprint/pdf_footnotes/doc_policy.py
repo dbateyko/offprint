@@ -39,7 +39,17 @@ _NON_ARTICLE_FILENAME_RE = re.compile(
     r"jd[-_ ]?brochure|employer[-_ ]certification|lrap|"
     r"(?:^|[-_])transcript(?:[-_]|$)|"
     r"info[-_ ]?sheet|book[-_ ]?review|agenda|sponsors?|"
-    r"(?:^|[-_])online[-_ ]?(?:supplement|symposium|essay|appendix|edition)"
+    r"(?:^|[-_])online[-_ ]?(?:supplement|symposium|essay|appendix|edition)|"
+    r"moot[-_ ]issue|"
+    r"financial[-_ ]statements?|"
+    r"instrument[-_ ]of[-_ ]accession|treaty[-_ ]of[-_ ]|convention[-_ ]on[-_ ]|"
+    r"books[-_ ]received|"
+    r"(?:^|[-_])legal[-_ ]help(?:[-_]|\.|$)|"
+    r"std[-_ ]?509|aba[-_ ]509|"
+    r"enforcement[-_ ]report[-_ ]fy|annual[-_ ]report[-_ ]fy|"
+    r"licensing[-_ ]letter|open[-_ ]letter|"
+    r"(?:^|[-_])docket[-_ ]|"
+    r"(?:^|[-_])brief\.pdf$|(?:^|[-_])brief[-_]\d"
     r")",
     re.IGNORECASE,
 )
