@@ -368,3 +368,50 @@ scripts/quality/build_footnote_audit_ledgers.py
 ```
 
 That script should read sidecars, raw manifests, and the extraction report, then emit the four normalized files specified above. Build this before the first 122k production audit so every subsequent run is comparable.
+
+## Hill-Climb Status (2026-04-26)
+
+### Holdout-1K headline (`artifacts/samples/sample_1k_holdout.txt`)
+
+| Metric | Pre-2026-04-26 | After today's fixes | Δ |
+|---|---|---|---|
+| Articles (post-doc_policy) | 605 | 593 | −12 |
+| Article strict-valid | 91.7% | **93.4%** | **+1.7 pp** |
+| Article ≥vwg | 95.5% | 96.6% | +1.1 pp |
+| Article honest strict (excl. empty) | 94.4% | 95.4% | +1.0 pp |
+| Article honest ≥vwg | 98.3% | 98.6% | +0.3 pp |
+
+Reproduce: `.venv/bin/python scripts/research/bench_holdout_1k.py --manifest artifacts/samples/sample_1k_holdout.txt --workers 4 --out artifacts/runs/holdout_1k_after_doc_policy_only.json`
+
+### Landed (in commit order)
+
+1. **`29ee499`** — `_cache_compatible_with_mode` now requires `parser=liteparse` for `balanced`/`footnote_optimized`. Older runs that fell back to pypdf populated text caches with `parser=pypdf`; subsequent footnote_optimized runs reused those caches and silently skipped liteparse. The first 122k corpus pass on 2026-04-26 was reading 27,427 stale pypdf caches (92% of all caches), producing zero notes with no warnings on PDFs liteparse handles cleanly.
+2. **`257ea93`** — `extract_document_text(footnote_optimized)` no longer falls back to pdfplumber/pypdf. PDFs liteparse cannot read return `pages=[]` with warning `liteparse_returned_none`, signalling downstream OCR routing rather than producing low-quality fallback output. Other parser modes (`pdfplumber_only`, `pypdf_only`, etc.) still call their respective parsers — pruning queued for a follow-up.
+3. **`88ae539`** — `_NON_ARTICLE_FILENAME_RE` in `doc_policy.py` extended with patterns for moot court issues, financial statements, treaty instruments, books-received lists, legal-help pages, ABA-509 disclosures, agency reports, open letters, and court briefs. The 1K holdout previously misclassified ~12 such docs as articles. **This is the source of the +1.7 pp headline lift.**
+
+### Reverted (today, after holdout regression)
+
+1. **`238fb87`** reverts the liteparse zero-line + cmap-failure detector. Threshold (>5% non-ASCII glyphs at small font size) caught Spanish-language journals (`derecho.uprrp.edu`, `tabla-de-citaci-n-*.pdf`) and journals with diacritics, regressing 14 article-valid → article-empty.
+2. **`7f55217`** reverts the body-text digit penalty in `sequence_solver._candidate_score`. The −3.0 penalty for body-size, non-margin, non-punctuated digit candidates dropped legitimate footnote labels in some short-document layouts, regressing 7 article-valid → article-vwg/invalid.
+
+Both fixes targeted real pathologies (huberfeld 0-line, MJLR cmap mojibake, BC body-digit mis-routing) but were too aggressive at the chosen thresholds. Proposals at `/tmp/huberfeld_proposal.md`, `/tmp/longgap_proposal.md` retain the diagnoses for a more careful retry.
+
+### Operational state
+
+- Corpus run: PID in screen `corpus_extract`, launched 2026-04-26 13:40, manifest size 74,764 PDFs, log `/tmp/full_corpus_run_20260426_1340.log`, report destination `artifacts/runs/full_corpus_20260426_1340.json`.
+- Pre-existing kept sidecars: 41,026 with `status=valid` (verified by sampling — 27/30 identical to fresh extraction, 3/30 recover slightly more notes; no regressions). These are skipped via `overwrite=False`.
+- Previous 122k run (2026-04-26 00:42) scrapped: cache-poisoned by stale parser=pypdf caches; 92% of caches were stale.
+
+### Deferred levers (not blocking current run)
+
+| Lever | Status | File / proposal | Est. lift |
+|---|---|---|---|
+| Long-gap solver scoring (BC body-digit) | retry needed with narrower trigger | `/tmp/longgap_proposal.md` | ~0.5–0.8 pp |
+| Liteparse 0-line / cmap detector → OCR | retry needed with stricter thresholds (Latin-1 supplement only, exclude Spanish/diacritic-heavy domains) | `/tmp/huberfeld_proposal.md`, `/tmp/longgap_proposal.md` | ~0.3–0.5 pp |
+| vwg solver collector relaxation | needs instrumented experiment first | `/tmp/vwg_proposal.md` | ~0.5–1.0 pp |
+| OCR routing for `liteparse_returned_none` | infra is ready (`--ocr-mode fallback --ocr-backend olmocr`); just a flag change at next run | `/tmp/ocr_routing_proposal.md` | ~0.5–0.6 pp on Drake-style scans |
+| Phase 2 cleanup: remove pdfplumber/pypdf/docling parser code paths and tests | deferred until corpus run completes | `text_extract.py`, `pipeline.py` | code clarity only |
+
+### Pre-flight before next corpus run
+
+If the in-flight run finishes clean, the headline number to publish is the article-scoped strict-valid % from `artifacts/runs/full_corpus_20260426_1340.json` aggregated by `doc_type=='article'`. Compare against the 93.4% holdout baseline. A material gap (>3 pp) likely indicates either (a) a journal-specific layout that holdout under-samples, or (b) an OCR-only bucket (Drake-class) larger than expected. If the gap is OCR-driven, re-run with `--ocr-mode fallback --ocr-backend olmocr --ocr-workers 4` after the vLLM screen is confirmed up.
