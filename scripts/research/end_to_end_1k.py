@@ -2,6 +2,7 @@
 """End-to-end measurement on the 1K sample with current doc_policy + solver +
 precomputed-aware selector. Produces the honest article_validity_rate."""
 from __future__ import annotations
+import argparse
 import json
 import os
 import sys
@@ -65,13 +66,18 @@ def run_one(pdf: str) -> dict:
 
 
 def main():
-    manifest = Path("artifacts/samples/sample_1k.txt")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--manifest", default="artifacts/samples/sample_1k.txt")
+    parser.add_argument("--workers", type=int, default=8)
+    args = parser.parse_args()
+
+    manifest = Path(args.manifest)
     pdfs = [ln.strip() for ln in manifest.read_text().splitlines() if ln.strip()]
-    print(f"running end-to-end on {len(pdfs)} PDFs")
+    print(f"running end-to-end on {len(pdfs)} PDFs from {manifest}")
 
     t0 = time.time()
     results = []
-    with ProcessPoolExecutor(max_workers=8) as pool:
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
         futs = [pool.submit(run_one, p) for p in pdfs]
         done = 0
         for f in as_completed(futs):

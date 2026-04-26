@@ -536,60 +536,96 @@ def solve_document(layouts: list) -> SolverResult:
     """
     pages = _pages_from_layouts(layouts)
     cands = _collect_candidates(pages)
-    empty = SolverResult(
-        page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=0
-    )
+    candidate_count = len(cands)
     if not cands:
-        return empty
+        return SolverResult(
+            page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=0
+        )
+
     max_plausible = max(120, len(pages) * 10)
-    cands = [c for c in cands if c.digit_value <= max_plausible]
-    path = _solve_sequence(cands)
-    path = _gap_fill(cands, path)
-    selected = [cands[i] for i in sorted(path)]
-    selected.sort(key=lambda c: (c.page, c.y, c.x))
-    labels_spatial = [c.digit_value for c in selected]
-    trimmed = set(_trim_tail_outliers(sorted(labels_spatial)))
-    final = [c for c in selected if c.digit_value in trimmed]
-    if len(final) < 3:
+    base_cands = [c for c in cands if c.digit_value <= max_plausible]
+    
+    # Serial multi-pass rescue for restarts (appendices, etc.)
+    all_final: list[LabelCandidate] = []
+    available = list(base_cands)
+    
+    # We allow up to 10 passes to catch docs with many small segments (e.g. Case Notes)
+    for _pass in range(10):
+        path = _solve_sequence(available)
+        if not path:
+            break
+            
+        path = _gap_fill(available, path)
+        selected_this_pass = [available[i] for i in sorted(path)]
+        
+        # Validation for this segment: it must be a sequence starting at 1 or 2.
+        labels = [c.digit_value for c in selected_this_pass]
+        trimmed_values = set(_trim_tail_outliers(sorted(labels)))
+        final_this_pass = [c for c in selected_this_pass if c.digit_value in trimmed_values]
+        
+        if len(final_this_pass) >= 3:
+            first_label = final_this_pass[0].digit_value
+            is_valid_start = first_label <= 1
+            if first_label == 2:
+                unique_labels = sorted({c.digit_value for c in final_this_pass})
+                span = unique_labels[-1] - unique_labels[0] + 1
+                density = len(unique_labels) / max(span, 1)
+                if len(unique_labels) >= 5 and density >= 0.80:
+                    is_valid_start = True
+            
+            if is_valid_start:
+                # Avoid interleaved noise: a new sequence must be spatially disjoint 
+                # from already accepted ones.
+                overlap = False
+                if all_final:
+                    # Spatial range of new segment
+                    new_start = (final_this_pass[0].page, final_this_pass[0].y)
+                    new_end = (final_this_pass[-1].page, final_this_pass[-1].y)
+
+                    for existing in all_final:
+                        # Is this existing candidate inside the new range?
+                        pos = (existing.page, existing.y)
+                        if new_start <= pos <= new_end:
+                            overlap = True
+                            break
+
+                    if not overlap:
+                        # Also check if new range contains existing range
+                        # but since they are disjoint if no point is inside, this is enough
+                        # for most cases. Let's check the other way too.
+                        existing_start = (all_final[0].page, all_final[0].y)
+                        existing_end = (all_final[-1].page, all_final[-1].y)
+                        if existing_start <= new_start <= existing_end:
+                            overlap = True
+
+                if not overlap:
+                    all_final.extend(final_this_pass)
+                    # Keep all_final sorted for next pass check
+                    all_final.sort(key=lambda c: (c.page, c.y, c.x))
+        # Always remove candidates used in this pass's path to avoid cycles,
+        # even if the sequence was rejected for not starting at 1.
+        used_ids = {id(available[i]) for i in path}
+        available = [c for c in available if id(c) not in used_ids]
+
+    if not all_final:
         return SolverResult(
             page_cutoffs={},
             selected_labels=[],
             selected_candidates=(),
-            candidate_count=len(cands),
+            candidate_count=candidate_count,
         )
-    first_label = final[0].digit_value
-    # Accept sequences starting at 1 unconditionally. Accept sequences starting
-    # at 2 when the sequence is long and dense (label 1's textItem was lost to
-    # a rendering artifact — '1', '1.', etc. — but the rest of the sequence is
-    # clearly real). Guarded against scattered stray "2" cases by requiring
-    # ≥5 labels and ≥80% density.
-    if first_label > 2:
-        return SolverResult(
-            page_cutoffs={},
-            selected_labels=[],
-            selected_candidates=(),
-            candidate_count=len(cands),
-        )
-    if first_label == 2:
-        unique_labels = sorted({c.digit_value for c in final})
-        span = unique_labels[-1] - unique_labels[0] + 1
-        density = len(unique_labels) / max(span, 1)
-        if len(unique_labels) < 5 or density < 0.80:
-            return SolverResult(
-                page_cutoffs={},
-                selected_labels=[],
-                selected_candidates=(),
-                candidate_count=len(cands),
-            )
+
+    final = sorted(all_final, key=lambda c: (c.page, c.y, c.x))
     page_cutoffs: dict[int, float] = {}
     for c in final:
         if c.page not in page_cutoffs or c.y < page_cutoffs[c.page]:
             page_cutoffs[c.page] = c.y
+            
     return SolverResult(
         page_cutoffs=page_cutoffs,
         selected_labels=sorted(set(c.digit_value for c in final)),
         selected_candidates=tuple(final),
-        candidate_count=len(cands),
+        candidate_count=candidate_count,
     )
 
 

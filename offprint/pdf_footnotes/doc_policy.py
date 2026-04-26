@@ -35,10 +35,10 @@ _NON_ARTICLE_FILENAME_RE = re.compile(
     r"call[-_ ]?for[-_ ]?papers|rules[-_ ]of[-_ ]procedure|"
     r"eprs[-_ ]stu|icct[-_ ]report|summary[-_ ]?charts?|"
     r"tax[-_ ]?(?:checklist|estimate)|opening[-_ ]remarks|"
-    r"case[-_ ]brief|land[-_ ]?acknowledgment|"
+    r"case[-_ ]brief|land[-_ ]?acknowledgment|masthead|editorial[-_ ]?board|"
     r"jd[-_ ]?brochure|employer[-_ ]certification|lrap|"
     r"(?:^|[-_])transcript(?:[-_]|$)|"
-    r"info[-_ ]?sheet|book[-_ ]?review|"
+    r"info[-_ ]?sheet|book[-_ ]?review|agenda|sponsors?|"
     r"(?:^|[-_])online[-_ ]?(?:supplement|symposium|essay|appendix|edition)"
     r")",
     re.IGNORECASE,
@@ -303,7 +303,8 @@ def classify_pdf(
         elif re.search(
             r"\b(editorial\s*board|masthead|inside[-\s]?cover|dedication|"
             r"foreword|preface|prolog(?:ue)?|errat[ao]|in\s+memoriam|memorial|"
-            r"letter\s+from|front[-\s]?matter|back[-\s]?cover|front[-\s]?cover)\b",
+            r"letter\s+from|front[-\s]?matter|back[-\s]?cover|front[-\s]?cover|"
+            r"agenda|sponsors?|symposium|transcript|ceremony|keynote|speech|keynote\s+address)\b",
             filename_l + " " + text_l,
         ):
             doc_type = "frontmatter"
@@ -320,10 +321,13 @@ def classify_pdf(
             confidence = 0.9
             strong_frontmatter = True
         elif "table of contents" in text_l or re.search(r"\b(toc|contents)\b", filename_l):
-            doc_type = "issue_compilation" if signals.page_count > 6 else "frontmatter"
-            reason_codes.append("toc_marker")
-            confidence = 0.95
-            strong_frontmatter = True
+            # Only treat as frontmatter/compilation if it doesn't look like an article.
+            # Real articles often start with a TOC.
+            if not signals.metadata_article_fields and signals.footnote_marker_count < 3:
+                doc_type = "issue_compilation" if signals.page_count > 10 else "frontmatter"
+                reason_codes.append("toc_marker")
+                confidence = 0.95
+                strong_frontmatter = True
         elif "yearbook" in text_l or "yearbook" in filename_l:
             doc_type = "other"
             reason_codes.append("yearbook_marker")

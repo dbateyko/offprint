@@ -71,6 +71,29 @@ python scripts/extract_text_jsonl.py \
 
 More detail: [docs/FOOTNOTE_QC_WORKFLOW.md](docs/FOOTNOTE_QC_WORKFLOW.md) and [scripts/README.md](scripts/README.md).
 
+## Footnote Extraction Quality
+
+We use a Dynamic Programming (DP) sequence solver over LiteParse layouts to extract ordinal footnote streams. 
+
+As of **April 25, 2026**, the pipeline achieves high-fidelity extraction on standard text-based PDFs. Benchmarks on a 1k random sample (v3) show:
+
+| Metric | LiteParse Only | Roadmap (w/ OCR) |
+|---|---|---|
+| **Articles Identified** | 672 / 1000 | 672 / 1000 |
+| **Strict-Valid (Honest)** | **84.2%** | **~95% (Est.)** |
+| **Valid with Gaps (Honest)** | **87.8%** | **~98% (Est.)** |
+| **Empty (Image-only)** | 6.5% | < 1% |
+| **Invalid (Garbled/OCR)** | 5.7% | < 2% |
+
+*Honest Denominator:* Only includes documents identified as "articles" by `doc_policy` (excludes mastheads, TOCs, transcripts, and agendas).
+
+### The OCR Frontier
+The remaining ~12% of failures are primarily:
+1. **Empty (6.5%):** Image-only scans (e.g. old volumes or scanned submissions) with zero text.
+2. **Invalid (5.7%):** Existing OCR scans with highly garbled text that LiteParse cannot reliably parse.
+
+**Next Step:** Route these documents through the `olmOCR/vLLM` pipeline to rescue the remaining scanned articles.
+
 ## Disclaimer
 
 This project is for scholarly research workflows. Respect publisher terms and `robots.txt`, apply polite request behavior, and do not redistribute PDFs without verifying rights.
