@@ -569,77 +569,90 @@ def _ghost_rescue(pages: list[_PageData], candidates: list[LabelCandidate]) -> l
     
     If Note 25 and 27 are found, Note 26 *must* be between them.
     This pass looks for the raw string '26' in that exact vertical slice.
+    
+    Now iterative: fills gaps created by previous rescue passes.
+    Now score-aware: returns new candidates for a second global solve pass.
     """
     if not candidates:
         return candidates
         
-    selected = sorted(candidates, key=lambda c: (c.page, c.y, c.x))
-    rescuable: list[LabelCandidate] = list(selected)
-    selected_set = set(c.digit_value for c in rescuable)
-    
-    # Identify gaps in the sequence
-    gaps: list[int] = []
-    if len(selected) >= 2:
-        expected = range(selected[0].digit_value, selected[-1].digit_value + 1)
-        gaps = [v for v in expected if v not in selected_set]
-        
-    if not gaps:
-        return candidates
-
     pages_map = {p.page: p for p in pages}
+    all_rescuable = list(candidates)
     
-    for gap in gaps:
-        # Find spatial bounds for this gap
-        prev_note = next((c for c in reversed(rescuable) if c.digit_value < gap), None)
-        next_note = next((c for c in rescuable if c.digit_value > gap), None)
+    # We loop until convergence to fill multi-note holes (e.g. 10, 11, 12 all missing)
+    for _iteration in range(5):
+        added_this_iter = 0
+        current = sorted(all_rescuable, key=lambda c: (c.page, c.y, c.x))
+        selected_set = set(c.digit_value for c in current)
         
-        if not prev_note or not next_note:
-            continue
+        # Identify gaps in the sequence
+        gaps: list[int] = []
+        if len(current) >= 2:
+            expected = range(current[0].digit_value, current[-1].digit_value + 1)
+            gaps = [v for v in expected if v not in selected_set]
             
-        # Search all items on pages between prev and next (inclusive)
-        # Broaden by 1 page to catch cases where the digit is at the very edge
-        for page_no in range(prev_note.page - 1, next_note.page + 2):
-            p = pages_map.get(page_no)
-            if not p:
+        if not gaps:
+            break
+
+        for gap in gaps:
+            # Find spatial bounds for this gap
+            prev_note = next((c for c in reversed(current) if c.digit_value < gap), None)
+            next_note = next((c for c in current if c.digit_value > gap), None)
+            
+            if not prev_note or not next_note:
                 continue
                 
-            for it in p.items:
-                raw_text = (it.get("text") or "").strip()
-                if not raw_text:
+            # Search all items on pages between prev and next (inclusive)
+            # Broaden by 1 page for safety
+            found_ghost = False
+            for page_no in range(prev_note.page - 1, next_note.page + 2):
+                p = pages_map.get(page_no)
+                if not p:
                     continue
-                
-                parts = re.split(r"[^\d]+", raw_text)
-                if str(gap) not in parts:
-                    continue
-                
-                y = float(it.get("y") or 0)
-                x = float(it.get("x") or 0)
-                fs = float(it.get("fontSize") or 0)
-                
-                # Spatial check
-                start_pos = (prev_note.page, prev_note.y)
-                end_pos = (next_note.page, next_note.y)
-                curr_pos = (page_no, y)
-                
-                if start_pos < curr_pos < end_pos:
-                    # Found a ghost! 
-                    y_rel = (y / p.height) if p.height else 0.5
-                    ghost = LabelCandidate(
-                        page=page_no,
-                        y=y,
-                        x=x,
-                        font_size=fs,
-                        digit_value=gap,
-                        text=raw_text,
-                        is_pure_digit=(raw_text == str(gap)),
-                        smaller_font=bool(fs and fs < p.median_font * 0.95),
-                        y_rel=y_rel,
-                    )
-                    rescuable.append(ghost)
-                    rescuable.sort(key=lambda c: (c.page, c.y, c.x))
-                    break
                     
-    return rescuable
+                for it in p.items:
+                    raw_text = (it.get("text") or "").strip()
+                    if not raw_text:
+                        continue
+                    
+                    parts = re.split(r"[^\d]+", raw_text)
+                    if str(gap) not in parts:
+                        continue
+                    
+                    y = float(it.get("y") or 0)
+                    x = float(it.get("x") or 0)
+                    fs = float(it.get("fontSize") or 0)
+                    
+                    # Spatial check: must be after prev and before next
+                    start_pos = (prev_note.page, prev_note.y)
+                    end_pos = (next_note.page, next_note.y)
+                    curr_pos = (page_no, y)
+                    
+                    if start_pos < curr_pos < end_pos:
+                        # Found a candidate! 
+                        y_rel = (y / p.height) if p.height else 0.5
+                        ghost = LabelCandidate(
+                            page=page_no,
+                            y=y,
+                            x=x,
+                            font_size=fs,
+                            digit_value=gap,
+                            text=raw_text,
+                            is_pure_digit=(raw_text == str(gap)),
+                            smaller_font=bool(fs and fs < p.median_font * 0.95),
+                            y_rel=y_rel,
+                        )
+                        all_rescuable.append(ghost)
+                        added_this_iter += 1
+                        found_ghost = True
+                        break # Only one candidate per gap per iteration
+                if found_ghost:
+                    break
+        
+        if added_this_iter == 0:
+            break
+                    
+    return all_rescuable
 
 
 def solve_document(layouts: list) -> SolverResult:
@@ -660,7 +673,7 @@ def solve_document(layouts: list) -> SolverResult:
     max_plausible = max(150, len(pages) * 15)
     base_cands = [c for c in cands if c.digit_value <= max_plausible]
     
-    # Global solve
+    # Pass 1: Solve for the primary sequence
     path = _solve_sequence(base_cands)
     if not path:
         return SolverResult(
@@ -670,16 +683,29 @@ def solve_document(layouts: list) -> SolverResult:
     path = _gap_fill(base_cands, path)
     selected = [base_cands[i] for i in sorted(path)]
     
-    # Ghost Rescue: targeted spatial search for remaining gaps.
-    # Often rescues subtle superscripts missed by the initial candidate pass.
-    selected = _ghost_rescue(pages, selected)
+    # Pass 2: Ghost Rescue. Targeted spatial search for remaining gaps.
+    # We find more candidates and then RE-SOLVE to pick the best path.
+    rescued_cands = _ghost_rescue(pages, selected)
     
-    selected.sort(key=lambda c: (c.page, c.y, c.x))
+    # Re-Solve: run the DP one more time over the combined set of base + rescued 
+    # candidates to ensure the final path is globally optimal.
+    # Note: we use all base_cands + the newly found ones.
+    final_pool = list(base_cands)
+    existing_ids = {id(c) for c in final_pool}
+    for rc in rescued_cands:
+        if id(rc) not in existing_ids:
+            final_pool.append(rc)
+    final_pool.sort(key=lambda c: (c.page, c.y, c.x))
+    
+    final_path = _solve_sequence(final_pool)
+    final_path = _gap_fill(final_pool, final_path)
+    final_selected = [final_pool[i] for i in sorted(final_path)]
+    final_selected.sort(key=lambda c: (c.page, c.y, c.x))
     
     # Final cleanup
-    labels = [c.digit_value for c in selected]
+    labels = [c.digit_value for c in final_selected]
     trimmed_values = set(_trim_tail_outliers(labels))
-    final = [c for c in selected if c.digit_value in trimmed_values]
+    final = [c for c in final_selected if c.digit_value in trimmed_values]
     
     if not final:
         return SolverResult(
