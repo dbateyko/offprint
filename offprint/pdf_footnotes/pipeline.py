@@ -797,14 +797,16 @@ def _select_liteparse_candidate_document(
     profile_for: Any,
 ) -> ExtractedDocument | None:
     results: list[_LiteparseCandidateResult] = []
+    
+    # Authoritative Solver First: if the sequence_solver finds a valid stream,
+    # we trust it above all heuristics.
+    solver_result: _LiteparseCandidateResult | None = None
+
     for document in documents:
         profile = profile_for(document)
-        # Solver candidate: trust its precomputed NoteRecord + OrdinalityReport
-        # instead of re-running the heuristic segmenter (which re-applies
-        # _is_likely_false_positive over solver-accepted labels and produces
-        # disagreement — see artifacts/runs/solver_integration_1k.json for the
-        # ~24pp drop that segmenter re-validation causes on the 1K benchmark).
         meta = document.metadata or {}
+        name = meta.get("liteparse_candidate", "unknown")
+        
         precomputed = meta.get("sequence_solver_precomputed") if isinstance(meta, dict) else None
         if precomputed:
             notes = list(precomputed.get("notes") or [])
@@ -817,57 +819,69 @@ def _select_liteparse_candidate_document(
                 gap_tolerance=profile.gap_tolerance,
                 strict_label_filter=profile.strict_label_filter,
             )
+            
         candidate_warnings = list(document.warnings or []) + list(note_warnings)
         score, metrics = _liteparse_candidate_score(notes, ordinality, candidate_warnings)
-        results.append(
-            _LiteparseCandidateResult(
-                document=document,
-                notes=notes,
-                author_notes=author_notes,
-                ordinality=ordinality,
-                warnings=candidate_warnings,
-                score=score,
-                metrics=metrics,
-            )
+        res = _LiteparseCandidateResult(
+            document=document,
+            notes=notes,
+            author_notes=author_notes,
+            ordinality=ordinality,
+            warnings=candidate_warnings,
+            score=score,
+            metrics=metrics,
         )
+        results.append(res)
+        
+        if name == "sequence_solver":
+            solver_result = res
+            # If solver is already high-quality, we can stop early.
+            if metrics.get("status") in {"valid", "valid_with_gaps"} and metrics.get("duplicate_numeric_labels", 0) == 0:
+                break
 
-        promoted = _promote_liteparse_body_gap_markers(
-            document,
-            notes,
-            ordinality,
-            strict_label_filter=profile.strict_label_filter,
-        )
-        if promoted is not None:
-            promoted_profile = profile_for(promoted)
-            promoted_notes, promoted_author_notes, promoted_ordinality, promoted_note_warnings = (
-                segment_document_notes_extended(
-                    promoted,
-                    gap_tolerance=promoted_profile.gap_tolerance,
-                    strict_label_filter=promoted_profile.strict_label_filter,
+        # Check for body-marker promotion (only for non-solver candidates)
+        if name != "sequence_solver":
+            promoted = _promote_liteparse_body_gap_markers(
+                document,
+                notes,
+                ordinality,
+                strict_label_filter=profile.strict_label_filter,
+            )
+            if promoted is not None:
+                promoted_profile = profile_for(promoted)
+                promoted_notes, promoted_author_notes, promoted_ordinality, promoted_note_warnings = (
+                    segment_document_notes_extended(
+                        promoted,
+                        gap_tolerance=promoted_profile.gap_tolerance,
+                        strict_label_filter=promoted_profile.strict_label_filter,
+                    )
                 )
-            )
-            promoted_warnings = list(promoted.warnings or []) + list(promoted_note_warnings)
-            promoted_score, promoted_metrics = _liteparse_candidate_score(
-                promoted_notes,
-                promoted_ordinality,
-                promoted_warnings,
-            )
-            results.append(
-                _LiteparseCandidateResult(
-                    document=promoted,
-                    notes=promoted_notes,
-                    author_notes=promoted_author_notes,
-                    ordinality=promoted_ordinality,
-                    warnings=promoted_warnings,
-                    score=promoted_score,
-                    metrics=promoted_metrics,
+                promoted_warnings = list(promoted.warnings or []) + list(promoted_note_warnings)
+                promoted_score, promoted_metrics = _liteparse_candidate_score(
+                    promoted_notes,
+                    promoted_ordinality,
+                    promoted_warnings,
                 )
-            )
+                results.append(
+                    _LiteparseCandidateResult(
+                        document=promoted,
+                        notes=promoted_notes,
+                        author_notes=promoted_author_notes,
+                        ordinality=promoted_ordinality,
+                        warnings=promoted_warnings,
+                        score=promoted_score,
+                        metrics=promoted_metrics,
+                    )
+                )
 
     if not results:
         return None
 
-    best = max(results, key=_liteparse_candidate_selection_key)
+    # If the solver found a valid sequence, use it.
+    if solver_result and solver_result.metrics.get("status") in {"valid", "valid_with_gaps"}:
+        best = solver_result
+    else:
+        best = max(results, key=_liteparse_candidate_selection_key)
     score_payload: dict[str, Any] = {}
     for result in results:
         name = str((result.document.metadata or {}).get("liteparse_candidate") or "unknown")

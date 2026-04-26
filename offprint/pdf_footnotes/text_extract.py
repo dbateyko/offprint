@@ -15,7 +15,6 @@ PARSER_MODES = {
     "pdfplumber_only",
     "pypdf_only",
     "docling_only",
-    "opendataloader_only",
     "liteparse_only",
     "footnote_optimized",
 }
@@ -968,118 +967,6 @@ def _safe_float(value: Any) -> float | None:
         return None
 
 
-def _walk_opendataloader_elements(node: Any, out: list[dict[str, Any]]) -> None:
-    if isinstance(node, dict):
-        content = " ".join(str(node.get("content", "") or "").split())
-        page_no = node.get("page number")
-        if content and isinstance(page_no, int):
-            out.append(node)
-        for value in node.values():
-            if isinstance(value, (dict, list)):
-                _walk_opendataloader_elements(value, out)
-        return
-    if isinstance(node, list):
-        for item in node:
-            _walk_opendataloader_elements(item, out)
-
-
-def _classify_opendataloader_note_candidates(
-    line_items: list[tuple[ExtractedLine, str]], page_height: float
-) -> tuple[list[ExtractedLine], list[ExtractedLine], bool]:
-    filtered = [
-        (line, item_type)
-        for line, item_type in line_items
-        if item_type not in _OPENDATALOADER_EXCLUDED_TYPES
-    ]
-    if not filtered:
-        return [], [], False
-
-    lines = [line for line, _item_type in filtered]
-    sizes = [float(line.font_size) for line in lines if line.font_size is not None]
-    median_size = statistics.median(sizes) if sizes else None
-
-    scored: list[tuple[ExtractedLine, float]] = []
-    for line, item_type in filtered:
-        text = (line.text or "").strip()
-        score = 0.0
-        note_like = bool(_NOTE_LIKE_RE.match(text))
-        legal_cue = bool(_LEGAL_FOOTNOTE_SIGNAL_RE.search(text))
-        rel_top = (line.top / page_height) if page_height > 0.0 else 0.0
-
-        if note_like:
-            score += 2.2
-        if legal_cue:
-            score += 1.2
-        if len(text) >= 60:
-            score += 0.2
-
-        if rel_top >= 0.82:
-            score += 2.0
-        elif rel_top >= 0.72:
-            score += 1.2
-        elif rel_top >= 0.62 and note_like:
-            score += 0.6
-
-        if (
-            median_size is not None
-            and line.font_size is not None
-            and line.font_size < median_size * 0.92
-        ):
-            score += 1.0
-
-        if item_type in {"list item", "caption"}:
-            score += 0.3
-        if item_type in {"heading", "table", "table row", "table cell", "image"}:
-            score -= 1.0
-        if len(text) < 10 and not note_like:
-            score -= 1.0
-
-        # Guard against first-page frontmatter and running heads.
-        if line.page_number <= 3:
-            if _FRONTMATTER_TEXT_RE.search(text) and not legal_cue:
-                score -= 2.0
-            if rel_top < 0.55:
-                score -= 1.8
-            if item_type == "heading":
-                score -= 1.2
-            if (
-                note_like
-                and re.match(r"^\s*(\d{2,4})\s+[A-Z]", text)
-                and not legal_cue
-                and rel_top < 0.45
-            ):
-                score -= 2.5
-
-        scored.append((line, score))
-
-    notes: list[ExtractedLine] = []
-    for line, score in scored:
-        text = (line.text or "").strip()
-        note_like = bool(_NOTE_LIKE_RE.match(text))
-        legal_cue = bool(_LEGAL_FOOTNOTE_SIGNAL_RE.search(text))
-        rel_top = (line.top / page_height) if page_height > 0.0 else 0.0
-        is_note = score >= 3.0 or (note_like and score >= 2.4)
-        if line.page_number <= 3 and is_note:
-            # First pages are noisy; require stronger evidence.
-            if legal_cue:
-                notes.append(line)
-                continue
-            if note_like and rel_top >= 0.82 and len(text) >= 25:
-                notes.append(line)
-                continue
-            continue
-        if is_note:
-            notes.append(line)
-
-    if notes and len(notes) <= max(3, int(len(lines) * 0.65)):
-        note_ids = {id(line) for line in notes}
-        body = [line for line in lines if id(line) not in note_ids]
-        if body:
-            return body, notes, True
-
-    return [], [], False
-
-
 _LITEPARSE_DASH_CHARS = frozenset("-–—―_‒⸺⸻~")
 
 
@@ -1112,28 +999,15 @@ def _bimodal_font_split(
     lines: list[ExtractedLine], *, page_height: float
 ) -> float | None:
     """Detect a bimodal font-size distribution per page and return the top-y
-    boundary above which body text lies and below which footnotes lie.
-
-    Returns None when the page is not cleanly bimodal, when the smaller
-    cluster is too small relative to the body, or when the candidate boundary
-    sits in the upper half of the page."""
+    boundary above which body text lies and below which footnotes lie."""
     sized = [ln for ln in lines if ln.font_size is not None]
     if len(sized) < 10 or page_height <= 0:
         return None
     from collections import Counter
-
-    # Bucket at 1-pt granularity so that line-median jitter (e.g. body sizes
-    # of 9.9/10.0/10.1/10.2 produced by slightly noisy PDFs) collapse into a
-    # single cluster. Finer bucketing scattered such distributions across
-    # multiple sub-12% buckets and caused the rail to abstain on real bimodal
-    # pages.
     buckets = Counter(int(round(float(ln.font_size))) for ln in sized)
     if len(buckets) < 2:
         return None
     total = len(sized)
-    # Any bucket carrying >=12% mass is a "real" cluster. Pick the extremes by
-    # value rather than by rank so that note-heavy pages (where the small
-    # cluster outnumbers the body) still identify the larger value as body.
     significant = sorted(s for s, c in buckets.items() if c / total >= 0.12)
     if len(significant) < 2:
         return None
@@ -1142,8 +1016,6 @@ def _bimodal_font_split(
     if big_size <= 0 or small_size / big_size > 0.9:
         return None
     threshold = (big_size + small_size) / 2.0
-    # Walk from the bottom of the page upward; extend the "notes region" as
-    # long as at least 70 % of lines at-or-below the boundary are small-font.
     sorted_lines = sorted(sized, key=lambda ln: float(ln.top), reverse=True)
     best_y: float | None = None
     small_count = 0
@@ -1171,7 +1043,6 @@ def _low_variance_density_split(
     """Find a footnote boundary when font size cannot separate body and notes."""
     if len(lines) < 6 or page_height <= 0:
         return None
-
     ordered = sorted(lines, key=lambda line: float(line.top))
     for idx, line in enumerate(ordered):
         rel_top = float(line.top) / page_height
@@ -1180,29 +1051,15 @@ def _low_variance_density_split(
         below = ordered[idx:]
         if len(below) < 3 or len(below) > max(5, int(len(ordered) * 0.60)):
             continue
-
         first_three = [" ".join((ln.text or "").split()) for ln in below[:3]]
-        starts_with_marker = sum(1 for text in first_three if _NOTE_LIKE_RE.match(text))
-        if starts_with_marker == 0:
+        if not any(_NOTE_LIKE_RE.match(text) for text in first_three):
             continue
-
-        note_like = 0
-        legal_cue = 0
-        short_id = 0
-        for candidate in below:
-            text = " ".join((candidate.text or "").split())
-            if _NOTE_LIKE_RE.match(text):
-                note_like += 1
-            if _LEGAL_FOOTNOTE_SIGNAL_RE.search(text):
-                legal_cue += 1
-            if _SHORT_ID_NOTE_RE.match(text):
-                short_id += 1
-
+        note_like = sum(1 for ln in below if _NOTE_LIKE_RE.match(" ".join((ln.text or "").split())))
+        legal_cue = sum(1 for ln in below if _LEGAL_FOOTNOTE_SIGNAL_RE.search(ln.text or ""))
+        short_id = sum(1 for ln in below if _SHORT_ID_NOTE_RE.match(ln.text or ""))
         signal = note_like + (0.6 * legal_cue) + (0.8 * short_id)
         density = signal / max(len(below), 1)
-        if note_like >= 2 and density >= 0.45:
-            return float(line.top)
-        if note_like >= 1 and legal_cue >= 2 and density >= 0.55:
+        if (note_like >= 2 and density >= 0.45) or (note_like >= 1 and legal_cue >= 2 and density >= 0.55):
             return float(line.top)
     return None
 
@@ -1240,7 +1097,6 @@ def _pattern_density_strict_split(
 ) -> float | None:
     if len(lines) < 8 or page_height <= 0:
         return None
-
     ordered = sorted(lines, key=lambda line: float(line.top))
     for idx, line in enumerate(ordered):
         rel_top = float(line.top) / page_height
@@ -1250,7 +1106,6 @@ def _pattern_density_strict_split(
         below = ordered[idx:]
         if len(window) < 5 or len(below) > max(8, int(len(ordered) * 0.75)):
             continue
-
         strong = 0
         starts = 0
         for candidate in window:
@@ -1260,7 +1115,6 @@ def _pattern_density_strict_split(
                 strong += 1
             elif _STRICT_FOOTNOTE_SIGNAL_RE.search(text):
                 strong += 1
-
         if strong >= 5 and starts >= 2:
             return float(line.top)
     return None
@@ -1465,6 +1319,7 @@ def _classify_liteparse_candidate_lines(
     candidate_name: str,
     note_cutoff_ratio: float | None = None,
 ) -> tuple[list[ExtractedLine], list[ExtractedLine], bool]:
+    # Parsimonious core: use only the most robust heuristics.
     if candidate_name == "default":
         return _classify_liteparse_note_candidates(lines, page_height=page_height)
     if candidate_name == "marker_density":
@@ -1474,32 +1329,16 @@ def _classify_liteparse_candidate_lines(
             if body and notes:
                 return body, notes, True
         return [], [], False
-    if candidate_name == "low_variance_density":
-        sep_y = _low_variance_density_split(lines, page_height=page_height)
-        if sep_y is not None:
-            body, notes = _split_lines_at_y(lines, sep_y)
-            if body and notes:
-                return body, notes, True
-        return [], [], False
-    if candidate_name == "pattern_density_strict":
-        sep_y = _pattern_density_strict_split(lines, page_height=page_height)
-        if sep_y is not None:
-            body, notes = _split_lines_at_y(lines, sep_y)
-            if body and notes:
-                return body, notes, True
-        return [], [], False
     if candidate_name == "liberal_notes":
         return _liberal_notes_split(lines, page_height=page_height)
-    if candidate_name == "bottom_60":
-        body, notes, _low_variance = _classify_lines(
-            lines, page_height=page_height, note_cutoff_ratio=0.60
-        )
-        return body, notes, True
     if candidate_name == "bottom_72":
+        # Standard 1-inch (approx 72px) footer zone
         body, notes, _low_variance = _classify_lines(
             lines, page_height=page_height, note_cutoff_ratio=0.72
         )
         return body, notes, True
+    
+    # Generic fallback
     return _classify_lines(
         lines,
         page_height=page_height,
@@ -1510,10 +1349,7 @@ def _classify_liteparse_candidate_lines(
 _LITEPARSE_CANDIDATE_NAMES = (
     "default",
     "marker_density",
-    "low_variance_density",
-    "pattern_density_strict",
     "liberal_notes",
-    "bottom_60",
     "bottom_72",
     "sequence_solver",
 )
@@ -1813,180 +1649,6 @@ def _extract_with_liteparse(
     return candidates[0]
 
 
-def _parse_opendataloader_json(
-    pdf_path: str,
-    payload: dict[str, Any],
-    *,
-    note_cutoff_ratio: float | None = None,
-) -> ExtractedDocument:
-    pages_data: dict[int, list[dict[str, Any]]] = {}
-    elements: list[dict[str, Any]] = []
-    _walk_opendataloader_elements(payload, elements)
-    for item in elements:
-        page_no = int(item.get("page number", 1))
-        pages_data.setdefault(page_no, []).append(item)
-
-    pages: list[ExtractedPage] = []
-    warnings: list[str] = []
-    low_font_variance_detected = False
-    reversed_word_order_detected = False
-
-    for page_no in sorted(pages_data):
-        items = pages_data[page_no]
-        lines: list[ExtractedLine] = []
-        line_items: list[tuple[ExtractedLine, str]] = []
-        raw_parts: list[str] = []
-        explicit_note_lines: list[ExtractedLine] = []
-        max_x = 0.0
-        max_y = 0.0
-
-        sortable: list[tuple[float, float, int, dict[str, Any]]] = []
-        for _idx, item in enumerate(items):
-            bbox = item.get("bounding box") or []
-            if isinstance(bbox, list) and len(bbox) == 4:
-                x0 = _safe_float(bbox[0]) or 0.0
-                y0 = _safe_float(bbox[1]) or 0.0
-                x1 = _safe_float(bbox[2]) or 0.0
-                y1 = _safe_float(bbox[3]) or 0.0
-                sortable.append((-y1, x0, _idx, item))
-                max_x = max(max_x, x0, x1)
-                max_y = max(max_y, y0, y1)
-            else:
-                sortable.append((float("inf"), float("inf"), _idx, item))
-
-        for _k1, _k2, _k3, item in sorted(sortable):
-            item_type = str(item.get("type", "") or "").strip().lower()
-            if item_type in _OPENDATALOADER_EXCLUDED_TYPES:
-                continue
-            text = " ".join(str(item.get("content", "") or "").split())
-            if not text:
-                continue
-            raw_parts.append(text)
-            bbox = item.get("bounding box") or []
-            top_from_top = 0.0
-            bottom_from_top = 0.0
-            if isinstance(bbox, list) and len(bbox) == 4 and max_y > 0.0:
-                y0 = _safe_float(bbox[1]) or 0.0
-                y1 = _safe_float(bbox[3]) or 0.0
-                top_from_top = max(0.0, max_y - y1)
-                bottom_from_top = max(top_from_top, max_y - y0)
-
-            line = ExtractedLine(
-                text=text,
-                page_number=page_no,
-                top=top_from_top,
-                bottom=bottom_from_top,
-                font_size=_safe_float(item.get("font size")),
-                source="opendataloader_json",
-            )
-            # Short "Id./Ibid." lines on opening pages are high-noise and are
-            # treated as frontmatter leakage by benchmark gating.
-            if line.page_number <= 3 and _SHORT_ID_NOTE_RE.match(text):
-                continue
-            if line.page_number <= 3 and _RUNNING_HEAD_JOURNAL_CITE_RE.match(text):
-                continue
-            lines.append(line)
-            line_items.append((line, item_type))
-            if item_type in {"footnote", "endnote"}:
-                if line.page_number <= 3 and _RUNNING_HEAD_JOURNAL_CITE_RE.match(text):
-                    continue
-                explicit_note_lines.append(line)
-
-        if explicit_note_lines:
-            body_lines = lines
-            note_lines = explicit_note_lines
-            page_low_font_variance = _low_font_variance(lines)
-        else:
-            body_lines, note_lines, used_custom = _classify_opendataloader_note_candidates(
-                line_items, page_height=max_y
-            )
-            if used_custom:
-                page_low_font_variance = _low_font_variance(lines)
-            else:
-                body_lines, note_lines, page_low_font_variance = _classify_lines(
-                    lines, page_height=max_y, note_cutoff_ratio=note_cutoff_ratio
-                )
-
-        low_font_variance_detected = low_font_variance_detected or page_low_font_variance
-        reversed_word_order_detected = (
-            reversed_word_order_detected or _reversed_word_order_suspected(note_lines)
-        )
-        pages.append(
-            ExtractedPage(
-                page_number=page_no,
-                width=max_x,
-                height=max_y,
-                body_lines=body_lines,
-                note_lines=note_lines,
-                raw_text="\n".join(raw_parts),
-                source="opendataloader_json",
-            )
-        )
-
-    if not pages:
-        warnings.append("opendataloader_json_no_pages")
-    if low_font_variance_detected:
-        warnings.append("low_font_variance_detected")
-    if reversed_word_order_detected:
-        warnings.append("reversed_word_order_suspected")
-
-    return ExtractedDocument(
-        pdf_path=pdf_path,
-        pages=pages,
-        warnings=warnings,
-        parser="opendataloader",
-    )
-
-
-def _extract_with_opendataloader(
-    pdf_path: str, *, note_cutoff_ratio: float | None = None
-) -> ExtractedDocument | None:
-    try:
-        import opendataloader_pdf  # type: ignore
-    except Exception:
-        return None
-
-    try:
-        with tempfile.TemporaryDirectory(prefix="opendataloader_pdf_") as output_dir:
-            # Disable C2 JIT compiler to prevent SIGSEGV in PhaseIdealLoop on JDK 21.
-            # JAVA_TOOL_OPTIONS is read by the JVM before its own command-line args.
-            _prev_jtopt = os.environ.get("JAVA_TOOL_OPTIONS")
-            os.environ["JAVA_TOOL_OPTIONS"] = "-XX:TieredStopAtLevel=1"
-            try:
-                opendataloader_pdf.convert(
-                    input_path=pdf_path,
-                    output_dir=output_dir,
-                    format="json",
-                    quiet=True,
-                )
-            finally:
-                if _prev_jtopt is None:
-                    os.environ.pop("JAVA_TOOL_OPTIONS", None)
-                else:
-                    os.environ["JAVA_TOOL_OPTIONS"] = _prev_jtopt
-            stem = Path(pdf_path).stem
-            default_json = Path(output_dir) / f"{stem}.json"
-            if default_json.exists():
-                payload_path = default_json
-            else:
-                candidates = sorted(Path(output_dir).glob("*.json"))
-                if not candidates:
-                    return None
-                payload_path = candidates[0]
-            with open(payload_path, "r", encoding="utf-8") as handle:
-                import json
-
-                payload = json.load(handle)
-        if not isinstance(payload, dict):
-            return None
-        return _parse_opendataloader_json(pdf_path, payload, note_cutoff_ratio=note_cutoff_ratio)
-    except Exception:
-        logging.getLogger(__name__).debug(
-            "opendataloader failed for %s", pdf_path, exc_info=True
-        )
-        return None
-
-
 _MERGED_NOTE_SPLIT_RE = re.compile(r"(?<=[.;:)\]\"\u201d\u2019'])\s+(?=\d{1,4}\s+[A-Z])")
 
 
@@ -2132,11 +1794,11 @@ def extract_document_text(
         else:
             document = _extract_with_pdfplumber(pdf_path, note_cutoff_ratio=note_cutoff_ratio)
         if document is not None:
-            document.warnings.append("liteparse unavailable; used pdfplumber fallback")
+            document.warnings.append("liteparse_returned_none; used pdfplumber fallback")
             return _annotate_parser(document, "pdfplumber")
         fallback = _extract_with_pypdf(pdf_path)
         if fallback is not None:
-            fallback.warnings.append("pdfplumber unavailable; used pypdf fallback")
+            fallback.warnings.append("liteparse_and_pdfplumber_returned_none; used pypdf fallback")
             return _annotate_parser(fallback, "pypdf")
         return ExtractedDocument(
             pdf_path=pdf_path,
@@ -2175,31 +1837,6 @@ def extract_document_text(
             pages=[],
             warnings=["No PDF parser available (install docling/pdfplumber/pypdf)"],
             parser="docling",
-        )
-
-    if mode == "opendataloader_only":
-        if note_cutoff_ratio is None:
-            document = _extract_with_opendataloader(pdf_path)
-        else:
-            document = _extract_with_opendataloader(pdf_path, note_cutoff_ratio=note_cutoff_ratio)
-        if document is not None:
-            return _annotate_parser(document, "opendataloader")
-        if note_cutoff_ratio is None:
-            fallback = _extract_with_pdfplumber(pdf_path)
-        else:
-            fallback = _extract_with_pdfplumber(pdf_path, note_cutoff_ratio=note_cutoff_ratio)
-        if fallback is not None:
-            fallback.warnings.append("opendataloader unavailable; used pdfplumber fallback")
-            return _annotate_parser(fallback, "pdfplumber")
-        fallback = _extract_with_pypdf(pdf_path)
-        if fallback is not None:
-            fallback.warnings.append("opendataloader unavailable; used pypdf fallback")
-            return _annotate_parser(fallback, "pypdf")
-        return ExtractedDocument(
-            pdf_path=pdf_path,
-            pages=[],
-            warnings=["No PDF parser available (install opendataloader-pdf/pdfplumber/pypdf)"],
-            parser="opendataloader",
         )
 
     if mode == "liteparse_only":

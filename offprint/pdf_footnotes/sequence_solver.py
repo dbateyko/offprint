@@ -405,27 +405,65 @@ def _gap_penalty(delta: int) -> float:
 
 
 def _solve_sequence(candidates: list[LabelCandidate]) -> list[int]:
+    """Find the best global sequence of footnote labels using DP.
+    
+    Weights:
+    - Base score for each candidate (derived from text/layout features)
+    - Penalty for numeric gaps (monotonically increasing)
+    - Penalty for sequence restarts (e.g. starting at 1 again in an appendix)
+    - Penalty for high starting labels (favors sequences starting at 1)
+    - Penalty for spatial reversals (staying on same page but moving 'up')
+    """
     n = len(candidates)
     if n == 0:
         return []
+    
+    # dp[i] = max score ending at candidate i
     dp = [0.0] * n
     parent = [-1] * n
     base = [_candidate_score(c) for c in candidates]
+    
     for i in range(n):
-        dp[i] = base[i]
         ci = candidates[i]
+        
+        # Start Penalty: encourage starting at label 1.
+        # Starting at label 3 costs 10.0, label 5 costs 20.0.
+        # This keeps the solver from picking stray numbers mid-doc.
+        start_penalty = max(0.0, (ci.digit_value - 1) * 5.0)
+        dp[i] = base[i] - start_penalty
+        
         for j in range(i):
             cj = candidates[j]
-            if cj.digit_value >= ci.digit_value:
-                continue
-            delta = ci.digit_value - cj.digit_value
-            spatial_pen = 0.0
-            if cj.page == ci.page and ci.y < cj.y - 0.5:
-                spatial_pen = 5.0
-            cand = dp[j] + base[i] - _gap_penalty(delta) - spatial_pen
+            
+            # Transition weights
+            is_restart = (cj.digit_value >= ci.digit_value)
+            
+            if is_restart:
+                # Sequential Restart: allow starting at 1 (or 2) again.
+                # Must be spatially after the previous note.
+                if ci.digit_value > 2:
+                    continue
+                # Same-page restarts are suspicious (often side-content/tables)
+                if cj.page == ci.page:
+                    continue
+                
+                # Restart cost: matches a ~4-note sequence score.
+                # Naturally filters out one-off '1' noise.
+                penalty = 12.0
+            else:
+                # Standard increment
+                delta = ci.digit_value - cj.digit_value
+                penalty = _gap_penalty(delta)
+                
+                # Spatial reversal penalty: if on same page, must move down.
+                if cj.page == ci.page and ci.y < cj.y - 0.5:
+                    penalty += 10.0
+
+            cand = dp[j] + base[i] - penalty
             if cand > dp[i]:
                 dp[i] = cand
                 parent[i] = j
+                
     best_i = max(range(n), key=lambda i: (dp[i], candidates[i].digit_value))
     path: list[int] = []
     cur = best_i
@@ -437,20 +475,18 @@ def _solve_sequence(candidates: list[LabelCandidate]) -> list[int]:
 
 
 def _trim_tail_outliers(labels: list[int]) -> list[int]:
-    import statistics as _stat
-
+    """Remove outlier labels at the end of a sequence (e.g. page numbers
+    picked up after the last real footnote)."""
     if len(labels) < 4:
         return labels
     out = list(labels)
     while len(out) >= 4:
         top, second = out[-1], out[-2]
         jump = top - second
-        deltas = [out[i + 1] - out[i] for i in range(len(out) - 2)]
-        if not deltas:
-            break
-        med = max(1, int(_stat.median(deltas)))
-        if jump >= max(8, 5 * med) and jump > (top * 0.15):
-            out.pop()
+        # If the jump to the last label is much larger than typical gaps, prune it.
+        # Threshold: 50+ jump OR 10x the document's average density.
+        if jump > 50 or jump > (out[-2] - out[0]) / len(out) * 10:
+             out.pop()
         else:
             break
     return out
@@ -529,10 +565,10 @@ class SolverResult:
 
 
 def solve_document(layouts: list) -> SolverResult:
-    """Run the full pipeline (collect → solve → gap-fill → trim) on liteparse
-    layouts and return the per-page body/notes cutoff positions plus the
-    selected label candidates (for downstream consumers that want to bypass
-    the heuristic segmenter and use solver decisions as authoritative).
+    """Run the authoritative global solver on liteparse layouts.
+    
+    This replaces the 'heuristic ensemble' by finding the single best
+    evidence-backed sequence of labels across the entire document.
     """
     pages = _pages_from_layouts(layouts)
     cands = _collect_candidates(pages)
@@ -542,80 +578,32 @@ def solve_document(layouts: list) -> SolverResult:
             page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=0
         )
 
-    max_plausible = max(120, len(pages) * 10)
+    # Filter out impossible labels to bound DP search space
+    max_plausible = max(150, len(pages) * 15)
     base_cands = [c for c in cands if c.digit_value <= max_plausible]
     
-    # Serial multi-pass rescue for restarts (appendices, etc.)
-    all_final: list[LabelCandidate] = []
-    available = list(base_cands)
-    
-    # We allow up to 10 passes to catch docs with many small segments (e.g. Case Notes)
-    for _pass in range(10):
-        path = _solve_sequence(available)
-        if not path:
-            break
-            
-        path = _gap_fill(available, path)
-        selected_this_pass = [available[i] for i in sorted(path)]
-        
-        # Validation for this segment: it must be a sequence starting at 1 or 2.
-        labels = [c.digit_value for c in selected_this_pass]
-        trimmed_values = set(_trim_tail_outliers(sorted(labels)))
-        final_this_pass = [c for c in selected_this_pass if c.digit_value in trimmed_values]
-        
-        if len(final_this_pass) >= 3:
-            first_label = final_this_pass[0].digit_value
-            is_valid_start = first_label <= 1
-            if first_label == 2:
-                unique_labels = sorted({c.digit_value for c in final_this_pass})
-                span = unique_labels[-1] - unique_labels[0] + 1
-                density = len(unique_labels) / max(span, 1)
-                if len(unique_labels) >= 5 and density >= 0.80:
-                    is_valid_start = True
-            
-            if is_valid_start:
-                # Avoid interleaved noise: a new sequence must be spatially disjoint 
-                # from already accepted ones.
-                overlap = False
-                if all_final:
-                    # Spatial range of new segment
-                    new_start = (final_this_pass[0].page, final_this_pass[0].y)
-                    new_end = (final_this_pass[-1].page, final_this_pass[-1].y)
-
-                    for existing in all_final:
-                        # Is this existing candidate inside the new range?
-                        pos = (existing.page, existing.y)
-                        if new_start <= pos <= new_end:
-                            overlap = True
-                            break
-
-                    if not overlap:
-                        # Also check if new range contains existing range
-                        # but since they are disjoint if no point is inside, this is enough
-                        # for most cases. Let's check the other way too.
-                        existing_start = (all_final[0].page, all_final[0].y)
-                        existing_end = (all_final[-1].page, all_final[-1].y)
-                        if existing_start <= new_start <= existing_end:
-                            overlap = True
-
-                if not overlap:
-                    all_final.extend(final_this_pass)
-                    # Keep all_final sorted for next pass check
-                    all_final.sort(key=lambda c: (c.page, c.y, c.x))
-        # Always remove candidates used in this pass's path to avoid cycles,
-        # even if the sequence was rejected for not starting at 1.
-        used_ids = {id(available[i]) for i in path}
-        available = [c for c in available if id(c) not in used_ids]
-
-    if not all_final:
+    # Global solve
+    path = _solve_sequence(base_cands)
+    if not path:
         return SolverResult(
-            page_cutoffs={},
-            selected_labels=[],
-            selected_candidates=(),
-            candidate_count=candidate_count,
+            page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
+        )
+        
+    path = _gap_fill(base_cands, path)
+    selected = [base_cands[i] for i in sorted(path)]
+    selected.sort(key=lambda c: (c.page, c.y, c.x))
+    
+    # Final cleanup
+    labels = [c.digit_value for c in selected]
+    trimmed_values = set(_trim_tail_outliers(labels))
+    final = [c for c in selected if c.digit_value in trimmed_values]
+    
+    if not final:
+        return SolverResult(
+            page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
         )
 
-    final = sorted(all_final, key=lambda c: (c.page, c.y, c.x))
+    # Calculate per-page body/note cutoffs for downstream layout analysis
     page_cutoffs: dict[int, float] = {}
     for c in final:
         if c.page not in page_cutoffs or c.y < page_cutoffs[c.page]:
