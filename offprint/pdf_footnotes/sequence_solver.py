@@ -20,8 +20,8 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
-LABEL_DIGIT_RE = re.compile(r"^(\d{1,4})(?:[\.\)\]]|\.{2,})?$")
-LABEL_START_RE = re.compile(r"^\s*(\d{1,4})(?:[\.\)\]]|\.{2,})?(?:\s|$)")
+LABEL_DIGIT_RE = re.compile(r"^\s*(\d{1,4})(?:[\.\)\]]|\.{2,})?\s*$")
+LABEL_START_RE = re.compile(r"^\s*(\d{1,4})(?:[\.\)\]]|\.{2,})?")
 
 CITATION_SIGNAL_RE = re.compile(
     r"\b(?:See|Id\.|Ibid\.|Cf\.|But see|Compare|E\.g\.|Accord|Supra|Infra|"
@@ -564,6 +564,84 @@ class SolverResult:
     candidate_count: int
 
 
+def _ghost_rescue(pages: list[_PageData], candidates: list[LabelCandidate]) -> list[LabelCandidate]:
+    """Targeted search for missing digits in spatial gaps.
+    
+    If Note 25 and 27 are found, Note 26 *must* be between them.
+    This pass looks for the raw string '26' in that exact vertical slice.
+    """
+    if not candidates:
+        return candidates
+        
+    selected = sorted(candidates, key=lambda c: (c.page, c.y, c.x))
+    rescuable: list[LabelCandidate] = list(selected)
+    selected_set = set(c.digit_value for c in rescuable)
+    
+    # Identify gaps in the sequence
+    gaps: list[int] = []
+    if len(selected) >= 2:
+        expected = range(selected[0].digit_value, selected[-1].digit_value + 1)
+        gaps = [v for v in expected if v not in selected_set]
+        
+    if not gaps:
+        return candidates
+
+    pages_map = {p.page: p for p in pages}
+    
+    for gap in gaps:
+        # Find spatial bounds for this gap
+        prev_note = next((c for c in reversed(rescuable) if c.digit_value < gap), None)
+        next_note = next((c for c in rescuable if c.digit_value > gap), None)
+        
+        if not prev_note or not next_note:
+            continue
+            
+        # Search all items on pages between prev and next (inclusive)
+        # Broaden by 1 page to catch cases where the digit is at the very edge
+        for page_no in range(prev_note.page - 1, next_note.page + 2):
+            p = pages_map.get(page_no)
+            if not p:
+                continue
+                
+            for it in p.items:
+                raw_text = (it.get("text") or "").strip()
+                if not raw_text:
+                    continue
+                
+                parts = re.split(r"[^\d]+", raw_text)
+                if str(gap) not in parts:
+                    continue
+                
+                y = float(it.get("y") or 0)
+                x = float(it.get("x") or 0)
+                fs = float(it.get("fontSize") or 0)
+                
+                # Spatial check
+                start_pos = (prev_note.page, prev_note.y)
+                end_pos = (next_note.page, next_note.y)
+                curr_pos = (page_no, y)
+                
+                if start_pos < curr_pos < end_pos:
+                    # Found a ghost! 
+                    y_rel = (y / p.height) if p.height else 0.5
+                    ghost = LabelCandidate(
+                        page=page_no,
+                        y=y,
+                        x=x,
+                        font_size=fs,
+                        digit_value=gap,
+                        text=raw_text,
+                        is_pure_digit=(raw_text == str(gap)),
+                        smaller_font=bool(fs and fs < p.median_font * 0.95),
+                        y_rel=y_rel,
+                    )
+                    rescuable.append(ghost)
+                    rescuable.sort(key=lambda c: (c.page, c.y, c.x))
+                    break
+                    
+    return rescuable
+
+
 def solve_document(layouts: list) -> SolverResult:
     """Run the authoritative global solver on liteparse layouts.
     
@@ -591,6 +669,11 @@ def solve_document(layouts: list) -> SolverResult:
         
     path = _gap_fill(base_cands, path)
     selected = [base_cands[i] for i in sorted(path)]
+    
+    # Ghost Rescue: targeted spatial search for remaining gaps.
+    # Often rescues subtle superscripts missed by the initial candidate pass.
+    selected = _ghost_rescue(pages, selected)
+    
     selected.sort(key=lambda c: (c.page, c.y, c.x))
     
     # Final cleanup
