@@ -1781,29 +1781,19 @@ def extract_document_text(
         note_cutoff_ratio = None
 
     if mode == "footnote_optimized":
-        # liteparse first for robust structured parsing, then fallback to
-        # existing deterministic parsers.
+        # liteparse exclusively. If liteparse can't read the PDF, return an
+        # empty ExtractedDocument so downstream code can route to OCR rather
+        # than producing low-quality fallback output.
         if note_cutoff_ratio is None:
             document = _extract_with_liteparse(pdf_path)
         else:
             document = _extract_with_liteparse(pdf_path, note_cutoff_ratio=note_cutoff_ratio)
         if document is not None:
             return _annotate_parser(document, "liteparse")
-        if note_cutoff_ratio is None:
-            document = _extract_with_pdfplumber(pdf_path)
-        else:
-            document = _extract_with_pdfplumber(pdf_path, note_cutoff_ratio=note_cutoff_ratio)
-        if document is not None:
-            document.warnings.append("liteparse_returned_none; used pdfplumber fallback")
-            return _annotate_parser(document, "pdfplumber")
-        fallback = _extract_with_pypdf(pdf_path)
-        if fallback is not None:
-            fallback.warnings.append("liteparse_and_pdfplumber_returned_none; used pypdf fallback")
-            return _annotate_parser(fallback, "pypdf")
         return ExtractedDocument(
             pdf_path=pdf_path,
             pages=[],
-            warnings=["No PDF parser available (install liteparse, pdfplumber, or pypdf)"],
+            warnings=["liteparse_returned_none"],
         )
 
     if mode == "pypdf_only":
