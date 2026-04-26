@@ -47,6 +47,8 @@ class LabelCandidate:
     cluster_peers: int = 0
     y_rel: float = 0.0
     substantive_text: bool = False
+    x_rel: float = 0.0
+    page_median_font: float = 0.0
 
 
 @dataclass
@@ -237,6 +239,7 @@ def _synthesize_split_label_candidates(
             alpha_tokens = [t for t in post if len(t) >= 2 and any(c.isalpha() for c in t)]
             has_upper_initial = any(t[:1].isupper() for t in alpha_tokens[:6])
             substantive_text = len(alpha_tokens) >= 4 and has_upper_initial
+            x_rel = (x / page.width) if page.width else 0.0
             synthesized.append(
                 LabelCandidate(
                     page=page.page,
@@ -252,6 +255,8 @@ def _synthesize_split_label_candidates(
                     citation_nearby=citation_nearby,
                     y_rel=y_rel,
                     substantive_text=substantive_text,
+                    x_rel=x_rel,
+                    page_median_font=page.median_font,
                 )
             )
     return synthesized
@@ -327,6 +332,7 @@ def _collect_candidates(pages: list[_PageData]) -> list[LabelCandidate]:
             has_upper_initial = any(t[:1].isupper() for t in alpha_tokens[:6])
             substantive_text = len(alpha_tokens) >= 4 and has_upper_initial
             y_rel = (y / p.height) if p.height else 0.5
+            x_rel = (x / p.width) if p.width else 0.0
             candidates.append(
                 LabelCandidate(
                     page=p.page,
@@ -342,6 +348,8 @@ def _collect_candidates(pages: list[_PageData]) -> list[LabelCandidate]:
                     citation_nearby=citation_nearby,
                     y_rel=y_rel,
                     substantive_text=substantive_text,
+                    x_rel=x_rel,
+                    page_median_font=p.median_font,
                 )
             )
         candidates.extend(
@@ -387,7 +395,24 @@ def _candidate_score(c: LabelCandidate) -> float:
         s -= 1.0
     if c.is_pure_digit and not c.has_punct and not c.citation_nearby and c.cluster_peers == 0:
         s -= 1.0
-    return max(s, 0.1)
+    s = max(s, 0.1)
+    # Body-digit penalty: candidates that look like body text (full font size,
+    # no footnote-label cues like '.' / ')' / ']' suffix, and not in the
+    # smaller-font footnote zone) are almost never real footnote labels —
+    # they're page numbers, percent figures (e.g. "35%"), citation page-ranges
+    # (e.g. "51-58"), etc. Strongly penalise them so DP scoring prefers the
+    # smaller-font left-margin labels even when they're sparser. Applied
+    # AFTER the 0.1 floor so the penalty is felt by DP regardless of base.
+    if (
+        c.page_median_font > 0
+        and c.font_size >= c.page_median_font * 0.9
+        and c.digit_value > 1
+        and not c.has_punct
+        and not c.smaller_font
+        and not c.is_pure_digit
+    ):
+        s -= 3.0
+    return s
 
 
 def _gap_penalty(delta: int) -> float:
