@@ -26,18 +26,52 @@ from offprint.pdf_footnotes.pipeline import (
     FootnoteProfile,
 )
 from offprint.pdf_footnotes.note_segment import segment_document_notes_extended
+from offprint.pdf_footnotes.doc_policy import (
+    classify_pdf,
+    collect_signals,
+    read_first_page_overview,
+    infer_domain,
+    infer_platform_family,
+    load_rules,
+)
+
+_RULES = None
+
+
+def _doc_type(pdf: str) -> tuple[str, list[str]]:
+    """Return (doc_type, reason_codes) from doc_policy."""
+    global _RULES
+    if _RULES is None:
+        _RULES = load_rules()
+    try:
+        page_count, fp_text = read_first_page_overview(pdf)
+        signals = collect_signals(fp_text, page_count, metadata=None)
+        domain = infer_domain(pdf)
+        platform = infer_platform_family(domain=domain)
+        decision = classify_pdf(
+            pdf_path=pdf,
+            domain=domain,
+            platform_family=platform,
+            signals=signals,
+            doc_policy="article_only",
+            rules=_RULES,
+        )
+        return decision.doc_type, list(decision.reason_codes)
+    except Exception:
+        return "article", []
 
 
 def run_one(pdf: str) -> dict:
+    doc_type, reason_codes = _doc_type(pdf)
     try:
         cands = extract_liteparse_candidate_documents(pdf)
         if not cands:
-            return {"pdf": pdf, "error": "no_candidates"}
+            return {"pdf": pdf, "error": "no_candidates", "doc_type": doc_type, "reason_codes": reason_codes}
         sel = _select_liteparse_candidate_document(
             cands, profile_for=lambda d: FootnoteProfile()
         )
         if sel is None:
-            return {"pdf": pdf, "error": "no_selection"}
+            return {"pdf": pdf, "error": "no_selection", "doc_type": doc_type, "reason_codes": reason_codes}
         meta = sel.metadata or {}
         name = meta.get("liteparse_selected_candidate", "unknown")
         pc = meta.get("sequence_solver_precomputed")
@@ -48,6 +82,8 @@ def run_one(pdf: str) -> dict:
             notes, _, rep, _ = segment_document_notes_extended(sel, gap_tolerance=0)
         return {
             "pdf": pdf,
+            "doc_type": doc_type,
+            "reason_codes": reason_codes,
             "selected_candidate": name,
             "status": rep.status if rep else "empty",
             "notes": len(notes),
@@ -55,7 +91,7 @@ def run_one(pdf: str) -> dict:
             "gap_count": len(rep.gaps) if rep else 0,
         }
     except Exception as e:
-        return {"pdf": pdf, "error": str(e)[:200]}
+        return {"pdf": pdf, "error": str(e)[:200], "doc_type": doc_type, "reason_codes": reason_codes}
 
 
 def main():
@@ -87,36 +123,70 @@ def main():
 
     cand_ct = Counter()
     status_ct = Counter()
+    doctype_ct = Counter()
+    article_status_ct = Counter()
     for r in results:
         cand_ct[r.get("selected_candidate") or "error"] += 1
         status_ct[r.get("status") or "error"] += 1
+        dt = r.get("doc_type") or "unknown"
+        doctype_ct[dt] += 1
+        if dt == "article":
+            article_status_ct[r.get("status") or "error"] += 1
 
     print("\n=== Selected candidate breakdown ===")
     for c, ct in cand_ct.most_common():
         print(f"  {c:<50}: {ct}")
 
-    print("\n=== Status breakdown ===")
+    print("\n=== doc_policy breakdown ===")
+    for dt, ct in doctype_ct.most_common():
+        print(f"  {dt:<20}: {ct}")
+
+    print("\n=== Status breakdown (all docs) ===")
     for s, ct in status_ct.most_common():
+        print(f"  {s:<20}: {ct}")
+
+    print("\n=== Status breakdown (articles only) ===")
+    for s, ct in article_status_ct.most_common():
         print(f"  {s:<20}: {ct}")
 
     total = len(results)
     valid = status_ct.get("valid", 0)
     vog = status_ct.get("valid_with_gaps", 0)
-    inv = status_ct.get("invalid", 0)
     emp = status_ct.get("empty", 0)
     err = sum(1 for r in results if r.get("error"))
 
-    print(f"\nTotal: {total} (errors: {err})")
-    print(f"strict-valid:    {valid}/{total} = {100*valid/max(total,1):.1f}%")
-    print(f">=valid_with_gaps: {valid+vog}/{total} = {100*(valid+vog)/max(total,1):.1f}%")
+    print(f"\n=== Raw (all docs) ===")
+    print(f"Total: {total} (errors: {err})")
+    print(f"strict-valid:        {valid}/{total} = {100*valid/max(total,1):.1f}%")
+    print(f">=valid_with_gaps:   {valid+vog}/{total} = {100*(valid+vog)/max(total,1):.1f}%")
     honest_denom = total - emp - err
     if honest_denom:
-        print(f"strict (honest, excluding empty/error): {valid}/{honest_denom} = {100*valid/honest_denom:.1f}%")
-        print(f">=vwg (honest): {valid+vog}/{honest_denom} = {100*(valid+vog)/honest_denom:.1f}%")
+        print(f"strict (honest):     {valid}/{honest_denom} = {100*valid/honest_denom:.1f}%")
+        print(f">=vwg (honest):      {valid+vog}/{honest_denom} = {100*(valid+vog)/honest_denom:.1f}%")
+
+    n_articles = doctype_ct.get("article", 0)
+    av = article_status_ct.get("valid", 0)
+    avg = article_status_ct.get("valid_with_gaps", 0)
+    aemp = article_status_ct.get("empty", 0)
+    if n_articles:
+        print(f"\n=== Article-scoped (excludes non-article doc_types) ===")
+        print(f"Articles: {n_articles}")
+        print(f"strict-valid:        {av}/{n_articles} = {100*av/n_articles:.1f}%")
+        print(f">=valid_with_gaps:   {av+avg}/{n_articles} = {100*(av+avg)/n_articles:.1f}%")
+        article_honest = n_articles - aemp
+        if article_honest:
+            print(f"strict (honest):     {av}/{article_honest} = {100*av/article_honest:.1f}%")
+            print(f">=vwg (honest):      {av+avg}/{article_honest} = {100*(av+avg)/article_honest:.1f}%")
 
     Path(args.out).write_text(
         json.dumps(
-            {"rows": results, "cand_ct": dict(cand_ct), "status_ct": dict(status_ct)},
+            {
+                "rows": results,
+                "cand_ct": dict(cand_ct),
+                "status_ct": dict(status_ct),
+                "doctype_ct": dict(doctype_ct),
+                "article_status_ct": dict(article_status_ct),
+            },
             default=str,
             indent=2,
         )
