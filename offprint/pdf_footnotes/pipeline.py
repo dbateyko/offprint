@@ -1268,7 +1268,8 @@ def _cache_compatible_with_mode(*, parser_mode: str, cached_parser: str) -> bool
         return parser == "opendataloader"
     if mode == "docling_only":
         return parser == "docling"
-    # balanced/footnote_optimized and unknown modes can reuse cached extracts.
+    if mode in {"balanced", "footnote_optimized"}:
+        return parser == "liteparse"
     return True
 
 
