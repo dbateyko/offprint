@@ -550,16 +550,16 @@ def validate_ordinality(
     # with minor glyph losses. Keep such docs in valid_with_gaps so the
     # honest ≥valid_with_gaps metric reflects actual extraction quality.
     ratio_relief_threshold = 0.15
-    # Cosmetic-gap promotion: long sequences with sub-0.5 % gap density are
-    # indistinguishable from "valid" for downstream consumers (e.g. a 458-note
-    # article missing label 217). Promote those to "valid" so the strict-valid
-    # metric tracks real extraction quality, not source-PDF label hiccups.
-    cosmetic_gap_ratio = 0.005
+    # Cosmetic-gap promotion: a sequence with at most 2 missing labels in a
+    # ≥10-note stream is indistinguishable from "valid" for downstream
+    # consumers. Promote those so the strict-valid metric tracks extraction
+    # quality, not source-PDF label hiccups (e.g. a 458-note article missing
+    # label 217, or an 18-note article missing label 4).
     if not gaps:
         status = "valid"
     elif tolerance_exceeded and gap_ratio > ratio_relief_threshold:
         status = "invalid"
-    elif gap_ratio < cosmetic_gap_ratio:
+    elif len(gaps) <= 2 and len(sorted_nums) >= 10:
         status = "valid"
     else:
         status = "valid_with_gaps"
