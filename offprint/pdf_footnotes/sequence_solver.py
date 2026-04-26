@@ -564,14 +564,32 @@ class SolverResult:
     candidate_count: int
 
 
+# Common OCR / LiteParse character mutations for digits
+OCR_MUTATIONS = {
+    "1": ["I", "l", "i", "|"],
+    "2": ["Z"],
+    "5": ["S"],
+    "7": ["K", "/"],
+    "8": ["B"],
+    "0": ["O", "o"],
+}
+
+def _is_ocr_match(target_digit: int, text: str) -> bool:
+    """Return True if text looks like a mutated version of target_digit."""
+    s = str(target_digit)
+    if s == text:
+        return True
+    # Check for simple character substitutions
+    for char, mutations in OCR_MUTATIONS.items():
+        if char in s:
+            for m in mutations:
+                if s.replace(char, m) == text:
+                    return True
+    return False
+
 def _ghost_rescue(pages: list[_PageData], candidates: list[LabelCandidate]) -> list[LabelCandidate]:
     """Targeted search for missing digits in spatial gaps.
-    
-    If Note 25 and 27 are found, Note 26 *must* be between them.
-    This pass looks for the raw string '26' in that exact vertical slice.
-    
-    Now iterative: fills gaps created by previous rescue passes.
-    Now score-aware: returns new candidates for a second global solve pass.
+    Now fuzzy (handles OCR errors) and iterative.
     """
     if not candidates:
         return candidates
@@ -579,13 +597,11 @@ def _ghost_rescue(pages: list[_PageData], candidates: list[LabelCandidate]) -> l
     pages_map = {p.page: p for p in pages}
     all_rescuable = list(candidates)
     
-    # We loop until convergence to fill multi-note holes (e.g. 10, 11, 12 all missing)
     for _iteration in range(5):
         added_this_iter = 0
         current = sorted(all_rescuable, key=lambda c: (c.page, c.y, c.x))
         selected_set = set(c.digit_value for c in current)
         
-        # Identify gaps in the sequence
         gaps: list[int] = []
         if len(current) >= 2:
             expected = range(current[0].digit_value, current[-1].digit_value + 1)
@@ -595,64 +611,120 @@ def _ghost_rescue(pages: list[_PageData], candidates: list[LabelCandidate]) -> l
             break
 
         for gap in gaps:
-            # Find spatial bounds for this gap
             prev_note = next((c for c in reversed(current) if c.digit_value < gap), None)
             next_note = next((c for c in current if c.digit_value > gap), None)
             
             if not prev_note or not next_note:
                 continue
                 
-            # Search all items on pages between prev and next (inclusive)
-            # Broaden by 1 page for safety
             found_ghost = False
             for page_no in range(prev_note.page - 1, next_note.page + 2):
                 p = pages_map.get(page_no)
                 if not p:
                     continue
-                    
                 for it in p.items:
                     raw_text = (it.get("text") or "").strip()
-                    if not raw_text:
-                        continue
-                    
-                    parts = re.split(r"[^\d]+", raw_text)
-                    if str(gap) not in parts:
-                        continue
+                    if not raw_text: continue
+                    parts = re.split(r"[^a-zA-Z\d]+", raw_text)
+                    if not any(_is_ocr_match(gap, p) for p in parts): continue
                     
                     y = float(it.get("y") or 0)
-                    x = float(it.get("x") or 0)
-                    fs = float(it.get("fontSize") or 0)
-                    
-                    # Spatial check: must be after prev and before next
                     start_pos = (prev_note.page, prev_note.y)
                     end_pos = (next_note.page, next_note.y)
                     curr_pos = (page_no, y)
                     
                     if start_pos < curr_pos < end_pos:
-                        # Found a candidate! 
-                        y_rel = (y / p.height) if p.height else 0.5
                         ghost = LabelCandidate(
                             page=page_no,
                             y=y,
-                            x=x,
-                            font_size=fs,
+                            x=float(it.get("x") or 0),
+                            font_size=float(it.get("fontSize") or 0),
                             digit_value=gap,
                             text=raw_text,
-                            is_pure_digit=(raw_text == str(gap)),
-                            smaller_font=bool(fs and fs < p.median_font * 0.95),
-                            y_rel=y_rel,
+                            is_pure_digit=bool(re.match(r"^\d+$", raw_text)),
+                            y_rel=(y / p.height) if p.height else 0.5,
                         )
                         all_rescuable.append(ghost)
                         added_this_iter += 1
                         found_ghost = True
-                        break # Only one candidate per gap per iteration
-                if found_ghost:
-                    break
+                        break 
+                if found_ghost: break
         
-        if added_this_iter == 0:
-            break
+        if added_this_iter == 0: break
                     
+    # Special Rescue: Missing Note 1
+    # If the sequence starts at 2, look for 1 on early pages.
+    current = sorted(all_rescuable, key=lambda c: (c.page, c.y, c.x))
+    if current and current[0].digit_value == 2:
+        first_two = current[0]
+        for page_no in range(max(1, first_two.page - 2), first_two.page + 1):
+            p = pages_map.get(page_no)
+            if not p: continue
+            for it in p.items:
+                raw_text = (it.get("text") or "").strip()
+                if not raw_text: continue
+                parts = re.split(r"[^a-zA-Z\d]+", raw_text)
+                if any(_is_ocr_match(1, pt) for pt in parts):
+                    y = float(it.get("y") or 0)
+                    if (page_no, y) < (first_two.page, first_two.y):
+                        all_rescuable.append(LabelCandidate(
+                            page=page_no, y=y, x=float(it.get("x") or 0),
+                            font_size=float(it.get("fontSize") or 0),
+                            digit_value=1, text=raw_text,
+                            is_pure_digit=bool(re.match(r"^\d+$", raw_text)),
+                            y_rel=(y/p.height) if p.height else 0.5
+                        ))
+                        break
     return all_rescuable
+
+
+def _dedupe_by_digit_value(final: list[LabelCandidate]) -> list[LabelCandidate]:
+    by_val: dict[int, list[LabelCandidate]] = {}
+    for c in final:
+        by_val.setdefault(c.digit_value, []).append(c)
+    if all(len(v) == 1 for v in by_val.values()):
+        return final
+    sorted_vals = sorted(by_val.keys())
+    kept: list[LabelCandidate] = []
+    for v in sorted_vals:
+        cands = by_val[v]
+        if len(cands) == 1:
+            kept.append(cands[0])
+            continue
+        prev_val = next((x for x in reversed(sorted_vals) if x < v), None)
+        next_val = next((x for x in sorted_vals if x > v), None)
+        prev_page = (
+            next((k.page for k in reversed(kept) if k.digit_value == prev_val), None)
+            if prev_val is not None
+            else None
+        )
+        next_page = by_val[next_val][0].page if next_val is not None else None
+
+        def neighbor_distance(c: LabelCandidate) -> float:
+            d = 0.0
+            n = 0
+            if prev_page is not None:
+                d += abs(c.page - prev_page)
+                n += 1
+            if next_page is not None:
+                d += abs(c.page - next_page)
+                n += 1
+            return d / n if n else 0.0
+
+        cands.sort(key=neighbor_distance)
+        kept.append(cands[0])
+    kept.sort(key=lambda c: (c.page, c.y, c.x))
+    return kept
+
+
+def _looks_like_toc(final: list[LabelCandidate], n_pages: int) -> bool:
+    if len(final) < 4 or n_pages < 4:
+        return False
+    page_ct: dict[int, int] = {}
+    for c in final:
+        page_ct[c.page] = page_ct.get(c.page, 0) + 1
+    top2 = sum(sorted(page_ct.values(), reverse=True)[:2])
+    return top2 >= 0.8 * len(final)
 
 
 def solve_document(layouts: list) -> SolverResult:
@@ -706,7 +778,21 @@ def solve_document(layouts: list) -> SolverResult:
     labels = [c.digit_value for c in final_selected]
     trimmed_values = set(_trim_tail_outliers(labels))
     final = [c for c in final_selected if c.digit_value in trimmed_values]
-    
+
+    # Dedupe-by-digit: when the same digit_value was accepted from two
+    # locations (e.g., a TOC entry on page 3 *and* a real footnote on page 28),
+    # keep the candidate whose page is closest to its digit-value neighbors'
+    # pages. Real footnote streams progress across pages; TOC clusters do not.
+    final = _dedupe_by_digit_value(final)
+
+    # TOC reject: if after dedupe the surviving labels cluster on ≤2 pages of a
+    # multi-page doc, this stream is a TOC/masthead/list, not a footnote
+    # sequence. Return empty rather than report a false "invalid" sequence.
+    if _looks_like_toc(final, n_pages=len(pages)):
+        return SolverResult(
+            page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
+        )
+
     if not final:
         return SolverResult(
             page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
