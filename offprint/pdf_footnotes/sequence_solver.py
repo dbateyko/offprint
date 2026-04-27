@@ -30,6 +30,13 @@ CITATION_SIGNAL_RE = re.compile(
     re.IGNORECASE,
 )
 
+# A TOC entry has 4+ dot leaders followed by a trailing page number, e.g.
+#   "Petition Signatures............................................................ 238"
+# Lines matching this pattern must never be promoted to footnote labels by the
+# solver — `_looks_like_toc` only catches whole-stream TOC clusters, leaving
+# scattered TOC entries (1-3 per doc) in front of the real footnote stream.
+TOC_LINE_RE = re.compile(r"\.{4,}\s*\d+\s*$")
+
 
 @dataclass
 class LabelCandidate:
@@ -231,6 +238,9 @@ def _synthesize_split_label_candidates(
                 continue
             seen.add(key)
             line_text = _line_text_starting_at(page, first)
+            # Reject TOC entries (same guard as in _collect_candidates).
+            if TOC_LINE_RE.search(line_text):
+                continue
             citation_nearby = bool(CITATION_SIGNAL_RE.search(line_text))
             tokens = line_text.split()
             post = tokens[size:] if len(tokens) >= size else []
@@ -320,6 +330,11 @@ def _collect_candidates(pages: list[_PageData]) -> list[LabelCandidate]:
             smaller_font = bool(fs and fs < p.median_font * 0.95)
             left_margin = bool(x <= left_thresh)
             line_text = _line_text_starting_at(p, it)
+            # Reject TOC entries: a line that has dot-leaders ending in a page
+            # number is unambiguously a table-of-contents entry, never a
+            # footnote label, regardless of layout features.
+            if TOC_LINE_RE.search(line_text):
+                continue
             citation_nearby = bool(CITATION_SIGNAL_RE.search(line_text))
             tokens = line_text.split()
             post = tokens[1:] if tokens else []
