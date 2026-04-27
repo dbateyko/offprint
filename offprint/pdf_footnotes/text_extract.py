@@ -1620,12 +1620,89 @@ def _build_liteparse_candidate_document(
     )
 
 
+# Single-character ASCII glyphs that appear standalone in cmap-mangled output
+# (e.g. Alegreya font with a broken cmap remaps digit/marker glyphs to '!', '#',
+# '$', '%', '*', '+'). These never legitimately appear as 1000s of standalone
+# tokens in body text. '&' is excluded (legitimate ampersand usage).
+_LITEPARSE_CMAP_MARKER_GLYPHS = frozenset("!#$%*+")
+# Latin accented letters that signal a non-English document (Spanish, French,
+# Portuguese, German). If many tokens contain these, the doc is likely fine —
+# liteparse handles diacritics correctly, the language model is just confused.
+_LITEPARSE_NON_ENGLISH_RE = re.compile(
+    r"[áéíóúñÁÉÍÓÚÑüÜçÇßàâêîôûÀÂÊÎÔÛèÈùÙ]"
+)
+# C1 control chars + Unicode replacement char — always pathological.
+_LITEPARSE_CTRL_REPL_RE = re.compile(r"[-�]")
+
+
+def _detect_liteparse_font_pathology(
+    layouts: list[_LiteparsePageLayout],
+) -> str | None:
+    """Detect liteparse layouts exhibiting font-encoding pathologies.
+
+    Returns the warning slug ``"liteparse_font_pathology"`` if a pathology is
+    detected, else ``None``. Designed to be conservative — it requires multiple
+    corroborating signals and bails out for non-English docs (Spanish/French/
+    German) where the model's confusion is linguistic, not font-related.
+
+    Pathologies caught:
+      * No-text: ≥3 pages and 0 raw textItems extracted across the doc
+        (image-scan or fully-broken cmap with no extractable text).
+      * Cmap-mangled: ≥0.5% of raw textItems are single-char ASCII marker
+        glyphs ('!', '#', '$', '%', '*', '+') which appear when fonts like
+        Alegreya have broken cmap tables.
+      * Control/replacement chars: ≥1% of textItems contain U+0080-009F or
+        U+FFFD (always pathological, never legitimate text).
+
+    Safeguard: if ≥1% of tokens contain Latin accented letters, the doc is
+    treated as non-English and never flagged.
+    """
+    if not layouts:
+        return None
+    n_pages = len(layouts)
+    if n_pages < 3:
+        return None
+    items_total = 0
+    accented_count = 0
+    cmap_marker_count = 0
+    ctrl_repl_count = 0
+    for layout in layouts:
+        for item in layout.raw_items or ():
+            text = str(item.get("text") or "")
+            if not text:
+                continue
+            items_total += 1
+            if _LITEPARSE_NON_ENGLISH_RE.search(text):
+                accented_count += 1
+            if len(text) == 1 and text in _LITEPARSE_CMAP_MARKER_GLYPHS:
+                cmap_marker_count += 1
+            if _LITEPARSE_CTRL_REPL_RE.search(text):
+                ctrl_repl_count += 1
+    # Pathology A: no extractable text at all across a multi-page doc.
+    if items_total == 0:
+        return "liteparse_font_pathology"
+    # Safeguard: non-English doc — don't fire.
+    if (accented_count / items_total) >= 0.01:
+        return None
+    # Pathology B: cmap-mangled marker glyphs above 2% of all tokens. The
+    # threshold is tuned empirically on holdout 1K — single-char marker glyphs
+    # appear at <1% in healthy English law-review docs but at 3-20% in cmap-
+    # mangled outputs (e.g. mjlr.org Alegreya font footnote markers).
+    if (cmap_marker_count / items_total) >= 0.02:
+        return "liteparse_font_pathology"
+    # Pathology C: control/replacement chars above 1% of all tokens.
+    if (ctrl_repl_count / items_total) >= 0.01:
+        return "liteparse_font_pathology"
+    return None
+
+
 def extract_liteparse_candidate_documents(
     pdf_path: str, *, note_cutoff_ratio: float | None = None
 ) -> list[ExtractedDocument]:
     layouts = _load_liteparse_page_layouts(pdf_path)
     if layouts is None:
         return []
+    pathology_warning = _detect_liteparse_font_pathology(layouts)
     candidates = [
         _build_liteparse_candidate_document(
             pdf_path,
@@ -1635,6 +1712,13 @@ def extract_liteparse_candidate_documents(
         )
         for name in _LITEPARSE_CANDIDATE_NAMES
     ]
+    if pathology_warning is not None:
+        # Annotate every candidate with the warning so downstream selectors
+        # and ocr_fallback_recommended() can route the doc accordingly. The
+        # extraction itself is preserved — this is metadata only.
+        for doc in candidates:
+            if pathology_warning not in doc.warnings:
+                doc.warnings.append(pathology_warning)
     return candidates
 
 
@@ -1899,5 +1983,7 @@ def ocr_fallback_recommended(document: ExtractedDocument, note_count: int) -> bo
     if "reversed_word_order_suspected" in document.warnings:
         return True
     if "low_font_variance_detected" in document.warnings:
+        return True
+    if "liteparse_font_pathology" in document.warnings:
         return True
     return False
