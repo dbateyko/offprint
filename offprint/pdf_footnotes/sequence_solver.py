@@ -563,6 +563,19 @@ def _gap_fill(cands: list[LabelCandidate], selected_idx: list[int]) -> list[int]
             best = max(pool, key=lambda i: _candidate_score(cands[i]))
             if _candidate_score(cands[best]) >= 1.0:
                 selected_set.add(best)
+            elif len(strict | near) == 1:
+                # Uniqueness guard for size-1 gap recovery: when exactly one
+                # candidate exists for this missing digit within the bracket
+                # [prev_selected, next_selected] (strict or ±2 pages), accept
+                # it regardless of its glyph score. The spatial position
+                # between two locked-in selections is itself strong evidence.
+                # The score-1.0 floor was rejecting valid pure-digit
+                # superscript markers (e.g. "33", "59") whose only "sin" is
+                # being isolated and unpunctuated; this recovers ~14% of the
+                # all-size-1-gap valid_with_gaps documents in the corpus.
+                # Multi-candidate gaps still require the score-1.0 vote to
+                # avoid picking the wrong glyph among competitors.
+                selected_set.add(best)
     return sorted(selected_set)
 
 
