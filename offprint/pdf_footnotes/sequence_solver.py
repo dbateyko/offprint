@@ -856,10 +856,18 @@ def build_note_records(layouts: list, result: SolverResult):
         next_cand = ordered[idx + 1] if idx + 1 < len(ordered) else None
         # Collect all lines that lie spatially within [cand, next_cand).
         collected: list[Any] = []
+        # For the LAST candidate (no next_cand), bound the note to at most
+        # cand.page + 1. Without this guard the note absorbs every line to
+        # end-of-document — real footnotes rarely span more than one page,
+        # so anything beyond cand.page+1 is body-bleed contamination that
+        # would poison downstream LLM consumers.
+        last_allowed_page = (
+            next_cand.page if next_cand is not None else cand.page + 1
+        )
         for pn in sorted(by_page.keys()):
             if pn < cand.page:
                 continue
-            if next_cand is not None and pn > next_cand.page:
+            if pn > last_allowed_page:
                 break
             layout = by_page[pn]
             for line in getattr(layout, "lines", ()):  # ExtractedLine
