@@ -1524,6 +1524,26 @@ class WordPressAcademicBaseAdapter(Adapter):
         except Exception:
             pass
 
+        # Fallback: themes encode volume/issue in CSS class names on <article>
+        # (e.g. SoCal LR `volume-volume-99`, Washington LR `tag-volume-101`,
+        # generic `vol-N`/`iss-N`).
+        if "volume" not in info or "issue" not in info:
+            try:
+                for elem in soup.select("article, body"):
+                    classes = " ".join(elem.get("class") or [])
+                    if "volume" not in info:
+                        m = re.search(r"(?:tag-volume|volume-volume|vol)[-_](\d{1,3})\b", classes, re.I)
+                        if m:
+                            info["volume"] = m.group(1)
+                    if "issue" not in info:
+                        m = re.search(r"(?:tag-issue|issue-issue|iss|no)[-_](\d{1,3})\b", classes, re.I)
+                        if m:
+                            info["issue"] = m.group(1)
+                    if "volume" in info and "issue" in info:
+                        break
+            except Exception:
+                pass
+
         return info
 
     @staticmethod
