@@ -25,6 +25,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+WORKSPACE_ROOT = ROOT.parent if (ROOT.parent / "catalog").exists() else ROOT.parent.parent
+DEFAULT_NON_ARTICLE_INVENTORY = WORKSPACE_ROOT / "catalog" / "article_inventory" / "non_articles.parquet"
 
 
 # ── Junk detection patterns ─────────────────────────────────────────
@@ -36,7 +38,7 @@ PAGE_NUMBER_RE = re.compile(r"^\s*\d{1,4}\s*$")
 # Volume/issue stamp
 VOL_ISSUE_RE = re.compile(r"^(Vol\.|Volume|No\.|Issue|Iss\.)\s*\d", re.IGNORECASE)
 # Very short note (not a valid legal cite)
-SHORT_CITE_RE = re.compile(r"(Id\.|Ibid\.|See |Cf\.|Supra|Infra)", re.IGNORECASE)
+SHORT_CITE_RE = re.compile(r"(Id\.|Ibid\.|See |Cf\.|Supra|Infra|As above\.)", re.IGNORECASE)
 
 
 @dataclass
@@ -108,7 +110,16 @@ def _detect_junk_notes(notes: list[NoteStats]) -> list[dict[str, str]]:
         if len(text) < 15 and not SHORT_CITE_RE.search(text):
             signals.append({"label": note.label, "type": "suspiciously_short", "text": text})
 
-        if text_counts.get(text, 0) >= 3:
+        # Skip Bluebook short-form citations: Id., See id., Ibid., supra-note
+        # references, etc. naturally repeat dozens of times per article and
+        # are not parser errors. Only flag long duplicated notes (>=60 chars
+        # and no short-cite token), which usually indicate the same paragraph
+        # being copied across multiple labels.
+        if (
+            text_counts.get(text, 0) >= 3
+            and len(text) >= 60
+            and not SHORT_CITE_RE.search(text)
+        ):
             signals.append({"label": note.label, "type": "duplicate_text", "text": text[:80]})
 
     return signals
@@ -186,6 +197,52 @@ def _find_sidecars(pdf_root: str) -> list[str]:
     return sidecars
 
 
+def _scraped_relpath(pdf_path: str) -> str:
+    marker = "/corpus/scraped/"
+    if marker in pdf_path:
+        return pdf_path.split(marker, 1)[1]
+    text = pdf_path.removeprefix("corpus/scraped/")
+    return text
+
+
+def _load_non_article_doc_types(path: str) -> dict[str, str]:
+    if not path:
+        return {}
+    inv = Path(path)
+    if not inv.exists():
+        return {}
+    try:
+        import pandas as pd
+
+        if inv.suffix == ".csv":
+            df = pd.read_csv(inv)
+        else:
+            df = pd.read_parquet(inv)
+    except Exception:
+        return {}
+    required = {"source", "source_record_id", "non_article_type", "status"}
+    if not required.issubset(df.columns):
+        return {}
+    authoritative_statuses = {
+        "doc_policy_excluded",
+        "offprint_metadata_non_article",
+        "needs_split",
+        "split_available",
+    }
+    sub = df[
+        df["source"].astype(str).eq("scraped")
+        & df["status"].astype(str).isin(authoritative_statuses)
+    ].copy()
+    out: dict[str, str] = {}
+    for row in sub.to_dict("records"):
+        doc_type = str(row.get("non_article_type") or "").strip()
+        if doc_type == "issue_or_volume_container":
+            doc_type = "issue_compilation"
+        if doc_type in {"frontmatter", "issue_compilation", "full_issue", "other"}:
+            out[str(row.get("source_record_id") or "")] = doc_type
+    return out
+
+
 def _percentile(values: list[float], p: float) -> float:
     if not values:
         return 0.0
@@ -198,7 +255,7 @@ def _percentile(values: list[float], p: float) -> float:
     return sorted_v[f] + (k - f) * (sorted_v[c] - sorted_v[f])
 
 
-def build_report(pdf_root: str) -> dict[str, Any]:
+def build_report(pdf_root: str, non_article_inventory: str = "") -> dict[str, Any]:
     """Build a corpus-wide diagnostic report from all sidecars."""
     sidecars = _find_sidecars(pdf_root)
     total_pdfs = sum(
@@ -216,6 +273,12 @@ def build_report(pdf_root: str) -> dict[str, Any]:
             docs.append(ds)
         else:
             parse_errors += 1
+    non_article_doc_types = _load_non_article_doc_types(non_article_inventory)
+    if non_article_doc_types:
+        for doc in docs:
+            override = non_article_doc_types.get(_scraped_relpath(doc.pdf_path))
+            if override:
+                doc.doc_type = override
 
     # ── Ordinality health ────────────────────────────────────────
     ord_counts = collections.Counter(d.ordinality_status for d in docs)
@@ -494,15 +557,19 @@ def _classify_failure(doc: DocStats) -> str:
     return "unclassified"
 
 
-def _write_failures_csv(pdf_root: str, out_path: str) -> None:
+def _write_failures_csv(pdf_root: str, out_path: str, non_article_inventory: str = "") -> None:
     import csv
 
     sidecars = _find_sidecars(pdf_root)
+    non_article_doc_types = _load_non_article_doc_types(non_article_inventory)
     rows: list[dict[str, Any]] = []
     for sc in sidecars:
         d = parse_sidecar(sc)
         if d is None:
             continue
+        override = non_article_doc_types.get(_scraped_relpath(d.pdf_path))
+        if override:
+            d.doc_type = override
         doc_type = (d.doc_type or "").lower()
         # Focus on articles — frontmatter/other zero-note is acceptable
         if doc_type and doc_type != "article":
@@ -663,11 +730,16 @@ def main() -> None:
         default="",
         help="Optional CSV path: per-doc failure categorization for non-frontmatter articles",
     )
+    parser.add_argument(
+        "--non-article-inventory",
+        default=str(DEFAULT_NON_ARTICLE_INVENTORY),
+        help="Unified non-article inventory Parquet/CSV used to override doc_type classifications when present",
+    )
     args = parser.parse_args()
 
-    report = build_report(args.pdf_root)
+    report = build_report(args.pdf_root, args.non_article_inventory)
     if args.failures_out:
-        _write_failures_csv(args.pdf_root, args.failures_out)
+        _write_failures_csv(args.pdf_root, args.failures_out, args.non_article_inventory)
         print(f"Failures CSV written to: {args.failures_out}")
 
     if not args.json_only:

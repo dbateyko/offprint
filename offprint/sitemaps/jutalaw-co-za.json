@@ -1,15 +1,14 @@
 {
-  "id": "readingroom-law-gsu-edu",
+  "id": "jutalaw-co-za",
   "start_urls": [
-    "https://readingroom.law.gsu.edu/gsulr/"
+    "https://jutalaw.co.za/products/3592-annual-survey-of-south-african-law-2008-issue"
   ],
-  "source": "manual",
+  "source": "selector_seed",
   "metadata": {
-    "journal_name": "Georgia State University Law Review",
-    "platform": "unknown",
-    "url": "https://readingroom.law.gsu.edu/gsulr/",
-    "created_date": "2025-12-14",
-    "status": "paused_other"
+    "journal_name": "Annual Survey of South African Law",
+    "url": "https://jutalaw.co.za/products/3592-annual-survey-of-south-african-law-2008-issue",
+    "created_date": "2026-04-13",
+    "status": "no_sitemap"
   },
   "selectors": [
     {

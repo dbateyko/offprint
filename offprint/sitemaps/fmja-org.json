@@ -9,6 +9,41 @@
     "platform": "custom",
     "url": "https://www.fmja.org/federal-courts-law-review/",
     "created_date": "2025-12-14",
-    "notes": "Manual override: journal archive hosted at fclr.org."
-  }
+    "notes": "Manual override: journal archive hosted at fclr.org.",
+    "status": "paused_other"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article, .article, .post, .entry, li",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1, h2, h3, .title, .entry-title",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h1 a, h2 a, h3 a, .title a, a[href*=\"/article/\"], a[href*=\"/issue/\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"], a[href*=\"/pdf/\"]",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
 }

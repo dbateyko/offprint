@@ -1352,6 +1352,12 @@ class WordPressAcademicBaseAdapter(Adapter):
         if volume_issue:
             metadata.update(volume_issue)
 
+        # Extract year from any available source.
+        if not metadata.get("year"):
+            year = self._extract_year(article_url, soup, metadata)
+            if year:
+                metadata["year"] = year
+
         # Construct a best-effort citation if possible
         if (
             not metadata.get("citation")
@@ -1414,6 +1420,80 @@ class WordPressAcademicBaseAdapter(Adapter):
         except Exception:
             pass
         return None
+
+    def _extract_year(
+        self,
+        article_url: str,
+        soup: BeautifulSoup,
+        metadata: Dict[str, Any],
+    ) -> str:
+        """Best-effort year extraction from page metadata, URLs, and inline text."""
+        year_re = re.compile(r"\b(19[5-9]\d|20\d\d)\b")
+
+        # 1. Metadata fields already populated by callers.
+        for key in ("date", "publication_date", "citation"):
+            val = metadata.get(key)
+            if val:
+                m = year_re.search(str(val))
+                if m:
+                    return m.group(1)
+
+        # 2. Article URL (e.g. /2018/03/foo or /volume-65-2018/).
+        m = year_re.search(article_url or "")
+        if m:
+            return m.group(1)
+
+        # 3. PDF link path on the page (WP commonly uses /wp-content/uploads/sites/N/YYYY/MM/).
+        try:
+            for a in soup.select("a[href$='.pdf'], a[href*='.pdf?']"):
+                href = a.get("href") or ""
+                m = year_re.search(href)
+                if m:
+                    return m.group(1)
+        except Exception:
+            pass
+
+        # 4. Common meta tags: article:published_time, citation_publication_date, og:published_time.
+        try:
+            for meta_attrs in (
+                {"property": "article:published_time"},
+                {"name": "citation_publication_date"},
+                {"name": "DC.date.issued"},
+                {"name": "DC.date"},
+                {"property": "og:article:published_time"},
+            ):
+                tag = soup.find("meta", attrs=meta_attrs)
+                if tag and tag.get("content"):
+                    m = year_re.search(tag["content"])
+                    if m:
+                        return m.group(1)
+        except Exception:
+            pass
+
+        # 5. JSON-LD blocks with datePublished.
+        try:
+            for tag in soup.find_all("script", attrs={"type": "application/ld+json"}):
+                txt = tag.string or tag.get_text() or ""
+                m = re.search(r'"datePublished"\s*:\s*"([^"]+)"', txt)
+                if m:
+                    y = year_re.search(m.group(1))
+                    if y:
+                        return y.group(1)
+        except Exception:
+            pass
+
+        # 6. <time datetime="..."> elements.
+        try:
+            for t in soup.find_all("time"):
+                dt = t.get("datetime") or t.get_text()
+                if dt:
+                    m = year_re.search(dt)
+                    if m:
+                        return m.group(1)
+        except Exception:
+            pass
+
+        return ""
 
     def _extract_volume_issue(self, url: str, soup: BeautifulSoup) -> Dict[str, Any]:
         """Extract volume and issue information."""

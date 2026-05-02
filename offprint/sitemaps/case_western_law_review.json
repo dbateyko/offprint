@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "domain": "scholarlycommons.law.case.edu",
+    "journal": "Case Western Reserve Law Review",
+    "original_url": "https://scholarlycommons.law.case.edu/caselrev/",
+    "platform": "digitalcommons",
+    "status": "active",
+    "status_reason": "dc_seed_added_for_flagship27_run",
+    "status_updated_at": "2026-05-01T13:30:00Z"
+  },
+  "sitemap_url": null,
+  "start_urls": ["https://scholarlycommons.law.case.edu/caselrev/sitemap.xml"],
+  "url": "https://scholarlycommons.law.case.edu/caselrev/all_issues.html"
+}

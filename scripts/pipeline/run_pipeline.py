@@ -121,14 +121,14 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         "--playwright-headed",
         dest="playwright_headed",
         action="store_true",
-        default=True,
-        help="Run Playwright in headed mode for primary scraping (default: enabled)",
+        default=False,
+        help="Run Playwright in headed mode for primary scraping (default: disabled)",
     )
     parser.add_argument(
         "--playwright-headless",
         dest="playwright_headed",
         action="store_false",
-        help="Run Playwright in headless mode for primary scraping",
+        help="Run Playwright in headless mode for primary scraping (default)",
     )
     parser.add_argument("--skip-retry-pass", action="store_true")
     parser.add_argument("--retry-max-retries", type=int, default=3)

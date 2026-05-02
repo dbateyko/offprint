@@ -1,15 +1,14 @@
 {
-  "id": "readingroom-law-gsu-edu",
+  "id": "www-aulr-org",
   "start_urls": [
-    "https://readingroom.law.gsu.edu/gsulr/"
+    "https://www.aulr.org/"
   ],
-  "source": "manual",
+  "source": "selector_seed",
   "metadata": {
-    "journal_name": "Georgia State University Law Review",
-    "platform": "unknown",
-    "url": "https://readingroom.law.gsu.edu/gsulr/",
-    "created_date": "2025-12-14",
-    "status": "paused_other"
+    "journal_name": "Auckland University Law Review",
+    "url": "https://www.aulr.org/",
+    "created_date": "2026-04-13",
+    "status": "no_sitemap"
   },
   "selectors": [
     {

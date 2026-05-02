@@ -20,35 +20,36 @@
   },
   "selectors": [
     {
-      "id": "volume_link",
-      "type": "SelectorLink",
-      "selector": ".entry-content a[href*='/volume-']",
-      "parentSelectors": ["_root"]
-    },
-    {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post, .entry-content",
-      "parentSelectors": ["volume_link"]
+      "selector": "article, .article, .post, .entry, li",
+      "parentSelectors": [
+        "_root"
+      ]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
+      "selector": "h1, h2, h3, .title, .entry-title",
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
+      "selector": "h1 a, h2 a, h3 a, .title a, a[href*=\"/article/\"], a[href*=\"/issue/\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
+      "selector": "a[href$=\".pdf\"], a[href*=\"/pdf/\"]",
+      "parentSelectors": [
+        "_root"
+      ]
     }
   ]
 }

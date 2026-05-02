@@ -290,3 +290,72 @@ register_many(
     OJSAdapter,
 )
 register("kb.osu.edu", DSpaceAdapter)
+register("aria.law.columbia.edu", WordPressAcademicBaseAdapter)
+register("univagora.ro", OJSAdapter)
+register("www.thomsonreuters.ca", GenericAdapter)
+register("www.uvic.ca", OJSAdapter)
+register("hrlr.oxfordjournals.org", GenericAdapter)
+register("arcticreview.no", OJSAdapter)
+register("www.law.unsw.edu.au", GenericAdapter)
+register("www-cambridge-org.ezproxy.wlu.edu", GenericAdapter)
+
+register("arizonalawreview.org", WordPressAcademicBaseAdapter)
+register("arizonastatelawjournal.org", WordPressAcademicBaseAdapter)
+register("bflr.ca", WordPressAcademicBaseAdapter)
+register("brooklynworks.brooklaw.edu", DigitalCommonsIssueArticleHopAdapter)
+register("cardozo.yu.edu", DrupalAdapter)
+register("cblr.columbia.edu", OJSAdapter)
+register("chicagounbound.uchicago.edu", DigitalCommonsIssueArticleHopAdapter)
+register("cilj.law.uconn.edu", WordPressAcademicBaseAdapter)
+register("cpilj.law.uconn.edu", WordPressAcademicBaseAdapter)
+register("cumberlandtrialjournal.com", WordPressAcademicBaseAdapter)
+register("dc.law.utah.edu", DigitalCommonsIssueArticleHopAdapter)
+register("drakelawreview.org", WordPressAcademicBaseAdapter)
+register("ecollections.law.fiu.edu", DigitalCommonsIssueArticleHopAdapter)
+register("ideaexchange.uakron.edu", DigitalCommonsIssueArticleHopAdapter)
+register("ila.org.au", WordPressAcademicBaseAdapter)
+register("jlsp.law.columbia.edu", WordPressAcademicBaseAdapter)
+register("law.emory.edu", DigitalCommonsIssueArticleHopAdapter)
+register("law.ku.edu", DrupalAdapter)
+register("lawpublications.barry.edu", DigitalCommonsIssueArticleHopAdapter)
+register("lawreview.law.miami.edu", WordPressAcademicBaseAdapter)
+register("lawreview.richmond.edu", WordPressAcademicBaseAdapter)
+register("mjlr.org", WordPressAcademicBaseAdapter)
+register("opensiuc.lib.siu.edu", DigitalCommonsIssueArticleHopAdapter)
+register("readingroom.law.gsu.edu", ScholasticaBaseAdapter)
+register("ssl.law.uq.edu.au", OJSAdapter)
+register("theelderlawjournal.com", WordPressAcademicBaseAdapter)
+register("www.anzlhsejournal.auckland.ac.nz", WordPressAcademicBaseAdapter)
+register("www.biliabd.org", WordPressAcademicBaseAdapter)
+register("www.cardozojcr.com", SquarespaceAdapter)
+register("www.fmja.org", WixAdapter)
+register("classic.austlii.edu.au", GenericAdapter)
+register("dsc.duq.edu", DigitalCommonsIssueArticleHopAdapter)
+register("genderandlaw.murdoch.edu.au", GenericAdapter)
+register("georgemasonlawreview.org", GenericAdapter)
+register("idaholawreview.com", SquarespaceAdapter)
+register("journals.librarypublishing.arizona.edu", GenericAdapter)
+register("sciendo.com", GenericAdapter)
+register("wvlawreview.wvu.edu", GenericAdapter)
+register("www.atlanticlawjournal.org", GenericAdapter)
+register("www.memphis.edu", GenericAdapter)
+
+# Flagship-27 audit: hosts unmapped despite having validated coverage in past runs.
+register_many(
+    [
+        "ndlawreview.org",
+        "www.ndlawreview.org",
+        "minnesotalawreview.org",
+        "www.minnesotalawreview.org",
+        "lawreview.law.lsu.edu",
+        "www.denverlawreview.org",
+        "denverlawreview.org",
+        "www.marylandlawreview.org",
+        "marylandlawreview.org",
+        "www.vanderbiltlawreview.org",
+        "vanderbiltlawreview.org",
+    ],
+    WordPressAcademicBaseAdapter,
+)
+register("www.floridalawreview.com", ScholasticaBaseAdapter)
+register("floridalawreview.com", ScholasticaBaseAdapter)

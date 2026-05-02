@@ -1,0 +1,14 @@
+{
+  "id": "hrlr-oxfordjournals-org",
+  "start_urls": [
+    "http://hrlr.oxfordjournals.org"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "hrlr.oxfordjournals.org",
+    "platform": "unknown",
+    "url": "http://hrlr.oxfordjournals.org",
+    "created_date": "2026-04-12",
+    "status": "active"
+  }
+}

@@ -1,14 +1,13 @@
 {
-  "id": "readingroom-law-gsu-edu",
+  "id": "www-vanderbiltlawreview-org",
   "start_urls": [
-    "https://readingroom.law.gsu.edu/gsulr/"
+    "https://www.vanderbiltlawreview.org/"
   ],
-  "source": "manual",
+  "source": "selector_seed",
   "metadata": {
-    "journal_name": "Georgia State University Law Review",
-    "platform": "unknown",
-    "url": "https://readingroom.law.gsu.edu/gsulr/",
-    "created_date": "2025-12-14",
+    "journal_name": "Vanderbilt Law Review",
+    "url": "https://www.vanderbiltlawreview.org/",
+    "created_date": "2026-04-13",
     "status": "paused_other"
   },
   "selectors": [

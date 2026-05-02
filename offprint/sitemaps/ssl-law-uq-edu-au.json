@@ -1,21 +1,21 @@
 {
-  "id": "readingroom-law-gsu-edu",
+  "id": "ssl-law-uq-edu-au",
   "start_urls": [
-    "https://readingroom.law.gsu.edu/gsulr/"
+    "https://ssl.law.uq.edu.au/journals/index.php/maritimejournal/"
   ],
-  "source": "manual",
+  "source": "selector_seed",
   "metadata": {
-    "journal_name": "Georgia State University Law Review",
-    "platform": "unknown",
-    "url": "https://readingroom.law.gsu.edu/gsulr/",
-    "created_date": "2025-12-14",
+    "journal_name": "Australian and New Zealand Maritime Law Journal",
+    "platform": "ojs",
+    "url": "https://ssl.law.uq.edu.au/journals/index.php/maritimejournal/",
+    "created_date": "2026-04-13",
     "status": "paused_other"
   },
   "selectors": [
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article, .article, .post, .entry, li",
+      "selector": ".obj_article_summary, .article-summary, .tocArticle, .media, article",
       "parentSelectors": [
         "_root"
       ]
@@ -23,7 +23,7 @@
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h1, h2, h3, .title, .entry-title",
+      "selector": ".obj_article_summary .title, .title a, h3.title a, h2.title a",
       "parentSelectors": [
         "article_container"
       ]
@@ -31,7 +31,7 @@
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h1 a, h2 a, h3 a, .title a, a[href*=\"/article/\"], a[href*=\"/issue/\"]",
+      "selector": ".obj_article_summary .title a, .title a, a[href*=\"/article/view/\"]",
       "parentSelectors": [
         "article_container"
       ]

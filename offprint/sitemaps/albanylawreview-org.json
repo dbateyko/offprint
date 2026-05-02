@@ -17,5 +17,39 @@
       "platform": "scholastica",
       "notes": "Scholastica platform. Discovery handled via window.JOURNAL extraction."
     }
-  }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".article, .issue-item, .article-listing, .posts li, article",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": ".article-title a, h2 a, h3 a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": ".article-title a, h2 a, h3 a, a[href*=\"/articles/\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"], a[href*=\"/pdf/\"]",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
 }

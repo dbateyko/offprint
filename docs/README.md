@@ -10,6 +10,7 @@ Start here for contributor navigation. This index is task-oriented and points to
 
 ## Run and Operate
 - [`OPERATIONS.md`](OPERATIONS.md): canonical run commands, resume/recovery, and quality checks.
+- [`FOOTNOTE_FULL_CORPUS_AUDIT.md`](FOOTNOTE_FULL_CORPUS_AUDIT.md): full-corpus footnote audit contract, denominator accounting, and OCR backlog routing.
 - [`OPERATOR_PLAYBOOK.md`](OPERATOR_PLAYBOOK.md): operator workflows and practical run lifecycle guidance.
 
 ## Build and Extend

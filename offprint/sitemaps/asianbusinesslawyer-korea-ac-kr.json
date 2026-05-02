@@ -1,15 +1,14 @@
 {
-  "id": "readingroom-law-gsu-edu",
+  "id": "asianbusinesslawyer-korea-ac-kr",
   "start_urls": [
-    "https://readingroom.law.gsu.edu/gsulr/"
+    "http://asianbusinesslawyer.korea.ac.kr/xe/main?ckattempt=1"
   ],
-  "source": "manual",
+  "source": "selector_seed",
   "metadata": {
-    "journal_name": "Georgia State University Law Review",
-    "platform": "unknown",
-    "url": "https://readingroom.law.gsu.edu/gsulr/",
-    "created_date": "2025-12-14",
-    "status": "paused_other"
+    "journal_name": "Asian Business Lawyer",
+    "url": "http://asianbusinesslawyer.korea.ac.kr/xe/main?ckattempt=1",
+    "created_date": "2026-04-13",
+    "status": "no_sitemap"
   },
   "selectors": [
     {

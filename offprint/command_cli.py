@@ -53,6 +53,10 @@ COMMANDS: dict[str, dict[str, CommandSpec]] = {
             "scripts/processing/extract_pdf_metadata.py",
             "Extract title/author/date/citation metadata",
         ),
+        "split-issues": CommandSpec(
+            "scripts/processing/split_issue_compilation_pdfs.py",
+            "Split issue-compilation PDFs into child article PDFs",
+        ),
         "build-hf": CommandSpec(
             "scripts/processing/build_hf_dataset.py",
             "Build Hugging Face parquet datasets",

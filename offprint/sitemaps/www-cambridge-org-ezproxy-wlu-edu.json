@@ -1,15 +1,15 @@
 {
-  "id": "readingroom-law-gsu-edu",
+  "id": "www-cambridge-org-ezproxy-wlu-edu",
   "start_urls": [
-    "https://readingroom.law.gsu.edu/gsulr/"
+    "https://www-cambridge-org.ezproxy.wlu.edu/core/journals/asian-journal-of-law-and-society"
   ],
-  "source": "manual",
+  "source": "auto_onboard",
   "metadata": {
-    "journal_name": "Georgia State University Law Review",
-    "platform": "unknown",
-    "url": "https://readingroom.law.gsu.edu/gsulr/",
-    "created_date": "2025-12-14",
-    "status": "paused_other"
+    "journal_name": "www-cambridge-org.ezproxy.wlu.edu",
+    "platform": "generic",
+    "url": "https://www-cambridge-org.ezproxy.wlu.edu/core/journals/asian-journal-of-law-and-society",
+    "created_date": "2026-04-12",
+    "status": "active"
   },
   "selectors": [
     {

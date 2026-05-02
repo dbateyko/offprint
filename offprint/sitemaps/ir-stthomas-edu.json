@@ -10,6 +10,42 @@
     "url": "https://researchonline.stthomas.edu/esploro/",
     "original_url": "https://ir.stthomas.edu/ustlj/",
     "updated_at": "2026-02-23",
-    "notes": "legacy bepress seed now redirects to Esploro root; treated as invalid smoke seed"
-  }
+    "notes": "legacy bepress seed now redirects to Esploro root; treated as invalid smoke seed",
+    "created_date": "2026-04-13",
+    "status": "paused_other"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article, .article, .post, .entry, li",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1, h2, h3, .title, .entry-title",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h1 a, h2 a, h3 a, .title a, a[href*=\"/article/\"], a[href*=\"/issue/\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"], a[href*=\"/pdf/\"]",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
 }

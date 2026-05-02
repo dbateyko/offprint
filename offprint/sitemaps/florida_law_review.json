@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "domain": "uknowledge.uky.edu",
-    "journal": "Kentucky Law Journal",
-    "original_url": "https://uknowledge.uky.edu/klj/",
+    "domain": "scholarship.law.ufl.edu",
+    "journal": "Florida Law Review",
+    "original_url": "https://scholarship.law.ufl.edu/flr/",
     "platform": "digitalcommons",
     "status": "active",
     "status_reason": "dc_backend_for_flagship_round2",
@@ -10,6 +10,6 @@
     "notes": "DC backend; web shell at original site discovers nothing via WP/Squarespace adapter."
   },
   "sitemap_url": null,
-  "start_urls": ["https://uknowledge.uky.edu/klj/sitemap.xml"],
-  "url": "https://uknowledge.uky.edu/klj/all_issues.html"
+  "start_urls": ["https://scholarship.law.ufl.edu/flr/sitemap.xml"],
+  "url": "https://scholarship.law.ufl.edu/flr/all_issues.html"
 }

@@ -879,7 +879,7 @@ class DigitalCommonsBaseAdapter(Adapter):
                             user_data_dir=user_data_dir,
                             final_out_dir=out_dir,
                             timeout_seconds=self.dc_download_timeout * 3, # Give browser plenty of time
-                            headless=False,
+                            headless=getattr(self, "dc_browser_headless", True),
                         )
                     except Exception as e:
                         print(f"⚠️ [dc] Failed to initialize browser downloader: {e}", flush=True)

@@ -1,0 +1,14 @@
+{
+  "id": "www-thomsonreuters-ca",
+  "start_urls": [
+    "https://www.thomsonreuters.ca/en/westlawnext-canada/advocates-quarterly.html"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "www.thomsonreuters.ca",
+    "platform": "unknown",
+    "url": "https://www.thomsonreuters.ca/en/westlawnext-canada/advocates-quarterly.html",
+    "created_date": "2026-04-12",
+    "status": "active"
+  }
+}

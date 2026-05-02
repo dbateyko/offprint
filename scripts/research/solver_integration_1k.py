@@ -4,6 +4,7 @@ and report which candidate wins per doc + end-to-end status."""
 from __future__ import annotations
 import json
 import time
+import argparse
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 import sys
@@ -47,14 +48,18 @@ def run_one(pdf: str) -> dict:
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--workers", type=int, default=8)
+    args = parser.parse_args()
+
     baseline = {r["pdf"]: r for r in json.load(open("artifacts/runs/liteparse_only_1k.json"))["rows"]}
     solver_baseline = {r["pdf"]: r for r in json.load(open("artifacts/runs/solver_1k.json"))["rows"]}
     included = [r["pdf"] for r in baseline.values() if r.get("doc_policy", {}).get("include")]
-    print(f"running {len(included)} PDFs through full selector")
+    print(f"running {len(included)} PDFs through full selector with {args.workers} workers")
 
     t0 = time.time()
     results = []
-    with ProcessPoolExecutor(max_workers=8) as pool:
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
         futs = {pool.submit(run_one, pdf): pdf for pdf in included}
         done = 0
         for f in as_completed(futs):

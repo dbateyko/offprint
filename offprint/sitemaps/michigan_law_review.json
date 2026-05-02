@@ -1,14 +1,17 @@
 {
   "metadata": {
-    "domain": "michiganlawreview.org",
+    "domain": "repository.law.umich.edu",
     "journal": "Michigan Law Review",
-    "original_url": "https://michiganlawreview.org/",
-    "platform": "WordPress",
+    "original_url": "https://repository.law.umich.edu/mlr/",
+    "platform": "digitalcommons",
     "status": "active",
-    "status_evidence_ref": "artifacts/top50_ranked_batch1_20260310_summary.json",
-    "status_reason": "site_adapter_validated_smoke_pass",
-    "status_updated_at": "2026-03-10T00:46:33Z"
+    "status_reason": "dc_sitemap_smoke_pass_after_scope_blacklist_fix",
+    "status_updated_at": "2026-05-01T13:17:00Z",
+    "notes": "Repointed from michiganlawreview.org WP shell to bepress backend. WP shell links downloads to repository.law.umich.edu/cgi/viewcontent.cgi anyway. Domain contains 'repository' which previously failed _is_in_scope; fixed by scoping blacklist to URL path."
   },
   "sitemap_url": null,
-  "url": "https://michiganlawreview.org/"
+  "start_urls": [
+    "https://repository.law.umich.edu/mlr/sitemap.xml"
+  ],
+  "url": "https://repository.law.umich.edu/mlr/all_issues.html"
 }

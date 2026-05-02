@@ -94,6 +94,21 @@ The remaining ~12% of failures are primarily:
 
 **Next Step:** Route these documents through the `olmOCR/vLLM` pipeline to rescue the remaining scanned articles.
 
+## Operational Lessons
+
+### Don't double-stack bepress hosts from one IP
+
+Bepress (Digital Commons) sites enforce rate limits at the **IP** level, not just per-host or per-circuit. The pipeline's per-host polite delay (`--dc-min-domain-delay-ms`) and per-circuit cooldown (`--dc-waf-fail-threshold`/`--dc-waf-cooldown-seconds`) only protect *within* a single host's reputation; they do nothing to limit aggregate request rate from your IP across many bepress hosts.
+
+**What we observed (2026-05-02)**: 4 screens scraping 9 bepress hosts ran cleanly for 18+ hours. Adding a second 4-screen run (4 more bepress hosts) tripped 10 new WAF circuits within 5 minutes — and not just on the new run: previously-stable hosts in the original run also started 403'ing (BYU 29/585 fail, LMU 37/634 fail). The patched headless-Playwright fallback also fails because the WAF fingerprints beyond user-agent. Effective rule of thumb:
+
+- **One ~4-worker bepress run per IP at a time**. If you need more parallelism, use distinct IPs (proxies, separate egress).
+- **Stagger when adding new bepress targets** to a running cluster: let the existing run wind down to ~1-2 active hosts before bringing more bepress online.
+- **Non-bepress (WordPress / OJS / Squarespace) is safe to stack** — those sites generally don't share an IP rep. We've run a third batch of 117 WP/OJS seeds concurrent with bepress without issue.
+- After a WAF cascade, **wait 24h** for IP reputation to clear before resuming bepress work. A cron entry one calendar day out is the cleanest pattern (`scripts/cron/flagship_batch_resume.sh` shows the shape).
+
+The pipeline doesn't yet expose a global "max-concurrent-bepress-hosts" knob — feature opportunity. For now, scale your scraping fleet by *batch* not by *worker count*.
+
 ## Disclaimer
 
 This project is for scholarly research workflows. Respect publisher terms and `robots.txt`, apply polite request behavior, and do not redistribute PDFs without verifying rights.

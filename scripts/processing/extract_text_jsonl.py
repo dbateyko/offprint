@@ -200,6 +200,7 @@ class BatchConfig:
     ocr_review_manifest_out: str | None = None
     shard_count: int = 1
     shard_index: int = 0
+    fast_skip_existing: bool = False  # skip without re-reading existing sidecar payload
 
 
 def _extract_for_pdf(
@@ -209,6 +210,22 @@ def _extract_for_pdf(
 ) -> dict[str, Any]:
     sidecar_path = _sidecar_path(pdf_path)
     if os.path.exists(sidecar_path) and not config.overwrite:
+        # Fast-skip path: don't re-read the existing sidecar payload. Cuts
+        # backfill skip-existing throughput from ~5/s to ~5,000/s on a corpus
+        # where most sidecars already exist.
+        if getattr(config, "fast_skip_existing", False):
+            return {
+                "pdf_path": pdf_path,
+                "sidecar_path": sidecar_path,
+                "status": "skipped_existing",
+                "doc_type": decision.doc_type if decision else "",
+                "platform_family": decision.platform_family if decision else "",
+                "domain": decision.domain if decision else "",
+                "warnings": [],
+                "needs_ocr_review": False,
+                "ocr_review_reasons": [],
+                "row": {},
+            }
         payload = {}
         try:
             payload = json.loads(Path(sidecar_path).read_text(encoding="utf-8"))
@@ -265,7 +282,27 @@ def _extract_for_pdf(
         "needs_ocr_review": needs_ocr_review,
         "ocr_review_reasons": needs_ocr_reasons,
     }
-    _write_json_atomic(sidecar_path, row)
+    try:
+        _write_json_atomic(sidecar_path, row)
+    except OSError as exc:
+        # Linux ext4 caps filename components at 255 bytes; a small number of
+        # offprint PDFs have basenames so long that <pdf>.text.json or its
+        # .tmp companion can't be written. Skip rather than crash the shard.
+        return {
+            "pdf_path": pdf_path,
+            "sidecar_path": sidecar_path,
+            "status": "failed",
+            "doc_type": decision.doc_type if decision else "",
+            "platform_family": decision.platform_family if decision else "",
+            "domain": decision.domain if decision else "",
+            "parser_used": str(getattr(document, "parser", "") or ""),
+            "char_count": 0,
+            "page_count": int(getattr(document, "page_count", 0) or 0),
+            "warnings": sorted(set([*warnings, f"sidecar_write_failed:{exc.errno}"])),
+            "needs_ocr_review": False,
+            "ocr_review_reasons": [],
+            "row": {},
+        }
 
     return {
         "pdf_path": pdf_path,
@@ -385,6 +422,27 @@ def run_batch(config: BatchConfig) -> dict[str, Any]:
         if report_detail == "full":
             summary["results"].append(result)
 
+    # Fast-skip pre-pass: when fast_skip_existing is set, partition out PDFs
+    # that already have a sidecar so we don't classify (read first page of)
+    # 90k+ already-extracted files. This is the single biggest backfill speedup.
+    work_candidates = candidates
+    if getattr(config, "fast_skip_existing", False) and not config.overwrite:
+        work_candidates = []
+        skipped_pre = 0
+        for pdf_path in candidates:
+            if os.path.exists(_sidecar_path(pdf_path)):
+                summary["skipped_existing"] += 1
+                summary["processed"] += 1
+                skipped_pre += 1
+            else:
+                work_candidates.append(pdf_path)
+        if skipped_pre:
+            print(
+                f"[fast-skip] pre-skipped {skipped_pre:,} of {len(candidates):,} "
+                f"PDFs (sidecar already present); will classify+extract {len(work_candidates):,}",
+                flush=True,
+            )
+
     with ThreadPoolExecutor(
         max_workers=max(1, int(config.classifier_workers))
     ) as classify_executor:
@@ -397,7 +455,7 @@ def run_batch(config: BatchConfig) -> dict[str, Any]:
                     doc_policy=config.doc_policy,
                     rules=rules,
                 ): pdf_path
-                for pdf_path in candidates
+                for pdf_path in work_candidates
             }
             pending_extract: set[Future[dict[str, Any]]] = set()
             max_inflight_extract = max(8, max(1, int(config.workers)) * 2)
@@ -499,6 +557,13 @@ def _parse_args() -> argparse.Namespace:
         help="Optional max output characters per document (0 = no cap)",
     )
     parser.add_argument("--overwrite", type=parse_bool, default=False, help="Overwrite text sidecars")
+    parser.add_argument(
+        "--fast-skip-existing",
+        type=parse_bool,
+        default=False,
+        help="When skipping existing sidecars, do NOT re-read the JSON payload. "
+             "Major speedup for backfill on a mostly-extracted corpus.",
+    )
     parser.add_argument("--limit", type=int, default=0, help="Limit number of PDFs processed")
     parser.add_argument(
         "--report-detail",
@@ -591,6 +656,7 @@ def main() -> None:
         ocr_review_manifest_out=(args.ocr_review_manifest_out or None),
         shard_count=int(args.shard_count),
         shard_index=int(args.shard_index),
+        fast_skip_existing=bool(args.fast_skip_existing),
     )
     summary = run_batch(config)
     print(json.dumps(summary, indent=2, sort_keys=True))

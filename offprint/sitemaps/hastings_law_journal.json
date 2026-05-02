@@ -1,12 +1,15 @@
 {
-  "url": "https://www.uclawjournal.org/",
-  "sitemap_url": null,
   "metadata": {
-    "journal": "Hastings Law Journal",
-    "platform": "WordPress",
-    "original_url": "https://www.hastingslawjournal.org/",
-    "domain": "www.uclawjournal.org",
-    "canonicalized_at": "2026-02-03",
-    "notes": "seed_audit: update domain via canonical URL"
-  }
+    "domain": "repository.uclawsf.edu",
+    "journal": "UC Law Journal (Hastings Law Journal)",
+    "original_url": "https://repository.uclawsf.edu/hastings_law_journal/",
+    "platform": "digitalcommons",
+    "status": "active",
+    "status_reason": "dc_seed_repointed_from_wp_shell_for_flagship27_run",
+    "status_updated_at": "2026-05-01T13:30:00Z",
+    "notes": "Renamed from Hastings Law Journal to UC Law Journal in 2023; archive remains under hastings_law_journal slug on uclawsf bepress. Repointed from WP shell uclawjournal.org."
+  },
+  "sitemap_url": null,
+  "start_urls": ["https://repository.uclawsf.edu/hastings_law_journal/sitemap.xml"],
+  "url": "https://repository.uclawsf.edu/hastings_law_journal/all_issues.html"
 }

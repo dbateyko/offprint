@@ -1777,6 +1777,7 @@ def run_orchestrator(
                     "domain": domain,
                     "stage": "queued",
                     "started_at": started_at,
+                    "last_event_at": started_at,
                     "last_change_at": started_at,
                     "discovered": 0,
                     "downloaded": 0,
@@ -1803,7 +1804,12 @@ def run_orchestrator(
                 event_type = str(event.get("event") or "")
 
                 state = _normalize_seed_runtime(seed, domain, event_ts)
-                state["last_change_at"] = max(float(state.get("last_change_at") or 0.0), event_ts)
+                prev_stage = str(state.get("stage") or "")
+                prev_discovered = int(state.get("discovered") or 0)
+                prev_downloaded = int(state.get("downloaded") or 0)
+                prev_failed = int(state.get("failed_downloads") or 0)
+                prev_done = bool(state.get("done"))
+                state["last_event_at"] = max(float(state.get("last_event_at") or 0.0), event_ts)
                 if "stage" in event:
                     state["stage"] = str(event.get("stage") or state.get("stage") or "running")
                 if "discovered" in event:
@@ -1821,6 +1827,23 @@ def run_orchestrator(
                     last_successful_pdf_at = max(last_successful_pdf_at, event_ts)
                 if event_type == "seed_done":
                     state["done"] = True
+
+                current_stage = str(state.get("stage") or "")
+                current_discovered = int(state.get("discovered") or 0)
+                current_downloaded = int(state.get("downloaded") or 0)
+                current_failed = int(state.get("failed_downloads") or 0)
+                current_done = bool(state.get("done"))
+
+                # Heartbeats should update liveness, not progress.
+                if (
+                    current_stage != prev_stage
+                    or current_discovered != prev_discovered
+                    or current_downloaded != prev_downloaded
+                    or current_failed != prev_failed
+                    or current_done != prev_done
+                    or event_type in {"seed_start", "first_pdf_candidate", "pdf_saved", "seed_done"}
+                ):
+                    state["last_change_at"] = max(float(state.get("last_change_at") or 0.0), event_ts)
 
         def _apply_result_to_summary(result: SeedProcessResult) -> None:
             previous_ok = seed_ok_totals.get(result.seed)
@@ -2807,14 +2830,14 @@ def main() -> None:
         "--playwright-headed",
         dest="playwright_headed",
         action="store_true",
-        default=True,
-        help="Run main --use-playwright browser in headed mode (default: enabled)",
+        default=False,
+        help="Run main --use-playwright browser in headed mode (default: disabled)",
     )
     parser.add_argument(
         "--playwright-headless",
         dest="playwright_headed",
         action="store_false",
-        help="Run main --use-playwright browser in headless mode",
+        help="Run main --use-playwright browser in headless mode (default)",
     )
     parser.add_argument(
         "--min-delay",

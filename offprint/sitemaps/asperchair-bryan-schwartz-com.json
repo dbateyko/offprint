@@ -1,15 +1,14 @@
 {
-  "id": "readingroom-law-gsu-edu",
+  "id": "asperchair-bryan-schwartz-com",
   "start_urls": [
-    "https://readingroom.law.gsu.edu/gsulr/"
+    "https://asperchair.bryan-schwartz.com/asper-review-of-international-business-and-trade-law/"
   ],
-  "source": "manual",
+  "source": "selector_seed",
   "metadata": {
-    "journal_name": "Georgia State University Law Review",
-    "platform": "unknown",
-    "url": "https://readingroom.law.gsu.edu/gsulr/",
-    "created_date": "2025-12-14",
-    "status": "paused_other"
+    "journal_name": "Asper Review of International Business and Trade Law",
+    "url": "https://asperchair.bryan-schwartz.com/asper-review-of-international-business-and-trade-law/",
+    "created_date": "2026-04-13",
+    "status": "no_sitemap"
   },
   "selectors": [
     {

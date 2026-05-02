@@ -1,0 +1,14 @@
+{
+  "id": "univagora-ro",
+  "start_urls": [
+    "http://univagora.ro/jour/index.php/aijjs/index"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "univagora.ro",
+    "platform": "ojs",
+    "url": "http://univagora.ro/jour/index.php/aijjs/index",
+    "created_date": "2026-04-12",
+    "status": "active"
+  }
+}

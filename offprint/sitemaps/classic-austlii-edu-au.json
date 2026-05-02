@@ -1,14 +1,14 @@
 {
-  "id": "readingroom-law-gsu-edu",
+  "id": "classic-austlii-edu-au",
   "start_urls": [
-    "https://readingroom.law.gsu.edu/gsulr/"
+    "http://classic.austlii.edu.au/au/journals/AUJlLegPhil/"
   ],
-  "source": "manual",
+  "source": "selector_seed",
   "metadata": {
-    "journal_name": "Georgia State University Law Review",
-    "platform": "unknown",
-    "url": "https://readingroom.law.gsu.edu/gsulr/",
-    "created_date": "2025-12-14",
+    "journal_name": "Australian Journal of Legal Philosophy",
+    "platform": "generic",
+    "url": "http://classic.austlii.edu.au/au/journals/AUJlLegPhil/",
+    "created_date": "2026-04-13",
     "status": "paused_other"
   },
   "selectors": [

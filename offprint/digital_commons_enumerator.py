@@ -387,9 +387,12 @@ def _is_in_scope(url: str, *, seed_url: str) -> bool:
         return False
     
     lowered = url.lower()
+    # Scope keyword checks to the path so hosts like "repository.law.umich.edu"
+    # don't trip the blacklist.
+    path_only = parsed.path.lower()
 
     # 1. Explicit Exclusions (Blacklist)
-    if any(k in lowered for k in BLACK_KEYWORDS):
+    if any(k in path_only for k in BLACK_KEYWORDS):
         return False
 
     # 2. Slug-based matching (High Confidence)
@@ -399,9 +402,6 @@ def _is_in_scope(url: str, *, seed_url: str) -> bool:
             return True
 
     # 3. Dynamic Journal Gathering (Low Confidence / Heuristic)
-    # We strip the protocol/host before checking keywords to avoid "law" in the domain name
-    # causing everything to match.
-    path_only = parsed.path.lower()
     if any(k in path_only for k in LAW_KEYWORDS):
         return True
 

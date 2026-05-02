@@ -1,0 +1,14 @@
+{
+  "id": "arcticreview-no",
+  "start_urls": [
+    "https://arcticreview.no/index.php/arctic"
+  ],
+  "source": "auto_onboard",
+  "metadata": {
+    "journal_name": "arcticreview.no",
+    "platform": "ojs",
+    "url": "https://arcticreview.no/index.php/arctic",
+    "created_date": "2026-04-12",
+    "status": "active"
+  }
+}

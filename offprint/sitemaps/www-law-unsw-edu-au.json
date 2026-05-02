@@ -1,15 +1,15 @@
 {
-  "id": "readingroom-law-gsu-edu",
+  "id": "www-law-unsw-edu-au",
   "start_urls": [
-    "https://readingroom.law.gsu.edu/gsulr/"
+    "http://www.law.unsw.edu.au/ajnrlp"
   ],
-  "source": "manual",
+  "source": "auto_onboard",
   "metadata": {
-    "journal_name": "Georgia State University Law Review",
-    "platform": "unknown",
-    "url": "https://readingroom.law.gsu.edu/gsulr/",
-    "created_date": "2025-12-14",
-    "status": "paused_other"
+    "journal_name": "www.law.unsw.edu.au",
+    "platform": "generic",
+    "url": "http://www.law.unsw.edu.au/ajnrlp",
+    "created_date": "2026-04-12",
+    "status": "active"
   },
   "selectors": [
     {
