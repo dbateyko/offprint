@@ -1,48 +1,64 @@
 {
   "id": "cblr-columbia-edu",
   "start_urls": [
-    "https://journals.library.columbia.edu/index.php/CBLR/issue/archive?page=[1-62]"
+    "https://journals.library.columbia.edu/index.php/CBLR/issue/archive"
   ],
-  "source": "manual",
+  "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Columbia Business Law Review",
-    "platform": "unknown",
+    "platform": "ojs",
     "url": "https://cblr.columbia.edu/",
-    "created_date": "2025-12-14",
-    "status": "paused_other"
+    "created_date": "2026-05-02",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://journals.library.columbia.edu/index.php/CBLR/issue/archive",
+      "volume_url_pattern": "https://journals.library.columbia.edu/index.php/CBLR/issue/view/{issue_id}",
+      "archive_path": "archive (paginated ?page=N) -> issue/view/{id} lists articles -> article/view/{aid}/{pdf_id} is the PDF",
+      "pagination": "?page=N",
+      "pagination_url_template": "https://journals.library.columbia.edu/index.php/CBLR/issue/archive?page={N}",
+      "total_volumes_estimated": 63,
+      "total_archive_pages": 3,
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "Open Journal Systems (PKP). Open access (CC-BY 4.0 from 2018). cblr.columbia.edu redirects/links to journals.library.columbia.edu/index.php/CBLR. Re-onboard from prior paused_other status; sister CBLR sub-journals share host but use distinct /index.php/{slug} paths so this seed is CBLR-scoped."
+    }
   },
   "selectors": [
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article, .article, .post, .entry, li",
-      "parentSelectors": [
-        "_root"
-      ]
+      "selector": "div.obj_article_summary",
+      "parentSelectors": ["_root"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h1, h2, h3, .title, .entry-title",
-      "parentSelectors": [
-        "article_container"
-      ]
+      "selector": "h3.title, .title",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "div.authors, .meta .authors",
+      "parentSelectors": ["article_container"]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h1 a, h2 a, h3 a, .title a, a[href*=\"/article/\"], a[href*=\"/issue/\"]",
-      "parentSelectors": [
-        "article_container"
-      ]
+      "selector": "h3.title a, .title a",
+      "parentSelectors": ["article_container"]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "a[href$=\".pdf\"], a[href*=\"/pdf/\"]",
-      "parentSelectors": [
-        "_root"
-      ]
+      "selector": "a.obj_galley_link.pdf, a[href*=\"/article/view/\"][href*=\"/\"]",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "next_page",
+      "type": "SelectorLink",
+      "selector": "a.next, li.next a",
+      "parentSelectors": ["_root"]
     }
   ]
 }

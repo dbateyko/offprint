@@ -1,0 +1,47 @@
+{
+  "id": "harvard_law_policy_review",
+  "start_urls": [
+    "https://journals.law.harvard.edu/lpr/hlprvolumes/"
+  ],
+  "source": "onboard-journal-skill",
+  "metadata": {
+    "journal_name": "Harvard Law & Policy Review",
+    "platform": "wordpress",
+    "url": "https://journals.law.harvard.edu/lpr/",
+    "created_date": "2026-05-02",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://journals.law.harvard.edu/lpr/hlprvolumes/",
+      "pagination": "none",
+      "pdf_location": "direct-on-issue-page",
+      "needs_headless": false,
+      "notes": "WordPress site. Volumes listed on /hlprvolumes/. Issue pages contain direct PDF links."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": ".entry-content li a, .sub-menu a[href*='volume']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".wp-block-file, .entry-content p:has(a[href$='.pdf'])",
+      "parentSelectors": ["issue_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

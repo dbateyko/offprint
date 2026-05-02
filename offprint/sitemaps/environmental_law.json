@@ -1,10 +1,45 @@
 {
-  "url": "https://law.lclark.edu/law_reviews/environmental_law/past_issues/",
-  "sitemap_url": null,
+  "id": "environmental_law",
+  "start_urls": [
+    "https://law.lclark.edu/law_reviews/environmental_law/past_issues/"
+  ],
+  "source": "claude_code_skill",
   "metadata": {
-    "journal": "Environmental Law",
-    "platform": "Law School Custom",
-    "original_url": "https://law.lclark.edu/law_reviews/environmental_law/",
-    "domain": "law.lclark.edu"
-  }
+    "journal_name": "Environmental Law",
+    "platform": "custom-university",
+    "url": "https://law.lclark.edu/law_reviews/environmental_law/",
+    "original_url": "https://law.lclark.edu/law_reviews/environmental_law/past_issues/",
+    "domain": "law.lclark.edu",
+    "created_date": "2026-05-02",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://law.lclark.edu/law_reviews/environmental_law/past_issues/",
+      "volume_url_pattern": "/law_reviews/environmental_law/past_issues/{volume_N}/ (case varies: volume_NN, Volume_NN; some nest /volume-NN/ subpath; older volumes use /index.php)",
+      "archive_path": "past_issues/ -> volume_N/ -> N-issueN/ -> /live/files/{id}-{slug} PDF resource",
+      "pagination": "none",
+      "pdf_location": "issue-detail-page",
+      "needs_headless": "false",
+      "notes": "Lewis & Clark LiveWhale CMS. PDFs hosted as /live/files/{id}-{slug} with no .pdf extension. Volume URL casing inconsistent (volume_NN vs Volume_NN); some nest /volume-NN/, older volumes use /index.php. Volumes 1-55 visible on past_issues index. Mirrors animallawreview-lclark-edu.json structure but with one more level (issue page between volume and PDF). Re-onboard: previously empty placeholder seed; now populated."
+    }
+  },
+  "selectors": [
+    {
+      "id": "volume_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/past_issues/']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/past_issues/']",
+      "parentSelectors": ["volume_link"]
+    },
+    {
+      "id": "article_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/live/files/']",
+      "parentSelectors": ["issue_link"]
+    }
+  ]
 }

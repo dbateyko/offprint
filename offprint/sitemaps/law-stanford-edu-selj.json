@@ -1,0 +1,50 @@
+{
+  "id": "law-stanford-edu-selj",
+  "start_urls": [
+    "https://law.stanford.edu/stanford-environmental-law-journal-selj/selj-archive/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Stanford Environmental Law Journal",
+    "platform": "wordpress",
+    "url": "https://law.stanford.edu/stanford-environmental-law-journal-selj/",
+    "created_date": "2026-05-02",
+    "status": "active_partial_metadata",
+    "navigation": {
+      "archive_root": "https://law.stanford.edu/stanford-environmental-law-journal-selj/selj-archive/",
+      "volume_url_pattern": "none-list",
+      "archive_path": "homepage -> /selj-archive/ -> .loop-item.pt-publication entries -> /publications/{slug}/ detail -> direct PDF in /wp-content/uploads/",
+      "pagination": "facetwp",
+      "pagination_url_template": "{archive_root}?_paged={N}",
+      "pdf_location": "both",
+      "needs_headless": "false",
+      "notes": "WordPress on law.stanford.edu (multi-tenant). Routed via StanfordSTLRAdapter, which falls through to WordPressAcademicBaseAdapter for non-STLR seeds. Many archive entries link directly to PDFs in /wp-content/uploads/; some only link to /publications/{slug}/ detail pages where the PDF is embedded. FacetWP pager uses ?_paged=N. Re-onboard: replaces stub registry_stanford_environmental_law_journal_481_2ede92f882.json. Requires browser-like UA (curl with default UA returns 403). Smoke test PASSED (PDF on disk) but per-article metadata is weak: WP fallback returns page <title> and aggregated authors instead of per-article title/authors; volume/issue not captured; year reflects fetch date not publication. Per-article metadata should be filled by post-download PDF first-page extractor."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.loop-item.pt-publication",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h2 a, h3 a, .pub-title",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a[href*='/publications/']",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf'], a[href*='/wp-content/uploads/'][href*='.pdf']",
+      "parentSelectors": ["_root"]
+    }
+  ]
+}

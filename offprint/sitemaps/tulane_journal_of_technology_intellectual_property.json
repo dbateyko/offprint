@@ -1,0 +1,12 @@
+{
+  "url": "https://journals.tulane.edu/tip/issue/archive",
+  "sitemap_url": null,
+  "metadata": {
+    "journal": "Tulane Journal of Technology & Intellectual Property",
+    "platform": "OJS",
+    "original_url": "https://journals.tulane.edu/tip/",
+    "domain": "journals.tulane.edu",
+    "canonicalized_at": "2026-05-02",
+    "notes": "OJS archive entrypoint; site fronted by Cloudflare managed-challenge -- requires headless browser fallback. Pagination via ?page=N on /tip/issue/archive. Pattern matches sibling Tulane OJS journals (elj, tjls)."
+  }
+}

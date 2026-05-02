@@ -1,10 +1,20 @@
 {
-  "url": "https://journals.library.columbia.edu/index.php/lawandarts",
-  "sitemap_url": null,
+  "id": "columbia_journal_of_law_the_arts",
+  "start_urls": [
+    "https://journals.library.columbia.edu/index.php/lawandarts/issue/archive"
+  ],
+  "source": "onboard-journal-skill",
   "metadata": {
-    "journal": "Columbia Journal of Law & the Arts",
-    "platform": "OJS",
-    "original_url": "https://journals.library.columbia.edu/index.php/lawandarts",
-    "domain": "journals.library.columbia.edu"
+    "journal_name": "Columbia Journal of Law & the Arts",
+    "platform": "ojs",
+    "url": "https://journals.library.columbia.edu/index.php/lawandarts",
+    "created_date": "2026-05-02",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://journals.library.columbia.edu/index.php/lawandarts/issue/archive",
+      "pagination": "ojs",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false
+    }
   }
 }

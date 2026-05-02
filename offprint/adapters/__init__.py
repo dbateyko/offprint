@@ -85,7 +85,7 @@ register("www.vjolt.org", VirginiaJOLTAdapter)  # Virginia JOLT
 register("jolt.richmond.edu", RichmondJOLTAdapter)  # Richmond JOLT
 register("www.jthtl.org", ColoradoJTHTLAdapter)  # Colorado JTHTL
 register("ctlj.colorado.edu", ColoradoCTLJAdapter)  # Colorado CTLJ
-register("journals.law.harvard.edu", IssueArchiveEnumeratorAdapter)  # Harvard Law journals (JLPP, etc.)
+# register("journals.law.harvard.edu", IssueArchiveEnumeratorAdapter)  # Harvard Law journals (JLPP, etc.)
 
 __all__ = [
     "Adapter",

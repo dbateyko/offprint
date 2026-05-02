@@ -1,0 +1,53 @@
+{
+  "id": "journals-law-harvard-edu-jol",
+  "start_urls": [
+    "https://journals.law.harvard.edu/jol/archive/"
+  ],
+  "source": "onboard-journal-skill",
+  "metadata": {
+    "journal_name": "Harvard Journal on Legislation",
+    "platform": "wordpress",
+    "url": "https://journals.law.harvard.edu/jol/",
+    "created_date": "2026-05-02",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://journals.law.harvard.edu/jol/archive/",
+      "pagination": "none",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "WordPress academic site. Issues found in /archive/ list. Recent articles have detail pages, older ones link directly to PDF."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": ".entry-content li a",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".wp-block-columns, .entry-content p",
+      "parentSelectors": ["issue_link"]
+    },
+    {
+      "id": "article_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/202']",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1.entry-title",
+      "parentSelectors": ["article_link"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["article_link", "article_container"]
+    }
+  ]
+}

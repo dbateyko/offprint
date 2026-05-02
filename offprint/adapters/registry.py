@@ -186,6 +186,7 @@ register_many(
         "georgialawreview.org",
         "illinoislawreview.org",
         "jhr.law.northwestern.edu",
+        "journals.law.harvard.edu",
         "northcarolinalawreview.org",
         "southerncalifornialawreview.com",
         "www.southerncalifornialawreview.com",
@@ -266,6 +267,7 @@ register_many(
     SelectorDrivenAdapter,
 )
 register("journals.indianapolis.iu.edu", OJSAdapter)
+register("journals.tulane.edu", OJSAdapter)
 register_many(
     [
         "aalj.org",
@@ -343,6 +345,9 @@ register("sciendo.com", GenericAdapter)
 register("wvlawreview.wvu.edu", GenericAdapter)
 register("www.atlanticlawjournal.org", GenericAdapter)
 register("www.memphis.edu", GenericAdapter)
+# Lewis & Clark LiveWhale CMS — shared by Animal Law Review,
+# Lewis & Clark Law Review, and Environmental Law (all use /live/files/).
+register("law.lclark.edu", GenericAdapter)
 
 # Flagship-27 audit: hosts unmapped despite having validated coverage in past runs.
 register_many(

@@ -1,0 +1,53 @@
+{
+  "id": "osblj-kb-osu-edu",
+  "start_urls": [
+    "https://kb.osu.edu/collections/23337044-33b8-5647-b535-f81a13678758"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Ohio State Business Law Journal",
+    "platform": "dspace",
+    "url": "https://moritzlaw.osu.edu/osblj-ohio-state-business-law-journal",
+    "created_date": "2026-05-02",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://kb.osu.edu/collections/23337044-33b8-5647-b535-f81a13678758",
+      "archive_path": "moritzlaw.osu.edu OSBLJ landing -> 'Knowledge Bank' link -> kb.osu.edu/handle/1811/78231 == community uuid 23337044-... -> per-issue subcollections -> item -> bitstream PDF. Seed uses /collections/<uuid> URL form so DSpaceAdapter._extract_dspace_scope_id() picks up the scope (it only parses /collections/ paths). Note: 23337044-... is technically a *community* uuid, not a collection, but the DSpace REST /discover/search/objects?scope= param accepts either and correctly returns all 355 items in the community subtree.",
+      "volume_url_pattern": "kb.osu.edu/handle/1811/{issue_handle}",
+      "pagination": "DSpace REST API",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "dspace_community_uuid": "23337044-33b8-5647-b535-f81a13678758",
+      "dspace_community_handle": "1811/78231",
+      "rest_api_base": "https://kb.osu.edu/server/api",
+      "total_items_estimated": 316,
+      "notes": "DSpace 7 Angular SPA — frontend is JS-rendered but DSpace REST API at /server/api works for enumeration (used by existing kb-osu-edu/OSJCL seed which smoke-passed). OSBLJ also publishes some recent articles directly on moritzlaw.osu.edu/sites/default/files/ (Drupal); the canonical archive is the KB community. Former title 'Ohio State Entrepreneurial Business Law Journal' (vols 1-9, 2006-2015) was renamed OSBLJ at vol 10 (2015); KB community covers both. Replaces the registry stub registry_ohio_state_business_law_journal_1321_0d8a22bf30.json which pointed at the dead /osblj path (returns 403/Drupal access-denied)."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/handle/1811/']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "ds-item-page, .item-page, article",
+      "parentSelectors": ["issue_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1, .item-page-title-field",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/bitstream/'], a[href$='.pdf']",
+      "parentSelectors": ["_root"]
+    }
+  ]
+}
