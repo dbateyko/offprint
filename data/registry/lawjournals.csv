@@ -9,7 +9,7 @@ California Law Review,https://www.californialawreview.org/,californialawreview.o
 University of Pennsylvania Law Review,https://www.pennlawreview.com/,pennlawreview.com,wordpress,active,pennlawreview-com.json,1833,6,yes,sitemap,
 Cornell Law Review,https://publications.lawschool.cornell.edu/lawreview/,publications.lawschool.cornell.edu,wordpress,active,cornell_law_review.json,1995,7,yes,sitemap,
 Michigan Law Review,https://www.michiganlawreview.org/,michiganlawreview.org,wordpress,active,michiganlawreview-org.json,,8,yes,cilp,
-Michigan Law Review Online,http://michiganlawreview.org/category/mlr-online,michiganlawreview.org,wordpress,active,registry_michigan_law_review_online_1411_90bd31506b.json,1826,8,,sitemap,
+Michigan Law Review Online,http://michiganlawreview.org/category/mlr-online,michiganlawreview.org,wordpress,active,michigan-law-review-online.json,1826,8,,sitemap,
 University of Chicago Law Review,https://lawreview.uchicago.edu/,lawreview.uchicago.edu,drupal,active,lawreview-uchicago-edu.json,1996,9,yes,sitemap,https://lawreview.uchicago.edu/print-archive
 Virginia Law Review,https://virginialawreview.org/,virginialawreview.org,wordpress,active,virginialawreview-org.json,,10,yes,sitemap,https://virginialawreview.org/
 Virginia Law Review Online,https://virginialawreview.org/online/,virginialawreview.org,wordpress,active,registry_virginia_law_review_online_1414_47d70993a2.json,1831,10,,sitemap,
@@ -22,7 +22,7 @@ Minnesota Law Review,https://minnesotalawreview.org/law-review-archive/,minnesot
 Georgetown Law Journal,https://www.law.georgetown.edu/georgetown-law-journal/,law.georgetown.edu,wordpress,active,law-georgetown-edu-glj.json,,17,yes,sitemap,https://www.law.georgetown.edu/georgetown-law-journal/in-print/
 Northwestern University Law Review,https://northwesternlawreview.org/,northwesternlawreview.org,wordpress,active,northwestern_university_law_review.json,1841,18,yes,sitemap,https://northwesternlawreview.org/issues/
 Texas Law Review,https://texaslawreview.org/,texaslawreview.org,wordpress,active,texaslawreview-org.json,,19,yes,sitemap,https://texaslawreview.org/archive/
-Texas Law Review Online Edition,https://texaslawreview.org/online-edition,texaslawreview.org,wordpress,active,registry_texas_law_review_online_edition_1412_92b083455a.json,1829,19,,sitemap,
+Texas Law Review Online Edition,https://texaslawreview.org/online-edition,texaslawreview.org,wordpress,active,texas-law-review-online.json,1829,19,,sitemap,
 Fordham Law Review,https://fordhamlawreview.org/,fordhamlawreview.org,DigitalCommons,active,fordhamlawreview-org.json,1997,20,yes,sitemap,
 UCLA Law Review,https://www.uclalawreview.org/,uclalawreview.org,wordpress,active,uclalawreview-org.json,,21,yes,cilp,
 UCLA Law Review Discourse,https://www.uclalawreview.org/category/discourse,uclalawreview.org,wordpress,active,registry_ucla_law_review_discourse_1753_cb23b8f1aa.json,1836,21,,sitemap,
@@ -43,32 +43,32 @@ www.law.uw.edu,https://www.law.uw.edu/wlr,law.uw.edu,wordpress,active,www-law-uw
 Wisconsin Law Review,https://wlr.law.wisc.edu/,wlr.law.wisc.edu,wordpress,active,wlr-law-wisc-edu.json,1857,35,yes,sitemap,https://wlr.law.wisc.edu/past-issues/
 William & Mary Law Review,,,,no_sitemap,,,36,yes,cilp,
 North Carolina Law Review,https://northcarolinalawreview.org/,northcarolinalawreview.org,wordpress,active,registry_north_carolina_law_review_1845_f385746d48.json,2003,37,yes,sitemap,
-Cardozo Law Review,https://cardozolawreview.com/,cardozolawreview.com,wordpress,active,registry_cardozo_law_review_158_6775a9d505.json,1610,38,yes,sitemap,
+Cardozo Law Review,https://cardozolawreview.com/,cardozolawreview.com,wordpress,active,cardozolawreview-com.json,1610,38,yes,sitemap,
 Ohio State Law Journal,https://oslj.osu.edu/,oslj.osu.edu,wordpress,active,oslj-osu-edu.json,,39,yes,sitemap,https://oslj.osu.edu/archives/
 U.C. Irvine Law Review,https://www.law.uci.edu/lawreview/,law.uci.edu,wordpress,active,law-uci-edu-lawreview.json,1755,40,,sitemap,https://www.law.uci.edu/lawreview/
 Supreme Court Review,https://www.law.uchicago.edu/supremecourt/supremecourt.html,law.uchicago.edu,drupal,paused_paywall,supreme_court_review.json,482,41,yes,sitemap,
 Emory Law Journal,https://scholarlycommons.law.emory.edu/elj/,scholarlycommons.law.emory.edu,digitalcommons,,emory_law_journal.json,2039,42,yes,sitemap,
 repository.uclawsf.edu,https://repository.uclawsf.edu/hastings_business_law_journal,repository.uclawsf.edu,digitalcommons,active,repository-uclawsf-edu.json,1854,43,,sitemap,
-Georgia Law Review,https://www.georgialawreview.org/,georgialawreview.org,wordpress,active,registry_georgia_law_review_1871_261c64f124.json,1871,44,yes,sitemap,
+Georgia Law Review,https://www.georgialawreview.org/,georgialawreview.org,wordpress,active,georgialawreview-org.json,1871,44,yes,sitemap,
 jclc.law.northwestern.edu,https://jclc.law.northwestern.edu/,jclc.law.northwestern.edu,wordpress,active,jclc-law-northwestern-edu.json,1957,45,,sitemap,
 Journal of Criminal Law and Criminology,https://scholarlycommons.law.northwestern.edu/jclc/,scholarlycommons.law.northwestern.edu,digitalcommons,no_sitemap,scholarlycommons-law-northwestern-edu.json,,45,yes,cilp,
 Alabama Law Review,https://www.law.ua.edu/alr/,law.ua.edu,wordpress,active,law-ua-edu-alr.json,,46,yes,sitemap,https://www.law.ua.edu/alr/archives/
-Harvard Journal of Law & Technology,https://jolt.law.harvard.edu/,jolt.law.harvard.edu,unknown,active,registry_harvard_journal_of_law_technology_247_750c7bc619.json,247,47,yes,sitemap,
-Administrative Law Review,https://administrativelawreview.org/,administrativelawreview.org,wordpress,active,registry_administrative_law_review_1934_fc933e5c43.json,1934,48,yes,sitemap,
+Harvard Journal of Law & Technology,https://jolt.law.harvard.edu/,jolt.law.harvard.edu,unknown,active,jolt-law-harvard-edu.json,247,47,yes,sitemap,
+Administrative Law Review,https://administrativelawreview.org/,administrativelawreview.org,wordpress,active,administrative-law-review.json,1934,48,yes,sitemap,
 Arizona Law Review,https://arizonalawreview.org/,arizonalawreview.org,wordpress,active,arizonalawreview-org.json,1850,49,yes,sitemap,
 Harvard Journal of Law & Public Policy,https://journals.law.harvard.edu/jlpp/,journals.law.harvard.edu,wordpress,no_sitemap,harvard_journal_of_law_and_public_policy.json,,50,yes,cilp,
 University of Utah Law (multiple collections),https://dc.law.utah.edu/,dc.law.utah.edu,digitalcommons,,dc-law-utah-edu.json,1897,51,,sitemap,https://dc.law.utah.edu/ulr/
 Utah Law Review,,,,no_sitemap,,,51,yes,cilp,
-American University Law Review,https://aulawreview.org/by-volume/,aulawreview.org,wordpress,active,registry_american_university_law_review_1851_ede9c5f8ce.json,2028,52,yes,sitemap,
+American University Law Review,https://aulawreview.org/by-volume/,aulawreview.org,wordpress,active,american-university-law-review.json,2028,52,yes,sitemap,
 Lewis & Clark Law Review,,,,no_sitemap,,,53,yes,cilp,
-Connecticut Law Review,https://connecticutlawreview.law.uconn.edu/,connecticutlawreview.law.uconn.edu,wordpress,active,registry_connecticut_law_review_1849_83d55bb733.json,1849,56,yes,sitemap,
+Connecticut Law Review,https://connecticutlawreview.law.uconn.edu/,connecticutlawreview.law.uconn.edu,wordpress,active,connecticutlawreview-law-uconn-edu.json,1849,56,yes,sitemap,
 Maryland Law Review,https://www.marylandlawreview.org/,marylandlawreview.org,squarespace,active,marylandlawreview-org.json,,57,yes,sitemap,https://www.marylandlawreview.org/issues/
 "University of Maryland Journal of Race, Religion, Gender and Class",https://digitalcommons.law.umaryland.edu/rrgc/,digitalcommons.law.umaryland.edu,digitalcommons,,digitalcommons-law-umaryland-edu.json,1868,57,,sitemap,
 Washington and Lee Law Review,https://scholarlycommons.law.wlu.edu/wlulr/,scholarlycommons.law.wlu.edu,digitalcommons,,scholarlycommons-law-wlu-edu.json,,58,yes,sitemap,
 Washington and Lee Law Review Online,https://lawreview.wlulaw.wlu.edu/category/online,lawreview.wlulaw.wlu.edu,wordpress,active,registry_washington_and_lee_law_review_online_1790_ef269a79e9.json,1864,58,,sitemap,
-Journal of Corporation Law,https://jcl.law.uiowa.edu/issue-archive,jcl.law.uiowa.edu,drupal,active,registry_journal_of_corporation_law_261_93884a30c2.json,261,60,yes,sitemap,
+Journal of Corporation Law,https://jcl.law.uiowa.edu/issue-archive,jcl.law.uiowa.edu,drupal,active,jcl-law-uiowa-edu.json,261,60,yes,sitemap,
 University of Pennsylvania Journal of Business Law,https://www.pennlawbusinesslaw.com/,pennlawbusinesslaw.com,wordpress,active,pennlawbusinesslaw-com.json,,61,yes,sitemap,https://www.pennlawbusinesslaw.com/archive/
-Buffalo Environmental Law Journal,https://digitalcommons.law.buffalo.edu/belj/all_issues.html,digitalcommons.law.buffalo.edu,digital_commons,active,registry_buffalo_environmental_law_journal_411_649f6769c3.json,1880,64,yes,sitemap,
+Buffalo Environmental Law Journal,https://digitalcommons.law.buffalo.edu/belj/all_issues.html,digitalcommons.law.buffalo.edu,digital_commons,active,digitalcommons-law-buffalo-edu.json,1880,64,yes,sitemap,
 Buffalo Law Review,,,,no_sitemap,,,64,yes,cilp,
 asil.org,https://asil.org/resources/american-journal-international-law,asil.org,unknown,active,asil-org.json,1950,65,,sitemap,
 Wake Forest Law Review,https://wakeforestlawreview.com/,wakeforestlawreview.com,wordpress,active,wakeforestlawreview-com.json,,67,yes,sitemap,https://wakeforestlawreview.com/category/articles/
@@ -91,7 +91,7 @@ Nevada Law Journal,https://scholars.law.unlv.edu/nlj/,scholars.law.unlv.edu,unkn
 Brigham Young University Education and Law Journal,https://digitalcommons.law.byu.edu/elj/,digitalcommons.law.byu.edu,digitalcommons,,digitalcommons-law-byu-edu.json,1884,84,yes,sitemap,
 Brigham Young University Law Review,,,,no_sitemap,,,84,yes,cilp,
 Harvard International Law Journal,https://harvardilj.org/,harvardilj.org,wordpress,active,harvardilj-org.json,,85,yes,sitemap,https://harvardilj.org/archives/
-Columbia Human Rights Law Review,http://hrlr.law.columbia.edu/hrlr,hrlr.law.columbia.edu,wordpress,active,registry_columbia_human_rights_law_review_208_1006fa8c5f.json,208,86,yes,sitemap,
+Columbia Human Rights Law Review,http://hrlr.law.columbia.edu/hrlr,hrlr.law.columbia.edu,wordpress,active,hrlr-law-columbia-edu.json,208,86,yes,sitemap,
 "Stanford Journal of Law, Business & Finance",,,,no_sitemap,,,87,yes,cilp,
 Columbia Business Law Review,https://cblr.columbia.edu/,cblr.columbia.edu,unknown,paused_other,cblr-columbia-edu.json,,88,yes,sitemap,
 www.cato.org,https://www.cato.org/search/category/reviews-journals+supreme-court-review/type/serial-issue,cato.org,unknown,active,www-cato-org.json,1000,89,,sitemap,
@@ -143,7 +143,7 @@ ablj.org,https://ablj.org/,ablj.org,wordpress,active,ablj-org.json,362,133,,site
 Jurimetrics,,,,no_sitemap,,,134,yes,cilp,
 Texas A&M Law Review,https://law.tamu.edu/current-students/academics/law-journals/law-review,law.tamu.edu,unknown,paused_404,registry_texas_a_m_law_review_1981_acb97d11d2.json,1981,135,yes,sitemap,
 Berkeley Journal of Employment and Labor Law,,,,no_sitemap,,,136,yes,cilp,
-South Carolina Law Review,https://scholarcommons.sc.edu/sclr/all_issues.html,scholarcommons.sc.edu,digital_commons,active,registry_south_carolina_law_review_1889_df8600c8cb.json,,137,yes,sitemap,
+South Carolina Law Review,https://scholarcommons.sc.edu/sclr/all_issues.html,scholarcommons.sc.edu,digital_commons,active,scholarcommons-sc-edu.json,,137,yes,sitemap,
 South Carolina Law Review,https://sclawreview.org/,sclawreview.org,unknown,no_sitemap,scholarcommons-sc-edu.json,1889,137,yes,wlu,
 Vanderbilt Journal of Entertainment and Technology Law,https://scholarship.law.vanderbilt.edu/jetlaw/all_issues.html,scholarship.law.vanderbilt.edu,digital_commons,active,registry_vanderbilt_journal_of_entertainment_and_technology_law_642_5343e94526.json,,139,yes,sitemap,
 Vanderbilt Journal of Entertainment and Technology Law,https://www.vanderbilt.edu/jetlaw/,vanderbilt.edu,wordpress,active,vanderbilt-jetlaw.json,642,139,yes,sitemap,https://www.vanderbilt.edu/jetlaw/past-volumes/
@@ -251,7 +251,7 @@ Chicago-Kent Law Review,https://scholarship.kentlaw.iit.edu/cklawreview/,scholar
 University of Pennsylvania Journal of International Law,,,,no_sitemap,,,233,yes,cilp,
 Cornell Journal of Law and Public Policy,https://community.lawschool.cornell.edu/jlpp,community.lawschool.cornell.edu,wordpress,active,registry_cornell_journal_of_law_and_public_policy_219_fa28132bb8.json,219,235,yes,sitemap,
 Cornell Journal of Law and Public Policy,https://scholarship.law.cornell.edu/cjlpp/,scholarship.law.cornell.edu,digitalcommons,,scholarship-law-cornell-edu.json,,235,yes,sitemap,
-Journal of International Media and Entertainment Law,https://www.swlaw.edu/curriculum/law-review-journals/journal-international-media-entertainment-law,swlaw.edu,drupal,active,registry_journal_of_international_media_and_entertainment_law_1359_2c20acabfe.json,1920,237,yes,sitemap,
+Journal of International Media and Entertainment Law,https://www.swlaw.edu/curriculum/law-review-journals/journal-international-media-entertainment-law,swlaw.edu,drupal,active,swlaw-jimel.json,1920,237,yes,sitemap,
 Southwestern Law Review,https://www.swlaw.edu/curriculum/law-review-journals/southwestern-law-review,swlaw.edu,drupal,no_sitemap,swlaw-law-review.json,,237,yes,cilp,
 University of Baltimore Law Review,,,,no_sitemap,,,238,yes,cilp,
 Family Law Quarterly,,,,no_sitemap,,,239,yes,cilp,
@@ -263,11 +263,11 @@ harvardnsj.com,http://harvardnsj.com/,harvardnsj.com,unknown,active,harvardnsj-c
 "Real Property, Trust and Estate Law Journal",,,,no_sitemap,,,244,yes,cilp,
 Cardozo Arts & Entertainment Law Journal,https://cardozo.yu.edu/cardozo-arts-and-entertainment-law-journal,cardozo.yu.edu,digital_commons,,cardozo-yu-edu.json,864,245,yes,sitemap,
 Cardozo Arts & Entertainment Law Journal,https://cardozoaelj.com/,cardozoaelj.com,wordpress,active,registry_cardozo_arts_entertainment_law_journal_204_87bbf6e1fd.json,204,245,yes,sitemap,
-Southern California Interdisciplinary Law Journal,https://gould.usc.edu/students/journals/ilj,gould.usc.edu,wordpress,active,registry_southern_california_interdisciplinary_law_journal_315_711c635688.json,316,246,yes,sitemap,
+Southern California Interdisciplinary Law Journal,https://gould.usc.edu/students/journals/ilj,gould.usc.edu,wordpress,active,weblaw-usc-edu.json,316,246,yes,sitemap,
 "American University Journal of Gender, Social Policy & the Law",https://jgspl.org/current-issue/,jgspl.org,wordpress,active,registry_american_university_journal_of_gender_social_policy_the_423_88f9f275ae.json,423,247,yes,sitemap,
 New York University Journal of International Law and Politics,https://www.law.nyu.edu/journals/jilp/index.htm,law.nyu.edu,drupal,active,registry_new_york_university_journal_of_international_law_and_pol_294_fcddcb836e.json,978,248,yes,sitemap,
 New York University Journal of Law & Liberty,https://www.lawandliberty.org/,lawandliberty.org,wordpress,active,lawandliberty-org.json,,248,yes,sitemap,https://www.lawandliberty.org/archives/
-Canada-United States Law Journal,http://scholarlycommons.law.case.edu/cuslj,scholarlycommons.law.case.edu,digital_commons,todo_adapter,registry_canada_united_states_law_journal_377_a136762fcb.json,1873,251,yes,sitemap,
+Canada-United States Law Journal,http://scholarlycommons.law.case.edu/cuslj,scholarlycommons.law.case.edu,digital_commons,todo_adapter,scholarlycommons-law-case-edu.json,1873,251,yes,sitemap,
 Case Western Reserve Law Review,,,,no_sitemap,,,251,yes,cilp,
 Baylor Law Review,,,,no_sitemap,,,252,yes,cilp,
 www.baylor.edu,https://www.baylor.edu/law/review/index.php?id=933862,baylor.edu,unknown,active,www-baylor-edu.json,1902,252,,sitemap,
@@ -302,7 +302,7 @@ Duquesne University (multiple collections),https://dsc.duq.edu/,dsc.duq.edu,digi
 Saint Louis University Journal of Health Law & Policy,https://scholarship.law.slu.edu/jhlp,scholarship.law.slu.edu,digital_commons,todo_adapter,registry_saint_louis_university_journal_of_health_law_policy_1474_8866d4cc01.json,1474,276,yes,sitemap,
 www.actec.org,https://www.actec.org/actec-law-journal,actec.org,wordpress,active,www-actec-org.json,1471,277,,sitemap,
 University of the Pacific Law Review,https://scholarlycommons.pacific.edu/uoplawreview,scholarlycommons.pacific.edu,digital_commons,todo_adapter,registry_university_of_the_pacific_law_review_1905_c4db999409.json,1905,279,yes,sitemap,
-Virginia Law & Business Review,https://www.vlbr.org/,vlbr.org,unknown,active,registry_virginia_law_business_review_1305_90b56c9c43.json,1305,280,,sitemap,
+Virginia Law & Business Review,https://www.vlbr.org/,vlbr.org,unknown,active,vlbr-org.json,1305,280,,sitemap,
 Colorado Technology Law Journal,https://ctlj.colorado.edu/,ctlj.colorado.edu,wordpress,active,registry_colorado_technology_law_journal_883_c782934a33.json,883,283,yes,sitemap,
 First Amendment Law Review,https://scholarship.law.unc.edu/falr,scholarship.law.unc.edu,digital_commons,todo_adapter,registry_first_amendment_law_review_926_f9fab8be8c.json,926,284,yes,sitemap,
 North Carolina Banking Institute,,,,no_sitemap,,,286,yes,cilp,
@@ -333,7 +333,7 @@ Albany Law Review,https://www.albanylawreview.org/,albanylawreview.org,scholasti
 www.aublr.org,http://www.aublr.org/,aublr.org,wordpress,active,www-aublr-org.json,2000,323,,sitemap,
 Gonzaga Law Review,https://www.gonzaga.edu/school-of-law/about/student-life/student-resources/student-organizations/gonzaga-law-review,gonzaga.edu,unknown,paused_waf,registry_gonzaga_law_review_140_6cfe758f8b.json,1365,326,yes,sitemap,
 www.belmontlawreview.org,https://www.belmontlawreview.org/,belmontlawreview.org,wordpress,active,www-belmontlawreview-org.json,2011,327,,sitemap,
-Campbell Law Review,https://scholarship.law.campbell.edu/clr,scholarship.law.campbell.edu,digital_commons,todo_adapter,registry_campbell_law_review_190_83916adbf4.json,190,328,yes,sitemap,
+Campbell Law Review,https://scholarship.law.campbell.edu/clr,scholarship.law.campbell.edu,digital_commons,todo_adapter,scholarship-law-campbell-edu.json,190,328,yes,sitemap,
 Media Law & Policy,http://www.nyls.edu/centers/projects/media_center/media_law_and_policy,nyls.edu,unknown,paused_404,registry_media_law_policy_559_1faf278b0a.json,1917,329,yes,sitemap,
 New York Law School Law Review,,,,no_sitemap,,,329,yes,cilp,
 Journal of Law and Policy,,,,no_sitemap,,,330,yes,cilp,
@@ -357,7 +357,7 @@ SMU Science and Technology Law Review,,,,no_sitemap,,,345,yes,cilp,
 Food and Drug Law Journal,https://www.fdli.org/resources/food-drug-law-journal,fdli.org,wordpress,paused_waf,registry_food_and_drug_law_journal_232_7d5de3ace5.json,232,346,,sitemap,
 South Dakota Law Review,https://www.usd.edu/law/south-dakota-law-review,usd.edu,unknown,paused_waf,registry_south_dakota_law_review_1924_06ef63cc9f.json,1924,347,yes,sitemap,
 South Dakota Law Review,https://red.library.usd.edu/sdlrev/,red.library.usd.edu,bepress_digital_commons,,usd-sdlrev.json,,347,yes,sitemap,
-Environmental Law Reporter,https://www.elr.info/,elr.info,drupal,active,registry_environmental_law_reporter_1008_f9e2f3bd3d.json,1008,349,yes,sitemap,
+Environmental Law Reporter,https://www.elr.info/,elr.info,drupal,active,elr-info.json,1008,349,yes,sitemap,
 Indiana Health Law Review,https://mckinneylaw.iu.edu/ihlr,mckinneylaw.iu.edu,unknown,paused_login,registry_indiana_health_law_review_927_e059a13376.json,1892,350,yes,sitemap,
 Federal Courts Law Review,https://www.fmja.org/federal-courts-law-review/,fmja.org,custom,active,fmja-org.json,,351,yes,sitemap,
 Federal Courts Law Review,https://www.fclr.org/,fclr.org,ojs,active,fclr-org.json,502,351,yes,sitemap,https://www.fclr.org/fclr/index.php/fclr/issue/archive
@@ -1193,7 +1193,7 @@ Rocky Mountain Law Journal,https://www.rockymountainlawjournal.org/,rockymountai
 Rocky Mountain Mineral Law Foundation Journal,https://www.rmmlf.org/publications/journal-and-newsletters/journal,rmmlf.org,unknown,paused_waf,registry_rocky_mountain_mineral_law_foundation_journal_1020_a9bb6e4a9c.json,1020,,,sitemap,
 Roger Williams University (multiple collections),https://docs.rwu.edu/,docs.rwu.edu,digitalcommons,,docs-rwu-edu.json,499,,,sitemap,https://docs.rwu.edu/rwu_LR/
 Roger Williams University Law Review,,,,no_sitemap,,,,yes,cilp,
-Roman Legal Tradition,https://www.romanlegaltradition.org/,romanlegaltradition.org,unknown,active,registry_roman_legal_tradition_1237_33155f9679.json,1237,,,sitemap,
+Roman Legal Tradition,https://www.romanlegaltradition.org/,romanlegaltradition.org,unknown,active,roman_legal_tradition.json,1237,,,sitemap,
 Rutgers Business Law Review,https://www.rutgersbusinesslawreview.com/archive,rutgersbusinesslawreview.com,unknown,active,registry_rutgers_business_law_review_1324_86e42d6d7a.json,1324,,,sitemap,
 Rutgers Computer and Technology Law Journal,https://rctlj.org/,rctlj.org,drupal,active,registry_rutgers_computer_and_technology_law_journal_308_22140f1506.json,308,,yes,sitemap,
 Rutgers International Law and Human Rights Journal,https://www.rutgers-ilhr-journal.org/,rutgers-ilhr-journal.org,wordpress,,rutgers-ilhr-journal-org.json,2030,,,sitemap,
