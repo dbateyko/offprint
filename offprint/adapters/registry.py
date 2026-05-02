@@ -173,6 +173,8 @@ register("www.yalelawjournal.org", YaleLawJournalAdapter)
 register("yalelawjournal.org", YaleLawJournalAdapter)
 register("northwesternlawreview.org", WordPressAcademicBaseAdapter)
 register("www.northwesternlawreview.org", WordPressAcademicBaseAdapter)
+register("washingtonlawreview.org", WordPressAcademicBaseAdapter)
+register("www.washingtonlawreview.org", WordPressAcademicBaseAdapter)
 
 # Recent onboarded hosts that were still missing explicit routing.
 register_many(
@@ -185,6 +187,8 @@ register_many(
         "illinoislawreview.org",
         "jhr.law.northwestern.edu",
         "northcarolinalawreview.org",
+        "southerncalifornialawreview.com",
+        "www.southerncalifornialawreview.com",
         "texastechlawreview.org",
         "wakeforestlawreview.com",
         "www.georgialawreview.org",

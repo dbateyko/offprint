@@ -1,0 +1,46 @@
+{
+  "id": "northcarolinalawreview-org",
+  "start_urls": [
+    "https://northcarolinalawreview.org/recent-issues/"
+  ],
+  "start_urls_note": "Single archive page lists every volume/issue front-end has (Volumes 103-104 plus prior). Earlier volumes redirect to UNC scholarship.law.unc.edu DC backend per site copy.",
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "North Carolina Law Review",
+    "platform": "WordPress",
+    "url": "https://northcarolinalawreview.org/",
+    "created_date": "2026-05-02",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://northcarolinalawreview.org/recent-issues/",
+      "volume_url_pattern": "none — all issues inlined on /recent-issues/",
+      "archive_path": "homepage -> Recent Issues -> single page lists every (volume, issue) with PDF links inline",
+      "pagination": "none",
+      "pagination_url_template": null,
+      "total_volumes_estimated": "2 most-recent volumes (Vol 103-104) on front-end; earlier volumes only on UNC Digital Commons backend (scholarship.law.unc.edu/nclr)",
+      "pdf_location": "direct-on-issue-page",
+      "needs_headless": false,
+      "notes": "Articles rendered as <p> blocks inside div.entry-content; each has <a href='*.pdf'><strong>TITLE</strong></a>, Authors. Volume/Issue indicated by preceding <h2> sibling, e.g. 'Volume 104, Issue 3'. Section labels (ARTICLES/COMMENT/RECENT DEVELOPMENT) appear as centered <p>. Re-onboard: replaces stub registry_north_carolina_law_review_1845_f385746d48.json. Forum content lives at /forum/ (separate seed) and case briefs at /case-briefs/."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.entry-content p:has(a[href$=\".pdf\"])",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

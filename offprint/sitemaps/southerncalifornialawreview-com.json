@@ -1,0 +1,52 @@
+{
+  "id": "southerncalifornialawreview-com",
+  "start_urls": ["https://southerncalifornialawreview.com/archive/"],
+  "start_urls_note": "Single archive page lists all ~700 articles across volumes (no pagination). PDFs live on individual article detail pages under /YYYY/MM/DD/<slug>/, with the actual file at /wp-content/uploads/YYYY/MM/<file>.pdf.",
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Southern California Law Review",
+    "platform": "WordPress",
+    "url": "https://southerncalifornialawreview.com/",
+    "created_date": "2026-05-02",
+    "status": "active",
+    "status_reason": "re-onboard with full selectors and start_urls; legacy seed (southern_california_law_review.json) had only metadata, no selectors",
+    "status_updated_at": "2026-05-02T00:00:00Z",
+    "navigation": {
+      "archive_root": "https://southerncalifornialawreview.com/archive/",
+      "volume_url_pattern": "none (no per-volume landing page; volume encoded in article post class as `volume-volume-{N}` / `volumeandissue-vol-{N}-no-{M}`)",
+      "archive_path": "homepage -> /archive/ -> ~700 article links rendered by Elementor posts widget -> article detail page -> PDF at /wp-content/uploads/YYYY/MM/*.pdf",
+      "pagination": "none",
+      "pagination_url_template": null,
+      "total_volumes_estimated": "Vol 92 -> Vol 99 visible (oldest confirmed Vol 92, 2018; newest Vol 99, 2025-2026)",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "Built on WordPress + Elementor. Article cards use class `elementor-post elementor-grid-item` with title in `h3.elementor-post__title > a`. PDF link on detail page is the first internal `a[href$='.pdf']` under /wp-content/uploads/. Sister Postscript section already covered by southerncalifornialawreview-postscript.json. Volume/issue can be parsed from container class names (`volume-volume-N`, `volumeandissue-vol-N-no-M`) if adapter supports it; otherwise needs PDF-first-page metadata pass. Smoke test 2026-05-02 PASS: PDF downloaded via WordPressAcademicBaseAdapter; per-article title not captured by adapter (uses archive page `<title>`), volume/issue not captured — needs tighter selectors or PDF-first-page metadata pass; year and authors captured correctly."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.elementor-post",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3.elementor-post__title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h3.elementor-post__title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*=\"/wp-content/uploads/\"][href$=\".pdf\"]",
+      "parentSelectors": ["_root"]
+    }
+  ]
+}

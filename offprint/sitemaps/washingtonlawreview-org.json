@@ -1,0 +1,31 @@
+{
+  "id": "washingtonlawreview-org",
+  "start_urls": ["https://washingtonlawreview.org/print-edition/"],
+  "start_urls_note": "Print-edition archive (paginated /print-edition/page/N/, ~8 pages). WordPress front-end aggregates all print articles.",
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Washington Law Review",
+    "platform": "wordpress",
+    "url": "https://www.washingtonlawreview.org/",
+    "created_date": "2026-05-02",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://washingtonlawreview.org/print-edition/",
+      "volume_url_pattern": "none (flat paginated post listing tagged volume-{N})",
+      "archive_path": "homepage -> Print Edition -> /print-edition/page/{N}/ lists articles -> article detail page -> 'Download the Full Article' button -> digitalcommons.law.uw.edu/wlr/vol{N}/iss{M}/{P}/",
+      "pagination": "/page/N/",
+      "pagination_url_template": "https://washingtonlawreview.org/print-edition/page/{N}/",
+      "total_volumes_estimated": "8 listing pages spanning at least vol 100-101 (sampled); full archive deeper",
+      "pdf_location": "article-detail-page (PDF actually hosted on Digital Commons backend digitalcommons.law.uw.edu/wlr/)",
+      "needs_headless": "false",
+      "notes": "WordPress (Salient theme) front-end at washingtonlawreview.org. The 'Download the Full Article' anchor on each article page links to a Digital Commons landing page (digitalcommons.law.uw.edu/wlr/volN/issM/P/), which then serves the actual PDF via context.cgi. There is also a parallel sitemap (washington_law_review.json) targeting the DC backend directly via DigitalCommonsBaseAdapter; this WP seed is complementary front-end coverage so that current-issue WordPress posts are also crawled. The homepage rejects bare curl with 403 unless a real browser UA is sent. Direct curl to www.washingtonlawreview.org returns 403; canonical host without www works. Smoke (2026-05-02): WordPressAcademicBaseAdapter discovered a wp-content/uploads style-guide PDF (494KB, 2024) before traversing into article pages; primary article PDFs require the WP adapter to follow article_url and then chase the digitalcommons download button. Volume not captured by adapter — needs selector tuning (volume comes from post tag like 'tag-volume-101'). Companion DC sitemap (washington_law_review.json) is the authoritative full-archive source."
+    }
+  },
+  "selectors": [
+    {"id": "article_container", "type": "SelectorElement", "selector": "article.post", "parentSelectors": ["_root"]},
+    {"id": "title", "type": "SelectorText", "selector": "h2.entry-title, h2.title", "parentSelectors": ["article_container"]},
+    {"id": "article_url", "type": "SelectorLink", "selector": "a.entire-meta-link, h2.entry-title a", "parentSelectors": ["article_container"]},
+    {"id": "pdf_link", "type": "SelectorLink", "selector": "a.nectar-button[href*=\"digitalcommons.law.uw.edu\"], a[href$=\".pdf\"]", "parentSelectors": ["_root"]},
+    {"id": "next_page", "type": "SelectorLink", "selector": "a.next, a[href*=\"/print-edition/page/\"]", "parentSelectors": ["_root"]}
+  ]
+}
