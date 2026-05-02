@@ -64,6 +64,9 @@ def is_pdf_url(url: str) -> bool:
     # Common OJS galley-style links: /article/view/<id>/<galley_id>
     if re.search(r"/article/view/\d+/\d+(?:$|[/?#])", lowered):
         return True
+    # LiveWhale CMS file download pattern
+    if "/live/files/" in lowered:
+        return True
     return False
 
 

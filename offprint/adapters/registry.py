@@ -350,7 +350,7 @@ register("www.atlanticlawjournal.org", GenericAdapter)
 register("www.memphis.edu", GenericAdapter)
 # Lewis & Clark LiveWhale CMS — shared by Animal Law Review,
 # Lewis & Clark Law Review, and Environmental Law (all use /live/files/).
-register("law.lclark.edu", SelectorDrivenAdapter)
+register("law.lclark.edu", GenericAdapter)
 
 # Flagship-27 audit: hosts unmapped despite having validated coverage in past runs.
 register_many(
