@@ -1,0 +1,26 @@
+{
+  "id": "stanford_journal_of_law_business_finance",
+  "start_urls": [
+    "https://law.stanford.edu/stanford-journal-of-law-business-finance-sjlbf/sjlbf-archive/"
+  ],
+  "source": "onboard-journal-skill",
+  "metadata": {
+    "journal_name": "Stanford Journal of Law, Business & Finance",
+    "platform": "wordpress",
+    "status": "active"
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.loop-item.pt-publication",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

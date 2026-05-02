@@ -1,0 +1,10 @@
+{
+  "id": "smu_law_review",
+  "start_urls": ["https://scholar.smu.edu/smulr/sitemap.xml"],
+  "source": "onboard-journal-skill",
+  "metadata": {
+    "journal_name": "SMU Law Review",
+    "platform": "digitalcommons",
+    "status": "todo_adapter"
+  }
+}

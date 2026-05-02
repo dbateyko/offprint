@@ -1,10 +1,32 @@
 {
-  "url": "https://law.lclark.edu/law_reviews/lewis_and_clark_law_review/past_issues/",
-  "sitemap_url": null,
+  "id": "lewis_clark_law_review",
+  "start_urls": [
+    "https://law.lclark.edu/law_reviews/lewis_and_clark_law_review/past_issues/"
+  ],
+  "source": "onboard-journal-skill",
   "metadata": {
-    "journal": "Lewis & Clark Law Review",
-    "platform": "Law School Custom",
-    "original_url": "https://law.lclark.edu/law_reviews/lewis_and_clark_law_review/",
-    "domain": "law.lclark.edu"
-  }
+    "journal_name": "Lewis & Clark Law Review",
+    "platform": "livewhale",
+    "status": "active"
+  },
+  "selectors": [
+    {
+      "id": "volume_link",
+      "type": "SelectorLink",
+      "selector": "div#page_content p strong a, div#page_content h4 a",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "div#page_content h4 a",
+      "parentSelectors": ["volume_link"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.lw_files_pdf",
+      "parentSelectors": ["issue_link"]
+    }
+  ]
 }

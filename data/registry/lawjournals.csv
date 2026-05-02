@@ -149,7 +149,7 @@ Vanderbilt Journal of Entertainment and Technology Law,https://scholarship.law.v
 Vanderbilt Journal of Entertainment and Technology Law,https://www.vanderbilt.edu/jetlaw/,vanderbilt.edu,wordpress,active,vanderbilt-jetlaw.json,642,139,yes,sitemap,https://www.vanderbilt.edu/jetlaw/past-volumes/
 New York University Journal of Legislation and Public Policy,https://nyujlpp.org/,nyujlpp.org,wordpress,active,nyujlpp-org.json,528,140,yes,sitemap,https://nyujlpp.org/archives/
 Tennessee Law Review,https://tennesseelawreview.org/,tennesseelawreview.org,,no_sitemap,tennesseelawreview-org.json,1926,141,yes,wlu,
-"Fordham Intellectual Property, Media & Entertainment Law Journal",,,,no_sitemap,,,142,yes,cilp,
+"Fordham Intellectual Property, Media & Entertainment Law Journal",https://ir.lawnet.fordham.edu/iplj/,ir.lawnet.fordham.edu,digitalcommons,todo_adapter,,,142,yes,cilp,
 www.fordhamiplj.org,http://www.fordhamiplj.org/,fordhamiplj.org,wordpress,active,www-fordhamiplj-org.json,443,142,,sitemap,
 "Journal of Business, Entrepreneurship & the Law",https://digitalcommons.pepperdine.edu/jbel/,digitalcommons.pepperdine.edu,digitalcommons,active,digitalcommons-pepperdine-edu.json,145,143,,sitemap,
 Pepperdine Law Review,https://digitalcommons.pepperdine.edu/plr/,digitalcommons.pepperdine.edu,digitalcommons,todo_adapter,,,143,yes,cilp,
@@ -318,7 +318,7 @@ Loyola Consumer Law Review,https://lawecommons.luc.edu/lclr/all_issues.html,lawe
 Stanford Journal of International Law,https://sjil.stanford.edu/,sjil.stanford.edu,wordpress,active,sjil-stanford-edu.json,,305,yes,sitemap,https://sjil.stanford.edu/archives/
 Boston University Public Interest Law Journal,,,,no_sitemap,,,306,yes,cilp,
 Journal of the Copyright Society of the U.S.A.,https://copyrightsociety.org/the-journal,copyrightsociety.org,wordpress,active,registry_journal_of_the_copyright_society_of_the_u_s_a_273_2f04724410.json,273,307,yes,sitemap,
-Health Matrix: Journal of Law-Medicine,,,,no_sitemap,,,308,yes,cilp,
+Health Matrix: Journal of Law-Medicine,https://scholarlycommons.law.case.edu/healthmatrix/,scholarlycommons.law.case.edu,digitalcommons,todo_adapter,,,308,yes,cilp,
 Judicature,https://judicature.duke.edu/,judicature.duke.edu,wordpress,active,registry_judicature_1930_0c76dfc5bb.json,1930,309,,sitemap,
 St. Mary's Law Journal,https://commons.stmarytx.edu/thestmaryslawjournal/,commons.stmarytx.edu,digitalcommons,todo_adapter,,,310,yes,cilp,
 St. Mary's University (multiple collections),https://commons.stmarytx.edu/,commons.stmarytx.edu,digitalcommons,active,commons-stmarytx-edu.json,1899,310,,sitemap,
@@ -765,7 +765,7 @@ I/S: A Journal of Law and Policy for the Information Society,,,,no_sitemap,,,,ye
 IDEA: The Journal of the Franklin Pierce Center for Intellectual Property,https://law.unh.edu/academics/journals/idea,law.unh.edu,,no_sitemap,,252,,yes,wlu,
 ihpme.utoronto.ca,https://ihpme.utoronto.ca/research/research-centres-initiatives/health-law-in-canada-journal/,ihpme.utoronto.ca,unknown,active,ihpme-utoronto-ca.json,1420,,,sitemap,
 IIC: International Review of Intellectual Property and Competition Law,,,,no_sitemap,,,,yes,cilp,
-ILSA Journal of International and Comparative Law,,,,no_sitemap,,,,yes,cilp,
+ILSA Journal of International and Comparative Law,https://scholarship.law.stjohns.edu/jicl/,scholarship.law.stjohns.edu,digitalcommons,todo_adapter,,,,yes,cilp,
 IMPACT,,,,no_sitemap,,,,yes,cilp,
 India Law Journal,https://www.indialawjournal.org/,indialawjournal.org,,no_sitemap,,1613,,,wlu,
 Indian Journal of Human Rights and the Law,http://serialspublications.com/journals/journal-detail.php?jid=213,serialspublications.com,,no_sitemap,,1560,,,wlu,
@@ -830,12 +830,12 @@ Irish Yearbook of International Law,http://www.hartjournals.co.uk/iyil/,hartjour
 Issues in Law & Medicine,https://issuesinlawandmedicine.com/,issuesinlawandmedicine.com,wordpress,active,registry_issues_in_law_medicine_254_291d6f5853.json,254,,,sitemap,
 James Cook University Law Review,https://www.jcu.edu.au/college-of-business-law-and-governance/law/jcu-law-review,jcu.edu.au,,no_sitemap,,748,,,wlu,
 Japanese Yearbook of International Law,http://www.ilajapan.org/jyil/,ilajapan.org,,no_sitemap,,1196,,,wlu,
-Jeffrey S. Moorad Sports Law Journal,,,,no_sitemap,,,,yes,cilp,
+Jeffrey S. Moorad Sports Law Journal,https://digitalcommons.law.villanova.edu/mslj/,digitalcommons.law.villanova.edu,digitalcommons,todo_adapter,,,,yes,cilp,
 Jersey and Guernsey Law Review,https://www.jerseylaw.je/publications/jglr/Pages/search.aspx,jerseylaw.je,,no_sitemap,,1327,,,wlu,
 Jewish Law Association Studies,http://www.legaltheory.demon.co.uk/jlas/,legaltheory.demon.co.uk,,no_sitemap,,1818,,,wlu,
 Jlep,http://jlep.net/home,jlep.net,Squarespace,active,jlep-net.json,1026,,,sitemap,
 John Marshall Journal of Information Technology & Privacy Law,https://repository.law.uic.edu/jitpl,repository.law.uic.edu,digital_commons,todo_adapter,registry_john_marshall_journal_of_information_technology_privacy_255_0edbacd6d9.json,974,,,sitemap,https://repository.law.uic.edu/lawreview/
-John Marshall Journal of Information Technology and Privacy Law,,,,no_sitemap,,,,yes,cilp,
+John Marshall Journal of Information Technology and Privacy Law,https://repository.law.uic.edu/jitpl/,repository.law.uic.edu,digitalcommons,todo_adapter,,,,yes,cilp,
 John Marshall Law Journal,https://www.johnmarshall.edu/lawreview,johnmarshall.edu,wordpress,active,registry_john_marshall_law_journal_1529_695b3e740f.json,1529,,,sitemap,
 Journal Jurisprudence,http://www.jurisprudence.com.au/index.htm,jurisprudence.com.au,,no_sitemap,,1475,,,wlu,
 Journal of Academic Legal Studies,http://www.joals.org/engine/index.php/joals,joals.org,,no_sitemap,,1250,,,wlu,

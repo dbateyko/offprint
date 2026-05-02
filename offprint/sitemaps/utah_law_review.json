@@ -1,0 +1,10 @@
+{
+  "id": "utah_law_review",
+  "start_urls": ["https://dc.law.utah.edu/ulr/sitemap.xml"],
+  "source": "onboard-journal-skill",
+  "metadata": {
+    "journal_name": "Utah Law Review",
+    "platform": "digitalcommons",
+    "status": "todo_adapter"
+  }
+}
