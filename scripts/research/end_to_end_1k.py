@@ -14,7 +14,7 @@ os.chdir('/mnt/shared_storage/law-review-corpus/offprint')
 sys.path.insert(0, '/mnt/shared_storage/law-review-corpus/offprint')
 
 from offprint.pdf_footnotes.doc_policy import (
-    classify_pdf, collect_signals, read_first_page_overview,
+    classify_pdf, collect_signals, read_first_page_overview, probe_text_density,
     infer_domain, infer_platform_family, load_rules,
 )
 from offprint.pdf_footnotes.text_extract import extract_liteparse_candidate_documents
@@ -28,7 +28,10 @@ def run_one(pdf: str) -> dict:
         domain = infer_domain(pdf, pdf_root='/mnt/shared_storage/law-review-corpus/corpus/scraped')
         platform = infer_platform_family(domain=domain)
         page_count, first_text = read_first_page_overview(pdf)
-        signals = collect_signals(first_text, page_count, metadata=None)
+        density = probe_text_density(pdf, page_count)
+        signals = collect_signals(
+            first_text, page_count, metadata=None, text_density_per_page=density
+        )
         decision = classify_pdf(
             pdf_path=pdf, domain=domain, platform_family=platform,
             signals=signals, doc_policy='article_only', rules=rules,

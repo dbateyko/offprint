@@ -2215,13 +2215,12 @@ def _extract_for_pdf(
     if isinstance(dm, dict):
         dm.pop("sequence_solver_precomputed", None)
     # Preserve note insertion order in sidecars so downstream evaluation can
-    # compare ordered streams accurately.
+    # compare ordered streams accurately. Only the .footnotes.json sidecar is
+    # written (canonical structured payload). The legacy .footnotes.jsonl
+    # variant — a redundant per-row view of the same data — was retired
+    # 2026-05-02 in favor of a single source of truth. Downstream consumers
+    # can stream notes via `for label, note in json_load(path)['notes'].items()`.
     _write_json_atomic(sidecar_path, payload, sort_keys=False)
-    _write_jsonl_sidecar_atomic(
-        _augmented_sidecar_path(pdf_path, ".footnotes.jsonl"),
-        payload,
-        emit_segments=config.emit_segments,
-    )
 
     payload_notes = payload.get("notes")
     payload_author_notes = payload.get("author_notes")

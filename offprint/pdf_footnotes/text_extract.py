@@ -7,7 +7,7 @@ import shutil
 import statistics
 import tempfile
 from pathlib import Path
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any, Sequence
 
 PARSER_MODES = {
@@ -22,6 +22,7 @@ _NOTE_LIKE_RE = re.compile(
     r"^\s*(?:\[\^\d{1,4}\]:|\d{1,4}[\]\)\.,:;-]?\s+|[ivxlcdm]{1,7}[\]\)\.,:;-]?\s+|[*†‡§¶]\s+)",
     re.IGNORECASE,
 )
+_SEPARATOR_ARABIC_NOTE_RE = re.compile(r"^\s*\d{1,4}[\]\)\.,:;-]\s+")
 _LEGAL_FOOTNOTE_SIGNAL_RE = re.compile(
     r"\b(?:v\.|u\.s\.|f\.\d|s\. ct\.|id\.|supra|infra|§)\b",
     re.IGNORECASE,
@@ -193,6 +194,10 @@ class _LiteparsePageLayout:
     # candidates that need glyph-level precision (e.g. the sequence_solver) can
     # work directly on liteparse output without re-parsing.
     raw_items: tuple[dict, ...] = ()
+    # Optional pdfplumber-derived vector separator y-position. LiteParse exposes
+    # text boxes, not PDF line/rect drawing primitives, so this lets the solver
+    # use the visible footnote rule without switching parsers.
+    separator_y: float | None = None
 
 
 _REPORTER_SPACED_RE = re.compile(r"\b([A-Z])\.\s+(\d)\s+([a-z])\b")
@@ -682,6 +687,107 @@ def _find_footnote_separator(page: Any) -> float | None:
     # If multiple, pick the one that is closest to the bottom but likely valid.
     # We sort by 'top' descending (closest to bottom first).
     return max(candidates)
+
+
+def _find_pdfplumber_separator_priors(
+    pdf_path: str,
+    *,
+    page_numbers: set[int] | None = None,
+) -> dict[int, float]:
+    """Return page_number -> visible footnote-rule y positions from pdfplumber.
+
+    LiteParse gives us excellent textItem coordinates but not PDF vector
+    drawing primitives. A geometry-only pdfplumber pass is cheap and lets the
+    LiteParse solver incorporate explicit horizontal rules / thin rectangles
+    when a PDF provides them.
+    """
+    try:
+        import pdfplumber  # type: ignore
+    except Exception:
+        return {}
+
+    priors: dict[int, float] = {}
+    try:
+        with pdfplumber.open(pdf_path) as pdf:
+            for idx, page in enumerate(pdf.pages, start=1):
+                if page_numbers is not None and idx not in page_numbers:
+                    continue
+                sep_y = _find_footnote_separator(page)
+                if sep_y is not None:
+                    priors[idx] = sep_y
+    except Exception:
+        return {}
+    return priors
+
+
+def _liteparse_page_has_lower_note_probe(layout: _LiteparsePageLayout) -> bool:
+    height = float(layout.height or 0.0)
+    if not height:
+        return False
+    lower_lines = [
+        line
+        for line in layout.lines
+        if height * 0.42 <= float(line.top or 0.0) <= height * 0.97
+    ]
+    note_like = [
+        line
+        for line in lower_lines
+        if _SEPARATOR_ARABIC_NOTE_RE.match((line.text or "").strip())
+    ]
+    if len(note_like) >= 2:
+        return True
+    return any(_STRICT_FOOTNOTE_SIGNAL_RE.search(line.text or "") for line in lower_lines)
+
+
+def _separator_supported_by_liteparse(
+    layout: _LiteparsePageLayout,
+    separator_y: float,
+) -> bool:
+    height = float(layout.height or 0.0)
+    if not height:
+        return False
+    sep_y = float(separator_y)
+    if sep_y < height * 0.42 or sep_y > height * 0.88:
+        return False
+
+    below = [
+        line
+        for line in layout.lines
+        if sep_y - 2.0 <= float(line.top or 0.0) <= min(height * 0.97, sep_y + 260.0)
+    ]
+    note_like = [
+        line
+        for line in below
+        if _SEPARATOR_ARABIC_NOTE_RE.match((line.text or "").strip())
+    ]
+    if not note_like:
+        return False
+    first_note_y = min(float(line.top or 0.0) for line in note_like)
+    if first_note_y - sep_y > 85.0:
+        return False
+
+    fonts = sorted(
+        float(line.font_size or 0.0)
+        for line in layout.lines
+        if float(line.font_size or 0.0) > 0.0
+    )
+    median_font = fonts[len(fonts) // 2] if fonts else 0.0
+    small_note_lines = sum(
+        1
+        for line in note_like
+        if median_font and float(line.font_size or 0.0) < median_font * 0.97
+    )
+    legal_signal = any(
+        _STRICT_FOOTNOTE_SIGNAL_RE.search(line.text or "")
+        or _LEGAL_FOOTNOTE_SIGNAL_RE.search(line.text or "")
+        for line in below
+    )
+    return len(note_like) >= 2 and (small_note_lines > 0 or legal_signal)
+
+
+def _env_flag_enabled(name: str) -> bool:
+    raw = (os.getenv(name, "0") or "0").strip().lower()
+    return raw not in {"0", "false", "no", "off"}
 
 
 def _find_font_transition(lines: list[ExtractedLine]) -> float | None:
@@ -1468,6 +1574,26 @@ def _load_liteparse_page_layouts(pdf_path: str) -> list[_LiteparsePageLayout] | 
             )
         )
 
+    if _env_flag_enabled("OFFPRINT_LITEPARSE_SEPARATOR_PRIORS"):
+        probe_pages = {
+            layout.page_number
+            for layout in layouts
+            if _liteparse_page_has_lower_note_probe(layout)
+        }
+        separator_priors = (
+            _find_pdfplumber_separator_priors(pdf_path, page_numbers=probe_pages)
+            if probe_pages
+            else {}
+        )
+        updated_layouts: list[_LiteparsePageLayout] = []
+        for layout in layouts:
+            sep_y = separator_priors.get(layout.page_number)
+            if sep_y is not None and _separator_supported_by_liteparse(layout, sep_y):
+                updated_layouts.append(replace(layout, separator_y=sep_y))
+            else:
+                updated_layouts.append(layout)
+        layouts = updated_layouts
+
     return layouts
 
 
@@ -1481,10 +1607,13 @@ def _build_liteparse_candidate_document(
     text_fidelity_score = _text_fidelity_score_for_word_pages(
         [_raw_items_to_word_dicts(layout.raw_items) for layout in layouts]
     )
+    separator_prior_pages = sum(1 for layout in layouts if layout.separator_y is not None)
     base_metadata: dict[str, Any] = {}
     if text_fidelity_score is not None:
         base_metadata["text_fidelity_score"] = text_fidelity_score
         base_metadata["text_fidelity_score_method"] = "page_y_band_column_proxy_v1"
+    if separator_prior_pages:
+        base_metadata["liteparse_separator_prior_pages"] = separator_prior_pages
 
     # The sequence_solver candidate is global: it reasons over all pages' raw
     # textItems at once, picks label positions that form the longest
@@ -1492,7 +1621,7 @@ def _build_liteparse_candidate_document(
     if candidate_name == "sequence_solver":
         from .sequence_solver import solve_document, build_note_records
 
-        result = solve_document(layouts)
+        result = solve_document(layouts, pdf_path=pdf_path)
         precomputed_notes, precomputed_author_notes, precomputed_ordinality = build_note_records(
             layouts, result
         )

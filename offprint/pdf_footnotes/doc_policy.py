@@ -9,7 +9,7 @@ from typing import Any
 from .text_extract import suppress_pypdf_noise
 
 DOC_POLICIES = {"article_only", "include_issue_compilations", "all"}
-DOC_TYPES = {"article", "issue_compilation", "frontmatter", "other"}
+DOC_TYPES = {"article", "issue_compilation", "frontmatter", "other", "needs_ocr"}
 
 _CITATION_RE = re.compile(
     r"(?:\b\d+\s+U\.?S\.?C\.?\b|\b\d+\s+C\.?F\.?R\.?\b|\b[A-Z][A-Za-z]+\s+v\.\s+[A-Z][A-Za-z]+|§)",
@@ -49,11 +49,80 @@ _NON_ARTICLE_FILENAME_RE = re.compile(
     r"enforcement[-_ ]report[-_ ]fy|annual[-_ ]report[-_ ]fy|"
     r"licensing[-_ ]letter|open[-_ ]letter|"
     r"(?:^|[-_])docket[-_ ]|"
-    r"(?:^|[-_])brief\.pdf$|(?:^|[-_])brief[-_]\d"
+    r"(?:^|[-_])brief\.pdf$|(?:^|[-_])brief[-_]\d|"
+    # Residual triage 2026-05-02: handouts, contest source lists, and
+    # publisher-specific non-article slugs caught in the article bucket
+    # (commons.stmarytx Gold & Blue alumni mag, Victoria Legal Aid resource
+    # handouts on yjil.org, derecho.uprrp.edu Spanish citation tables, JCS
+    # contest source-material lists, ELR Pro extracted issue subsections,
+    # ACUTA telecommunications-journal issue compilations on unl).
+    r"vla[-_ ]?resource|tabla[-_ ]?de[-_ ]?citaci|"
+    r"list[-_ ]?of[-_ ]?all[-_ ]?source[-_ ]?material|remix[-_ ]?art[-_ ]?contest|"
+    r"gold[-_ ]?(?:and|&|n)[-_ ]?blue|acutajournal|"
+    r"^elpar[-_ ]?\d+[-_ ]?copyright"
     r")",
     re.IGNORECASE,
 )
 _ROUNDTABLE_FILENAME_RE = re.compile(r"round[-_ ]?table|roundtable", re.IGNORECASE)
+
+# Seasonal alumni-magazine filename pattern (e.g. "2011-fall.pdf",
+# "2018_winter.pdf"). Cornell Law Forum is the canonical case: 82-pp issues
+# get routed to the article bucket today and produce zero usable footnotes.
+# Combined with a >=30 page count or a magazine title-text marker downstream,
+# this becomes a confident `other` classification.
+_SEASONAL_MAGAZINE_FILENAME_RE = re.compile(
+    r"^\d{4}[-_ ]?(spring|fall|winter|summer|autumn)(?:[-_ ]|\.pdf$|$)",
+    re.IGNORECASE,
+)
+
+# Bepress / repository coversheets render their first page as the recommended-
+# citation block prefixed by the publication's section title — "Book Reviews",
+# "Contents", "Front Matter", "Masthead". When the entire document is short
+# (≤10 pp) and the first page opens with one of these, it's a coversheet, not
+# a real article. The bepress download-citation block also creates 3-7 spurious
+# numeric "footnote markers" (Volume/Issue/Article ids and OSCOLA/AGLC format
+# snippets) that fool the article_like signal.
+_BEPRESS_COVERSHEET_TITLE_RE = re.compile(
+    r"^\s*(?:book\s*reviews?|contents|front[-\s]?matter|masthead|"
+    r"editorial\s*board|table\s+of\s+contents)\s*$",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+# Court-filing markers: NYLS DigitalCommons hosts a court-filings repository
+# whose PDFs land in our article bucket because they pass the bepress
+# article-shape signals. The filing-type heading is a unique signature.
+_COURT_FILING_TITLE_RE = re.compile(
+    r"\b(?:petition\s+for\s+(?:rehearing|certiorari|writ)|"
+    r"(?:rehearing\s+)?en\s+banc|"
+    r"brief\s+(?:for|of|in\s+(?:support|opposition))|"
+    r"motion\s+to\s+(?:dismiss|compel|strike)|"
+    r"reply\s+brief)\b",
+    re.IGNORECASE,
+)
+
+# Panel-transcript marker: a row of speaker tags ("MR. SMITH:", "PROFESSOR
+# JONES:") repeated 3+ times signals a symposium/colloquium transcript rather
+# than a footnoted article. (Real articles quote speakers but never structure
+# the body around speaker turns.)
+_PANEL_SPEAKER_RE = re.compile(
+    r"(?:^|\n)\s*(?:MR|MS|MRS|DR|PROFESSOR|JUDGE|JUSTICE|SENATOR|REP)\.?\s+"
+    r"[A-Z][A-Z]+:\s",
+)
+
+# Path-based skip patterns. Matches the absolute or relative PDF path; used
+# to exclude legacy / manually-imported corpora that violate the
+# `corpus/scraped/<domain>/<file>.pdf` flat-by-domain convention. Routed to
+# `other` rather than deleted so downstream consumers can still find the
+# files if they need them.
+#
+# - `www.stetson.edu/Volume NN/...` : 608 PDFs manually imported pre-offprint
+#   (predates the scraper; see `corpus/scraped/www.stetson.edu/Volume 30/Codex.code-workspace`
+#   and the `paused_waf` registry status). Real Stetson Law Review articles,
+#   but their nested-by-volume layout breaks the domain-extraction logic and
+#   skews per-publisher quality metrics. Documented 2026-05-03.
+_LEGACY_PATH_SKIP_RE = re.compile(
+    r"/www\.stetson\.edu/[Vv]olume[ _-]?\d+/",
+)
 
 
 @dataclass(frozen=True)
@@ -64,6 +133,11 @@ class DocSignals:
     footnote_marker_count: int
     metadata_article_fields: bool
     garbled_text: bool
+    # Average chars per page sampled across the document body. None means the
+    # caller did not probe (legacy path); below the OCR threshold means the
+    # PDF lacks a usable text layer (scanned image-only pages) and should be
+    # routed to `needs_ocr` rather than counted as an article-bucket failure.
+    text_density_per_page: float | None = None
 
 
 @dataclass(frozen=True)
@@ -167,6 +241,42 @@ def read_first_page_overview(pdf_path: str) -> tuple[int, str]:
         return 0, ""
 
 
+def probe_text_density(pdf_path: str, page_count: int) -> float | None:
+    """Return average chars/page across up to 5 sampled pages (1, 25%, 50%,
+    75%, last). Returns None if the PDF can't be opened.
+
+    Used to detect scanned-image PDFs whose text layer is empty or near-empty
+    on most pages. The footnote pipeline's solver and segmenter cannot
+    recover footnotes from such docs regardless of heuristic improvements;
+    they belong in the `needs_ocr` routing class rather than the article
+    failure bucket.
+    """
+    if page_count <= 0:
+        return None
+    try:
+        suppress_pypdf_noise()
+        from pypdf import PdfReader  # type: ignore
+    except Exception:
+        return None
+    try:
+        reader = PdfReader(pdf_path)
+        n = len(reader.pages)
+        if n == 0:
+            return None
+        # Sample up to 5 pages spread across the doc (deduplicated).
+        idxs = sorted({0, n // 4, n // 2, (3 * n) // 4, n - 1} & set(range(n)))
+        total_chars = 0
+        for i in idxs:
+            try:
+                txt = reader.pages[i].extract_text() or ""
+            except Exception:
+                txt = ""
+            total_chars += len(txt.strip())
+        return float(total_chars) / max(len(idxs), 1)
+    except Exception:
+        return None
+
+
 def _metadata_article_fields(metadata: dict[str, Any] | None) -> bool:
     if not isinstance(metadata, dict):
         return False
@@ -184,7 +294,13 @@ def _metadata_article_fields(metadata: dict[str, Any] | None) -> bool:
     return has_author or bool(citation or year)
 
 
-def collect_signals(first_page_text: str, page_count: int, metadata: dict[str, Any] | None) -> DocSignals:
+def collect_signals(
+    first_page_text: str,
+    page_count: int,
+    metadata: dict[str, Any] | None,
+    *,
+    text_density_per_page: float | None = None,
+) -> DocSignals:
     text = first_page_text or ""
     visible = [ch for ch in text if not ch.isspace()]
     alpha_count = sum(1 for ch in visible if ch.isalpha())
@@ -198,6 +314,7 @@ def collect_signals(first_page_text: str, page_count: int, metadata: dict[str, A
         footnote_marker_count=len(_FOOTNOTE_MARKER_RE.findall(text)),
         metadata_article_fields=_metadata_article_fields(metadata),
         garbled_text=garbled,
+        text_density_per_page=text_density_per_page,
     )
 
 
@@ -248,6 +365,20 @@ def classify_pdf(
     doc_type = "article"
     confidence = 0.6
 
+    # Legacy-import path skip (see _LEGACY_PATH_SKIP_RE). Fires before all
+    # other rules — these PDFs violate the flat-by-domain corpus convention
+    # and shouldn't be classified as articles.
+    if _LEGACY_PATH_SKIP_RE.search(pdf_path):
+        return DocDecision(
+            doc_type="other",
+            include=should_include_doc("other", doc_policy),
+            reason_codes=["legacy_import_path"],
+            confidence=0.99,
+            platform_family=platform_family,
+            domain=domain,
+            ocr_candidate=False,
+        )
+
     overrides = rules.get("overrides") if isinstance(rules.get("overrides"), dict) else {}
     by_platform = overrides.get("platform") if isinstance(overrides.get("platform"), dict) else {}
     by_domain = overrides.get("domain") if isinstance(overrides.get("domain"), dict) else {}
@@ -271,6 +402,43 @@ def classify_pdf(
             doc_type = "other"
             reason_codes.append("non_article_filename")
             confidence = 0.96
+            strong_frontmatter = True
+        elif _SEASONAL_MAGAZINE_FILENAME_RE.search(filename_l) and (
+            signals.page_count >= 30
+            or re.search(r"\b(forum|magazine|alumni|bulletin|review[-\s]online)\b", text_l)
+        ):
+            # Cornell Law Forum-style alumni magazines: 30+ pp seasonal issues
+            # whose footnote markers are actually photo credits / page refs.
+            doc_type = "other"
+            reason_codes.append("seasonal_alumni_magazine")
+            confidence = 0.95
+            strong_frontmatter = True
+        elif (
+            signals.page_count <= 10
+            and _BEPRESS_COVERSHEET_TITLE_RE.search(signals.first_page_text)
+        ):
+            # Bepress coversheets (Book Reviews, Contents, Front Matter, etc.)
+            # passing as articles because the recommended-citation block
+            # produces ≥2 numeric "footnote markers".
+            doc_type = "frontmatter"
+            reason_codes.append("bepress_coversheet_title")
+            confidence = 0.96
+            strong_frontmatter = True
+        elif _COURT_FILING_TITLE_RE.search(signals.first_page_text):
+            # Court filings (Petition for Rehearing, Brief for / Brief of, En
+            # Banc, motions) — appear in NYLS DigitalCommons court-filings
+            # repository and others. Not articles.
+            doc_type = "other"
+            reason_codes.append("court_filing_title")
+            confidence = 0.96
+            strong_frontmatter = True
+        elif len(_PANEL_SPEAKER_RE.findall(signals.first_page_text)) >= 3:
+            # Panel/symposium transcripts: 3+ "MR. SMITH:" / "PROFESSOR JONES:"
+            # speaker tags on the first page indicate a colloquium transcript
+            # rather than a footnoted article.
+            doc_type = "other"
+            reason_codes.append("panel_transcript")
+            confidence = 0.92
             strong_frontmatter = True
         elif _ROUNDTABLE_FILENAME_RE.search(filename_l):
             doc_type = "issue_compilation" if signals.page_count >= 20 else "other"
@@ -343,6 +511,31 @@ def classify_pdf(
             reason_codes.append("yearbook_marker")
             confidence = 0.98
             strong_frontmatter = True
+
+    # OCR gate: if we probed text density and the doc averages < 200 chars per
+    # page across its sampled pages, the text layer is unusable for footnote
+    # extraction (scanned-image PDF, severely corrupted CMap, or non-Latin
+    # script with broken encoding). Route to `needs_ocr` so it leaves the
+    # article denominator and joins the OCR backlog rather than being marked
+    # as `empty`/`invalid`. Only fires when no stronger classification has
+    # already triggered (strong_frontmatter would have set doc_type to
+    # frontmatter / other / issue_compilation already).
+    #
+    # Threshold: 200 chars/page averaged over 5 sampled pages. A genuine law-
+    # review article is consistently 1500-3000 cpp; book-review squibs and
+    # short covers have already been caught by earlier rules. Values below
+    # 200 are essentially "nothing extractable" — any successful run on such
+    # a doc is a bookkeeping accident, not a real recovery.
+    if (
+        not strong_frontmatter
+        and doc_type == "article"
+        and signals.text_density_per_page is not None
+        and signals.text_density_per_page < 200.0
+        and signals.page_count >= 4
+    ):
+        doc_type = "needs_ocr"
+        reason_codes.append("low_text_density")
+        confidence = 0.9
 
     # Short docs (covers, tributes, agendas) often carry scraped metadata but
     # lack the body signals of a real article. Require corroborating content

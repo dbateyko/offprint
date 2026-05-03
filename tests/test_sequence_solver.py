@@ -3,10 +3,13 @@ from __future__ import annotations
 
 from offprint.pdf_footnotes.note_segment import validate_ordinality
 from offprint.pdf_footnotes.sequence_solver import (
+    DIGIT_EQUIVALENTS,
     LabelCandidate,
     SolverResult,
     _collect_candidates,
+    _is_ocr_match,
     _pages_from_layouts,
+    _scan_split_label_match,
     build_note_records,
     solve_document,
 )
@@ -19,7 +22,7 @@ def _mk_line(text: str, page: int, top: float, font_size: float = 9.0) -> Extrac
     )
 
 
-def _mk_layout(page: int, lines, items) -> _LiteparsePageLayout:
+def _mk_layout(page: int, lines, items, separator_y: float | None = None) -> _LiteparsePageLayout:
     return _LiteparsePageLayout(
         page_number=page,
         width=612.0,
@@ -27,6 +30,7 @@ def _mk_layout(page: int, lines, items) -> _LiteparsePageLayout:
         raw_text="",
         lines=tuple(lines),
         raw_items=tuple(items),
+        separator_y=separator_y,
     )
 
 
@@ -82,6 +86,72 @@ def test_build_note_records_constructs_note_spans_from_selected_candidates():
     assert not notes[2].text.startswith("3.")
     # Author notes unused by solver path.
     assert author_notes == []
+
+
+def test_separator_prior_prefers_below_rule_candidate_over_body_number():
+    """A pdf vector footnote rule should help the solver reject an above-rule
+    body number when the same missing label appears below the rule.
+    """
+    layout = _mk_layout(
+        1,
+        lines=[
+            _mk_line("Body paragraph 1 discusses background facts.", 1, 190, 11),
+            _mk_line("2 Body subsection heading that should stay out.", 1, 450, 11),
+            _mk_line("1. See authority explaining note one.", 1, 560, 9),
+            _mk_line("2. See authority explaining note two.", 1, 578, 9),
+            _mk_line("3. See authority explaining note three.", 1, 596, 9),
+        ],
+        items=[
+            {"text": "1.", "x": 72, "y": 560, "width": 10, "height": 10, "fontSize": 9},
+            {"text": "See", "x": 90, "y": 560, "width": 18, "height": 10, "fontSize": 9},
+            {"text": "2", "x": 72, "y": 450, "width": 8, "height": 10, "fontSize": 11},
+            {
+                "text": "Body subsection heading that should stay out.",
+                "x": 90,
+                "y": 450,
+                "width": 220,
+                "height": 10,
+                "fontSize": 11,
+            },
+            {"text": "2.", "x": 72, "y": 578, "width": 10, "height": 10, "fontSize": 9},
+            {"text": "See", "x": 90, "y": 578, "width": 18, "height": 10, "fontSize": 9},
+            {"text": "3.", "x": 72, "y": 596, "width": 10, "height": 10, "fontSize": 9},
+            {"text": "See", "x": 90, "y": 596, "width": 18, "height": 10, "fontSize": 9},
+        ],
+        separator_y=548.0,
+    )
+
+    result = solve_document([layout])
+
+    assert result.selected_labels == [1, 2, 3]
+    selected_twos = [c for c in result.selected_candidates if c.digit_value == 2]
+    assert len(selected_twos) == 1
+    assert selected_twos[0].y == 578
+
+
+def test_separator_prior_accepts_split_label_just_outside_left_margin():
+    layout = _mk_layout(
+        1,
+        lines=[
+            _mk_line("1. See authority explaining note one.", 1, 560, 9),
+            _mk_line("2. Id. at 210.", 1, 578, 9),
+            _mk_line("3. Id. at 211.", 1, 596, 9),
+        ],
+        items=[
+            {"text": "1.", "x": 155.4, "y": 560, "width": 10, "height": 10, "fontSize": 9},
+            {"text": "See", "x": 175, "y": 560, "width": 18, "height": 10, "fontSize": 9},
+            {"text": "2", "x": 155.4, "y": 578, "width": 3.8, "height": 10, "fontSize": 9},
+            {"text": ".", "x": 159.2, "y": 578, "width": 2.4, "height": 10, "fontSize": 9},
+            {"text": "Id.", "x": 175, "y": 578, "width": 10, "height": 10, "fontSize": 9},
+            {"text": "3.", "x": 155.4, "y": 596, "width": 10, "height": 10, "fontSize": 9},
+            {"text": "Id.", "x": 175, "y": 596, "width": 10, "height": 10, "fontSize": 9},
+        ],
+        separator_y=548.0,
+    )
+
+    result = solve_document([layout])
+
+    assert result.selected_labels == [1, 2, 3]
 
 
 def test_solve_document_accepts_dense_start_at_2_when_label_1_is_lost():
@@ -417,3 +487,296 @@ def test_validate_ordinality_clean_sequence_still_valid():
     report = validate_ordinality(list(range(1, 50)), gap_tolerance=2)
     assert report.status == "valid"
     assert report.gaps == []
+
+
+def test_geometry_rescue_recovers_split_labels_outside_conservative_margin():
+    # Footnote labels at x=160 (26.1% of 612).
+    # Label 10 is split into '1' and '0'.
+    # note_text_after will be False because we only have one word 'short'.
+    # Without a separator_y, the 25% margin would reject it, but geometry
+    # rescue should recover it by aligning with the 1..9, 11 column.
+    items = []
+    lines = []
+    for i in range(1, 12):
+        y = 500 + i * 20
+        if i == 10:
+            items.append({"text": "1", "x": 160.0, "y": y, "width": 4.0, "height": 10, "fontSize": 9})
+            items.append({"text": "0.", "x": 164.0, "y": y, "width": 6.0, "height": 10, "fontSize": 9})
+            items.append({"text": "short", "x": 180, "y": y, "width": 18, "height": 10, "fontSize": 9})
+            lines.append(_mk_line(f"{i}. short", 1, y, 9))
+        else:
+            items.append({"text": f"{i}.", "x": 160.0, "y": y, "width": 10, "height": 10, "fontSize": 9})
+            items.append({"text": "See", "x": 180, "y": y, "width": 18, "height": 10, "fontSize": 9})
+            lines.append(_mk_line(f"{i}. See authority explaining note.", 1, y, 9))
+
+    layout = _mk_layout(1, lines, items, separator_y=None)
+    result = solve_document([layout])
+    assert result.selected_labels == list(range(1, 12))
+
+
+# ---- Glyph-normalization regression tests (residual triage 2026-05-02) ----
+
+
+def test_is_ocr_match_cascaded_substitutions():
+    # Chapman: "lOl" → 101 (lowercase-l, capital-O, lowercase-l).
+    assert _is_ocr_match(101, "lOl")
+    # FAMU: "Il2" → 132 (capital-I, lowercase-l + 2 — actually 112; use 112).
+    assert _is_ocr_match(112, "Il2")
+    # JOLT/Arizona: "I 10" — caller pre-splits on whitespace; "I10" normalized.
+    assert _is_ocr_match(110, "I10")
+    # Notre Dame / BC: "33°" → 330 (degree sign for 0).
+    assert _is_ocr_match(330, "33°")
+    # UKY: "'05" — apostrophe strip alone yields "05" (length 2). The caller
+    # must concatenate this with an adjacent "1" item via _scan_split_label
+    # to recover label 105; bare _is_ocr_match must not accept the
+    # length-mismatched form on either side.
+    assert not _is_ocr_match(105, "'05")
+    assert not _is_ocr_match(5, "'05")  # stripped to "05" — length 2 vs target len 1
+    # Apostrophe-prefixed full-length token IS accepted (UKY "'05" for label 5
+    # only via _scan_split — covered separately).
+    assert _is_ocr_match(105, "'105")  # leading apostrophe stripped, exact match
+    # Negative: random text doesn't match.
+    assert not _is_ocr_match(101, "abc")
+    assert not _is_ocr_match(101, "1011")
+    assert not _is_ocr_match(101, "10")
+
+
+def test_is_ocr_match_apostrophe_strip_does_not_overmatch():
+    # Apostrophe strip on a 2-digit observed token: "'05" → "05" (length 2).
+    # vs target 5 (length 1) → must NOT match.
+    assert not _is_ocr_match(5, "'05")
+    # vs target 50 (length 2) → "05" — first char target "5" vs observed "0".
+    # "0" is not in DIGIT_EQUIVALENTS["5"] → must not match.
+    assert not _is_ocr_match(50, "'05")
+
+
+def test_digit_equivalents_self_inclusion():
+    # Each digit must accept itself.
+    for d, glyphs in DIGIT_EQUIVALENTS.items():
+        assert d in glyphs
+
+
+def test_scan_split_label_recovers_two_digit_split():
+    # Cornell-style "6 7" rendering of label 67.
+    items = [
+        {"text": "6", "x": 100.0, "y": 500.0, "width": 5.0, "height": 10, "fontSize": 9},
+        {"text": "7", "x": 108.0, "y": 500.0, "width": 5.0, "height": 10, "fontSize": 9},
+        {"text": "Supra", "x": 130.0, "y": 500.0, "width": 25.0, "height": 10, "fontSize": 9},
+    ]
+    anchor = _scan_split_label_match(67, items)
+    assert anchor is not None
+    assert anchor["text"] == "6"
+
+
+def test_scan_split_label_rejects_too_wide_gap():
+    # Same digits but with a body-sized gap → should NOT merge.
+    items = [
+        {"text": "6", "x": 100.0, "y": 500.0, "width": 5.0, "height": 10, "fontSize": 9},
+        {"text": "7", "x": 250.0, "y": 500.0, "width": 5.0, "height": 10, "fontSize": 9},
+    ]
+    assert _scan_split_label_match(67, items) is None
+
+
+def test_scan_split_label_rejects_different_y():
+    # Tokens on different lines must not merge.
+    items = [
+        {"text": "6", "x": 100.0, "y": 500.0, "width": 5.0, "height": 10, "fontSize": 9},
+        {"text": "7", "x": 108.0, "y": 520.0, "width": 5.0, "height": 10, "fontSize": 9},
+    ]
+    assert _scan_split_label_match(67, items) is None
+
+
+def test_scan_split_label_with_glyph_equivalents():
+    # FAMU-style "Il" rendering of 11 split as "I" + "l".
+    items = [
+        {"text": "I", "x": 100.0, "y": 500.0, "width": 4.0, "height": 10, "fontSize": 9},
+        {"text": "l", "x": 106.0, "y": 500.0, "width": 4.0, "height": 10, "fontSize": 9},
+    ]
+    anchor = _scan_split_label_match(11, items)
+    assert anchor is not None
+
+
+def test_digit_equivalents_S_in_both_5_and_8():
+    """Maine pattern: `S 7` for label 87 requires S to be valid for 8."""
+    assert "S" in DIGIT_EQUIVALENTS["8"]
+    assert "S" in DIGIT_EQUIVALENTS["5"]
+
+
+def test_is_ocr_match_S_for_8():
+    # `S7` should match 87 (S→8 in hundreds-place position is rare; here
+    # tens-place).
+    assert _is_ocr_match(87, "S7")
+    # And must still match 57 (legacy).
+    assert _is_ocr_match(57, "S7")
+
+
+# ---- Per-domain glyph profile tests ----
+
+
+def test_domain_glyph_profile_bclawreview_3_to_5():
+    from offprint.pdf_footnotes.sequence_solver import _equivalents_for, _is_ocr_match
+    # Without domain, `5` does NOT match target `3`.
+    assert "5" not in _equivalents_for("3", domain=None)
+    assert not _is_ocr_match(330, "550")
+    # With BC's profile, `5` matches `3`.
+    assert "5" in _equivalents_for("3", domain="bclawreview.bc.edu")
+    assert _is_ocr_match(330, "550", domain="bclawreview.bc.edu")
+    # `308` rendering as `508` (BC observed): only matches with profile.
+    assert _is_ocr_match(308, "508", domain="bclawreview.bc.edu")
+    assert not _is_ocr_match(308, "508")
+
+
+def test_domain_glyph_profile_does_not_leak_to_other_domains():
+    from offprint.pdf_footnotes.sequence_solver import _is_ocr_match
+    # A clean publisher must not get BC's `5→3` substitution.
+    assert not _is_ocr_match(330, "550", domain="harvardlawreview.org")
+    assert not _is_ocr_match(330, "550", domain="example.com")
+
+
+def test_domain_inference_from_pdf_path():
+    from offprint.pdf_footnotes.sequence_solver import _domain_from_pdf_path
+    assert _domain_from_pdf_path(
+        "/mnt/data/corpus/scraped/bclawreview.bc.edu/63beb1f9a5219.pdf"
+    ) == "bclawreview.bc.edu"
+    assert _domain_from_pdf_path(
+        "../corpus/scraped/uknowledge.uky.edu/viewcontent.cgi-x.pdf"
+    ) == "uknowledge.uky.edu"
+    # Fallback: parent dir as domain when no `scraped/` segment.
+    assert _domain_from_pdf_path(
+        "/some/other/path/example.com/file.pdf"
+    ) == "example.com"
+    assert _domain_from_pdf_path(None) is None
+    assert _domain_from_pdf_path("") is None
+
+
+# ---- Alberta domain profile ----
+
+
+def test_albertalawreview_glyph_profile():
+    from offprint.pdf_footnotes.sequence_solver import _is_ocr_match, _equivalents_for
+    domain = "albertalawreview.com"
+    # 8 ↔ M (schachter `IM.`=18)
+    assert _is_ocr_match(18, "IM", domain=domain)
+    # 8 ↔ o (leigh `o See`=8)
+    assert _is_ocr_match(8, "o", domain=domain)
+    # 6 ↔ G (clark `8G`=86)
+    assert _is_ocr_match(86, "8G", domain=domain)
+    # 1 ↔ smart-quote (hurlburt `"`=11)
+    assert _is_ocr_match(11, '""', domain=domain)
+    # Without the domain, none of these fire.
+    assert not _is_ocr_match(18, "IM")
+    assert not _is_ocr_match(86, "8G")
+    # Profile doesn't leak to other domains.
+    assert not _is_ocr_match(86, "8G", domain="harvardlawreview.org")
+    # 8 has both base equivalents (B, S) AND Alberta extras (M, o, G).
+    eq = _equivalents_for("8", domain=domain)
+    assert "B" in eq and "M" in eq and "o" in eq
+
+
+# ---- Bare-label tolerance (Alberta house style) ----
+
+
+def test_domain_profile_alberta_is_bare_label_friendly():
+    from offprint.pdf_footnotes.sequence_solver import _profile_for, DomainProfile
+    profile = _profile_for("albertalawreview.com")
+    assert isinstance(profile, DomainProfile)
+    assert profile.bare_label_friendly is True
+
+
+def test_domain_profile_other_publishers_are_not_bare_label_friendly():
+    from offprint.pdf_footnotes.sequence_solver import _profile_for
+    bc = _profile_for("bclawreview.bc.edu")
+    assert bc is not None and bc.bare_label_friendly is False
+    assert _profile_for("harvardlawreview.org") is None
+    assert _profile_for(None) is None
+
+
+def test_bare_label_friendly_promotes_punct_on_alberta_candidates():
+    """Alberta-style "12 Smith v. Jones" — bare digit followed by a case
+    citation. With bare_label_friendly, the candidate's has_punct is
+    promoted so it gets the +2 scoring bonus."""
+    items = []
+    lines = []
+    # 5 footnotes in Alberta house style: bare label + citation, no period.
+    y = 500
+    for i in range(1, 6):
+        items.append({"text": str(i), "x": 72.0, "y": y, "width": 6.0, "height": 10, "fontSize": 9})
+        items.append({"text": "Smith", "x": 82.0, "y": y, "width": 22.0, "height": 10, "fontSize": 9})
+        items.append({"text": "v.", "x": 108.0, "y": y, "width": 8.0, "height": 10, "fontSize": 9})
+        items.append({"text": "Jones,", "x": 119.0, "y": y, "width": 26.0, "height": 10, "fontSize": 9})
+        items.append({"text": "1", "x": 148.0, "y": y, "width": 5.0, "height": 10, "fontSize": 9})
+        items.append({"text": "Alta", "x": 156.0, "y": y, "width": 18.0, "height": 10, "fontSize": 9})
+        items.append({"text": "L.R.", "x": 178.0, "y": y, "width": 16.0, "height": 10, "fontSize": 9})
+        items.append({"text": "100", "x": 198.0, "y": y, "width": 14.0, "height": 10, "fontSize": 9})
+        lines.append(_mk_line(f"{i} Smith v. Jones, 1 Alta L.R. 100", 1, y, 9))
+        y += 13
+    layout = _mk_layout(1, lines, items)
+    result = solve_document([layout], pdf_path="/x/corpus/scraped/albertalawreview.com/test.pdf")
+    # All 5 bare-label footnotes should be selected.
+    assert result.selected_labels == [1, 2, 3, 4, 5]
+
+
+def test_bare_label_friendly_does_not_apply_to_unprofiled_domain():
+    """Same Alberta-style data on an unprofiled domain — the solver should
+    still pick up the labels (because the citation_nearby + substantive_text
+    signals are strong) but the candidates are NOT promoted to has_punct.
+    Verifies the promotion is gated by domain."""
+    from offprint.pdf_footnotes.sequence_solver import _collect_candidates, _pages_from_layouts
+    items = [
+        {"text": "1", "x": 72.0, "y": 500, "width": 6.0, "height": 10, "fontSize": 9},
+        {"text": "Smith", "x": 82.0, "y": 500, "width": 22.0, "height": 10, "fontSize": 9},
+        {"text": "v.", "x": 108.0, "y": 500, "width": 8.0, "height": 10, "fontSize": 9},
+        {"text": "Jones,", "x": 119.0, "y": 500, "width": 26.0, "height": 10, "fontSize": 9},
+        {"text": "1", "x": 148.0, "y": 500, "width": 5.0, "height": 10, "fontSize": 9},
+        {"text": "Alta", "x": 156.0, "y": 500, "width": 18.0, "height": 10, "fontSize": 9},
+        {"text": "L.R.", "x": 178.0, "y": 500, "width": 16.0, "height": 10, "fontSize": 9},
+        {"text": "100", "x": 198.0, "y": 500, "width": 14.0, "height": 10, "fontSize": 9},
+    ]
+    layout = _mk_layout(1, [_mk_line("1 Smith v. Jones", 1, 500, 9)], items)
+    pages = _pages_from_layouts([layout])
+    # Without domain → no promotion
+    cands_neutral = _collect_candidates(pages)
+    bare_neutral = [c for c in cands_neutral if c.digit_value == 1 and c.x < 80]
+    assert bare_neutral, "should still find the candidate"
+    assert all(not c.has_punct for c in bare_neutral)
+    # With Alberta domain → promotion fires (citation_nearby is True)
+    cands_alberta = _collect_candidates(pages, domain="albertalawreview.com")
+    bare_alberta = [c for c in cands_alberta if c.digit_value == 1 and c.x < 80]
+    assert bare_alberta
+    assert any(c.has_punct for c in bare_alberta), \
+        "bare label with citation_nearby should be promoted to has_punct"
+
+
+def test_looks_like_toc_does_not_reject_short_article_starting_at_1():
+    """Regression: 18-smith.pdf (Alberta book review, 4pp, 9 footnotes
+    densely packed on pages 1-2) was being killed by the TOC heuristic
+    after the bare-label promotion correctly found the full 1-9 sequence."""
+    from offprint.pdf_footnotes.sequence_solver import _looks_like_toc, LabelCandidate
+    # 9 candidates: 5 on p1, 3 on p2, 1 on p3 — top-2 = 8/9 = 89%, would
+    # trip the old 80% threshold. But sequence is 1..9 contiguous, so it's
+    # a real footnote stream, not a TOC.
+    cands = []
+    for d in range(1, 6):
+        cands.append(LabelCandidate(page=1, y=500+d, x=50, font_size=9,
+                                     digit_value=d, text=str(d)))
+    for d in range(6, 9):
+        cands.append(LabelCandidate(page=2, y=500+d, x=50, font_size=9,
+                                     digit_value=d, text=str(d)))
+    cands.append(LabelCandidate(page=3, y=500, x=50, font_size=9,
+                                 digit_value=9, text="9"))
+    assert _looks_like_toc(cands, n_pages=4) is False
+
+
+def test_looks_like_toc_still_rejects_real_toc_concentration():
+    """A real TOC: 6 numeric entries (page numbers) all on page 1, none
+    starting at 1 → should still trip the TOC heuristic."""
+    from offprint.pdf_footnotes.sequence_solver import _looks_like_toc, LabelCandidate
+    cands = [
+        LabelCandidate(page=1, y=100, x=50, font_size=11, digit_value=23, text="23"),
+        LabelCandidate(page=1, y=120, x=50, font_size=11, digit_value=47, text="47"),
+        LabelCandidate(page=1, y=140, x=50, font_size=11, digit_value=89, text="89"),
+        LabelCandidate(page=1, y=160, x=50, font_size=11, digit_value=141, text="141"),
+        LabelCandidate(page=1, y=180, x=50, font_size=11, digit_value=203, text="203"),
+        LabelCandidate(page=1, y=200, x=50, font_size=11, digit_value=287, text="287"),
+    ]
+    assert _looks_like_toc(cands, n_pages=10) is True

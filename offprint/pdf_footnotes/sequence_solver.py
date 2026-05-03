@@ -17,7 +17,7 @@ numbers vs. the heuristic candidate ensemble.
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 LABEL_DIGIT_RE = re.compile(r"^\s*(\d{1,4})(?:[\.\)\]]|\.{2,})?\s*$")
@@ -54,6 +54,8 @@ class LabelCandidate:
     cluster_peers: int = 0
     y_rel: float = 0.0
     substantive_text: bool = False
+    separator_y: float | None = None
+    below_separator: bool = False
 
 
 @dataclass
@@ -63,6 +65,7 @@ class _PageData:
     height: float
     items: list[dict[str, Any]]
     median_font: float
+    separator_y: float | None = None
 
 
 def _pages_from_layouts(layouts: list) -> list[_PageData]:
@@ -80,6 +83,7 @@ def _pages_from_layouts(layouts: list) -> list[_PageData]:
                 height=float(getattr(layout, "height", 0.0) or 0.0),
                 items=items,
                 median_font=med,
+                separator_y=getattr(layout, "separator_y", None),
             )
         )
     return result
@@ -168,6 +172,7 @@ def _synthesize_split_label_candidates(
     page: _PageData,
     recurring_texts: set[tuple[int, str]],
     max_label: int,
+    alignment_x: float | None = None,
 ) -> list[LabelCandidate]:
     """Create candidates for labels split across adjacent digit textItems."""
     valid_items: list[dict[str, Any]] = []
@@ -226,7 +231,17 @@ def _synthesize_split_label_candidates(
             y_rel = (first_y / page.height) if page.height else 0.5
             smaller_font = bool(fs and fs < page.median_font * 0.95)
             at_line_start = not _has_previous_line_text(page, first)
-            left_margin = bool(x <= left_thresh)
+            separator_y = page.separator_y
+            below_separator = bool(
+                separator_y is not None and first_y >= float(separator_y) - 2.0
+            )
+            separator_left_thresh = page.width * 0.35 if page.width else 210.0
+            column_aligned = bool(alignment_x is not None and abs(x - alignment_x) <= 12.0)
+            left_margin = bool(
+                x <= left_thresh 
+                or (below_separator and x <= separator_left_thresh)
+                or column_aligned
+            )
             note_text_after = _has_note_text_after(page, components[-1], fs)
             if not (
                 note_text_after
@@ -262,6 +277,8 @@ def _synthesize_split_label_candidates(
                     citation_nearby=citation_nearby,
                     y_rel=y_rel,
                     substantive_text=substantive_text,
+                    separator_y=separator_y,
+                    below_separator=below_separator,
                 )
             )
     return synthesized
@@ -291,9 +308,13 @@ def _detect_repeating_header_texts(pages: list[_PageData]) -> set[tuple[int, str
     return {k for k, c in text_by_yband.items() if c >= thresh}
 
 
-def _collect_candidates(pages: list[_PageData]) -> list[LabelCandidate]:
+def _collect_candidates(
+    pages: list[_PageData], domain: str | None = None
+) -> list[LabelCandidate]:
     recurring_texts = _detect_repeating_header_texts(pages)
     max_synthetic_label = max(120, len(pages) * 10)
+    profile = _profile_for(domain)
+    bare_label_friendly = bool(profile and profile.bare_label_friendly)
     candidates: list[LabelCandidate] = []
     for p in pages:
         if not p.items:
@@ -328,7 +349,6 @@ def _collect_candidates(pages: list[_PageData]) -> list[LabelCandidate]:
             if digit_value is None or digit_value < 1 or digit_value > 1500:
                 continue
             smaller_font = bool(fs and fs < p.median_font * 0.95)
-            left_margin = bool(x <= left_thresh)
             line_text = _line_text_starting_at(p, it)
             # Reject TOC entries: a line that has dot-leaders ending in a page
             # number is unambiguously a table-of-contents entry, never a
@@ -342,6 +362,14 @@ def _collect_candidates(pages: list[_PageData]) -> list[LabelCandidate]:
             has_upper_initial = any(t[:1].isupper() for t in alpha_tokens[:6])
             substantive_text = len(alpha_tokens) >= 4 and has_upper_initial
             y_rel = (y / p.height) if p.height else 0.5
+            separator_y = p.separator_y
+            below_separator = bool(
+                separator_y is not None and y >= float(separator_y) - 2.0
+            )
+            separator_left_thresh = p.width * 0.35 if p.width else 210.0
+            left_margin = bool(
+                x <= left_thresh or (below_separator and x <= separator_left_thresh)
+            )
             candidates.append(
                 LabelCandidate(
                     page=p.page,
@@ -357,6 +385,8 @@ def _collect_candidates(pages: list[_PageData]) -> list[LabelCandidate]:
                     citation_nearby=citation_nearby,
                     y_rel=y_rel,
                     substantive_text=substantive_text,
+                    separator_y=separator_y,
+                    below_separator=below_separator,
                 )
             )
         candidates.extend(
@@ -374,6 +404,21 @@ def _collect_candidates(pages: list[_PageData]) -> list[LabelCandidate]:
                 for o in page_cands
                 if o is not c and abs(o.x - c.x) <= 20 and abs(o.y - c.y) <= 80
             )
+    # Bare-label-friendly promotion: for publishers whose house style omits
+    # the post-label period (e.g. Alberta Law Review's "12 Smith v. Jones"),
+    # promote bare-label candidates to has_punct=True when they sit at the
+    # left margin AND have a citation signal or substantive text after them.
+    # Without this, bare-label candidates lose the +2 punct bonus and are
+    # often discarded by the DP in favor of body-text noise.
+    if bare_label_friendly:
+        for c in candidates:
+            if (
+                not c.has_punct
+                and c.is_pure_digit
+                and c.left_margin
+                and (c.citation_nearby or c.substantive_text)
+            ):
+                c.has_punct = True
     return candidates
 
 
@@ -400,6 +445,11 @@ def _candidate_score(c: LabelCandidate) -> float:
         s += 0.5
     elif c.y_rel < 0.2:
         s -= 1.0
+    if c.separator_y is not None:
+        if c.below_separator:
+            s += 1.25
+        elif c.y < float(c.separator_y) - 20.0:
+            s -= 1.25
     if c.is_pure_digit and not c.has_punct and not c.citation_nearby and c.cluster_peers == 0:
         s -= 1.0
     return max(s, 0.1)
@@ -592,30 +642,242 @@ class SolverResult:
     candidate_count: int
 
 
-# Common OCR / LiteParse character mutations for digits
-OCR_MUTATIONS = {
-    "1": ["I", "l", "i", "|"],
-    "2": ["Z"],
-    "5": ["S"],
-    "7": ["K", "/"],
-    "8": ["B"],
-    "0": ["O", "o"],
+# Common OCR / LiteParse character mutations for digits.
+# Per-character equivalence: each digit may render as itself OR any glyph that
+# OCR / private-CMap fonts confuse for it. Empirically observed in the residual
+# triage (batches 1-4 of the holdout 1K, 2026-05-02): JOLT and Arizona render
+# "1" as "I"/"l" inside three-digit labels (e.g. "I 10" for 110); FAMU renders
+# "7" as "J" and "1" as "I"; Notre Dame and BC render "0" as "°" (degree
+# sign); UNC 1923 renders some leading digits as `"` (private CMap glyph
+# loss); Chapman renders "0" as "o" / "1" as "l".
+DIGIT_EQUIVALENTS: dict[str, frozenset[str]] = {
+    "0": frozenset({"0", "O", "o", "Q", "°", "º"}),
+    "1": frozenset({"1", "I", "l", "i", "|", "T", "!"}),
+    "2": frozenset({"2", "Z"}),
+    "3": frozenset({"3"}),
+    "4": frozenset({"4"}),
+    # `S` is added to both `5` and `8` because Maine's scanned text layer
+    # (and similar publisher OCR) renders `8` → `S` in three-digit labels
+    # (`S 7` for 87, `S77he` for 87). The solver disambiguates by sequence
+    # context: a candidate `S` between confirmed labels `86` and `88` is
+    # selected as 87, not 57 (57 wouldn't fit the monotonic sequence).
+    "5": frozenset({"5", "S"}),
+    "6": frozenset({"6"}),
+    "7": frozenset({"7", "K", "J", "/"}),
+    "8": frozenset({"8", "B", "S"}),
+    "9": frozenset({"9"}),
 }
 
-def _is_ocr_match(target_digit: int, text: str) -> bool:
-    """Return True if text looks like a mutated version of target_digit."""
-    s = str(target_digit)
-    if s == text:
-        return True
-    # Check for simple character substitutions
-    for char, mutations in OCR_MUTATIONS.items():
-        if char in s:
-            for m in mutations:
-                if s.replace(char, m) == text:
-                    return True
-    return False
+# Per-domain extraction profiles. Combines glyph-equivalent overrides with
+# scoring/segmentation knobs gated by publisher domain. Use this for
+# catastrophic systematic OCR substitutions or house-style conventions that
+# are too aggressive to apply globally (e.g. `5→3`, which would corrupt
+# every clean document; or "no period after label digit", which would
+# inflate noise on dotted-label publishers).
+#
+# Add a profile only after confirming the pattern is publisher-stable across
+# multiple sampled docs — one-off corruption belongs in the OCR backlog.
+@dataclass(frozen=True)
+class DomainProfile:
+    # Per-digit extra equivalents on top of DIGIT_EQUIVALENTS.
+    glyphs: dict[str, frozenset[str]] = field(default_factory=dict)
+    # When True, bare-label candidates (a leading digit *without* a trailing
+    # `.`/`)`/`]`) that have either a nearby citation signal or substantive
+    # English-prose text after them are treated as if they had punctuation
+    # for scoring purposes. This restores the +2 punct bonus that the
+    # global solver's scoring withholds from publishers whose house style
+    # omits the post-label period (e.g. Alberta Law Review's "12 Smith v.
+    # Jones (1987)" form). Sequence-DP context still gates the candidate.
+    bare_label_friendly: bool = False
 
-def _ghost_rescue(pages: list[_PageData], candidates: list[LabelCandidate]) -> list[LabelCandidate]:
+
+_DOMAIN_PROFILES: dict[str, DomainProfile] = {
+    # Boston College Law Review: scanned back-issue OCR renders `3` as `5`
+    # in three-digit labels (300-340 range observed in residual triage:
+    # `5°1` for 308, `5L2` for 312, `54°` for 340).
+    "bclawreview.bc.edu": DomainProfile(
+        glyphs={"3": frozenset({"5"})},
+    ),
+    # FAMU Law Review: confirmed `J` for `7` and `\` for `1`.
+    "commons.law.famu.edu": DomainProfile(
+        glyphs={"1": frozenset({"\\"})},
+    ),
+    # Alberta Law Review: scanned back-issues (vols 5-31) — see triage
+    # 2026-05-03. Evidence: `IM.`=18 (schachter), `o See`=8 (leigh), `8G`=86
+    # (clark), `"`=11 (hurlburt), `o`=8 in tens-place (harrison). House
+    # style also drops the post-label period (`12 Smith v. Jones`) which
+    # the bare-label-friendly flag accommodates.
+    "albertalawreview.com": DomainProfile(
+        glyphs={
+            "1": frozenset({'"', "“", "”"}),
+            "6": frozenset({"G"}),
+            "8": frozenset({"M", "o", "G"}),
+        },
+        bare_label_friendly=True,
+    ),
+}
+
+# Back-compat shim: external callers (and the existing test surface) still
+# import _DOMAIN_GLYPH_PROFILES. Keep it as a derived view.
+_DOMAIN_GLYPH_PROFILES: dict[str, dict[str, frozenset[str]]] = {
+    domain: dict(profile.glyphs) for domain, profile in _DOMAIN_PROFILES.items()
+}
+
+
+def _equivalents_for(digit: str, domain: str | None = None) -> frozenset[str]:
+    """Return the set of glyphs that may stand in for `digit`, optionally
+    augmented by a per-domain profile."""
+    base = DIGIT_EQUIVALENTS.get(digit, frozenset())
+    if domain:
+        profile = _DOMAIN_PROFILES.get(domain)
+        if profile is not None:
+            extra = profile.glyphs.get(digit)
+            if extra:
+                return base | extra
+    return base
+
+
+def _profile_for(domain: str | None) -> DomainProfile | None:
+    """Return the registered DomainProfile for `domain`, or None."""
+    if not domain:
+        return None
+    return _DOMAIN_PROFILES.get(domain)
+
+
+def _domain_from_pdf_path(pdf_path: str | None) -> str | None:
+    """Extract the domain segment from a corpus PDF path
+    (`.../corpus/scraped/<domain>/<file>.pdf`)."""
+    if not pdf_path:
+        return None
+    parts = pdf_path.replace("\\", "/").split("/")
+    for i, part in enumerate(parts):
+        if part == "scraped" and i + 1 < len(parts):
+            cand = parts[i + 1].lower()
+            if "." in cand and not cand.endswith(".pdf"):
+                return cand
+    # Fallback: parent directory if it looks like a domain.
+    if len(parts) >= 2:
+        cand = parts[-2].lower()
+        if "." in cand and not cand.endswith(".pdf"):
+            return cand
+    return None
+
+# Punctuation that sometimes prefixes / suffixes an OCR-corrupted label.
+# Stripped before matching: `'05` → `05`, `33.` → `33`, `(7)` → `7`. Curly
+# quotes and apostrophes are kept here because they may also stand in for
+# digit glyphs (e.g. Alberta `"` ↔ 1); the strip is then computed dynamically
+# to exclude any char that is also a digit equivalent for some digit.
+_LABEL_TOKEN_PUNCT = "'\"`‘’“”.,()[]{}<>:;-—_"
+
+# Back-compat alias retained for any external importers.
+OCR_MUTATIONS = {
+    d: [g for g in glyphs if g != d]
+    for d, glyphs in DIGIT_EQUIVALENTS.items()
+}
+
+
+def _strip_label_punct(text: str, domain: str | None = None) -> str:
+    """Strip leading/trailing punctuation that commonly attaches to corrupted
+    label tokens (e.g. `'05`, `33.`, `(7)`).
+
+    Punctuation chars that are also digit-glyph equivalents for the active
+    domain (e.g. `"` is in Alberta's `1` profile) are NOT stripped — they
+    might be the actual label glyph rather than incidental quoting.
+    """
+    # Compute the dynamic strip-set: punctuation minus any char that's a
+    # known digit-equivalent (globally or per-domain).
+    keep_chars: set[str] = set()
+    for d in DIGIT_EQUIVALENTS:
+        keep_chars.update(_equivalents_for(d, domain))
+    strip_set = "".join(c for c in _LABEL_TOKEN_PUNCT if c not in keep_chars)
+    return text.strip(strip_set).strip() if strip_set else text.strip()
+
+
+def _is_ocr_match(target_digit: int, text: str, domain: str | None = None) -> bool:
+    """Return True if `text` could be an OCR-mutated rendering of `target_digit`.
+
+    Per-character fuzzy match with cascaded substitutions: each digit position
+    may independently render as any glyph in DIGIT_EQUIVALENTS for that digit
+    (plus per-domain extras when `domain` is provided).
+    Leading/trailing label punctuation is stripped before comparison.
+    """
+    if not text:
+        return False
+    cleaned = _strip_label_punct(text, domain)
+    if not cleaned:
+        return False
+    target = str(target_digit)
+    if cleaned == target:
+        return True
+    if len(cleaned) != len(target):
+        return False
+    for tgt_char, obs_char in zip(target, cleaned):
+        equivalents = _equivalents_for(tgt_char, domain)
+        if obs_char not in equivalents:
+            return False
+    return True
+
+
+def _scan_split_label_match(
+    target_digit: int,
+    items: list[dict[str, Any]],
+    y_tol: float = 2.5,
+    x_gap_max_factor: float = 1.4,
+    domain: str | None = None,
+) -> dict[str, Any] | None:
+    """Find a whitespace-split rendering of `target_digit` across adjacent
+    same-line items.
+
+    Catches Cornell/Buffalo/Maine-style splits where "67" renders as the two
+    items "6", "7" or "8 6" for 86. Returns the leading item of the matching
+    span (so the caller can use its position), or None.
+    """
+    target = str(target_digit)
+    if len(target) < 2:
+        return None
+    # Pre-clean each item's text to a single fragment.
+    cleaned_items: list[tuple[dict[str, Any], str, float, float]] = []
+    for it in items:
+        raw = (it.get("text") or "").strip()
+        cleaned = _strip_label_punct(raw)
+        if not cleaned or any(c.isspace() for c in cleaned):
+            continue
+        # Only consider tokens that are a candidate digit-equivalent fragment.
+        if not all(
+            any(c in DIGIT_EQUIVALENTS[d] for d in DIGIT_EQUIVALENTS) for c in cleaned
+        ):
+            continue
+        x = float(it.get("x") or 0)
+        y = float(it.get("y") or 0)
+        cleaned_items.append((it, cleaned, x, y))
+    cleaned_items.sort(key=lambda t: (t[3], t[2]))
+    n = len(cleaned_items)
+    for i, (it_i, txt_i, x_i, y_i) in enumerate(cleaned_items):
+        # Try concatenations of length 2..len(target) starting at i.
+        concat = txt_i
+        last_x_end = x_i + float(it_i.get("width") or 0)
+        last_fs = float(it_i.get("fontSize") or 0) or 8.0
+        for j in range(i + 1, min(n, i + len(target))):
+            it_j, txt_j, x_j, y_j = cleaned_items[j]
+            if abs(y_j - y_i) > y_tol:
+                break
+            x_gap = x_j - last_x_end
+            if x_gap > max(4.0, last_fs * x_gap_max_factor):
+                break
+            concat += txt_j
+            if len(concat) == len(target) and _is_ocr_match(target_digit, concat, domain):
+                return it_i
+            if len(concat) > len(target):
+                break
+            last_x_end = x_j + float(it_j.get("width") or 0)
+            last_fs = max(last_fs, float(it_j.get("fontSize") or 0) or last_fs)
+    return None
+
+def _ghost_rescue(
+    pages: list[_PageData],
+    candidates: list[LabelCandidate],
+    domain: str | None = None,
+) -> list[LabelCandidate]:
     """Targeted search for missing digits in spatial gaps.
     Now fuzzy (handles OCR errors) and iterative.
     """
@@ -650,33 +912,71 @@ def _ghost_rescue(pages: list[_PageData], candidates: list[LabelCandidate]) -> l
                 p = pages_map.get(page_no)
                 if not p:
                     continue
+                anchor_item: dict[str, Any] | None = None
+                anchor_text: str = ""
                 for it in p.items:
                     raw_text = (it.get("text") or "").strip()
-                    if not raw_text: continue
-                    parts = re.split(r"[^a-zA-Z\d]+", raw_text)
-                    if not any(_is_ocr_match(gap, p) for p in parts): continue
-                    
-                    y = float(it.get("y") or 0)
-                    start_pos = (prev_note.page, prev_note.y)
-                    end_pos = (next_note.page, next_note.y)
-                    curr_pos = (page_no, y)
-                    
-                    if start_pos < curr_pos < end_pos:
-                        ghost = LabelCandidate(
-                            page=page_no,
-                            y=y,
-                            x=float(it.get("x") or 0),
-                            font_size=float(it.get("fontSize") or 0),
-                            digit_value=gap,
-                            text=raw_text,
-                            is_pure_digit=bool(re.match(r"^\d+$", raw_text)),
-                            y_rel=(y / p.height) if p.height else 0.5,
-                        )
-                        all_rescuable.append(ghost)
-                        added_this_iter += 1
-                        found_ghost = True
-                        break 
-                if found_ghost: break
+                    if not raw_text:
+                        continue
+                    parts = re.split(r"[^a-zA-Z\d°º'\"`]+", raw_text)
+                    if any(_is_ocr_match(gap, part, domain) for part in parts):
+                        anchor_item = it
+                        anchor_text = raw_text
+                        break
+                # Fallback: whitespace-split label across adjacent items
+                # (Cornell `6 7` for 67, Buffalo/Maine `8 6` for 86).
+                if anchor_item is None:
+                    split_anchor = _scan_split_label_match(gap, p.items, domain=domain)
+                    if split_anchor is not None:
+                        anchor_item = split_anchor
+                        anchor_text = (split_anchor.get("text") or "").strip()
+                # Fallback: apostrophe-stripped missing-leading-digit
+                # (UKY pattern: `'05` rendered for label 105 — the leading
+                # `1` of the hundreds digit is dropped during OCR encoding).
+                # Only fires when the gap is 3-digit (100-999) and the
+                # observed token's tail matches the gap's last two digits.
+                if anchor_item is None and gap >= 100:
+                    gap_tail = str(gap)[-2:]
+                    leading_digit = str(gap)[0]
+                    for it in p.items:
+                        raw_text = (it.get("text") or "").strip()
+                        if not raw_text or not raw_text.startswith(("'", "`", "‘", "’")):
+                            continue
+                        stripped = _strip_label_punct(raw_text, domain)
+                        if len(stripped) != 2:
+                            continue
+                        # Tail must match the gap's last two digits via the
+                        # same per-char glyph equivalence used elsewhere.
+                        if all(
+                            obs in _equivalents_for(tgt, domain)
+                            for tgt, obs in zip(gap_tail, stripped)
+                        ):
+                            anchor_item = it
+                            anchor_text = raw_text
+                            break
+                    _ = leading_digit  # documentation only
+                if anchor_item is None:
+                    continue
+                y = float(anchor_item.get("y") or 0)
+                start_pos = (prev_note.page, prev_note.y)
+                end_pos = (next_note.page, next_note.y)
+                curr_pos = (page_no, y)
+                if start_pos < curr_pos < end_pos:
+                    ghost = LabelCandidate(
+                        page=page_no,
+                        y=y,
+                        x=float(anchor_item.get("x") or 0),
+                        font_size=float(anchor_item.get("fontSize") or 0),
+                        digit_value=gap,
+                        text=anchor_text,
+                        is_pure_digit=bool(re.match(r"^\d+$", anchor_text)),
+                        y_rel=(y / p.height) if p.height else 0.5,
+                    )
+                    all_rescuable.append(ghost)
+                    added_this_iter += 1
+                    found_ghost = True
+                if found_ghost:
+                    break
         
         if added_this_iter == 0: break
                     
@@ -691,7 +991,7 @@ def _ghost_rescue(pages: list[_PageData], candidates: list[LabelCandidate]) -> l
             for it in p.items:
                 raw_text = (it.get("text") or "").strip()
                 if not raw_text: continue
-                parts = re.split(r"[^a-zA-Z\d]+", raw_text)
+                parts = re.split(r"[^a-zA-Z\d°º'\"`]+", raw_text)
                 if any(_is_ocr_match(1, pt) for pt in parts):
                     y = float(it.get("y") or 0)
                     if (page_no, y) < (first_two.page, first_two.y):
@@ -748,6 +1048,16 @@ def _dedupe_by_digit_value(final: list[LabelCandidate]) -> list[LabelCandidate]:
 def _looks_like_toc(final: list[LabelCandidate], n_pages: int) -> bool:
     if len(final) < 4 or n_pages < 4:
         return False
+    # Real footnote sequences universally start at 1; TOC numeric entries
+    # are page numbers and essentially never start at 1 (a chapter heading
+    # "1. Introduction ... p.5" emits a label `1` but the page-concentration
+    # check then catches it because real TOCs have ≥6 such entries crammed
+    # on one page, whereas a 4pp article with 4 footnotes that happen to
+    # cluster on pages 1-2 is a real article. So: trust any sequence
+    # starting at 1 with ≥4 labels.
+    labels = sorted({c.digit_value for c in final})
+    if labels[0] == 1 and len(labels) >= 4:
+        return False
     page_ct: dict[int, int] = {}
     for c in final:
         page_ct[c.page] = page_ct.get(c.page, 0) + 1
@@ -755,14 +1065,47 @@ def _looks_like_toc(final: list[LabelCandidate], n_pages: int) -> bool:
     return top2 >= 0.8 * len(final)
 
 
-def solve_document(layouts: list) -> SolverResult:
-    """Run the authoritative global solver on liteparse layouts.
+def _geometry_rescue(
+    pages: list[_PageData],
+    selected: list[LabelCandidate],
+    recurring_texts: set[tuple[int, str]],
+) -> list[LabelCandidate]:
+    """Recover split/spaced labels that align with the discovered footnote column."""
+    if not selected:
+        return []
     
+    # Identify the median X of the discovered labels to define the 'column'.
+    selected_xs = sorted(c.x for c in selected)
+    median_x = selected_xs[len(selected_xs) // 2]
+    
+    rescued: list[LabelCandidate] = []
+    max_synthetic_label = max(1500, max(c.digit_value for c in selected) + 10)
+    
+    for p in pages:
+        # Re-run synthesis using the discovered median_x as a prior for 'left margin'.
+        # This allows us to recover split labels that were previously too far right
+        # but align perfectly with the rest of the footnotes.
+        page_new = _synthesize_split_label_candidates(
+            p, recurring_texts, max_synthetic_label, alignment_x=median_x
+        )
+        rescued.extend(page_new)
+        
+    return rescued
+
+
+def solve_document(layouts: list, *, pdf_path: str | None = None) -> SolverResult:
+    """Run the authoritative global solver on liteparse layouts.
+
     This replaces the 'heuristic ensemble' by finding the single best
     evidence-backed sequence of labels across the entire document.
+
+    `pdf_path` is used to look up a per-domain glyph profile (see
+    `_DOMAIN_GLYPH_PROFILES`). When None, only the global DIGIT_EQUIVALENTS
+    apply.
     """
+    domain = _domain_from_pdf_path(pdf_path)
     pages = _pages_from_layouts(layouts)
-    cands = _collect_candidates(pages)
+    cands = _collect_candidates(pages, domain=domain)
     candidate_count = len(cands)
     if not cands:
         return SolverResult(
@@ -783,18 +1126,21 @@ def solve_document(layouts: list) -> SolverResult:
     path = _gap_fill(base_cands, path)
     selected = [base_cands[i] for i in sorted(path)]
     
-    # Pass 2: Ghost Rescue. Targeted spatial search for remaining gaps.
-    # We find more candidates and then RE-SOLVE to pick the best path.
-    rescued_cands = _ghost_rescue(pages, selected)
+    # Pass 2: Geometry & Ghost Rescue. Targeted search for remaining gaps.
+    # We find more candidates using discovered layout priors (column alignment)
+    # and fuzzy OCR matching, then RE-SOLVE to pick the best path.
+    recurring_texts = _detect_repeating_header_texts(pages)
+    geom_cands = _geometry_rescue(pages, selected, recurring_texts)
+    rescued_cands = _ghost_rescue(pages, selected, domain=domain)
     
     # Re-Solve: run the DP one more time over the combined set of base + rescued 
     # candidates to ensure the final path is globally optimal.
-    # Note: we use all base_cands + the newly found ones.
     final_pool = list(base_cands)
     existing_ids = {id(c) for c in final_pool}
-    for rc in rescued_cands:
+    for rc in (geom_cands + rescued_cands):
         if id(rc) not in existing_ids:
             final_pool.append(rc)
+            existing_ids.add(id(rc))
     final_pool.sort(key=lambda c: (c.page, c.y, c.x))
     
     final_path = _solve_sequence(final_pool)
@@ -817,6 +1163,13 @@ def solve_document(layouts: list) -> SolverResult:
     # multi-page doc, this stream is a TOC/masthead/list, not a footnote
     # sequence. Return empty rather than report a false "invalid" sequence.
     if _looks_like_toc(final, n_pages=len(pages)):
+        return SolverResult(
+            page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
+        )
+
+    # Abstain if the sequence is too short and doesn't start at 1.
+    # (Prevents picking up stray 2, 3, 4 from a list or table).
+    if final and final[0].digit_value > 1 and len(final) < 5:
         return SolverResult(
             page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
         )
