@@ -1,14 +1,17 @@
 {
   "id": "constitutionalcommentary-lib-umn-edu",
   "start_urls": [
-    "https://constitutionalcommentary.lib.umn.edu/"
+    "https://scholarship.law.umn.edu/concomm/"
   ],
   "source": "auto_onboard",
   "metadata": {
-    "journal_name": "constitutionalcommentary.lib.umn.edu",
-    "platform": "wordpress",
-    "url": "https://constitutionalcommentary.lib.umn.edu/",
+    "journal_name": "Constitutional Commentary",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.umn.edu/concomm/",
     "created_date": "2026-03-26",
-    "status": "active"
+    "status": "active",
+    "status_reason": "constitutionalcommentary.lib.umn.edu shell redirects users to U Minn Scholarship Repository (Digital Commons). PDFs hosted there.",
+    "status_updated_at": "2026-05-04T00:00:00Z",
+    "notes": "Re-pointed from WP shell to Digital Commons backend (concomm 1984-2022)."
   }
 }

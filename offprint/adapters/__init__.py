@@ -6,6 +6,7 @@ from .cambridge_core import CambridgeCoreAdapter
 from .columbia_stlr import ColumbiaSTLRAdapter
 from .digitalcommons import DigitalCommonsAdapter
 from .digital_commons_issue_article_hop import DigitalCommonsIssueArticleHopAdapter
+from .drexel_law_review import DrexelLawReviewAdapter
 from .dspace import DSpaceAdapter
 from .escholarship import EScholarshipAdapter
 from .example_site import ExampleSiteAdapter

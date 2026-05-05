@@ -1,14 +1,17 @@
 {
   "id": "cornellilj-org",
   "start_urls": [
-    "https://cornellilj.org/"
+    "https://scholarship.law.cornell.edu/cilj/"
   ],
   "source": "auto_onboard",
   "metadata": {
-    "journal_name": "cornellilj.org",
-    "platform": "wordpress",
-    "url": "https://cornellilj.org/",
+    "journal_name": "Cornell International Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.cornell.edu/cilj/",
     "created_date": "2026-03-26",
-    "status": "active"
+    "status": "active",
+    "status_reason": "cornellilj.org redirects to publications.lawschool.cornell.edu/cilj/ (WP shell). Print archive points to scholarship.law.cornell.edu/cilj/ (Digital Commons/BePress) for full-text PDFs.",
+    "status_updated_at": "2026-05-04T00:00:00Z",
+    "notes": "Re-pointed from WP shell to Digital Commons backend."
   }
 }

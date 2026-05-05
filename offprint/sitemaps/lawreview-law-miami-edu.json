@@ -1,13 +1,17 @@
 {
   "id": "lawreview-law-miami-edu",
   "start_urls": [
-    "https://lawreview.law.miami.edu/"
+    "https://repository.law.miami.edu/umlr/"
   ],
   "source": "manual",
   "metadata": {
     "journal_name": "University of Miami Law Review",
-    "platform": "unknown",
-    "url": "https://lawreview.law.miami.edu/",
-    "created_date": "2025-12-14"
+    "platform": "digitalcommons",
+    "url": "https://repository.law.miami.edu/umlr/",
+    "created_date": "2025-12-14",
+    "status": "active",
+    "status_reason": "lawreview.law.miami.edu is a discovery shell; full-text PDFs live on Digital Commons at repository.law.miami.edu/umlr/.",
+    "status_updated_at": "2026-05-04T00:00:00Z",
+    "notes": "Re-pointed to Digital Commons backend. Note: existing repository-law-miami-edu.json may overlap."
   }
 }

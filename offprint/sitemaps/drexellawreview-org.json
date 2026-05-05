@@ -1,54 +1,23 @@
 {
   "id": "drexellawreview-org",
   "start_urls": [
-    "https://drexellawreview.org/archive/"
+    "https://drexel.edu/law/lawreview/issues/Archives/"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Drexel Law Review",
-    "platform": "WordPress",
-    "url": "https://drexellawreview.org/",
+    "platform": "custom",
+    "url": "https://drexel.edu/law/lawreview/",
     "created_date": "2026-04-01",
     "status": "active",
+    "status_reason": "Custom adapter (DrexelLawReviewAdapter) handles 2-hop discovery: archive index -> per-author landing page -> .ashx PDF handler. Validated by smoke test 2026-05-04.",
+    "status_updated_at": "2026-05-04T00:00:00Z",
     "navigation": {
-      "archive_root": "https://drexellawreview.org/archive/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archive/ -> current issue -> previous volumes -> volume/issue links -> article detail -> PDF link",
-      "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
+      "archive_root": "https://drexel.edu/law/lawreview/issues/Archives/",
+      "volume_url_pattern": "/law/lawreview/issues/Archives/v{N}-{I}/",
+      "article_url_pattern": "/law/lawreview/issues/Archives/v{N}-{I}/{Author}/",
+      "pdf_pattern": "/~/media/Files/law/law review/V{N}-{I}/*.ashx",
+      "notes": "Defunct WP domain replaced by drexel.edu/law/lawreview/. PDFs served via .ashx redirects."
     }
-  },
-  "selectors": [
-    {
-      "id": "issue_link",
-      "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-'], a[href*='/v-']",
-      "parentSelectors": ["_root"]
-    },
-    {
-      "id": "article_container",
-      "type": "SelectorElement",
-      "selector": "article.post, .entry-content",
-      "parentSelectors": ["issue_link"]
-    },
-    {
-      "id": "title",
-      "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "article_url",
-      "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "pdf_link",
-      "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
-    }
-  ]
+  }
 }

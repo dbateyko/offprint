@@ -1,54 +1,36 @@
 {
   "id": "georgemasonlawreview-org",
   "start_urls": [
-    "https://georgemasonlawreview.org/issue-archive/"
+    "https://lawreview.gmu.edu/archive/"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "George Mason Law Review",
-    "platform": "WordPress",
-    "url": "https://georgemasonlawreview.org/",
+    "platform": "wordpress",
+    "url": "https://lawreview.gmu.edu/",
     "created_date": "2026-04-01",
     "status": "active",
+    "status_reason": "georgemasonlawreview.org has been hijacked by 1win casino spam (302 to 1win.georgemasonlawreview.org). Canonical site is lawreview.gmu.edu (WordPress with Yoast wp-sitemap.xml).",
+    "status_updated_at": "2026-05-04T00:00:00Z",
     "navigation": {
-      "archive_root": "https://georgemasonlawreview.org/issue-archive/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /issue-archive/ -> individual volumes -> article detail -> PDF link",
-      "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
+      "archive_root": "https://lawreview.gmu.edu/archive/",
+      "wp_sitemap": "https://lawreview.gmu.edu/wp-sitemap.xml",
+      "pdf_pattern": "wp-content/uploads/YYYY/MM/*.pdf",
+      "notes": "PDFs hosted directly on lawreview.gmu.edu under /wp-content/uploads/."
     }
   },
   "selectors": [
     {
       "id": "volume_link",
       "type": "SelectorLink",
-      "selector": ".entry-content a[href*='/volume-']",
+      "selector": "a[href*='/print__issues/'], a[href*='/archive/']",
       "parentSelectors": ["_root"]
-    },
-    {
-      "id": "article_container",
-      "type": "SelectorElement",
-      "selector": "article.post, .entry-content",
-      "parentSelectors": ["volume_link"]
-    },
-    {
-      "id": "title",
-      "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "article_url",
-      "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
       "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
+      "parentSelectors": ["_root", "volume_link"]
     }
   ]
 }

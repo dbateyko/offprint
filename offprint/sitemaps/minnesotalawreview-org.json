@@ -20,9 +20,9 @@
     "platform": "wordpress",
     "status": "active",
     "status_evidence_ref": "artifacts/top50_vanderbilt_minnesota_20260310_summary.json",
-    "status_reason": "site_adapter_validated_smoke_pass_archive_seed",
-    "status_updated_at": "2026-03-10T01:18:44Z",
-    "url": "https://minnesotalawreview.org/law-review-archive/"
+    "status_reason": "WP site; PDFs at /wp-content/uploads/. Switched start_url to wp-sitemap.xml so XML-sitemap discovery lane finds /vol-NNN-print-issues/ pages with direct PDF links.",
+    "status_updated_at": "2026-05-04T00:00:00Z",
+    "url": "https://minnesotalawreview.org/"
   },
   "source": "manual",
   "start_urls": [

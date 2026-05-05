@@ -12,6 +12,7 @@ from .berkeley_btlj import BerkeleyBTLJAdapter
 from .blogger import BloggerAdapter
 from .cambridge_core import CambridgeCoreAdapter
 from .digital_commons_issue_article_hop import DigitalCommonsIssueArticleHopAdapter
+from .drexel_law_review import DrexelLawReviewAdapter
 from .drupal import DrupalAdapter
 from .dspace import DSpaceAdapter
 from .escholarship import EScholarshipAdapter
@@ -153,6 +154,8 @@ register("jolt.law.harvard.edu", SelectorDrivenAdapter)
 register("www.vjolt.org", SelectorDrivenAdapter)
 register("law.adelaide.edu.au", SelectorDrivenAdapter)
 register("ilj.law.indiana.edu", SelectorDrivenAdapter)
+register("drexel.edu", DrexelLawReviewAdapter)
+register("www.drexel.edu", DrexelLawReviewAdapter)
 register("texaslawreview.org", WordPressAcademicBaseAdapter)
 register("www.bu.edu", WordPressAcademicBaseAdapter)
 register("www.law.georgetown.edu", WordPressAcademicBaseAdapter)
