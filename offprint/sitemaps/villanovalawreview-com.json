@@ -1,54 +1,17 @@
 {
   "id": "villanovalawreview-com",
   "start_urls": [
-    "https://villanovalawreview.com/archive/"
+    "https://digitalcommons.law.villanova.edu/vlr/"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Villanova Law Review",
-    "platform": "WordPress",
+    "platform": "digitalcommons",
     "url": "https://villanovalawreview.com/",
     "created_date": "2026-04-01",
     "status": "active",
-    "navigation": {
-      "archive_root": "https://villanovalawreview.com/archive/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archive/ -> volume/issue links -> article detail -> PDF link",
-      "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
-    }
-  },
-  "selectors": [
-    {
-      "id": "issue_link",
-      "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
-      "parentSelectors": ["_root"]
-    },
-    {
-      "id": "article_container",
-      "type": "SelectorElement",
-      "selector": "article.post",
-      "parentSelectors": ["issue_link"]
-    },
-    {
-      "id": "title",
-      "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "article_url",
-      "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "pdf_link",
-      "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
-    }
-  ]
+    "status_reason": "villanovalawreview.com/archive/ now 404; canonical archive is bepress at digitalcommons.law.villanova.edu/vlr/.",
+    "status_updated_at": "2026-05-05T02:21:20Z",
+    "status_evidence_ref": "curl -I villanovalawreview.com/archive -> 404; digitalcommons.law.villanova.edu/vlr/ -> 200"
+  }
 }

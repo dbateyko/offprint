@@ -1,15 +1,17 @@
 {
   "id": "michigan-journal-race-law",
   "start_urls": [
-    "https://mjrl.org/"
+    "https://repository.law.umich.edu/mjrl/"
   ],
   "source": "registry_batch",
   "metadata": {
     "journal_name": "Michigan Journal of Race & Law",
-    "platform": "wordpress",
+    "platform": "digitalcommons",
     "url": "https://mjrl.org/",
     "created_date": "2026-03-31",
     "status": "active",
-    "notes": "Auto-onboarded from registry. Platform: wordpress"
+    "status_reason": "mjrl.org WP shell has no archive page (homepage only). Canonical archive is bepress backend at repository.law.umich.edu/mjrl/.",
+    "status_updated_at": "2026-05-05T02:21:20Z",
+    "status_evidence_ref": "repository.law.umich.edu/mjrl/ -> 200"
   }
 }

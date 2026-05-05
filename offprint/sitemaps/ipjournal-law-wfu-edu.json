@@ -1,0 +1,17 @@
+{
+  "id": "ipjournal-law-wfu-edu",
+  "start_urls": [
+    "https://jbipl.pubpub.org/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Wake Forest Journal of Business and Intellectual Property Law",
+    "platform": "pubpub",
+    "url": "https://ipjournal.law.wfu.edu/",
+    "created_date": "2026-05-05",
+    "status": "paused_waf",
+    "status_reason": "ipjournal.law.wfu.edu 301-redirects to jbipl.pubpub.org which is fronted by Cloudflare WAF (returns 403 Attention Required to non-browser UAs). PubPub also requires JS rendering for article discovery; no current adapter for pubpub.org and the WAF blocks Generic crawl. Needs site-specific PubPub adapter or Playwright fallback.",
+    "status_updated_at": "2026-05-05T02:21:20Z",
+    "status_evidence_ref": "curl -A Mozilla jbipl.pubpub.org -> 403 Cloudflare; ipjournal.law.wfu.edu -> 301 to jbipl.pubpub.org"
+  }
+}

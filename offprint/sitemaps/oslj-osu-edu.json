@@ -1,54 +1,17 @@
 {
   "id": "oslj-osu-edu",
   "start_urls": [
-    "https://oslj.osu.edu/archives/"
+    "https://kb.osu.edu/handle/1811/64013"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Ohio State Law Journal",
-    "platform": "WordPress",
+    "platform": "dspace",
     "url": "https://oslj.osu.edu/",
     "created_date": "2026-04-01",
     "status": "active",
-    "navigation": {
-      "archive_root": "https://oslj.osu.edu/archives/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
-      "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
-    }
-  },
-  "selectors": [
-    {
-      "id": "issue_link",
-      "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
-      "parentSelectors": ["_root"]
-    },
-    {
-      "id": "article_container",
-      "type": "SelectorElement",
-      "selector": "article.post",
-      "parentSelectors": ["issue_link"]
-    },
-    {
-      "id": "title",
-      "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "article_url",
-      "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "pdf_link",
-      "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
-      "notes": "PDF link on article page."
-    }
-  ]
+    "status_reason": "oslj.osu.edu offline (connection refused). Canonical archive is OSU Knowledge Bank DSpace collection at kb.osu.edu/handle/1811/64013.",
+    "status_updated_at": "2026-05-05T02:21:20Z",
+    "status_evidence_ref": "curl oslj.osu.edu -> 000; kb.osu.edu/handle/1811/64013 -> 200; DSpaceAdapter registered for kb.osu.edu in registry.py"
+  }
 }

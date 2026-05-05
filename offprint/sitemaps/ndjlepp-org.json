@@ -1,54 +1,17 @@
 {
   "id": "ndjlepp-org",
   "start_urls": [
-    "https://ndjlepp.org/archives/"
+    "https://scholarship.law.nd.edu/ndjlepp/"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Notre Dame Journal of Law, Ethics & Public Policy",
-    "platform": "WordPress",
-    "url": "https://ndjlepp.org/",
+    "platform": "digitalcommons",
+    "url": "https://jlepp.org/",
     "created_date": "2026-04-01",
     "status": "active",
-    "navigation": {
-      "archive_root": "https://ndjlepp.org/archives/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> individual volumes -> article list -> PDF link",
-      "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
-    }
-  },
-  "selectors": [
-    {
-      "id": "volume_link",
-      "type": "SelectorLink",
-      "selector": ".entry-content a[href*='/volume-']",
-      "parentSelectors": ["_root"]
-    },
-    {
-      "id": "article_container",
-      "type": "SelectorElement",
-      "selector": "article.post, .entry-content",
-      "parentSelectors": ["volume_link"]
-    },
-    {
-      "id": "title",
-      "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "article_url",
-      "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "pdf_link",
-      "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
-    }
-  ]
+    "status_reason": "ndjlepp.org connection-refused; jlepp.org WP shell host not registered to a WP adapter (would need registry.py change). Bepress backend at scholarship.law.nd.edu/ndjlepp/ is canonical archive and routes to DigitalCommons adapter via existing scholarship.* heuristic.",
+    "status_updated_at": "2026-05-05T02:21:20Z",
+    "status_evidence_ref": "scholarship.law.nd.edu/ndjlepp/ -> 200"
+  }
 }

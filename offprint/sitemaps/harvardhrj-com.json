@@ -1,54 +1,17 @@
 {
   "id": "harvardhrj-com",
   "start_urls": [
-    "https://harvardhrj.com/archives/"
+    "https://journals.law.harvard.edu/hrj/current/previous/"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Harvard Human Rights Journal",
-    "platform": "WordPress",
+    "platform": "wordpress",
     "url": "https://harvardhrj.com/",
     "created_date": "2026-04-01",
     "status": "active",
-    "navigation": {
-      "archive_root": "https://harvardhrj.com/archives/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> individual volumes -> article detail -> PDF link",
-      "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
-    }
-  },
-  "selectors": [
-    {
-      "id": "volume_link",
-      "type": "SelectorLink",
-      "selector": ".entry-content a[href*='/volume-']",
-      "parentSelectors": ["_root"]
-    },
-    {
-      "id": "article_container",
-      "type": "SelectorElement",
-      "selector": "article.post, .entry-content",
-      "parentSelectors": ["volume_link"]
-    },
-    {
-      "id": "title",
-      "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "article_url",
-      "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "pdf_link",
-      "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
-    }
-  ]
+    "status_reason": "harvardhrj.com archives path 404 and root 403 (WAF); canonical site is journals.law.harvard.edu/hrj/.",
+    "status_updated_at": "2026-05-05T02:21:20Z",
+    "status_evidence_ref": "curl harvardhrj.com -> 403; journals.law.harvard.edu/hrj/current/previous/ -> 200"
+  }
 }

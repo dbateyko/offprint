@@ -9,7 +9,10 @@
     "platform": "Squarespace",
     "url": "http://hawaiilawreview.com/",
     "created_date": "2026-03-22",
-    "status": "active",
+    "status": "paused_other",
+    "status_reason": "hawaiilawreview.com is a live Squarespace site with direct PDF download links visible (Volume 48, etc.). Host is not registered in adapters/registry.py to SquarespaceAdapter, so it routes to GenericAdapter and the Squarespace-specific accordion structure isn't traversed. Needs registry registration to SquarespaceAdapter.",
+    "status_updated_at": "2026-05-05T02:21:20Z",
+    "status_evidence_ref": "hawaiilawreview.com/issue -> 200; PDFs visible per WebFetch",
     "navigation": {
       "volume_url_pattern": "/issues-archive-1/*",
       "archive_path": "issues-archive-1",

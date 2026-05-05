@@ -9,7 +9,10 @@
     "platform": "WordPress",
     "url": "https://lawreview.vermontlaw.edu/",
     "created_date": "2026-04-01",
-    "status": "active",
+    "status": "paused_other",
+    "status_reason": "lawreview.vermontlaw.edu is a live WordPress site with PDFs at /wp-content/uploads/. Host is not registered in adapters/registry.py to WordPressAcademicBaseAdapter, so it falls through to GenericAdapter which doesn't get the WP fast-mode benefits (wp-sitemap.xml + wp-json scan). Needs registry registration as WordPressAcademicBaseAdapter to discover PDFs reliably.",
+    "status_updated_at": "2026-05-05T02:21:20Z",
+    "status_evidence_ref": "lawreview.vermontlaw.edu/past-issues/ -> 200 with /wp-content/uploads/YYYY/MM/*.pdf links visible",
     "navigation": {
       "archive_root": "https://lawreview.vermontlaw.edu/past-issues/",
       "volume_url_pattern": "none-list",

@@ -9,7 +9,10 @@
     "platform": "Wix",
     "url": "https://pennjournalconlaw.com/jcl-online.html",
     "created_date": "2026-03-22",
-    "status": "active",
+    "status": "paused_other",
+    "status_reason": "pennjournalconlaw.com is a live Wix site (PDFs at /uploads/4/7/7/5/47752841/*.pdf, multiple volumes). Host is not registered in adapters/registry.py to WixAdapter, routing falls through to Generic. Needs registry registration as WixAdapter (sister sites cumberlandlawreview, fmja already registered).",
+    "status_updated_at": "2026-05-05T02:21:20Z",
+    "status_evidence_ref": "pennjournalconlaw.com/archive1.html -> 200; PDFs visible per WebFetch",
     "navigation": {
       "volume_url_pattern": "/vol-{N}-masthead.html",
       "archive_path": "has archive link in header to /archive1.html",
