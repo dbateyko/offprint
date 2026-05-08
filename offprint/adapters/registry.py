@@ -374,3 +374,7 @@ register_many(
 )
 register("www.floridalawreview.com", ScholasticaBaseAdapter)
 register("floridalawreview.com", ScholasticaBaseAdapter)
+register("clb.scholasticahq.com", ScholasticaBaseAdapter)
+register("ccjls.scholasticahq.com", ScholasticaBaseAdapter)
+register("lmulawreview.scholasticahq.com", ScholasticaBaseAdapter)
+register("loyolamaritimelawjournal.scholasticahq.com", ScholasticaBaseAdapter)
