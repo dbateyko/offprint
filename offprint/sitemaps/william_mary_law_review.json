@@ -1,10 +1,12 @@
 {
   "id": "william_mary_law_review",
-  "start_urls": ["https://scholarship.law.wm.edu/wmlr/sitemap.xml"],
+  "start_urls": [
+    "https://scholarship.law.wm.edu/wmlr/sitemap.xml"
+  ],
   "source": "onboard-journal-skill",
   "metadata": {
     "journal_name": "William & Mary Law Review",
     "platform": "digitalcommons",
-    "status": "todo_adapter"
+    "status": "active"
   }
 }
