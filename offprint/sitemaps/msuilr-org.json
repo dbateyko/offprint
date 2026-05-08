@@ -1,0 +1,24 @@
+{
+  "id": "msuilr-org",
+  "start_urls": ["https://www.msuilr.org/"],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Michigan State International Law Review",
+    "platform": "squarespace",
+    "url": "https://www.msuilr.org/",
+    "created_date": "2026-05-08",
+    "status": "paused_print_only",
+    "status_reason": "MSU International Law Review's website is a Squarespace brochure: navigation pages (about, exec board, symposia, submit). The print journal articles are not posted as PDFs anywhere on the site. The /new-blog collection holds ~100 short student-authored 'perspectives' web essays (HTML only, no PDFs) — these are real content but not law-review articles per se.",
+    "status_updated_at": "2026-05-08T00:00:00Z",
+    "navigation": {
+      "archive_root": "https://www.msuilr.org/publications-1",
+      "volume_url_pattern": "none",
+      "archive_path": "no archive — page mentions 'Volume 31' but provides no link/PDF",
+      "pagination": "none",
+      "pdf_location": "none on site",
+      "needs_headless": false,
+      "notes": "Probed 2026-05-08. Migration target from defunct digitalcommons.law.msu.edu. /publications and /publications-1 list no journal articles. /new-blog yields HTML perspectives essays via /new-blog/YYYY/M/D/<slug> — could be onboarded separately if HTML content is in scope. Squarespace JSON endpoint /new-blog?format=json-pretty returns a 433KB collection list of all blog items. Print journal likely on HeinOnline."
+    }
+  },
+  "selectors": []
+}
