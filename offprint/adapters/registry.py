@@ -7,6 +7,7 @@ import requests
 
 from .aipla_quarterly_journal import AIPLAQuarterlyJournalAdapter
 from .ajcl_archive import AJCLArchiveAdapter
+from .ave_maria_law_review import AveMariaLawReviewAdapter
 from .base import Adapter
 from .berkeley_btlj import BerkeleyBTLJAdapter
 from .blogger import BloggerAdapter
@@ -22,6 +23,7 @@ from .greenbag import GreenBagAdapter
 from .selector_driven import SelectorDrivenAdapter
 from .harvard_jolt import HarvardJOLTAdapter
 from .illinois_jltp import IllinoisJLTPAdapter
+from .issue_archive_enumerator import IssueArchiveEnumeratorAdapter
 from .jurimetrics import JurimetricsAdapter
 from .janeway import JanewayAdapter
 from .nc_jolt import NorthCarolinaJOLTAdapter
@@ -46,6 +48,7 @@ from .scholastica_journals import (
 )
 from .springer import SpringerAdapter
 from .squarespace import SquarespaceAdapter
+from .stthomas_law_journal import StThomasLawJournalAdapter
 from .uh_hjil import UHHJILAdapter
 from .umassd_ojs import UMassDOJSAdapter
 from .und_law_review import UNDLawReviewAdapter
@@ -262,6 +265,19 @@ register_many(
     ],
     DigitalCommonsIssueArticleHopAdapter,
 )
+register_many(
+    [
+        "ajelp.com",
+        "civicresearchinstitute.com",
+        "commonwealthlaw.widener.edu",
+        "delawarelaw.widener.edu",
+        "law.mc.edu",
+        "law.uark.edu",
+        "msujanrl.org",
+        "pennjournalconlaw.com",
+    ],
+    IssueArchiveEnumeratorAdapter,
+)
 
 # Recent onboarded hosts that were still missing explicit routing.
 register_many(
@@ -288,6 +304,11 @@ register_many(
 )
 register("ojs.lib.umassd.edu", UMassDOJSAdapter)
 register("www.aipla.org", AIPLAQuarterlyJournalAdapter)
+register("www.avemarialaw.edu", AveMariaLawReviewAdapter)
+register("avemarialaw.edu", AveMariaLawReviewAdapter)
+register("avemarialaw-law-review.avemarialaw.edu", AveMariaLawReviewAdapter)
+register("jbipl.pubpub.org", PubPubAdapter)
+register("blj.ucdavis.edu", SelectorDrivenAdapter)
 
 register_many(
     [
@@ -312,6 +333,10 @@ register("www.texasbusinesslaw.org", PloneAdapter)
 register("www.romanlegaltradition.org", RomanLegalTraditionAdapter)
 register("romanlegaltradition.org", RomanLegalTraditionAdapter)
 register("lawecommons.luc.edu", DigitalCommonsIssueArticleHopAdapter)
+register("jilp.law.ucdavis.edu", GenericAdapter)
+register("law.stthomas.edu", StThomasLawJournalAdapter)
+register("researchonline.stthomas.edu", StThomasLawJournalAdapter)
+register("blogs.law.widener.edu", GenericAdapter)
 register("www.cumberlandlawreview.com", WixAdapter)
 register("cumberlandlawreview.com", WixAdapter)
 register("www.texenrls.org", WordPressAcademicBaseAdapter)
@@ -435,6 +460,8 @@ register("sciendo.com", GenericAdapter)
 register("wvlawreview.wvu.edu", GenericAdapter)
 register("www.atlanticlawjournal.org", GenericAdapter)
 register("www.memphis.edu", GenericAdapter)
+register("epj.us", SelectorDrivenAdapter)
+register("environs.law.ucdavis.edu", DrupalAdapter)
 # Lewis & Clark LiveWhale CMS — shared by Animal Law Review,
 # Lewis & Clark Law Review, and Environmental Law (all use /live/files/).
 register("law.lclark.edu", GenericAdapter)

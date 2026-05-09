@@ -1,0 +1,51 @@
+{
+  "id": "ave-maria-law-review",
+  "start_urls": [
+    "https://www.avemarialaw.edu/law-review/"
+  ],
+  "source": "phase4_onboarding_batch_a",
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "div[id^=\"tab-volume-\"] p:has(a[href$=\".pdf\"])",
+      "multiple": true
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href$=\".pdf\"]",
+      "multiple": false
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href$=\".pdf\"]",
+      "multiple": false
+    }
+  ],
+  "metadata": {
+    "journal_name": "Ave Maria Law Review",
+    "platform": "wordpress",
+    "url": "https://www.avemarialaw.edu/law-review/",
+    "original_url": "http://avemarialaw-law-review.avemarialaw.edu/Home/issues",
+    "domain": "www.avemarialaw.edu",
+    "canonicalization": "Legacy avemarialaw-law-review.avemarialaw.edu times out; current archive is embedded on the main school WordPress page.",
+    "pagination": {
+      "type": "none",
+      "notes": "All volume tabs and PDF links are present in the initial HTML; no next-link or query pagination observed."
+    },
+    "navigation": {
+      "notes": "Archive uses Visual Composer tab panels with stable tab-volume-N ids. Adapter extracts volume from the tab id and year from PDF upload paths."
+    }
+  }
+}

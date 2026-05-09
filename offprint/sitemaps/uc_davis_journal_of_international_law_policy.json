@@ -6,6 +6,8 @@
     "platform": "Law School Custom",
     "original_url": "https://jilp.law.ucdavis.edu/",
     "domain": "jilp.law.ucdavis.edu",
-    "notes": "Manual override: archive page."
+    "status": "paused_waf",
+    "status_updated_at": "2026-05-09T00:00:00Z",
+    "notes": "Manual override: archive page. Rechecked 2026-05-09; https/http and www/non-www journal-scoped variants return Cloudflare 403 blocked page before article discovery."
   }
 }
