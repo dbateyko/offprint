@@ -1,0 +1,14 @@
+{
+  "id": "scholarlycommons-northwestern-nulr",
+  "metadata": {
+    "journal_name": "Northwestern University Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarlycommons.law.northwestern.edu/nulr/",
+    "created_date": "2026-05-08",
+    "status": "active",
+    "notes": "Digital Commons backend for Northwestern Law Review. More reliable than the WP frontend."
+  },
+  "start_urls": [
+    "https://scholarlycommons.law.northwestern.edu/nulr/all_issues.html"
+  ]
+}

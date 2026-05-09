@@ -13,9 +13,11 @@ from .berkeley_btlj import BerkeleyBTLJAdapter
 from .blogger import BloggerAdapter
 from .cambridge_core import CambridgeCoreAdapter
 from .digital_commons_issue_article_hop import DigitalCommonsIssueArticleHopAdapter
+from .degruyter import DeGruyterAdapter
 from .drexel_law_review import DrexelLawReviewAdapter
 from .drupal import DrupalAdapter
 from .dspace import DSpaceAdapter
+from .ejil import EJILAdapter
 from .escholarship import EScholarshipAdapter
 from .generic import GenericAdapter
 from .georgetown_jnslp import GeorgetownJNSLPAdapter
@@ -163,6 +165,7 @@ register("drexel.edu", DrexelLawReviewAdapter)
 register("www.drexel.edu", DrexelLawReviewAdapter)
 register("texaslawreview.org", WordPressAcademicBaseAdapter)
 register("www.bu.edu", WordPressAcademicBaseAdapter)
+register("www.cambridge.org", CambridgeCoreAdapter)
 register("www.law.georgetown.edu", WordPressAcademicBaseAdapter)
 register("publications.lawschool.cornell.edu", WordPressAcademicBaseAdapter)
 register("virginialawreview.org", WordPressAcademicBaseAdapter)
@@ -304,6 +307,8 @@ register_many(
 )
 register("ojs.lib.umassd.edu", UMassDOJSAdapter)
 register("www.aipla.org", AIPLAQuarterlyJournalAdapter)
+register("ajcl.org", AJCLArchiveAdapter)
+register("www.degruyter.com", DeGruyterAdapter)
 register("www.avemarialaw.edu", AveMariaLawReviewAdapter)
 register("avemarialaw.edu", AveMariaLawReviewAdapter)
 register("avemarialaw-law-review.avemarialaw.edu", AveMariaLawReviewAdapter)
@@ -410,6 +415,7 @@ register_many(
 register("kb.osu.edu", DSpaceAdapter)
 register("aria.law.columbia.edu", WordPressAcademicBaseAdapter)
 register("univagora.ro", OJSAdapter)
+register("www.ejil.org", EJILAdapter)
 register("www.thomsonreuters.ca", GenericAdapter)
 register("www.uvic.ca", OJSAdapter)
 register("hrlr.oxfordjournals.org", GenericAdapter)
@@ -434,6 +440,10 @@ register("ecollections.law.fiu.edu", DigitalCommonsIssueArticleHopAdapter)
 register("ideaexchange.uakron.edu", DigitalCommonsIssueArticleHopAdapter)
 register("ila.org.au", WordPressAcademicBaseAdapter)
 register("jlsp.law.columbia.edu", WordPressAcademicBaseAdapter)
+register("digitalcommons.law.uga.edu", DigitalCommonsIssueArticleHopAdapter)
+register("digitalcommons.osgoode.yorku.ca", DigitalCommonsIssueArticleHopAdapter)
+register("digitalcommons.schulichlaw.dal.ca", DigitalCommonsIssueArticleHopAdapter)
+register("scholarlycommons.law.northwestern.edu", DigitalCommonsIssueArticleHopAdapter)
 register("law.emory.edu", DigitalCommonsIssueArticleHopAdapter)
 register("law.ku.edu", DrupalAdapter)
 register("lawpublications.barry.edu", DigitalCommonsIssueArticleHopAdapter)

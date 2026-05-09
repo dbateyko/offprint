@@ -1,0 +1,47 @@
+{
+  "id": "degruyter-com",
+  "start_urls": [
+    "https://www.degruyter.com/journal/key/TIL/html",
+    "https://www.degruyter.com/journal/key/LEHR/html"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "De Gruyter Journals",
+    "platform": "publisher",
+    "url": "https://www.degruyter.com/",
+    "created_date": "2026-05-09",
+    "status": "active",
+    "navigation": {
+      "archive_root": "direct-on-page",
+      "pagination": "html-links",
+      "pdf_location": "issue-page",
+      "notes": "De Gruyter Brill site. Journal home has issues list. Issue page has direct PDF download buttons."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "div.volume-issues-list a.text-dark",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.ahead-of-print-item",
+      "parentSelectors": ["issue_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "span.ahead-of-print-title",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.btn-abstract-download-dgb",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}
