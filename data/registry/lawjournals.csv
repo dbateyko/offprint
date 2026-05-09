@@ -477,7 +477,7 @@ New York University Journal of Law & Liberty,https://www.lawandliberty.org/,lawa
 New York University Journal of Law & Liberty,https://www.nyujll.com/archives,nyujll.com,Squarespace,active,new_york_university_journal_of_law_liberty.json,978,248,yes,sitemap,
 New York University Journal of Law & Liberty,http://www.law.nyu.edu/journals/lawliberty/index.htm,law.nyu.edu,drupal,active,registry_new_york_university_journal_of_law_liberty_978_15b4b1eb4b.json,978,248,yes,sitemap,
 American Political Science Review,https://www.cambridge.org/core/journals/american-political-science-review,cambridge.org,unknown,active,registry_american_political_science_review_1445_8acc9b3df9.json,1445,249,,sitemap,
-Theoretical Inquiries in Law,https://www.degruyter.com/journal/key/TIL/html,degruyter.com,,no_sitemap,,676,250,,wlu,
+Theoretical Inquiries in Law,https://www.degruyter.com/,degruyter.com,publisher,active,degruyter-com.json,676,250,,sitemap,
 Case Western Reserve Law Review,https://scholarlycommons.law.case.edu/caselrev/sitemap.xml,scholarlycommons.law.case.edu,digitalcommons,active,case_western_law_review.json,1873,251,yes,sitemap,
 Case Western Reserve Law Review,https://scholarlycommons.law.case.edu/caselrev/sitemap.xml,scholarlycommons.law.case.edu,digitalcommons,,case_western_reserve_law_review.json,1873,251,yes,sitemap,
 Case Western Reserve Law Review,https://scholarlycommons.law.case.edu/caselrev,scholarlycommons.law.case.edu,digital_commons,todo_adapter,registry_case_western_reserve_law_review_1873_c76af9a18f.json,1873,251,yes,sitemap,
@@ -661,7 +661,7 @@ Kansas Journal of Law & Public Policy,https://lawjournal.ku.edu/,lawjournal.ku.e
 Energy Law Journal,https://www.eba-net.org/felj/energy-law-journal,eba-net.org,wordpress,paused_login,registry_energy_law_journal_229_fffd3f8ecd.json,229,373,,sitemap,
 American University International Law Review,https://digitalcommons.wcl.american.edu/auilr/sitemap.xml,digitalcommons.wcl.american.edu,digitalcommons,,american_university_international_law_review.json,367,374,yes,sitemap,https://digitalcommons.wcl.american.edu/aulr/
 American University International Law Review,https://digitalcommons.wcl.american.edu/auilr,digitalcommons.wcl.american.edu,digital_commons,active,registry_american_university_international_law_review_367_19db36da0e.json,367,374,yes,sitemap,https://digitalcommons.wcl.american.edu/aulr/
-Law & Ethics of Human Rights,https://www.degruyter.com/journal/key/LEHR/html,degruyter.com,,no_sitemap,,1452,375,,wlu,
+Law & Ethics of Human Rights,https://www.degruyter.com/journal/key/LEHR/html,degruyter.com,publisher,active,degruyter-lehr.json,1452,375,,sitemap,
 Capital University Law Review,https://www.capitallawreview.org/issues,capitallawreview.org,scholastica,todo_adapter,law-capital-edu.json,1919,376,yes,sitemap,
 Capital University Law Review,https://www.capitallawreview.org/,capitallawreview.org,unknown,active,registry_capital_university_law_review_1919_addc604858.json,1919,376,yes,sitemap,
 Mercer Law Review,https://guides.law.mercer.edu/mlr,guides.law.mercer.edu,,no_sitemap,guides-law-mercer-edu.json,1896,377,yes,sitemap,
@@ -1090,7 +1090,6 @@ Currents: International Trade Law Journal,http://www.stcl.edu/currents/about.cur
 Dalhousie Journal of Legal Studies,https://digitalcommons.schulichlaw.dal.ca/djls/,digitalcommons.schulichlaw.dal.ca,,no_sitemap,,863,,,wlu,https://digitalcommons.schulichlaw.dal.ca/
 Dalhousie Law Journal,https://digitalcommons.schulichlaw.dal.ca/dlj/,digitalcommons.schulichlaw.dal.ca,,no_sitemap,,735,,,wlu,https://digitalcommons.schulichlaw.dal.ca/
 Dartmouth Law Journal,http://www.dartmouthlawjournal.org/,dartmouthlawjournal.org,unknown,paused_waf,registry_dartmouth_law_journal_1028_1f867e6749.json,1028,,,sitemap,
-De Gruyter Journals,https://www.degruyter.com/,degruyter.com,publisher,active,degruyter-com.json,,,,sitemap,
 Deakin Law Review,https://ojs.deakin.edu.au/index.php/dlr,ojs.deakin.edu.au,,no_sitemap,,736,,,wlu,
 Defense Counsel Journal,https://www.iadclaw.org/publications-news/defensecounseljournal,iadclaw.org,unknown,paused_waf,registry_defense_counsel_journal_387_b99c6cabf0.json,387,,,sitemap,
 Defense Law Journal,https://www.overdrive.com/media/1303458/defense-law-journal,overdrive.com,unknown,active,registry_defense_law_journal_1129_a6a009f848.json,1129,,,sitemap,

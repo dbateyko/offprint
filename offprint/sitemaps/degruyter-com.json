@@ -6,7 +6,7 @@
   ],
   "source": "claude_code_skill",
   "metadata": {
-    "journal_name": "De Gruyter Journals",
+    "journal_name": "Theoretical Inquiries in Law",
     "platform": "publisher",
     "url": "https://www.degruyter.com/",
     "created_date": "2026-05-09",
@@ -23,25 +23,33 @@
       "id": "issue_link",
       "type": "SelectorLink",
       "selector": "div.volume-issues-list a.text-dark",
-      "parentSelectors": ["_root"]
+      "parentSelectors": [
+        "_root"
+      ]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
       "selector": "div.ahead-of-print-item",
-      "parentSelectors": ["issue_link"]
+      "parentSelectors": [
+        "issue_link"
+      ]
     },
     {
       "id": "title",
       "type": "SelectorText",
       "selector": "span.ahead-of-print-title",
-      "parentSelectors": ["article_container"]
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
       "selector": "a.btn-abstract-download-dgb",
-      "parentSelectors": ["article_container"]
+      "parentSelectors": [
+        "article_container"
+      ]
     }
   ]
 }

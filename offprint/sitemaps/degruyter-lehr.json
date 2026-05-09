@@ -1,0 +1,13 @@
+{
+  "id": "degruyter-lehr",
+  "start_urls": [
+    "https://www.degruyter.com/journal/key/LEHR/html"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Law & Ethics of Human Rights",
+    "platform": "publisher",
+    "url": "https://www.degruyter.com/journal/key/LEHR/html",
+    "status": "active"
+  }
+}
