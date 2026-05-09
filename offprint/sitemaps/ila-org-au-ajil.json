@@ -1,0 +1,24 @@
+{
+  "id": "ila-org-au-ajil",
+  "start_urls": ["https://www.ila.org.au/publications/ajil/"],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Australian International Law Journal",
+    "platform": "wordpress",
+    "url": "https://www.ila.org.au/publications/ajil/",
+    "created_date": "2026-05-08",
+    "status": "paused_paywall",
+    "status_reason": "Articles are not openly published on the journal's WordPress site. The /publications/ajil/ page contains only submission policy and call-for-papers PDFs. Full text is distributed through Westlaw and AustLII (http://www.austlii.edu.au/au/journals/AUIntLawJl/), but AustLII is behind a Cloudflare WAF challenge.",
+    "status_updated_at": "2026-05-08T00:00:00Z",
+    "navigation": {
+      "archive_root": "https://www.ila.org.au/publications/ajil/",
+      "volume_url_pattern": "none",
+      "archive_path": "no archive — only policy PDFs on the journal page",
+      "pagination": "none",
+      "pdf_location": "none on official site",
+      "needs_headless": false,
+      "notes": "Probed 2026-05-08. Searched WP REST (/wp-json/wp/v2/posts and /pages) — only 4 'call for papers' announcement posts exist, no article posts. /publications/ajil/archive/ returns 404. AustLII has full text but is WAF-blocked without browser. Revisit only if open access changes or AustLII becomes accessible."
+    }
+  },
+  "selectors": []
+}
