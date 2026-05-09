@@ -9,6 +9,10 @@
     "platform": "drupal",
     "url": "https://law.howard.edu/student-life/co-curricular-activities/howard-human-civil-rights-law-review",
     "created_date": "2026-03-02",
-    "notes": "Added from discovered_journals generic triage; validated reachable with Drupal PDF paths."
+    "notes": "Added from discovered_journals generic triage; validated reachable with Drupal PDF paths.",
+    "status": "paused_unmapped",
+    "status_reason": "Drupal page; PDF discovery beyond this single page needs custom adapter",
+    "status_updated_at": "2026-05-09T03:07:49Z",
+    "status_evidence_ref": "drainer 11:38Z->03:06Z run: 200+ todo_adapter_blocked rejections, no working adapter"
   }
 }

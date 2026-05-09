@@ -88,6 +88,11 @@ register("www.jthtl.org", ColoradoJTHTLAdapter)  # Colorado JTHTL
 register("ctlj.colorado.edu", ColoradoCTLJAdapter)  # Colorado CTLJ
 # register("journals.law.harvard.edu", IssueArchiveEnumeratorAdapter)  # Harvard Law journals (JLPP, etc.)
 
+register("northwesternlawreview.org", SelectorDrivenAdapter)
+register("www.northwesternlawreview.org", SelectorDrivenAdapter)
+register("californialawreview.org", SelectorDrivenAdapter)
+register("www.californialawreview.org", SelectorDrivenAdapter)
+
 __all__ = [
     "Adapter",
     "GenericAdapter",

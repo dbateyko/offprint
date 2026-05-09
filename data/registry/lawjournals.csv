@@ -20,7 +20,7 @@ Iowa Law Review,https://ilr.law.uiowa.edu/,ilr.law.uiowa.edu,unknown,active,ilr-
 Boston University Law Review,https://www.bu.edu/bulawreview/,https://www.bu.edu/bulawreview/archives/,bu.edu,active,bu-edu-bulawreview.json,,15,yes,sitemap,
 Minnesota Law Review,https://minnesotalawreview.org/law-review-archive/,minnesotalawreview.org,wordpress,active,minnesotalawreview-org.json,1838,16,yes,sitemap,
 Georgetown Law Journal,https://www.law.georgetown.edu/georgetown-law-journal/,law.georgetown.edu,wordpress,active,law-georgetown-edu-glj.json,,17,yes,sitemap,https://www.law.georgetown.edu/georgetown-law-journal/in-print/
-Northwestern University Law Review,https://northwesternlawreview.org/,northwesternlawreview.org,wordpress,active,northwestern_university_law_review.json,1841,18,yes,sitemap,https://northwesternlawreview.org/issues/
+Northwestern University Law Review,https://northwesternlawreview.org/,northwesternlawreview.org,digitalcommons,active,scholarlycommons-northwestern-nulr.json,1841,18,yes,sitemap,https://scholarlycommons.law.northwestern.edu/nulr/all_issues.html
 Texas Law Review,https://texaslawreview.org/,texaslawreview.org,wordpress,active,texaslawreview-org.json,,19,yes,sitemap,https://texaslawreview.org/archive/
 Texas Law Review Online Edition,https://texaslawreview.org/online-edition,texaslawreview.org,wordpress,active,texas-law-review-online.json,1829,19,,sitemap,
 Fordham Law Review,https://fordhamlawreview.org/,fordhamlawreview.org,DigitalCommons,active,fordhamlawreview-org.json,1997,20,yes,sitemap,
@@ -173,7 +173,7 @@ Journal of Catholic Legal Studies,https://scholarship.law.stjohns.edu/jcls/,scho
 St. John's Law Review,https://scholarship.law.stjohns.edu/lawreview/,scholarship.law.stjohns.edu,digitalcommons,active,scholarship-law-stjohns-edu.json,,160,yes,cilp,
 University of Cincinnati Law Review,https://scholarship.law.uc.edu/uclr,scholarship.law.uc.edu,digital_commons,todo_adapter,university_of_cincinnati_law_review.json,1867,161,yes,sitemap,
 Boston University Journal of Science & Technology Law,https://www.bu.edu/jstl/,bu.edu,wordpress,active,bu-jstl.json,,162,yes,sitemap,https://www.bu.edu/jstl/archive/
-Berkeley Business Law Journal,https://www.bblj.org/,bblj.org,wordpress,active,bblj-org.json,,163,yes,sitemap,https://www.bblj.org/archive/
+Berkeley Business Law Journal,https://www.bblj.org/,bblj.org,wordpress,paused_down,bblj-org.json,,163,yes,sitemap,https://www.bblj.org/archive/
 businesslawjournal.org,http://businesslawjournal.org/,businesslawjournal.org,wordpress,active,businesslawjournal-org.json,972,163,,sitemap,
 Cleveland State Law Review,https://engagedscholarship.csuohio.edu/clevstlrev/,engagedscholarship.csuohio.edu,digitalcommons,active,engagedscholarship-csuohio-edu.json,,164,yes,cilp,
 Cleveland State Law Review Et Cetera,https://engagedscholarship.csuohio.edu/etcetera/,engagedscholarship.csuohio.edu,digitalcommons,active,engagedscholarship-csuohio-edu-etcetera.json,1923,164,,sitemap,
@@ -283,7 +283,7 @@ European Journal of International Law,,,,no_sitemap,,,261,yes,cilp,
 www.ejil.org,http://www.ejil.org/,ejil.org,unknown,active,www-ejil-org.json,739,261,,sitemap,
 Washburn Law Journal,https://www.washburnlaw.edu/publications/wlj,washburnlaw.edu,unknown,paused_404,registry_washburn_law_journal_153_9ff81f7701.json,153,262,yes,sitemap,
 Drexel Law Review,https://drexellawreview.org/,drexellawreview.org,wordpress,active,drexellawreview-org.json,,263,yes,sitemap,https://drexellawreview.org/archive/
-www.drexel.edu,http://www.drexel.edu/law/lawreview,drexel.edu,scholastica,active,www-drexel-edu.json,1605,263,,sitemap,
+www.drexel.edu,http://www.drexel.edu/law/lawreview,drexel.edu,scholastica,paused_redundant,www-drexel-edu.json,1605,263,,sitemap,
 Ohio State Journal on Dispute Resolution,https://moritzlaw.osu.edu/ojdr/,osu.edu,wordpress,active,ojdr-osu-edu.json,,264,yes,sitemap,https://moritzlaw.osu.edu/ojdr/past-issues/
 Emory Bankruptcy Developments Journal,https://law.emory.edu/ebdj/,law.emory.edu,digital_commons,active,law-emory-edu.json,2007,265,yes,sitemap,
 American Journal of Law & Medicine,https://academic.oup.com/ajlm,academic.oup.com,silverchair,active,american_journal_of_law_medicine.json,,266,yes,cilp,
@@ -502,7 +502,7 @@ Belmont Criminal Law Journal,https://www.belmontcriminallaw.com/,belmontcriminal
 Benefits Law Journal,http://journalseek.net/cgi-bin/journalseek/journalsearch.cgi?field=issn&query=0897-7992,journalseek.net,unknown,active,registry_benefits_law_journal_457_a8214a0bcd.json,457,,,sitemap,
 Berkeley Journal of African-American Law & Policy,,www.law.berkeley.edu,unknown,active,registry_berkeley_journal_of_african_american_law_policy_601_c51d4bbd8f.json,,,yes,cilp,
 "Berkeley Journal of Gender, Law & Justice",,www.law.berkeley.edu,unknown,active,registry_berkeley_journal_of_gender_law_justice_200_50dbbdb91c.json,,,yes,cilp,
-Berkeley Journal of International Law,https://www.bjil.org/,bjil.org,wordpress,active,bjil-org.json,,,,yes,sitemap
+Berkeley Journal of International Law,https://www.bjil.org/,bjil.org,wordpress,paused_down,bjil-org.json,,,,yes,sitemap
 Berkeley Journal of International Law Publicist,https://bjil.typepad.com/publicist/2009/03/introducing-publicist.html,bjil.typepad.com,unknown,paused_waf,registry_berkeley_journal_of_international_law_publicist_1639_c291b4f174.json,1639,,,sitemap,
 Berkeleyjournalofinternationallaw,https://www.berkeleyjournalofinternationallaw.com/about,berkeleyjournalofinternationallaw.com,Wix,active,berkeleyjournalofinternationallaw-com.json,425,,,sitemap,
 Biotechnology Law Report,https://home.liebertpub.com/publications/biotechnology-law-report/6,home.liebertpub.com,unknown,paused_waf,registry_biotechnology_law_report_1087_78a0c175bd.json,1503,,,sitemap,

@@ -4,10 +4,10 @@
     "journal": "Iowa Law Review",
     "original_url": "https://ilr.law.uiowa.edu/",
     "platform": "Law School Custom",
-    "status": "active",
-    "status_evidence_ref": "artifacts/top50_ranked_batch4_20260310_summary.json",
-    "status_reason": "site_adapter_validated_shallow_pdf_check",
-    "status_updated_at": "2026-03-10T00:56:21Z"
+    "status": "paused_unmapped",
+    "status_evidence_ref": "drainer 11:38Z->03:06Z run: 200+ todo_adapter_blocked rejections, no working adapter",
+    "status_reason": "Iowa Law Review homepage; archive structure needs probe",
+    "status_updated_at": "2026-05-09T03:07:49Z"
   },
   "sitemap_url": null,
   "url": "https://ilr.law.uiowa.edu/"

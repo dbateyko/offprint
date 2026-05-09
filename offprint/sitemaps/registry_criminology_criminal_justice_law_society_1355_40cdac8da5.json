@@ -9,7 +9,7 @@
     "platform": "scholastica",
     "url": "",
     "created_date": "2026-03-31",
-    "status": "todo_adapter",
+    "status": "active",
     "status_reason": "Scholastica site - handled by ScholasticaBaseAdapter",
     "navigation": {
       "archive_root": "/articles",

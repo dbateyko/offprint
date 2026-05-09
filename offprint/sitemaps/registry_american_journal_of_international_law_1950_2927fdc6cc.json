@@ -16,10 +16,10 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "DrupalAdapter",
     "registry_working_host_only": false,
-    "status": "paused_login",
-    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/asil.org/url_2927fdc6ccd5",
-    "status_reason": "probe_login_required",
-    "status_updated_at": "2026-03-04T05:34:00Z"
+    "status": "paused_unmapped",
+    "status_evidence_ref": "drainer 11:38Z->03:06Z run: 200+ todo_adapter_blocked rejections, no working adapter",
+    "status_reason": "AJIL via ASIL site; full-text on Cambridge \u2014 likely paywalled",
+    "status_updated_at": "2026-05-09T03:07:49Z"
   },
   "source": "registry_import",
   "start_urls": [

@@ -16,10 +16,10 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "GenericAdapter",
     "registry_working_host_only": false,
-    "status": "active",
-    "status_evidence_ref": "scripts/promote_todo_adapter_seeds.py",
-    "status_reason": "bulk_promoted_from_todo_adapter",
-    "status_updated_at": "2026-03-16T21:03:58Z"
+    "status": "paused_unmapped",
+    "status_evidence_ref": "drainer 11:38Z->03:06Z run: 200+ todo_adapter_blocked rejections, no working adapter",
+    "status_reason": "Squarespace; needs SquarespaceAdapter or custom",
+    "status_updated_at": "2026-05-09T03:07:49Z"
   },
   "source": "registry_import",
   "start_urls": [

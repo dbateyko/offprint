@@ -220,7 +220,7 @@ class DigitalCommonsBaseAdapter(Adapter):
 
     def _request_oai_xml(self, endpoint: str, params: dict) -> Optional[ET.Element]:
         try:
-            resp = self.session.get(endpoint, params=params, headers=DEFAULT_HEADERS, timeout=30)
+            resp = self.session.get(endpoint, params=params, headers=DEFAULT_HEADERS, timeout=self.dc_download_timeout)
             if resp.status_code >= 400 or not resp.content:
                 return None
             return ET.fromstring(resp.content)
