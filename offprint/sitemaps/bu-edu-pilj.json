@@ -1,0 +1,42 @@
+{
+  "id": "bu-edu-pilj",
+  "start_urls": [
+    "https://www.bu.edu/pilj/archives/volume-19-number-2-spring-2010/",
+    "https://www.bu.edu/pilj/archives/volume-19-number-1-fall-2009/",
+    "https://www.bu.edu/pilj/archives/volume-18-number-2-spring-2009/"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Boston University Public Interest Law Journal",
+    "platform": "wordpress",
+    "url": "https://www.bu.edu/pilj/",
+    "created_date": "2026-05-09",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.bu.edu/pilj/archives/",
+      "pagination": "manual_batch",
+      "pdf_location": "direct-on-issue-page",
+      "notes": "WordPress site. Seeded with a few recent volumes for smoke test."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.entry-content li",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

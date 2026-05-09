@@ -16,10 +16,10 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "GenericAdapter",
     "registry_working_host_only": false,
-    "status": "paused_waf",
+    "status": "paused_paywall",
     "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/academic.oup.com/url_11232357ec08",
-    "status_reason": "probe_waf_marker_detected",
-    "status_updated_at": "2026-03-04T05:34:00Z"
+    "status_reason": "Host is paywalled or requires institutional/ezproxy access during bulk unmapped-host triage; paused to stop repeated adapter-blocked retries.",
+    "status_updated_at": "2026-05-09T16:06:51Z"
   },
   "source": "registry_import",
   "start_urls": [

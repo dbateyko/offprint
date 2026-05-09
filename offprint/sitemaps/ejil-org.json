@@ -1,0 +1,40 @@
+{
+  "id": "ejil-org",
+  "start_urls": [
+    "https://www.ejil.org/archives.php"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "European Journal of International Law",
+    "platform": "custom",
+    "url": "https://www.ejil.org/",
+    "created_date": "2026-05-09",
+    "status": "active",
+    "navigation": {
+      "archive_root": "https://www.ejil.org/archives.php",
+      "pagination": "html-links",
+      "pdf_location": "issue-page",
+      "notes": "Custom site. Index page links to issue pages (archive.php?issue=N), which link directly to PDFs (./pdfs/...). Article pages also exist but issue pages are more efficient for discovery."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "ul.issues li a",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*=\"/pdfs/\"], a[href^=\"./pdfs/\"]",
+      "parentSelectors": ["issue_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "li",
+      "parentSelectors": ["pdf_link"]
+    }
+  ]
+}

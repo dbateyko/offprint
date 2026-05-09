@@ -7,8 +7,8 @@
     "platform": "unknown",
     "status": "paused_paywall",
     "status_evidence_ref": "scripts/onboard_smoke_target.py",
-    "status_reason": "preflight_blocked_unmapped_link_springer_and_paywall_risk",
-    "status_updated_at": "2026-03-27T04:34:00Z",
+    "status_reason": "Host is paywalled or requires institutional/ezproxy access during bulk unmapped-host triage; paused to stop repeated adapter-blocked retries.",
+    "status_updated_at": "2026-05-09T16:06:51Z",
     "url": "https://www.springer.com/journal/10609",
     "navigation": {
       "notes": "Short-loop run 2026-03-27: host/scoped seeds blocked or subscription-gated; keep paused_paywall."

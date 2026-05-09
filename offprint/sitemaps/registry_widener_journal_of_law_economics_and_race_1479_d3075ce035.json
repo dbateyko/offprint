@@ -16,10 +16,10 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "GenericAdapter",
     "registry_working_host_only": false,
-    "status": "active",
+    "status": "paused_other",
     "status_evidence_ref": "scripts/promote_todo_adapter_seeds.py",
-    "status_reason": "bulk_promoted_from_todo_adapter",
-    "status_updated_at": "2026-03-16T21:03:58Z"
+    "status_reason": "Original host does not resolve from current probe; https/http and www/non-www variants failed, and likely Widener canonical replacements checked returned 404.",
+    "status_updated_at": "2026-05-09T00:00:00Z"
   },
   "source": "registry_import",
   "start_urls": [

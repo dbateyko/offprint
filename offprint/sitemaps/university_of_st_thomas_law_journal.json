@@ -1,0 +1,63 @@
+{
+  "id": "university-of-st-thomas-law-journal",
+  "start_urls": [
+    "https://law.stthomas.edu/student-life/get-involved/university-of-stthomas-law-journal/current-issue/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "University of St. Thomas Law Journal",
+    "platform": "esploro_via_law_school_listing",
+    "url": "https://law.stthomas.edu/student-life/get-involved/university-of-stthomas-law-journal/",
+    "original_url": "https://law.stthomas.edu/student-life/get-involved/university-of-stthomas-law-journal",
+    "domain": "law.stthomas.edu",
+    "created_date": "2026-05-09",
+    "status": "active",
+    "notes": "Curated current-issue seed. Listing page has article rows linking to researchonline.stthomas.edu Esploro output records; StThomasLawJournalAdapter resolves Esploro JSON metadata and PDF file IDs. Pagination strategy: none for current issue; past issue navigation is available from the journal page but Esploro search result pages are Angular-rendered.",
+    "navigation": {
+      "pagination_type": "none",
+      "notes": "No pagination on current issue listing. Past issue page links to Esploro collection/search pages, which need API-aware expansion before broad backfile crawling."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "table tr:has(a[href*=\"researchonline.stthomas.edu/esploro/outputs/\"])",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "th[data-label=\"Article Title\"] a, td[data-label=\"Article Title\"] a, a[href*=\"researchonline.stthomas.edu/esploro/outputs/\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a[href*=\"researchonline.stthomas.edu/esploro/outputs/\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "td[data-label=\"Author\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*=\"researchonline.stthomas.edu/esploro/outputs/\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

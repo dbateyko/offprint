@@ -8,6 +8,9 @@
     "journal_name": "Journal of Global Rights and Organizations",
     "platform": "wordpress",
     "url": "https://impunitywatch.com/",
-    "created_date": "2026-03-01"
+    "created_date": "2026-03-01",
+    "status": "paused_unmapped",
+    "status_reason": "Host appears dead or defunct during bulk unmapped-host triage; paused to stop repeated adapter-blocked retries.",
+    "status_updated_at": "2026-05-09T16:06:51Z"
   }
 }
