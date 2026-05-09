@@ -181,6 +181,88 @@ register("www.northwesternlawreview.org", WordPressAcademicBaseAdapter)
 register("washingtonlawreview.org", WordPressAcademicBaseAdapter)
 register("www.washingtonlawreview.org", WordPressAcademicBaseAdapter)
 
+# Bulk platform registrations for seeds whose metadata already identifies the
+# reusable adapter. These were previously rejected as unmapped before discovery.
+register_many(
+    [
+        "betr.missouri.edu",
+        "businesslawjournal.org",
+        "cablj.org",
+        "campbelllawobserver.com",
+        "community.lawschool.cornell.edu",
+        "derecho.uprrp.edu",
+        "disabilitylawjournal.org",
+        "djcil.law.duke.edu",
+        "esteyjournal.com",
+        "feslr.com",
+        "fjil.org",
+        "harvardhrj.com",
+        "inter-american-law-review.law.miami.edu",
+        "international-and-comparative-law-review.law.miami.edu",
+        "issuesinlawandmedicine.com",
+        "jach.law.wisc.edu",
+        "jgspl.org",
+        "jipel.law.nyu.edu",
+        "jlsp.law.northwestern.edu",
+        "jost.syr.edu",
+        "journals.law.unc.edu",
+        "law.faulkner.edu",
+        "law.laverne.edu",
+        "law.missouri.edu",
+        "law.utexas.edu",
+        "law.vanderbilt.edu",
+        "lawandmobility.org",
+        "lawforbusiness.usc.edu",
+        "lawreview.gmu.edu",
+        "lcp.law.duke.edu",
+        "mitchellhamline.edu",
+        "mjrl.org",
+        "nccivilrights.law.unc.edu",
+        "nclawreview.org",
+        "nsac.law.miami.edu",
+        "oclj.mainelaw.maine.edu",
+        "onthecusp.untdallas.edu",
+        "southernlawjournal.com",
+        "tiplj.org",
+        "ufjlpp.org",
+        "wilj.law.wisc.edu",
+        "womensrightslawreporter.com",
+        "www.ecologylawquarterly.org",
+        "www.fjil.org",
+        "www.fsulawreview.com",
+        "www.innovatingjustice.org",
+        "www.journaloffreespeechlaw.org",
+        "www.mjeal-online.org",
+        "cjca.queenslaw.ca",
+        "ctcap.org",
+        "www.fclj.org",
+    ],
+    WordPressAcademicBaseAdapter,
+)
+register_many(
+    [
+        "jgrj.law.uiowa.edu",
+        "law.unlv.edu",
+        "law.uoregon.edu",
+        "lawreview.unl.edu",
+        "legal-forum.uchicago.edu",
+        "tlcp.law.uiowa.edu",
+        "www.ipmall.info",
+    ],
+    DrupalAdapter,
+)
+register_many(
+    [
+        "cwldc.widener.edu",
+        "insight.dickinsonlaw.psu.edu",
+        "ir.law.fsu.edu",
+        "nsuworks.nova.edu",
+        "researchonline.nd.edu.au",
+        "scholar.law.colorado.edu",
+    ],
+    DigitalCommonsIssueArticleHopAdapter,
+)
+
 # Recent onboarded hosts that were still missing explicit routing.
 register_many(
     [
