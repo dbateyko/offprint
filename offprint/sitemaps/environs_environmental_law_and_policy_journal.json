@@ -1,11 +1,20 @@
 {
-  "url": "https://environs.law.ucdavis.edu/archives",
-  "sitemap_url": null,
+  "id": "environs-environmental-law-and-policy-journal",
+  "source": "manual_onboarding",
+  "start_urls": [
+    "https://environs.law.ucdavis.edu/sitemap.xml"
+  ],
   "metadata": {
-    "journal": "Environs: Environmental Law and Policy Journal",
-    "platform": "Custom/Unknown",
+    "journal_name": "Environs: Environmental Law and Policy Journal",
+    "platform": "drupal",
     "original_url": "https://environs.law.ucdavis.edu/",
     "domain": "environs.law.ucdavis.edu",
-    "notes": "Manual override: archive page."
+    "url": "https://environs.law.ucdavis.edu/",
+    "archive_url": "https://environs.law.ucdavis.edu/archives",
+    "status": "paused_waf",
+    "navigation": {
+      "pagination_type": "sitemap.xml",
+      "notes": "Drupal 10 site. sitemap.xml is fetchable and lists archive issue/article URLs, but homepage, /archives, and sampled archive URLs return Cloudflare 403 'Sorry, you have been blocked' from this environment. No article HTML or PDF URL could be verified on disk."
+    }
   }
 }

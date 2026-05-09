@@ -208,7 +208,7 @@ William & Mary Business Law Review,https://scholarship.law.wm.edu/wmblr/,scholar
 wmblr.wordpress.com,https://wmblr.wordpress.com/,wmblr.wordpress.com,wordpress,active,wmblr-wordpress-com.json,1592,194,,sitemap,
 New Mexico Law Review,https://nmlr.unm.edu/,nmlr.unm.edu,wordpress,active,nmlr-unm-edu.json,171,195,yes,sitemap,https://nmlr.unm.edu/archives/
 University of St. Thomas Law Journal,https://researchonline.stthomas.edu/esploro/,researchonline.stthomas.edu,unknown,paused_other,ir-stthomas-edu.json,,196,yes,sitemap,
-University of St. Thomas Law Journal,https://law.stthomas.edu/student-life/get-involved/university-of-stthomas-law-journal,law.stthomas.edu,unknown,active,registry_university_of_st_thomas_law_journal_947_c4531b8d5e.json,947,196,yes,sitemap,
+University of St. Thomas Law Journal,https://law.stthomas.edu/student-life/get-involved/university-of-stthomas-law-journal/,law.stthomas.edu,esploro_via_law_school_listing,active,university_of_st_thomas_law_journal.json,947,196,yes,sitemap,https://law.stthomas.edu/student-life/get-involved/university-of-stthomas-law-journal/current-issue/
 Columbia Journal of Transnational Law,https://www.jtl.columbia.edu/,jtl.columbia.edu,unknown,active,jtl-columbia-edu.json,211,198,yes,sitemap,
 UMKC Law Review,,,,no_sitemap,,,199,yes,cilp,
 umkclawreview.org,https://umkclawreview.org/,umkclawreview.org,wordpress,active,umkclawreview-org.json,186,199,,sitemap,
@@ -490,7 +490,7 @@ Australian Journal of Asian Law,,,,no_sitemap,,,,yes,cilp,
 Australian Journal of Gender and Law,https://genderandlaw.murdoch.edu.au/index.php/sisterinlaw/,genderandlaw.murdoch.edu.au,generic,paused_other,genderandlaw-murdoch-edu-au.json,1621,,,wlu,
 Australian Journal of Legal Philosophy,http://classic.austlii.edu.au/au/journals/AUJlLegPhil/,classic.austlii.edu.au,generic,paused_other,classic-austlii-edu-au.json,1437,,,wlu,
 Australian Year Book of International Law,https://aybil.law.anu.edu.au/,aybil.law.anu.edu.au,,no_sitemap,aybil-law-anu-edu-au.json,1069,,,wlu,
-Ave Maria Law Review,http://avemarialaw-law-review.avemarialaw.edu/Home/issues,avemarialaw-law-review.avemarialaw.edu,unknown,active,registry_ave_maria_law_review_598_52d5d9712e.json,598,,yes,sitemap,
+Ave Maria Law Review,https://www.avemarialaw.edu/law-review/,www.avemarialaw.edu,wordpress,active,ave_maria_law_review.json,598,,yes,sitemap,https://www.avemarialaw.edu/law-review/
 Baltic Journal of Law & Politics,https://sciendo.com/journal/bjlp,sciendo.com,,no_sitemap,,1582,,,wlu,
 Bangladesh Journal of Law,http://www.biliabd.org/jinfolaw.php,biliabd.org,wordpress,paused_other,www-biliabd-org.json,1607,,,wlu,
 Banking & Finance Law Review,https://bflr.ca/,bflr.ca,,no_sitemap,,820,,,wlu,
@@ -650,11 +650,11 @@ Environmental Claims Journal,https://www.tandfonline.com/loi/becj20,tandfonline.
 Environmental Law,https://law.lclark.edu/law_reviews/environmental_law,law.lclark.edu,custom-university,active,environmental_law.json,1160,,yes,sitemap,
 Environmental Liability,https://www.lawtext.com/publication/environmental-liability-law-policy-and-practice,lawtext.com,,no_sitemap,,1301,,,wlu,
 Environmental Policy and Law,http://www.iospress.nl/journal/environmental-policy-and-law/,iospress.nl,,no_sitemap,,1094,,,wlu,
-Environs: Environmental Law and Policy Journal,https://environs.law.ucdavis.edu/,environs.law.ucdavis.edu,unknown,active,registry_environs_environmental_law_and_policy_journal_562_54592aad11.json,562,,yes,sitemap,https://environs.law.ucdavis.edu/archives
+Environs: Environmental Law and Policy Journal,https://environs.law.ucdavis.edu/,environs.law.ucdavis.edu,drupal,paused_waf,environs_environmental_law_and_policy_journal.json,562,,yes,sitemap,https://environs.law.ucdavis.edu/sitemap.xml
 Erasmus Law and Economics Review,http://www.eler.org/,eler.org,,no_sitemap,,998,,,wlu,
 Erasmus Law Review,http://www.erasmuslawreview.nl/,erasmuslawreview.nl,,no_sitemap,,1454,,,wlu,
 Estate Planning,https://store.tax.thomsonreuters.com/accounting/Tax/Estate-Planning/p/100201345,store.tax.thomsonreuters.com,unknown,active,registry_estate_planning_1261_408b4e9b1e.json,1261,,,sitemap,
-Estate Planning & Community Property Law Journal,https://epj.us/,epj.us,unknown,active,registry_estate_planning_community_property_law_journal_1698_af6bde59cc.json,1698,,,sitemap,
+Estate Planning & Community Property Law Journal,https://epj.us/,epj.us,custom-godaddy,active,epj-us.json,1698,,,sitemap,https://epj.us/volume-11
 "Estates, Trusts & Pensions Journal",https://store.thomsonreuters.ca/en-ca/products/estates-trusts-and-pensions-journal-30908401,store.thomsonreuters.ca,,no_sitemap,,1517,,,wlu,
 Estey Journal of International Law and Trade Policy,https://esteyjournal.com/,esteyjournal.com,wordpress,active,esteyjournal-com.json,,,,sitemap,
 European Banking and Financial Law Journal (Euredia),http://www.story.be/?q=000000013609,story.be,,no_sitemap,,1290,,,wlu,
@@ -854,7 +854,7 @@ Journal of Bioethical Inquiry,http://bioethicalinquiry.com/,bioethicalinquiry.co
 Journal of BioLaw and Business,http://biolawbusiness.com/,biolawbusiness.com,unknown,paused_waf,registry_journal_of_biolaw_and_business_547_1e2c87261f.json,547,,,sitemap,
 Journal of Business & Securities Law,https://digitalcommons.law.msu.edu/jbsl,digitalcommons.law.msu.edu,digital_commons,todo_adapter,registry_journal_of_business_securities_law_1032_d7d720f087.json,1032,,,sitemap,
 Journal of Business and Securities Law,,,,no_sitemap,,,,yes,cilp,
-"Journal of Business, Entrepreneurship & the Law",http://jbelonline.org/,jbelonline.org,unknown,active,registry_journal_of_business_entrepreneurship_the_law_1482_f0e486572e.json,1482,,,sitemap,
+"Journal of Business, Entrepreneurship & the Law",https://digitalcommons.pepperdine.edu/jbel/,digitalcommons.pepperdine.edu,digitalcommons,todo_adapter,digitalcommons-pepperdine-edu.json,1482,,,sitemap,http://jbelonline.org/
 "Journal of Business, Entrepreneurship and the Law",,,,no_sitemap,,,,yes,cilp,
 Journal of Civil Law Studies,https://digitalcommons.law.lsu.edu/jcls,digitalcommons.law.lsu.edu,digital_commons,todo_adapter,louisiana_law_review.json,1660,,,sitemap,
 Journal of Civil Practice and Procedure,http://www.legalperiodicals.org/disp.php?pub=Journal+of+Civil+Practice+and+Procedure+,legalperiodicals.org,,no_sitemap,,1539,,,wlu,
@@ -1312,8 +1312,8 @@ Tulane Journal of Technology and Intellectual Property,,,,no_sitemap,,,,yes,cilp
 Tulane Maritime Law Journal,http://www.tulanemaritimejournal.org/,tulanemaritimejournal.org,unknown,active,registry_tulane_maritime_law_journal_332_d217542fda.json,332,,yes,sitemap,
 U.C. Davis Journal of International Law & Policy,,,,no_sitemap,,,,yes,cilp,
 U.C. Davis Law Review,,,,no_sitemap,,,,yes,cilp,
-UC Davis Business Law Journal,https://blj.ucdavis.edu/,blj.ucdavis.edu,custom/unknown,active,uc_davis_business_law_journal.json,970,,yes,wlu,https://blj.ucdavis.edu/archives
-UC Davis Journal of International Law & Policy,https://jilp.law.ucdavis.edu/,jilp.law.ucdavis.edu,law school custom,active,uc_davis_journal_of_international_law_policy.json,462,,,wlu,https://jilp.law.ucdavis.edu/archives
+UC Davis Business Law Journal,https://blj.ucdavis.edu/archives,blj.ucdavis.edu,custom/unknown,paused_waf,uc_davis_business_law_journal.json,970,,yes,sitemap,https://blj.ucdavis.edu/archives
+UC Davis Journal of International Law & Policy,https://jilp.law.ucdavis.edu/,jilp.law.ucdavis.edu,law school custom,paused_waf,uc_davis_journal_of_international_law_policy.json,462,,,wlu,https://jilp.law.ucdavis.edu/archives
 UC Davis Social Justice Law Review,http://sjlr.law.ucdavis.edu/,sjlr.law.ucdavis.edu,unknown,active,registry_uc_davis_social_justice_law_review_637_1e1d5bdc35.json,637,,yes,wlu,
 UC Irvine Law Review,https://www.law.uci.edu/lawreview/,law.uci.edu,wordpress,active,law-uci-edu-lawreview.json,,,yes,cilp,
 UC Law Journal of Race and Economic Justice,,,,no_sitemap,,,,yes,cilp,
@@ -1393,7 +1393,7 @@ Virginia Journal of Social Policy & the Law,https://vjspl.org/,vjspl.org,unknown
 Virginia Law and Business Review,,,,no_sitemap,,,,yes,cilp,
 Virginia Sports and Entertainment Law Journal,https://wordpress.its.virginia.edu/VaSE,wordpress.its.virginia.edu,unknown,active,registry_virginia_sports_and_entertainment_law_journal_673_dc3b65a35d.json,673,,yes,sitemap,
 Waikato Law Review,https://www.waikato.ac.nz/law/research/waikato_law_review,waikato.ac.nz,,no_sitemap,,767,,,wlu,
-Wake Forest Journal of Business and Intellectual Property Law,http://ipjournal.law.wfu.edu/,ipjournal.law.wfu.edu,unknown,active,registry_wake_forest_journal_of_business_and_intellectual_propert_962_facb881e96.json,962,,,sitemap,
+Wake Forest Journal of Business and Intellectual Property Law,https://jbipl.pubpub.org/print-archive,jbipl.pubpub.org,pubpub,paused_waf,wake_forest_journal_of_business_and_intellectual_property_law.json,962,,,sitemap,https://jbipl.pubpub.org/print-archive
 Wake Forest Journal of Law & Policy,,,,no_sitemap,,,,yes,cilp,
 Wake Forest Law Review Online,https://www.wakeforestlawreview.com/category/online/,wakeforestlawreview.com,wordpress,active,registry_wake_forest_law_review_online_2010_c3c9950ccb.json,2010,,,sitemap,
 "War Crimes, Genocide & Crimes Against Humanity",http://www.war-crimes.org/,war-crimes.org,unknown,active,registry_war_crimes_genocide_crimes_against_humanity_1249_0c5db2deec.json,1249,,,sitemap,
@@ -1418,7 +1418,7 @@ Western University (multiple collections),https://ir.lib.uwo.ca/,ir.lib.uwo.ca,d
 Whittier Journal of Child and Family Advocacy,http://www.law.whittier.edu/index/student-organizations/whittier-journal-of-child-family-advocacy,law.whittier.edu,unknown,active,registry_whittier_journal_of_child_and_family_advocacy_489_4c673356ad.json,489,,,sitemap,
 Widener Commonwealth Law Review,https://commonwealthlaw.widener.edu/current-students/student-organizations/widener-law-journal,commonwealthlaw.widener.edu,unknown,paused_waf,commonwealthlaw-widener-edu.json,350,,yes,sitemap,
 Widener Commonwealth Law School,https://cwldc.widener.edu/,cwldc.widener.edu,digitalcommons,active,cwldc-widener-edu.json,,,,sitemap,https://cwldc.widener.edu/wclr/
-"Widener Journal of Law, Economics and Race",http://blogs.law.widener.edu/wjler,blogs.law.widener.edu,unknown,active,registry_widener_journal_of_law_economics_and_race_1479_d3075ce035.json,1479,,,sitemap,
+"Widener Journal of Law, Economics and Race",http://blogs.law.widener.edu/wjler,blogs.law.widener.edu,unknown,paused_other,registry_widener_journal_of_law_economics_and_race_1479_d3075ce035.json,1479,,,sitemap,http://blogs.law.widener.edu/wjler
 Willamette Journal of International Law and Dispute Resolution,https://willamette.edu/law/resources/journals/wjildr/index.html,willamette.edu,unknown,paused_login,registry_willamette_journal_of_international_law_and_dispute_reso_525_f337cd9eca.json,525,,yes,sitemap,
 Willamette Law Review,,,,no_sitemap,,,,yes,cilp,
 William & Mary Environmental Law and Policy Review,https://scholarship.law.wm.edu/wmelpr,scholarship.law.wm.edu,digital_commons,todo_adapter,william_mary_environmental_law_and_policy_review.json,2019,,yes,sitemap,https://scholarship.law.wm.edu/wmlr/

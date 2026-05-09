@@ -1,10 +1,61 @@
 {
-  "url": "https://blj.ucdavis.edu/archives",
-  "sitemap_url": null,
+  "id": "uc-davis-business-law-journal",
+  "start_urls": [
+    "https://blj.ucdavis.edu/archives"
+  ],
+  "source": "phase4_onboarding_batch_a",
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "main article, .view-content article, .node--type-article",
+      "multiple": true
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "h2 a, h3 a, h1",
+      "multiple": false
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "h2 a, h3 a, a[href*=\"/archives/\"]",
+      "multiple": false
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href$=\".pdf\"], a[href*=\"/files/\"][href*=\".pdf\"]",
+      "multiple": false
+    }
+  ],
   "metadata": {
-    "journal": "UC Davis Business Law Journal",
-    "platform": "Custom/Unknown",
+    "journal_name": "UC Davis Business Law Journal",
+    "platform": "custom/unknown",
+    "url": "https://blj.ucdavis.edu/archives",
     "original_url": "https://blj.ucdavis.edu/",
-    "domain": "blj.ucdavis.edu"
+    "domain": "blj.ucdavis.edu",
+    "status": "paused_waf",
+    "status_reason": "blj.ucdavis.edu archive and article pages return Cloudflare 403 to local smoke requests, although direct PDF asset URLs under /sites/g/files/ are reachable.",
+    "pagination": {
+      "type": "unknown",
+      "notes": "Search-visible archive paths use /archives/{volume}; local Cloudflare 403 blocks direct pagination validation."
+    },
+    "navigation": {
+      "notes": "Selectors are conservative Drupal-style guesses retained for the archive page once WAF access is available; no pass claimed while archive HTML is blocked."
+    }
   }
 }
