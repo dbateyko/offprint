@@ -4,7 +4,7 @@
     "created_date": "2026-04-04",
     "journal_name": "American Journal of Law & Medicine",
     "platform": "silverchair",
-    "status": "active",
+    "status": "paused_paywall",
     "url": "https://academic.oup.com/ajlm",
     "navigation": {
       "archive_root": "https://academic.oup.com/ajlm/issue-archive",
@@ -12,7 +12,9 @@
       "pdf_location": "article-link",
       "needs_headless": "true",
       "notes": "Oxford Academic / Silverchair platform. Protected by WAF; requires headless browser. Articles are listed in 'al-article-items' blocks."
-    }
+    },
+    "status_reason": "Host is paywalled or requires institutional/ezproxy access during bulk unmapped-host triage; paused to stop repeated adapter-blocked retries.",
+    "status_updated_at": "2026-05-09T16:06:51Z"
   },
   "source": "manual",
   "start_urls": [

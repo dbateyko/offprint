@@ -9,6 +9,8 @@
     "platform": "unknown",
     "url": "https://onlinelibrary.wiley.com/journal/17441714",
     "created_date": "2026-03-26",
-    "status": "active"
+    "status": "paused_paywall",
+    "status_reason": "Host is paywalled or requires institutional/ezproxy access during bulk unmapped-host triage; paused to stop repeated adapter-blocked retries.",
+    "status_updated_at": "2026-05-09T16:06:51Z"
   }
 }

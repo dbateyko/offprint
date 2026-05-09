@@ -9,11 +9,13 @@
     "platform": "unknown",
     "url": "https://midwestalsb.weebly.com/the-midwest-law-journal.html",
     "created_date": "2026-03-22",
-    "status": "active",
+    "status": "paused_unmapped",
     "navigation": {
       "archive_path": "PDF list page as primary archive",
       "notes": "No pagination or volume navigation. Weebly site. PDF links directly on listing page."
-    }
+    },
+    "status_reason": "Host appears dead or defunct during bulk unmapped-host triage; paused to stop repeated adapter-blocked retries.",
+    "status_updated_at": "2026-05-09T16:06:51Z"
   },
   "selectors": [
     {

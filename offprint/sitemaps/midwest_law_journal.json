@@ -7,10 +7,10 @@
     "notes": "Deep-probe configure_now seed; site hosts journal issue PDFs directly.",
     "original_url": "https://midwestalsb.weebly.com/the-midwest-law-journal.html",
     "platform": "generic_web",
-    "status": "active",
+    "status": "paused_unmapped",
     "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
-    "status_reason": "adapter_registered",
-    "status_updated_at": "2026-03-04T03:40:25Z"
+    "status_reason": "Host appears dead or defunct during bulk unmapped-host triage; paused to stop repeated adapter-blocked retries.",
+    "status_updated_at": "2026-05-09T16:06:51Z"
   },
   "source": "manual",
   "start_urls": [
