@@ -1,11 +1,23 @@
 {
-  "url": "https://jbipl.pubpub.org/print-archive",
-  "sitemap_url": null,
+  "id": "wake-forest-journal-of-business-and-intellectual-property-law",
+  "start_urls": [
+    "https://jbipl.pubpub.org/print-archive"
+  ],
+  "source": "phase4_onboarding_batch_a",
   "metadata": {
-    "journal": "Wake Forest Journal of Business and Intellectual Property Law",
-    "platform": "Custom/Unknown",
-    "original_url": "https://jbipl.pubpub.org/",
+    "journal_name": "Wake Forest Journal of Business and Intellectual Property Law",
+    "platform": "pubpub",
+    "url": "https://jbipl.pubpub.org/print-archive",
+    "original_url": "http://ipjournal.law.wfu.edu/",
     "domain": "jbipl.pubpub.org",
-    "notes": "Manual override: print archive page."
+    "status": "paused_waf",
+    "status_reason": "Legacy ipjournal.law.wfu.edu does not resolve from this environment. Current PubPub archive exists at jbipl.pubpub.org/print-archive but returns Cloudflare 403 to local smoke requests.",
+    "pagination": {
+      "type": "none",
+      "notes": "PubPub print archive is a single archive page when accessible; local requests are blocked before pagination can be crawled."
+    },
+    "navigation": {
+      "notes": "Search index confirms PubPub print archive article links, and direct assets.pubpub.org PDFs are reachable, but the archive and pub pages are Cloudflare-blocked to the smoke client."
+    }
   }
 }

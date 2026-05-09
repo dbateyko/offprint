@@ -1,0 +1,77 @@
+{
+  "id": "epj-us",
+  "source": "manual_onboarding",
+  "start_urls": [
+    "https://epj.us/volume-11"
+  ],
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "parentSelectors": [
+        "_root"
+      ],
+      "selector": "div:has(> div[data-aid^=\"ABOUT_DESCRIPTION_RENDERED\"])",
+      "multiple": true
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "div[data-aid^=\"ABOUT_DESCRIPTION_RENDERED\"]",
+      "multiple": false
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "div[data-aid^=\"ABOUT_DESCRIPTION_RENDERED\"]",
+      "multiple": false
+    },
+    {
+      "id": "volume",
+      "type": "SelectorText",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "div[data-aid^=\"ABOUT_DESCRIPTION_RENDERED\"]",
+      "multiple": false
+    },
+    {
+      "id": "year",
+      "type": "SelectorText",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "div[data-aid^=\"ABOUT_DESCRIPTION_RENDERED\"]",
+      "multiple": false
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "parentSelectors": [
+        "article_container"
+      ],
+      "selector": "a[href*=\"%2C-issue-\"]",
+      "multiple": false
+    }
+  ],
+  "metadata": {
+    "journal_name": "Estate Planning & Community Property Law Journal",
+    "platform": "custom-godaddy",
+    "domain": "epj.us",
+    "url": "https://epj.us/",
+    "archive_url": "https://epj.us/issues",
+    "original_url": "https://epj.us/",
+    "status": "active",
+    "created_date": "2026-05-09",
+    "navigation": {
+      "pagination_type": "none",
+    "notes": "GoDaddy site. /issues lists Volume 1 through Volume 18 without pagination. Volume pages link to issue pages; older volume pages expose article citation text and Read anchors. The selector smoke seed uses Volume 11 because it exposes authors, volume, and 2018/2019 years in HTML; current Volume 18 issue page exposes direct PDFs but sparse article metadata."
+    }
+  }
+}
