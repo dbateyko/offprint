@@ -22,6 +22,7 @@ from .greenbag import GreenBagAdapter
 from .selector_driven import SelectorDrivenAdapter
 from .harvard_jolt import HarvardJOLTAdapter
 from .illinois_jltp import IllinoisJLTPAdapter
+from .issue_archive_enumerator import IssueArchiveEnumeratorAdapter
 from .jurimetrics import JurimetricsAdapter
 from .janeway import JanewayAdapter
 from .nc_jolt import NorthCarolinaJOLTAdapter
@@ -261,6 +262,19 @@ register_many(
         "scholar.law.colorado.edu",
     ],
     DigitalCommonsIssueArticleHopAdapter,
+)
+register_many(
+    [
+        "ajelp.com",
+        "civicresearchinstitute.com",
+        "commonwealthlaw.widener.edu",
+        "delawarelaw.widener.edu",
+        "law.mc.edu",
+        "law.uark.edu",
+        "msujanrl.org",
+        "pennjournalconlaw.com",
+    ],
+    IssueArchiveEnumeratorAdapter,
 )
 
 # Recent onboarded hosts that were still missing explicit routing.
