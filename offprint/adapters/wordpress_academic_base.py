@@ -272,6 +272,9 @@ class WordPressAcademicBaseAdapter(Adapter):
             generic = GenericAdapter(session=self.session)
             # Use same verify=False logic if needed
             for result in generic.discover_pdfs(start_url, max_depth=generic_depth):
+                if self._seed_budget_exhausted():
+                    print("⚠️  WordPress: seed discovery budget exhausted in generic fallback")
+                    break
                 yield result
 
     def _build_discovery_lanes(
@@ -312,8 +315,11 @@ class WordPressAcademicBaseAdapter(Adapter):
                 break
 
     def _seed_budget_exhausted(self) -> bool:
-        if not self.fast_mode:
-            return False
+        # Gate on budget>0 only — the budget should fire whenever the operator
+        # configured one, regardless of fast_mode. (2026-05-09: WP seeds were
+        # holding sd_master worker slots for 1380s+ because this used to
+        # require fast_mode=True even when LRS_WORDPRESS_FAST_SEED_BUDGET_SECONDS
+        # was set explicitly.)
         if self.fast_seed_budget_seconds <= 0:
             return False
         if self._discover_started_at <= 0:
@@ -717,6 +723,12 @@ class WordPressAcademicBaseAdapter(Adapter):
             effective_max_attempts = min(effective_max_attempts, self.fast_max_attempts)
 
         for attempt in range(1, effective_max_attempts + 1):
+            # Fail-fast if the per-seed discovery budget is exhausted. Without this,
+            # a hung lane (HTML BFS, generic fallback) can keep issuing requests
+            # past the budget because the budget check used to live only at lane
+            # boundaries. Worst-case overshoot is now one request timeout (~timeout s).
+            if self._seed_budget_exhausted():
+                return None
             try:
                 # Use a fresh header dict to avoid leaking session defaults that might be blocked
                 current_headers = {}
