@@ -780,3 +780,28 @@ def test_looks_like_toc_still_rejects_real_toc_concentration():
         LabelCandidate(page=1, y=200, x=50, font_size=11, digit_value=287, text="287"),
     ]
     assert _looks_like_toc(cands, n_pages=10) is True
+
+
+def test_lowercase_s_glyph_matches_8_in_is_ocr_match():
+    """Lowercase `s` must match digit `8` (and `5`) in _is_ocr_match.
+
+    Chapman Law Review font encoding produces `14s` for ordinal 148 —
+    the `8` glyph is encoded as lowercase `s` in the PDF CMap. The ghost
+    rescue relies on _is_ocr_match to accept this substitution so the gap
+    at 148 can be recovered.
+    """
+    # Chapman `14s` → 148 (trailing 8 rendered as lowercase s)
+    assert _is_ocr_match(148, "14s")
+    assert _is_ocr_match(148, "14S")  # uppercase S still works
+    # Lowercase `s` as `8` in other positions
+    assert _is_ocr_match(58, "5s")
+    assert _is_ocr_match(81, "s1")
+    # Lowercase `s` as `5`
+    assert _is_ocr_match(5, "s")
+    assert _is_ocr_match(51, "s1")
+    # Correct digits still work
+    assert _is_ocr_match(148, "148")
+    assert _is_ocr_match(5, "5")
+    # Must not match wrong targets
+    assert not _is_ocr_match(148, "14b")  # `b` not in equivalents for 8
+    assert not _is_ocr_match(148, "1s")   # length mismatch

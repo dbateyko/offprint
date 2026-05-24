@@ -656,15 +656,17 @@ DIGIT_EQUIVALENTS: dict[str, frozenset[str]] = {
     "2": frozenset({"2", "Z"}),
     "3": frozenset({"3"}),
     "4": frozenset({"4"}),
-    # `S` is added to both `5` and `8` because Maine's scanned text layer
+    # `S`/`s` is added to both `5` and `8` because Maine's scanned text layer
     # (and similar publisher OCR) renders `8` → `S` in three-digit labels
-    # (`S 7` for 87, `S77he` for 87). The solver disambiguates by sequence
-    # context: a candidate `S` between confirmed labels `86` and `88` is
-    # selected as 87, not 57 (57 wouldn't fit the monotonic sequence).
-    "5": frozenset({"5", "S"}),
+    # (`S 7` for 87, `S77he` for 87). Lowercase `s` is also observed when
+    # the font encoding produces lowercase glyph variants (Chapman `14s` for
+    # 148). The solver disambiguates by sequence context: a candidate `S`/`s`
+    # between confirmed labels `86` and `88` is selected as 87, not 57
+    # (57 wouldn't fit the monotonic sequence).
+    "5": frozenset({"5", "S", "s"}),
     "6": frozenset({"6"}),
     "7": frozenset({"7", "K", "J", "/"}),
-    "8": frozenset({"8", "B", "S"}),
+    "8": frozenset({"8", "B", "S", "s"}),
     "9": frozenset({"9"}),
 }
 
