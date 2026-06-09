@@ -9,45 +9,58 @@
     "platform": "Custom/Drupal",
     "url": "https://law.loyno.edu/loyola-law-review/",
     "created_date": "2026-04-01",
-    "status": "active",
+    "status": "paused_404",
     "navigation": {
       "archive_root": "https://law.loyno.edu/loyola-law-review/",
       "volume_url_pattern": "none-list",
       "archive_path": "homepage -> issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
       "notes": "University-hosted site. Issues are listed as separate pages or nodes. PDFs are direct on article detail pages."
-    }
+    },
+    "status_reason": "zero-PDF triage 2026-06-09T23:04:51Z: seed unreachable (status=404 )",
+    "status_updated_at": "2026-06-09T23:04:51Z",
+    "status_evidence_ref": "inventory/triage_zero_pdf_seeds.py"
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
       "selector": "a[href*='/volume-'], a[href*='/issue-']",
-      "parentSelectors": ["_root"]
+      "parentSelectors": [
+        "_root"
+      ]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
       "selector": ".node-article, .field-items",
-      "parentSelectors": ["issue_link"]
+      "parentSelectors": [
+        "issue_link"
+      ]
     },
     {
       "id": "title",
       "type": "SelectorText",
       "selector": "h1.title, h2.title a",
-      "parentSelectors": ["article_container"]
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
       "selector": "h2.title a, h1.title a",
-      "parentSelectors": ["article_container"]
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
       "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
+      "parentSelectors": [
+        "_root"
+      ],
       "notes": "PDF link on article page."
     }
   ]

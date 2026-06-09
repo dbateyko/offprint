@@ -15,6 +15,9 @@
     "navigation": {
       "pagination_type": "sitemap.xml",
       "notes": "Drupal 10 site. sitemap.xml is fetchable and lists archive issue/article URLs, but homepage, /archives, and sampled archive URLs return Cloudflare 403 'Sorry, you have been blocked' from this environment. No article HTML or PDF URL could be verified on disk."
-    }
+    },
+    "status_reason": "zero-PDF triage 2026-06-09T23:04:51Z: seed unreachable (status=403 )",
+    "status_updated_at": "2026-06-09T23:04:51Z",
+    "status_evidence_ref": "inventory/triage_zero_pdf_seeds.py"
   }
 }

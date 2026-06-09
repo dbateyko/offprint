@@ -9,6 +9,10 @@
     "platform": "drupal",
     "url": "https://legal-forum.uchicago.edu/",
     "created_date": "2026-03-01",
-    "notes": "Smoke test passed 2026-03-01 via GenericAdapter. Drupal site (sites/default/files path). Registered as DrupalAdapter."
+    "notes": "Smoke test passed 2026-03-01 via GenericAdapter. Drupal site (sites/default/files path). Registered as DrupalAdapter.",
+    "status": "paused_404",
+    "status_reason": "zero-PDF triage 2026-06-09T23:04:51Z: seed unreachable (status=404 )",
+    "status_updated_at": "2026-06-09T23:04:51Z",
+    "status_evidence_ref": "inventory/triage_zero_pdf_seeds.py"
   }
 }
