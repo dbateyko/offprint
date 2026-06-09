@@ -251,6 +251,29 @@ def _rescue_from_body_lines(
 DEFAULT_GAP_TOLERANCE = 0
 DEFAULT_GAP_RATIO_THRESHOLD = 0.35
 
+# --- Ordinality bucketing knobs (named, not buried magic numbers) ----------
+# These govern how a sequence is bucketed into valid / valid_with_gaps /
+# invalid. They are exposed as named constants + validate_ordinality kwargs so
+# the quality metric's sensitivity to them is auditable; diagnose_footnote_
+# corpus.py can sweep them.
+#
+# Ratio relief: for long sequences the absolute gap_tolerance is too strict — a
+# 400-note article with a few glyph-loss gaps is well-extracted, not "invalid".
+# Gaps under this fraction of the span keep the doc in valid_with_gaps rather
+# than invalid.
+DEFAULT_RATIO_RELIEF_THRESHOLD = 0.15
+#
+# Cosmetic-gap promotion: when True, a sequence with at most COSMETIC_GAP_MAX
+# missing labels in a stream of >= COSMETIC_GAP_MIN_NOTES is counted as strict
+# "valid" rather than "valid_with_gaps". This INFLATES the strict-valid bucket
+# by conflating "perfect" with "near-perfect", so it is OFF by default: strict-
+# valid means zero gaps. Near-miss docs still count in the inclusive
+# >= valid_with_gaps metric. Set True only to reproduce the older promoted
+# number, and report which setting was used.
+DEFAULT_PROMOTE_COSMETIC_GAPS = False
+COSMETIC_GAP_MAX = 2
+COSMETIC_GAP_MIN_NOTES = 10
+
 
 def _text_starts_with_citation_fragment(text: str) -> bool:
     """
@@ -500,6 +523,8 @@ def _trim_stray_label_outliers(sorted_nums: list[int]) -> list[int]:
 def validate_ordinality(
     footnote_numbers: list[int],
     gap_tolerance: int = DEFAULT_GAP_TOLERANCE,
+    ratio_relief_threshold: float = DEFAULT_RATIO_RELIEF_THRESHOLD,
+    promote_cosmetic_gaps: bool = DEFAULT_PROMOTE_COSMETIC_GAPS,
 ) -> OrdinalityReport:
     """
     Validate footnote sequence with permissive gap tolerance.
@@ -544,22 +569,24 @@ def validate_ordinality(
     tolerance_exceeded = len(gaps) > gap_tolerance
     span = max_n - min_n + 1
     gap_ratio = len(gaps) / span if span > 0 else 0.0
-    # Ratio-based relief for long sequences: the absolute gap_tolerance was
-    # designed for short sequences. A 400-note article with 5 gaps (1.25 %)
-    # shouldn't be "invalid" just because 5 > 2; it's obviously well-extracted
-    # with minor glyph losses. Keep such docs in valid_with_gaps so the
-    # honest ≥valid_with_gaps metric reflects actual extraction quality.
-    ratio_relief_threshold = 0.15
-    # Cosmetic-gap promotion: a sequence with at most 2 missing labels in a
-    # ≥10-note stream is indistinguishable from "valid" for downstream
-    # consumers. Promote those so the strict-valid metric tracks extraction
-    # quality, not source-PDF label hiccups (e.g. a 458-note article missing
-    # label 217, or an 18-note article missing label 4).
+    # Bucketing (see the module-level knob docs):
+    #   - zero gaps                                  -> valid (strict)
+    #   - gaps over tolerance AND over the ratio
+    #     relief fraction of a long span             -> invalid
+    #   - (optional) <=COSMETIC_GAP_MAX gaps in a
+    #     >=COSMETIC_GAP_MIN_NOTES stream            -> valid, only when
+    #     promote_cosmetic_gaps is set (OFF by default: strict-valid means
+    #     zero gaps; these near-misses otherwise land in valid_with_gaps and
+    #     are captured by the inclusive >= valid_with_gaps metric).
     if not gaps:
         status = "valid"
     elif tolerance_exceeded and gap_ratio > ratio_relief_threshold:
         status = "invalid"
-    elif len(gaps) <= 2 and len(sorted_nums) >= 10:
+    elif (
+        promote_cosmetic_gaps
+        and len(gaps) <= COSMETIC_GAP_MAX
+        and len(sorted_nums) >= COSMETIC_GAP_MIN_NOTES
+    ):
         status = "valid"
     else:
         status = "valid_with_gaps"
