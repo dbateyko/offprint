@@ -468,6 +468,26 @@ def _word_x_center(word: dict) -> float:
 
 
 def _detect_word_column_split(words: list[dict]) -> float | None:
+    """Find the x of a two-column gutter, or None for a single-column page.
+
+    Two detectors, first hit wins:
+      1. center-gap — a large gap between adjacent sorted word x-centers. Fires
+         when the gutter leaves a clean break in the *centers* distribution.
+      2. projection-profile — the x in the central band crossed by almost no
+         word span (a near-empty vertical gutter). This catches DENSE two-column
+         scans where word centers fill the page so no single center-to-center
+         gap is large enough for (1). That was the failure mode scrambling
+         two-column scanned law reviews: undetected columns got y-banded into
+         interleaved lines ("…the Oilspill Act had been passed Ollspill Act
+         received surprisingly little public unanimously by both the House…").
+    """
+    return (
+        _detect_column_split_center_gap(words)
+        or _detect_column_split_projection(words)
+    )
+
+
+def _detect_column_split_center_gap(words: list[dict]) -> float | None:
     if len(words) < 12:
         return None
 
@@ -499,6 +519,73 @@ def _detect_word_column_split(words: list[dict]) -> float | None:
 
     split_x = (centers[split_idx] + centers[split_idx + 1]) / 2.0
     if not (centers[0] + x_span * 0.30 <= split_x <= centers[0] + x_span * 0.70):
+        return None
+    return split_x
+
+
+# Projection-profile column detection. A two-column page has a near-empty
+# vertical band (the gutter) in its central third that almost no word's
+# [x0, x1] span crosses; a single-column page's centre is full of text, so the
+# central-band coverage minimum stays high and this returns None. Conservative
+# by design (high min-word count, deep-gutter + balanced-sides + few-straddlers
+# guards) so it never splits a genuine single-column page.
+_PROJECTION_MIN_WORDS = 40
+_PROJECTION_GUTTER_COV_FRAC = 0.12    # gutter coverage <= 12% of central-band peak
+_PROJECTION_MAX_STRADDLE_FRAC = 0.03  # <= 3% of words may cross the gutter
+
+
+def _detect_column_split_projection(words: list[dict]) -> float | None:
+    spans = [
+        (float(w.get("x0", 0.0)), float(w.get("x1", 0.0))) for w in words
+    ]
+    spans = [(x0, x1) for x0, x1 in spans if x1 > x0]
+    if len(spans) < _PROJECTION_MIN_WORDS:
+        return None
+
+    centers = sorted((x0 + x1) / 2.0 for x0, x1 in spans)
+    if centers[-1] - centers[0] < 250.0:
+        return None
+
+    left_edge = min(x0 for x0, _ in spans)
+    right_edge = max(x1 for _, x1 in spans)
+    width = right_edge - left_edge
+    if width < 250.0:
+        return None
+
+    # Word-span coverage at 1-unit resolution via a difference array.
+    n = int(width) + 2
+    delta = [0] * (n + 1)
+    for x0, x1 in spans:
+        a = max(0, int(x0 - left_edge))
+        b = min(n, int(x1 - left_edge))
+        if b <= a:
+            b = a + 1
+        delta[a] += 1
+        delta[b] -= 1
+    cov = [0] * n
+    run = 0
+    for i in range(n):
+        run += delta[i]
+        cov[i] = run
+
+    lo = int(width * 0.30)
+    hi = int(width * 0.70)
+    if hi <= lo:
+        return None
+    gutter_rel = min(range(lo, hi), key=lambda i: cov[i])
+    band_peak = max(cov[lo:hi]) or 1
+    if cov[gutter_rel] > max(2, _PROJECTION_GUTTER_COV_FRAC * band_peak):
+        return None
+
+    split_x = float(left_edge + gutter_rel)
+    left_count = sum(1 for c in centers if c < split_x)
+    right_count = len(centers) - left_count
+    min_side = max(4, int(len(centers) * 0.20))
+    if left_count < min_side or right_count < min_side:
+        return None
+
+    straddle = sum(1 for x0, x1 in spans if x0 < split_x < x1)
+    if straddle > max(3, int(len(spans) * _PROJECTION_MAX_STRADDLE_FRAC)):
         return None
     return split_x
 

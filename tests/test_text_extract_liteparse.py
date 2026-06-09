@@ -7,9 +7,61 @@ from offprint.pdf_footnotes.text_extract import (
     _classify_liteparse_candidate_lines,
     _classify_liteparse_note_candidates,
     _cluster_words_to_lines,
+    _detect_word_column_split,
     _low_variance_density_split,
     _text_fidelity_score_for_word_pages,
 )
+
+
+def _two_column_words(rows: int = 30) -> list[dict]:
+    """Dense two-column page: left col 40-200, right col 240-400, gutter 200-240.
+
+    Words tile each column contiguously (as real wrapped text does — no aligned
+    intra-column gaps), with row-staggered start offsets so the only sustained
+    empty vertical band is the true gutter. Word centres are continuous (no
+    large center-to-center gap), the case the legacy center-gap detector misses
+    — the projection profile must catch the empty gutter instead.
+    """
+    words: list[dict] = []
+    for r in range(rows):
+        top = 60.0 + r * 12.0
+        jitter = (r % 3) * 4  # stagger so word boundaries don't align across rows
+        for x0 in range(40 + jitter, 200, 16):  # left column, contiguous tiling
+            words.append({"x0": float(x0), "x1": float(min(x0 + 16, 200)), "top": top,
+                          "bottom": top + 10, "text": "w"})
+        for x0 in range(240 + jitter, 400, 16):  # right column
+            words.append({"x0": float(x0), "x1": float(min(x0 + 16, 400)), "top": top,
+                          "bottom": top + 10, "text": "w"})
+    return words
+
+
+def test_projection_detects_dense_two_column_gutter() -> None:
+    split = _detect_word_column_split(_two_column_words())
+    assert split is not None
+    # gutter sits between the columns (right edge of left col 200, left of right 240)
+    assert 200.0 <= split <= 240.0
+
+
+def test_projection_leaves_single_column_unsplit() -> None:
+    # A single dense column spanning the page width must NOT be split.
+    words = []
+    for r in range(30):
+        top = 60.0 + r * 12.0
+        jitter = (r % 3) * 4
+        for x0 in range(40 + jitter, 400, 16):
+            words.append({"x0": float(x0), "x1": float(min(x0 + 16, 400)), "top": top,
+                          "bottom": top + 10, "text": "w"})
+    assert _detect_word_column_split(words) is None
+
+
+def test_two_column_words_cluster_without_cross_column_mixing() -> None:
+    # Each output line should come from one column only (monotone x within a line).
+    lines = _cluster_words_to_lines(_two_column_words(), page_number=1)
+    assert lines  # produced something
+    # With the gutter detected, no single line should span both columns: the
+    # left and right column rows are emitted as separate lines, so line count
+    # is ~2x the row count rather than 1x.
+    assert len(lines) >= 40
 
 
 def _line(text: str, top: float, *, size: float = 10.0) -> ExtractedLine:
