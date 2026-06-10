@@ -16,6 +16,24 @@ OJS_NAV_HINTS = ("/issue/", "/article/")
 PDF_HINTS = (".pdf", "/pdf", "galley", "pdf-download-button")
 OJS_INSECURE_TLS_HOSTS = {"tlp.law.pitt.edu"}
 
+# OJS serves the galley *viewer* at /article/view/<id>/<galley> (an HTML page
+# with an embedded PDF reader) and the raw file at /article/download/<id>/<galley>.
+# Discovery often surfaces the view URL; downloading it returns text/html, which
+# the Content-Type gate rejects -> the whole article fails as "unknown". Rewriting
+# view->download targets the canonical raw-file route (same public file).
+_GALLEY_VIEW_RE = re.compile(r"(/article/)view(/\d+/\d+)(?=$|[/?#])", re.IGNORECASE)
+
+
+def _normalize_galley_download_url(url: str) -> str:
+    """Rewrite an OJS galley *viewer* URL to its raw-file *download* URL.
+
+    Idempotent: a /article/download/<id>/<galley> URL (or any non-galley URL)
+    is returned unchanged.
+    """
+    if not url:
+        return url
+    return _GALLEY_VIEW_RE.sub(r"\1download\2", url)
+
 
 class OJSAdapter(Adapter):
     """Adapter for OJS-based journals.
@@ -247,13 +265,28 @@ class OJSAdapter(Adapter):
     ) -> Optional[str]:
         """Download PDF using the OJS-specific _get method for Playwright fallback."""
         # Some OJS sites (Tulane, Utah) require a browser to trigger the actual PDF download
-        # from an /article/view/ or /article/download/ URL.
+        # from an /article/view/ or /article/download/ URL. Normalize the galley *viewer*
+        # URL to its raw-file *download* route first; the viewer returns text/html and the
+        # Content-Type gate below would otherwise reject it as a silent "unknown" failure.
+        pdf_url = _normalize_galley_download_url(pdf_url)
         resp = self._get(pdf_url)
         if resp and "application/pdf" in resp.headers.get("Content-Type", "").lower():
             # If _get returned a mock PlaywrightResponse, it might already have the data
             # or the URL might be updated.
             final_url = resp.url if hasattr(resp, "url") else pdf_url
             return self._download_with_generic(final_url, out_dir, referer=referer, **kwargs)
+        # Surface a specific error so this stops masquerading as "unknown".
+        status_code = getattr(resp, "status_code", 0) if resp is not None else 0
+        content_type = ""
+        if resp is not None:
+            content_type = resp.headers.get("Content-Type", "")
+        self._set_download_meta(
+            error_type="ojs_viewer_not_pdf",
+            status_code=status_code,
+            url=pdf_url,
+            content_type=content_type,
+        )
+        return None
 
     def _citation_pdf_url(self, article_html: str, article_url: str) -> str:
         soup = BeautifulSoup(article_html, "lxml")
@@ -450,6 +483,12 @@ class OJSAdapter(Adapter):
                 continue
 
             if link_lower.endswith(".pdf") or is_numeric_pdf or self._head_is_pdf(link):
-                if link not in seen_pdfs:
-                    seen_pdfs.add(link)
-                    yield DiscoveryResult(page_url=article_url, pdf_url=link, metadata=dict(article_metadata))
+                # Surface the canonical raw-file download URL, not the galley viewer.
+                download_link = _normalize_galley_download_url(link)
+                if download_link not in seen_pdfs:
+                    seen_pdfs.add(download_link)
+                    yield DiscoveryResult(
+                        page_url=article_url,
+                        pdf_url=download_link,
+                        metadata=dict(article_metadata),
+                    )
