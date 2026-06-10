@@ -136,6 +136,8 @@ def pick_adapter_for(
             if session and hasattr(cls_or_inst, "session"): cls_or_inst.session = session
             return cls_or_inst
     if host == "escholarship.org" or host.endswith(".escholarship.org"): return EScholarshipAdapter(session=session)
+    # Every *.scholasticahq.com subdomain is a Scholastica-hosted journal.
+    if host.endswith(".scholasticahq.com"): return ScholasticaBaseAdapter(session=session)
     if any(sub in host for sub in ["digitalcommons.", "scholarlycommons.", "scholarship.", "scholarworks.", "engagedscholarship.", "repository.", "uknowledge.", "via.library.", "ir.lawnet.", "commons.", "academicworks.", "archives."]):
         return DigitalCommonsIssueArticleHopAdapter(session=session)
     if allow_generic:
@@ -443,6 +445,10 @@ register("jlsp.law.columbia.edu", WordPressAcademicBaseAdapter)
 register("digitalcommons.law.uga.edu", DigitalCommonsIssueArticleHopAdapter)
 register("digitalcommons.osgoode.yorku.ca", DigitalCommonsIssueArticleHopAdapter)
 register("digitalcommons.schulichlaw.dal.ca", DigitalCommonsIssueArticleHopAdapter)
+# bepress/Digital Commons repos whose host prefix (docs./scholars.) is too
+# generic for the substring heuristic above — register explicitly.
+register("docs.rwu.edu", DigitalCommonsIssueArticleHopAdapter)
+register("scholars.unh.edu", DigitalCommonsIssueArticleHopAdapter)
 register("scholarlycommons.law.northwestern.edu", DigitalCommonsIssueArticleHopAdapter)
 register("law.emory.edu", DigitalCommonsIssueArticleHopAdapter)
 register("law.ku.edu", DrupalAdapter)
