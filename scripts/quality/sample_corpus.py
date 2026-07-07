@@ -8,10 +8,12 @@ Produces a deterministic manifest of ~N PDFs across journal directories:
 
 Emits one absolute path per line.
 """
+
 from __future__ import annotations
 
 import argparse
 import math
+import os
 import random
 import sys
 from pathlib import Path
@@ -67,9 +69,7 @@ def build_sample(root: Path, target_total: int, max_per_journal: int, seed: int)
     raw_weights = [math.sqrt(len(pdfs)) for _, pdfs in journals]
     wsum = sum(raw_weights)
     # Initial quotas
-    quotas = [
-        max(1, min(max_per_journal, round(target_total * w / wsum))) for w in raw_weights
-    ]
+    quotas = [max(1, min(max_per_journal, round(target_total * w / wsum))) for w in raw_weights]
     # Clamp to available
     quotas = [min(q, len(pdfs)) for q, (_, pdfs) in zip(quotas, journals)]
 
@@ -87,9 +87,7 @@ def build_sample(root: Path, target_total: int, max_per_journal: int, seed: int)
     rng = random.Random(seed)
     while sum(quotas) < target_total:
         # pick journal with largest headroom
-        headrooms = [
-            min(max_per_journal, len(pdfs)) - q for q, (_, pdfs) in zip(quotas, journals)
-        ]
+        headrooms = [min(max_per_journal, len(pdfs)) - q for q, (_, pdfs) in zip(quotas, journals)]
         if max(headrooms) <= 0:
             break
         max_hr = max(headrooms)
@@ -107,7 +105,11 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(
         "--root",
-        default="/mnt/shared_storage/law-review-corpus/corpus/scraped",
+        default=str(
+            Path(os.environ.get("OFFPRINT_ROOT", "/mnt/shared_storage/law-review-corpus"))
+            / "corpus"
+            / "scraped"
+        ),
         help="Corpus root (journal dirs as children)",
     )
     ap.add_argument("--target", type=int, default=1000, help="Target sample size")

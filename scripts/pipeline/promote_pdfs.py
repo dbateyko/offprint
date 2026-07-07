@@ -15,6 +15,7 @@ Usage:
     promote_pdfs.py --host brooklynworks.brooklaw.edu
     promote_pdfs.py --all --dry-run
 """
+
 from __future__ import annotations
 import argparse
 import csv
@@ -24,7 +25,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-ROOT = Path("/mnt/shared_storage/law-review-corpus")
+ROOT = Path(os.environ.get("OFFPRINT_ROOT", "/mnt/shared_storage/law-review-corpus"))
 SCRAPED_V2 = ROOT / "offprint" / "artifacts" / "scraped_v2"
 CORPUS = ROOT / "corpus" / "scraped"
 LOG = CORPUS / "PROMOTION_LOG.csv"
@@ -142,8 +143,15 @@ def promote_host(host: str, *, dry_run: bool = False) -> dict:
 def append_log(row: dict) -> None:
     LOG.parent.mkdir(parents=True, exist_ok=True)
     write_header = not LOG.exists()
-    fields = ["ts", "host", "n_promoted", "n_skipped_dup",
-              "n_corpus_before", "n_corpus_after", "n_link_collision"]
+    fields = [
+        "ts",
+        "host",
+        "n_promoted",
+        "n_skipped_dup",
+        "n_corpus_before",
+        "n_corpus_after",
+        "n_link_collision",
+    ]
     out = {k: "" for k in fields}
     out.update(row)
     out["ts"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -155,12 +163,18 @@ def append_log(row: dict) -> None:
 
 
 def main() -> None:
+    global ROOT, SCRAPED_V2, CORPUS, LOG
     ap = argparse.ArgumentParser()
+    ap.add_argument("--root", type=Path, default=ROOT)
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--host", help="Promote only this host directory")
     g.add_argument("--all", action="store_true", help="Promote every host in scraped_v2/")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
+    ROOT = args.root.expanduser().resolve()
+    SCRAPED_V2 = ROOT / "offprint" / "artifacts" / "scraped_v2"
+    CORPUS = ROOT / "corpus" / "scraped"
+    LOG = CORPUS / "PROMOTION_LOG.csv"
 
     if not SCRAPED_V2.exists():
         print(f"no scraped_v2 dir at {SCRAPED_V2}")

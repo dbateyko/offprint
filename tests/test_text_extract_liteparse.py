@@ -9,6 +9,7 @@ from offprint.pdf_footnotes.text_extract import (
     _cluster_words_to_lines,
     _detect_word_column_split,
     _low_variance_density_split,
+    _pattern_density_strict_split,
     _text_fidelity_score_for_word_pages,
 )
 
@@ -27,11 +28,25 @@ def _two_column_words(rows: int = 30) -> list[dict]:
         top = 60.0 + r * 12.0
         jitter = (r % 3) * 4  # stagger so word boundaries don't align across rows
         for x0 in range(40 + jitter, 200, 16):  # left column, contiguous tiling
-            words.append({"x0": float(x0), "x1": float(min(x0 + 16, 200)), "top": top,
-                          "bottom": top + 10, "text": "w"})
+            words.append(
+                {
+                    "x0": float(x0),
+                    "x1": float(min(x0 + 16, 200)),
+                    "top": top,
+                    "bottom": top + 10,
+                    "text": "w",
+                }
+            )
         for x0 in range(240 + jitter, 400, 16):  # right column
-            words.append({"x0": float(x0), "x1": float(min(x0 + 16, 400)), "top": top,
-                          "bottom": top + 10, "text": "w"})
+            words.append(
+                {
+                    "x0": float(x0),
+                    "x1": float(min(x0 + 16, 400)),
+                    "top": top,
+                    "bottom": top + 10,
+                    "text": "w",
+                }
+            )
     return words
 
 
@@ -49,8 +64,15 @@ def test_projection_leaves_single_column_unsplit() -> None:
         top = 60.0 + r * 12.0
         jitter = (r % 3) * 4
         for x0 in range(40 + jitter, 400, 16):
-            words.append({"x0": float(x0), "x1": float(min(x0 + 16, 400)), "top": top,
-                          "bottom": top + 10, "text": "w"})
+            words.append(
+                {
+                    "x0": float(x0),
+                    "x1": float(min(x0 + 16, 400)),
+                    "top": top,
+                    "bottom": top + 10,
+                    "text": "w",
+                }
+            )
     assert _detect_word_column_split(words) is None
 
 
@@ -126,13 +148,10 @@ def test_liteparse_pattern_density_strict_finds_content_only_note_band() -> None
         _line("6 Supra note 2.", 555),
     ]
 
-    body, notes, used_custom = _classify_liteparse_candidate_lines(
-        lines,
-        page_height=800,
-        candidate_name="pattern_density_strict",
-    )
-
-    assert used_custom is True
+    split_y = _pattern_density_strict_split(lines, page_height=800)
+    assert split_y == 430
+    body = [line for line in lines if line.top < split_y]
+    notes = [line for line in lines if line.top >= split_y]
     assert body[-1].text.startswith("This page includes")
     assert [line.text.split()[0] for line in notes] == ["1", "2", "3", "4", "5", "6"]
 

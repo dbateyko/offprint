@@ -19,6 +19,7 @@ Run via: ``python3 scripts/pipeline/scrape_drainer.py [--launch]``
 Wrap in screen for unattended operation:
     screen -dmS sd_master python3 offprint/scripts/pipeline/scrape_drainer.py --launch
 """
+
 from __future__ import annotations
 import argparse
 import datetime as dt
@@ -27,13 +28,12 @@ import re
 import shutil
 import string
 import subprocess
-import sys
 import time
 from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/mnt/shared_storage/law-review-corpus")
+ROOT = Path(os.environ.get("OFFPRINT_ROOT", "/mnt/shared_storage/law-review-corpus"))
 WORKLIST = ROOT / "catalog" / "scrape_worklist.csv"
 SITEMAPS = ROOT / "offprint" / "offprint" / "sitemaps"
 DRAINER_ROOT = Path("/tmp/scrape_drainer")
@@ -49,7 +49,7 @@ BEPRESS_PATTERNS = re.compile(
 
 SCRIPT_TEMPLATE = """#!/usr/bin/env bash
 set -u
-cd /mnt/shared_storage/law-review-corpus/offprint
+cd {offprint_dir}
 export LRS_VERBOSE_PDF_LOG=0
 export LRS_MAX_BROWSERS=1
 export LRS_WORDPRESS_FAST_MODE=1
@@ -79,7 +79,9 @@ def is_bepress(host: str, platform: str) -> bool:
     if BEPRESS_PATTERNS.search(host or ""):
         return True
     return (platform or "").strip().lower() in {
-        "digitalcommons", "digital_commons", "bepress_digital_commons"
+        "digitalcommons",
+        "digital_commons",
+        "bepress_digital_commons",
     }
 
 
@@ -115,15 +117,24 @@ def refresh_worklist() -> None:
     print("[refresh] coverage + worklist + ledger ...")
     subprocess.run(
         ["python3", "offprint-data-ops/inventory/build_scrape_coverage.py"],
-        cwd=ROOT, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,
+        cwd=ROOT,
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
     )
     subprocess.run(
         ["python3", "offprint-data-ops/inventory/build_sitemap_ledger.py"],
-        cwd=ROOT, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,
+        cwd=ROOT,
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
     )
     subprocess.run(
         ["python3", "offprint-data-ops/inventory/build_scrape_worklist.py"],
-        cwd=ROOT, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,
+        cwd=ROOT,
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
     )
 
 
@@ -139,9 +150,17 @@ def screen_letter(used: set[str], prefix: str) -> str:
     raise RuntimeError("ran out of screen labels (1296 in use)")
 
 
-def schedule_chunk(seeds: list[str], used_screens: set[str], *,
-                   prefix: str, wall_clock: str, well_covered: int,
-                   out_dir: str, ts: str, dry_run: bool) -> str:
+def schedule_chunk(
+    seeds: list[str],
+    used_screens: set[str],
+    *,
+    prefix: str,
+    wall_clock: str,
+    well_covered: int,
+    out_dir: str,
+    ts: str,
+    dry_run: bool,
+) -> str:
     name = screen_letter(used_screens, prefix)
     screen_dir = DRAINER_ROOT / name
     screen_dir.mkdir(parents=True, exist_ok=True)
@@ -151,10 +170,16 @@ def schedule_chunk(seeds: list[str], used_screens: set[str], *,
             shutil.copy(src, screen_dir / sf)
     run_id = f"{ts}_{name}"
     script_path = DRAINER_ROOT / f"{name}.sh"
-    script_path.write_text(SCRIPT_TEMPLATE.format(
-        wall_clock=wall_clock, sitemaps_dir=str(screen_dir),
-        out_dir=out_dir, run_id=run_id, well_covered=well_covered,
-    ))
+    script_path.write_text(
+        SCRIPT_TEMPLATE.format(
+            offprint_dir=ROOT / "offprint",
+            wall_clock=wall_clock,
+            sitemaps_dir=str(screen_dir),
+            out_dir=out_dir,
+            run_id=run_id,
+            well_covered=well_covered,
+        )
+    )
     script_path.chmod(0o755)
     log_path = DRAINER_ROOT / f"{name}.log"
     cmd = f'screen -dmS {name} bash -lc "{script_path} 2>&1 | tee {log_path}"'
@@ -181,10 +206,14 @@ def iteration(args, used_screens: set[str]) -> dict:
     eligible = eligible[~eligible.sitemap_file.isin(in_flight)]
 
     bepress_active = sum(
-        1 for n in active
-        if any(is_bepress(p.stem.split("_")[1] if "_" in p.stem else "", "")
-               or BEPRESS_PATTERNS.search(p.read_text()) is not None
-               for p in (DRAINER_ROOT / n).glob("*.json")) if (DRAINER_ROOT / n).exists()
+        1
+        for n in active
+        if any(
+            is_bepress(p.stem.split("_")[1] if "_" in p.stem else "", "")
+            or BEPRESS_PATTERNS.search(p.read_text()) is not None
+            for p in (DRAINER_ROOT / n).glob("*.json")
+        )
+        if (DRAINER_ROOT / n).exists()
     )
     # Simpler: count screens whose dir contains any bepress sitemap
     bepress_active = 0
@@ -214,28 +243,44 @@ def iteration(args, used_screens: set[str]) -> dict:
     bepress_seeds = bepress.head(bepress_take).sitemap_file.tolist()
     other_seeds = other.head(other_take).sitemap_file.tolist()
 
-    print(f"[iter] eligible={len(eligible)} active={len(active)} "
-          f"(bep={bepress_active}/{args.max_bepress_screens}, "
-          f"oth={other_active}/{args.max_other_screens}) "
-          f"-> scheduling bep_chunks={bepress_quota}, oth_chunks={other_quota}")
+    print(
+        f"[iter] eligible={len(eligible)} active={len(active)} "
+        f"(bep={bepress_active}/{args.max_bepress_screens}, "
+        f"oth={other_active}/{args.max_other_screens}) "
+        f"-> scheduling bep_chunks={bepress_quota}, oth_chunks={other_quota}"
+    )
 
     ts = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     n_scheduled = 0
     for chunk_start in range(0, len(bepress_seeds), args.seeds_per_screen):
-        chunk = bepress_seeds[chunk_start: chunk_start + args.seeds_per_screen]
+        chunk = bepress_seeds[chunk_start : chunk_start + args.seeds_per_screen]
         if not chunk:
             break
-        schedule_chunk(chunk, used_screens, prefix=args.screen_prefix,
-                       wall_clock=args.wall_clock, well_covered=args.well_covered,
-                       out_dir=args.out_dir, ts=ts, dry_run=args.dry_run)
+        schedule_chunk(
+            chunk,
+            used_screens,
+            prefix=args.screen_prefix,
+            wall_clock=args.wall_clock,
+            well_covered=args.well_covered,
+            out_dir=args.out_dir,
+            ts=ts,
+            dry_run=args.dry_run,
+        )
         n_scheduled += 1
     for chunk_start in range(0, len(other_seeds), args.seeds_per_screen):
-        chunk = other_seeds[chunk_start: chunk_start + args.seeds_per_screen]
+        chunk = other_seeds[chunk_start : chunk_start + args.seeds_per_screen]
         if not chunk:
             break
-        schedule_chunk(chunk, used_screens, prefix=args.screen_prefix,
-                       wall_clock=args.wall_clock, well_covered=args.well_covered,
-                       out_dir=args.out_dir, ts=ts, dry_run=args.dry_run)
+        schedule_chunk(
+            chunk,
+            used_screens,
+            prefix=args.screen_prefix,
+            wall_clock=args.wall_clock,
+            well_covered=args.well_covered,
+            out_dir=args.out_dir,
+            ts=ts,
+            dry_run=args.dry_run,
+        )
         n_scheduled += 1
 
     return {
@@ -247,7 +292,9 @@ def iteration(args, used_screens: set[str]) -> dict:
 
 
 def main() -> None:
+    global ROOT, WORKLIST, SITEMAPS
     ap = argparse.ArgumentParser()
+    ap.add_argument("--root", type=Path, default=ROOT)
     ap.add_argument("--max-bepress-screens", type=int, default=4)
     ap.add_argument("--max-other-screens", type=int, default=12)
     ap.add_argument("--seeds-per-screen", type=int, default=7)
@@ -255,15 +302,25 @@ def main() -> None:
     ap.add_argument("--wall-clock", default="4h")
     ap.add_argument("--out-dir", default="artifacts/scraped_v2")
     ap.add_argument("--screen-prefix", default="sd")
-    ap.add_argument("--sleep-seconds", type=int, default=180,
-                    help="Sleep between iterations when nothing to schedule")
-    ap.add_argument("--max-iterations", type=int, default=0,
-                    help="0 = run forever until worklist empty")
-    ap.add_argument("--launch", action="store_true",
-                    help="Required to actually start screens (default: dry-run)")
-    ap.add_argument("--dry-run", action="store_true",
-                    help="Force dry-run regardless of --launch")
+    ap.add_argument(
+        "--sleep-seconds",
+        type=int,
+        default=180,
+        help="Sleep between iterations when nothing to schedule",
+    )
+    ap.add_argument(
+        "--max-iterations", type=int, default=0, help="0 = run forever until worklist empty"
+    )
+    ap.add_argument(
+        "--launch",
+        action="store_true",
+        help="Required to actually start screens (default: dry-run)",
+    )
+    ap.add_argument("--dry-run", action="store_true", help="Force dry-run regardless of --launch")
     args = ap.parse_args()
+    ROOT = args.root.expanduser().resolve()
+    WORKLIST = ROOT / "catalog" / "scrape_worklist.csv"
+    SITEMAPS = ROOT / "offprint" / "offprint" / "sitemaps"
 
     # Default safety: if neither --launch nor --dry-run was passed, dry-run.
     if not args.launch:

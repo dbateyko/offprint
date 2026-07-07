@@ -22,6 +22,21 @@ Run this in Claude Code. If you omit the URL, the skill can pick the next unonbo
 
 Skill reference: [docs/skills/onboard-journal.md](docs/skills/onboard-journal.md)
 
+## Install + Quickstart
+
+```bash
+python3 -m pip install -e '.[pdf_footnotes]'
+mkdir -p /tmp/offprint-one-seed
+cp offprint/sitemaps/aalj-org.json /tmp/offprint-one-seed/
+python3 scripts/pipeline/run_pipeline.py --mode full \
+  --sitemaps-dir /tmp/offprint-one-seed --max-workers 1
+python3 scripts/processing/extract_footnotes.py \
+  --pdf-root artifacts/pdfs --features legal --ocr-mode off
+```
+
+The one-seed directory is how the pipeline scopes an end-to-end run to one
+journal. OCR and GPU-backed rescue are optional; the example disables OCR.
+
 ## Project Goals
 
 - Expand high-quality coverage across U.S. law review hosts.
@@ -31,7 +46,7 @@ Skill reference: [docs/skills/onboard-journal.md](docs/skills/onboard-journal.md
 
 ## Coverage So Far
 
-As of **March 31, 2026** (`python3 scripts/reporting/site_status_report.py --summary`) and Top-50 evidence as of **March 26, 2026** (`artifacts/top50_coverage_report_20260326_rerun.json`):
+As of **March 31, 2026** (`python3 scripts/reporting/site_status_report.py --summary`) and Top-50 evidence as of **March 26, 2026**:
 
 | Metric | Value |
 |---|---:|
@@ -50,7 +65,7 @@ As of **March 31, 2026** (`python3 scripts/reporting/site_status_report.py --sum
 1. Quarantine non-article PDFs (high-precision QC):
 
 ```bash
-python scripts/qc_quarantine_pdfs.py \
+python3 scripts/processing/qc_quarantine_pdfs.py \
   --pdf-root artifacts/pdfs \
   --quarantine-root artifacts/quarantine \
   --dry-run false
@@ -59,7 +74,7 @@ python scripts/qc_quarantine_pdfs.py \
 2. Extract footnotes and article text:
 
 ```bash
-python scripts/extract_footnotes.py \
+python3 scripts/processing/extract_footnotes.py \
   --pdf-root artifacts/pdfs \
   --features legal \
   --respect-qc-exclusions true

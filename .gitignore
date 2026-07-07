@@ -216,6 +216,10 @@ cache/http/
 pdfs_quarantine/
 *.footnotes.json
 archive/
+!/archive/
+/archive/*
+!/archive/research-diagnostics/
+!/archive/research-diagnostics/*.py
 batch_runs/
 runs/
 runs_links_only/
