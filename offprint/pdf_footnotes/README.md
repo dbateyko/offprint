@@ -94,6 +94,22 @@ The bugs that motivated the rebuild (Charleston's rejected pincite, Seattle U's 
 - `doc_policy` tightened: expanded `_NON_ARTICLE_FILENAME_RE`, added long-doc rules (>200 pp → issue_compilation; 120+ pp without notes or metadata → issue_compilation).
 - Full test suite: 36 tests passing, including 3 new `tests/test_sequence_solver.py` tests covering the precomputed path.
 
+### Cross-page boundary clipping (July 2026)
+
+`build_note_records` clips continuation pages to their detected footnote region.
+A line is retained when it is below the page's vector separator or belongs to
+the smaller-font band. If neither signal exists, the legacy span is preserved
+and the note exposes `features.boundary_confidence = "low"`.
+
+On a four-PDF Yale-hosted CPU-only sample, 168 cross-page notes fell from a
+2,294.5-character median before clipping to 128 characters after clipping. The
+same-page median was 81 characters, so cross-page notes are now in the same
+length regime. These are extraction-length diagnostics, not text-level F1.
+
+Existing corpus sidecars and `articles_footnotes.parquet` still contain the
+pre-fix text. Re-extract the corpus and rebuild the parquet only after the live
+labeling run finishes; do not mutate its current inputs mid-run.
+
 ### Run the full-corpus audit
 
 See **[`docs/full_corpus_audit_roadmap.md`](../../docs/full_corpus_audit_roadmap.md)** for the canonical plan, pre-flight checklist, and definition of "done." Short version:

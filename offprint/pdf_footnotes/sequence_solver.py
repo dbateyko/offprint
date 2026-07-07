@@ -14,9 +14,11 @@ matches the ExtractedPage body/notes contract used by the rest of the pipeline.
 See offprint/pdf_footnotes/README.md for architectural context and benchmark
 numbers vs. the heuristic candidate ensemble.
 """
+
 from __future__ import annotations
 
 import re
+from collections import Counter
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -72,9 +74,7 @@ def _pages_from_layouts(layouts: list) -> list[_PageData]:
     result: list[_PageData] = []
     for layout in layouts:
         items = list(getattr(layout, "raw_items", ()) or [])
-        fonts = [
-            float(it.get("fontSize") or 0) for it in items if it.get("fontSize")
-        ]
+        fonts = [float(it.get("fontSize") or 0) for it in items if it.get("fontSize")]
         med = sorted(fonts)[len(fonts) // 2] if fonts else 10.0
         result.append(
             _PageData(
@@ -232,13 +232,11 @@ def _synthesize_split_label_candidates(
             smaller_font = bool(fs and fs < page.median_font * 0.95)
             at_line_start = not _has_previous_line_text(page, first)
             separator_y = page.separator_y
-            below_separator = bool(
-                separator_y is not None and first_y >= float(separator_y) - 2.0
-            )
+            below_separator = bool(separator_y is not None and first_y >= float(separator_y) - 2.0)
             separator_left_thresh = page.width * 0.35 if page.width else 210.0
             column_aligned = bool(alignment_x is not None and abs(x - alignment_x) <= 12.0)
             left_margin = bool(
-                x <= left_thresh 
+                x <= left_thresh
                 or (below_separator and x <= separator_left_thresh)
                 or column_aligned
             )
@@ -308,9 +306,7 @@ def _detect_repeating_header_texts(pages: list[_PageData]) -> set[tuple[int, str
     return {k for k, c in text_by_yband.items() if c >= thresh}
 
 
-def _collect_candidates(
-    pages: list[_PageData], domain: str | None = None
-) -> list[LabelCandidate]:
+def _collect_candidates(pages: list[_PageData], domain: str | None = None) -> list[LabelCandidate]:
     recurring_texts = _detect_repeating_header_texts(pages)
     max_synthetic_label = max(120, len(pages) * 10)
     profile = _profile_for(domain)
@@ -363,13 +359,9 @@ def _collect_candidates(
             substantive_text = len(alpha_tokens) >= 4 and has_upper_initial
             y_rel = (y / p.height) if p.height else 0.5
             separator_y = p.separator_y
-            below_separator = bool(
-                separator_y is not None and y >= float(separator_y) - 2.0
-            )
+            below_separator = bool(separator_y is not None and y >= float(separator_y) - 2.0)
             separator_left_thresh = p.width * 0.35 if p.width else 210.0
-            left_margin = bool(
-                x <= left_thresh or (below_separator and x <= separator_left_thresh)
-            )
+            left_margin = bool(x <= left_thresh or (below_separator and x <= separator_left_thresh))
             candidates.append(
                 LabelCandidate(
                     page=p.page,
@@ -471,7 +463,7 @@ def _gap_penalty(delta: int) -> float:
 
 def _solve_sequence(candidates: list[LabelCandidate]) -> list[int]:
     """Find the best global sequence of footnote labels using DP.
-    
+
     Weights:
     - Base score for each candidate (derived from text/layout features)
     - Penalty for numeric gaps (monotonically increasing)
@@ -482,27 +474,27 @@ def _solve_sequence(candidates: list[LabelCandidate]) -> list[int]:
     n = len(candidates)
     if n == 0:
         return []
-    
+
     # dp[i] = max score ending at candidate i
     dp = [0.0] * n
     parent = [-1] * n
     base = [_candidate_score(c) for c in candidates]
-    
+
     for i in range(n):
         ci = candidates[i]
-        
+
         # Start Penalty: encourage starting at label 1.
         # Starting at label 3 costs 10.0, label 5 costs 20.0.
         # This keeps the solver from picking stray numbers mid-doc.
         start_penalty = max(0.0, (ci.digit_value - 1) * 5.0)
         dp[i] = base[i] - start_penalty
-        
+
         for j in range(i):
             cj = candidates[j]
-            
+
             # Transition weights
-            is_restart = (cj.digit_value >= ci.digit_value)
-            
+            is_restart = cj.digit_value >= ci.digit_value
+
             if is_restart:
                 # Sequential Restart: allow starting at 1 (or 2) again.
                 # Must be spatially after the previous note.
@@ -511,7 +503,7 @@ def _solve_sequence(candidates: list[LabelCandidate]) -> list[int]:
                 # Same-page restarts are suspicious (often side-content/tables)
                 if cj.page == ci.page:
                     continue
-                
+
                 # Restart cost: matches a ~4-note sequence score.
                 # Naturally filters out one-off '1' noise.
                 penalty = 12.0
@@ -519,7 +511,7 @@ def _solve_sequence(candidates: list[LabelCandidate]) -> list[int]:
                 # Standard increment
                 delta = ci.digit_value - cj.digit_value
                 penalty = _gap_penalty(delta)
-                
+
                 # Spatial reversal penalty: if on same page, must move down.
                 if cj.page == ci.page and ci.y < cj.y - 0.5:
                     penalty += 10.0
@@ -528,7 +520,7 @@ def _solve_sequence(candidates: list[LabelCandidate]) -> list[int]:
             if cand > dp[i]:
                 dp[i] = cand
                 parent[i] = j
-                
+
     best_i = max(range(n), key=lambda i: (dp[i], candidates[i].digit_value))
     path: list[int] = []
     cur = best_i
@@ -551,7 +543,7 @@ def _trim_tail_outliers(labels: list[int]) -> list[int]:
         # If the jump to the last label is much larger than typical gaps, prune it.
         # Threshold: 50+ jump OR 10x the document's average density.
         if jump > 50 or jump > (out[-2] - out[0]) / len(out) * 10:
-             out.pop()
+            out.pop()
         else:
             break
     return out
@@ -584,11 +576,7 @@ def _gap_fill(cands: list[LabelCandidate], selected_idx: list[int]) -> list[int]
     def aligned_column(cm) -> bool:
         # Within 15 px of the path's median x, AND the candidate is at the left
         # margin, AND it has cluster peers (other candidates nearby on its page).
-        return (
-            abs(cm.x - median_x) <= 15.0
-            and cm.left_margin
-            and cm.cluster_peers >= 2
-        )
+        return abs(cm.x - median_x) <= 15.0 and cm.left_margin and cm.cluster_peers >= 2
 
     for a, b in zip(ordered, ordered[1:]):
         ca, cb = cands[a], cands[b]
@@ -604,8 +592,7 @@ def _gap_fill(cands: list[LabelCandidate], selected_idx: list[int]) -> list[int]
             # real footnote column jumps pages (multi-article PDFs, appendices)
             # and the DP's path didn't reach it.
             column_anywhere = {
-                i for i in options
-                if aligned_column(cands[i]) and _candidate_score(cands[i]) >= 4.5
+                i for i in options if aligned_column(cands[i]) and _candidate_score(cands[i]) >= 4.5
             }
             pool = strict | near | column_anywhere
             if not pool:
@@ -669,6 +656,7 @@ DIGIT_EQUIVALENTS: dict[str, frozenset[str]] = {
     "8": frozenset({"8", "B", "S", "s"}),
     "9": frozenset({"9"}),
 }
+
 
 # Per-domain extraction profiles. Combines glyph-equivalent overrides with
 # scoring/segmentation knobs gated by publisher domain. Use this for
@@ -764,6 +752,7 @@ def _domain_from_pdf_path(pdf_path: str | None) -> str | None:
             return cand
     return None
 
+
 # Punctuation that sometimes prefixes / suffixes an OCR-corrupted label.
 # Stripped before matching: `'05` → `05`, `33.` → `33`, `(7)` → `7`. Curly
 # quotes and apostrophes are kept here because they may also stand in for
@@ -772,10 +761,7 @@ def _domain_from_pdf_path(pdf_path: str | None) -> str | None:
 _LABEL_TOKEN_PUNCT = "'\"`‘’“”.,()[]{}<>:;-—_"
 
 # Back-compat alias retained for any external importers.
-OCR_MUTATIONS = {
-    d: [g for g in glyphs if g != d]
-    for d, glyphs in DIGIT_EQUIVALENTS.items()
-}
+OCR_MUTATIONS = {d: [g for g in glyphs if g != d] for d, glyphs in DIGIT_EQUIVALENTS.items()}
 
 
 def _strip_label_punct(text: str, domain: str | None = None) -> str:
@@ -845,9 +831,7 @@ def _scan_split_label_match(
         if not cleaned or any(c.isspace() for c in cleaned):
             continue
         # Only consider tokens that are a candidate digit-equivalent fragment.
-        if not all(
-            any(c in DIGIT_EQUIVALENTS[d] for d in DIGIT_EQUIVALENTS) for c in cleaned
-        ):
+        if not all(any(c in DIGIT_EQUIVALENTS[d] for d in DIGIT_EQUIVALENTS) for c in cleaned):
             continue
         x = float(it.get("x") or 0)
         y = float(it.get("y") or 0)
@@ -875,6 +859,7 @@ def _scan_split_label_match(
             last_fs = max(last_fs, float(it_j.get("fontSize") or 0) or last_fs)
     return None
 
+
 def _ghost_rescue(
     pages: list[_PageData],
     candidates: list[LabelCandidate],
@@ -885,30 +870,30 @@ def _ghost_rescue(
     """
     if not candidates:
         return candidates
-        
+
     pages_map = {p.page: p for p in pages}
     all_rescuable = list(candidates)
-    
+
     for _iteration in range(5):
         added_this_iter = 0
         current = sorted(all_rescuable, key=lambda c: (c.page, c.y, c.x))
         selected_set = set(c.digit_value for c in current)
-        
+
         gaps: list[int] = []
         if len(current) >= 2:
             expected = range(current[0].digit_value, current[-1].digit_value + 1)
             gaps = [v for v in expected if v not in selected_set]
-            
+
         if not gaps:
             break
 
         for gap in gaps:
             prev_note = next((c for c in reversed(current) if c.digit_value < gap), None)
             next_note = next((c for c in current if c.digit_value > gap), None)
-            
+
             if not prev_note or not next_note:
                 continue
-                
+
             found_ghost = False
             for page_no in range(prev_note.page - 1, next_note.page + 2):
                 p = pages_map.get(page_no)
@@ -979,9 +964,10 @@ def _ghost_rescue(
                     found_ghost = True
                 if found_ghost:
                     break
-        
-        if added_this_iter == 0: break
-                    
+
+        if added_this_iter == 0:
+            break
+
     # Special Rescue: Missing Note 1
     # If the sequence starts at 2, look for 1 on early pages.
     current = sorted(all_rescuable, key=lambda c: (c.page, c.y, c.x))
@@ -989,21 +975,28 @@ def _ghost_rescue(
         first_two = current[0]
         for page_no in range(max(1, first_two.page - 2), first_two.page + 1):
             p = pages_map.get(page_no)
-            if not p: continue
+            if not p:
+                continue
             for it in p.items:
                 raw_text = (it.get("text") or "").strip()
-                if not raw_text: continue
+                if not raw_text:
+                    continue
                 parts = re.split(r"[^a-zA-Z\d°º'\"`]+", raw_text)
                 if any(_is_ocr_match(1, pt) for pt in parts):
                     y = float(it.get("y") or 0)
                     if (page_no, y) < (first_two.page, first_two.y):
-                        all_rescuable.append(LabelCandidate(
-                            page=page_no, y=y, x=float(it.get("x") or 0),
-                            font_size=float(it.get("fontSize") or 0),
-                            digit_value=1, text=raw_text,
-                            is_pure_digit=bool(re.match(r"^\d+$", raw_text)),
-                            y_rel=(y/p.height) if p.height else 0.5
-                        ))
+                        all_rescuable.append(
+                            LabelCandidate(
+                                page=page_no,
+                                y=y,
+                                x=float(it.get("x") or 0),
+                                font_size=float(it.get("fontSize") or 0),
+                                digit_value=1,
+                                text=raw_text,
+                                is_pure_digit=bool(re.match(r"^\d+$", raw_text)),
+                                y_rel=(y / p.height) if p.height else 0.5,
+                            )
+                        )
                         break
     return all_rescuable
 
@@ -1075,14 +1068,14 @@ def _geometry_rescue(
     """Recover split/spaced labels that align with the discovered footnote column."""
     if not selected:
         return []
-    
+
     # Identify the median X of the discovered labels to define the 'column'.
     selected_xs = sorted(c.x for c in selected)
     median_x = selected_xs[len(selected_xs) // 2]
-    
+
     rescued: list[LabelCandidate] = []
     max_synthetic_label = max(1500, max(c.digit_value for c in selected) + 10)
-    
+
     for p in pages:
         # Re-run synthesis using the discovered median_x as a prior for 'left margin'.
         # This allows us to recover split labels that were previously too far right
@@ -1091,7 +1084,7 @@ def _geometry_rescue(
             p, recurring_texts, max_synthetic_label, alignment_x=median_x
         )
         rescued.extend(page_new)
-        
+
     return rescued
 
 
@@ -1117,39 +1110,42 @@ def solve_document(layouts: list, *, pdf_path: str | None = None) -> SolverResul
     # Filter out impossible labels to bound DP search space
     max_plausible = max(150, len(pages) * 15)
     base_cands = [c for c in cands if c.digit_value <= max_plausible]
-    
+
     # Pass 1: Solve for the primary sequence
     path = _solve_sequence(base_cands)
     if not path:
         return SolverResult(
-            page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
+            page_cutoffs={},
+            selected_labels=[],
+            selected_candidates=(),
+            candidate_count=candidate_count,
         )
-        
+
     path = _gap_fill(base_cands, path)
     selected = [base_cands[i] for i in sorted(path)]
-    
+
     # Pass 2: Geometry & Ghost Rescue. Targeted search for remaining gaps.
     # We find more candidates using discovered layout priors (column alignment)
     # and fuzzy OCR matching, then RE-SOLVE to pick the best path.
     recurring_texts = _detect_repeating_header_texts(pages)
     geom_cands = _geometry_rescue(pages, selected, recurring_texts)
     rescued_cands = _ghost_rescue(pages, selected, domain=domain)
-    
-    # Re-Solve: run the DP one more time over the combined set of base + rescued 
+
+    # Re-Solve: run the DP one more time over the combined set of base + rescued
     # candidates to ensure the final path is globally optimal.
     final_pool = list(base_cands)
     existing_ids = {id(c) for c in final_pool}
-    for rc in (geom_cands + rescued_cands):
+    for rc in geom_cands + rescued_cands:
         if id(rc) not in existing_ids:
             final_pool.append(rc)
             existing_ids.add(id(rc))
     final_pool.sort(key=lambda c: (c.page, c.y, c.x))
-    
+
     final_path = _solve_sequence(final_pool)
     final_path = _gap_fill(final_pool, final_path)
     final_selected = [final_pool[i] for i in sorted(final_path)]
     final_selected.sort(key=lambda c: (c.page, c.y, c.x))
-    
+
     # Final cleanup
     labels = [c.digit_value for c in final_selected]
     trimmed_values = set(_trim_tail_outliers(labels))
@@ -1166,19 +1162,28 @@ def solve_document(layouts: list, *, pdf_path: str | None = None) -> SolverResul
     # sequence. Return empty rather than report a false "invalid" sequence.
     if _looks_like_toc(final, n_pages=len(pages)):
         return SolverResult(
-            page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
+            page_cutoffs={},
+            selected_labels=[],
+            selected_candidates=(),
+            candidate_count=candidate_count,
         )
 
     # Abstain if the sequence is too short and doesn't start at 1.
     # (Prevents picking up stray 2, 3, 4 from a list or table).
     if final and final[0].digit_value > 1 and len(final) < 5:
         return SolverResult(
-            page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
+            page_cutoffs={},
+            selected_labels=[],
+            selected_candidates=(),
+            candidate_count=candidate_count,
         )
 
     if not final:
         return SolverResult(
-            page_cutoffs={}, selected_labels=[], selected_candidates=(), candidate_count=candidate_count
+            page_cutoffs={},
+            selected_labels=[],
+            selected_candidates=(),
+            candidate_count=candidate_count,
         )
 
     # Calculate per-page body/note cutoffs for downstream layout analysis
@@ -1186,7 +1191,7 @@ def solve_document(layouts: list, *, pdf_path: str | None = None) -> SolverResul
     for c in final:
         if c.page not in page_cutoffs or c.y < page_cutoffs[c.page]:
             page_cutoffs[c.page] = c.y
-            
+
     return SolverResult(
         page_cutoffs=page_cutoffs,
         selected_labels=sorted(set(c.digit_value for c in final)),
@@ -1209,7 +1214,7 @@ def build_note_records(layouts: list, result: SolverResult):
     empty here — author-note (asterisk/dagger) handling stays in the segmenter
     path and runs as a supplementary pass.
     """
-    from .schema import NoteRecord, OrdinalityReport
+    from .schema import NoteRecord
 
     if not result.selected_candidates:
         return [], [], None
@@ -1229,15 +1234,20 @@ def build_note_records(layouts: list, result: SolverResult):
         # end-of-document — real footnotes rarely span more than one page,
         # so anything beyond cand.page+1 is body-bleed contamination that
         # would poison downstream LLM consumers.
-        last_allowed_page = (
-            next_cand.page if next_cand is not None else cand.page + 1
-        )
+        last_allowed_page = next_cand.page if next_cand is not None else cand.page + 1
+        boundary_confidence_low = False
         for pn in sorted(by_page.keys()):
             if pn < cand.page:
                 continue
             if pn > last_allowed_page:
                 break
             layout = by_page[pn]
+            separator_y = getattr(layout, "separator_y", None)
+            font_threshold = None
+            if pn > cand.page:
+                font_threshold = _continuation_footnote_font_threshold(layout)
+                if separator_y is None and font_threshold is None:
+                    boundary_confidence_low = True
             for line in getattr(layout, "lines", ()):  # ExtractedLine
                 top = float(getattr(line, "top", 0.0) or 0.0)
                 # Start of the span: exclude lines strictly above cand on cand's page.
@@ -1247,6 +1257,21 @@ def build_note_records(layouts: list, result: SolverResult):
                 # next_cand's page.
                 if next_cand is not None:
                     if pn == next_cand.page and top >= next_cand.y - 0.5:
+                        continue
+                # A continuation page begins with body text, not the prior
+                # page's footnote. Keep only lines supported by the page's
+                # footnote-region separator or its smaller-font band. When
+                # neither signal exists, preserve the legacy span and expose
+                # the uncertainty on the note record.
+                if pn > cand.page and (separator_y is not None or font_threshold is not None):
+                    line_font = getattr(line, "font_size", None)
+                    below_separator = separator_y is not None and top >= float(separator_y) - 0.5
+                    in_footnote_font_band = (
+                        font_threshold is not None
+                        and line_font is not None
+                        and float(line_font) <= font_threshold
+                    )
+                    if not (below_separator or in_footnote_font_band):
                         continue
                 collected.append(line)
         text_parts = [(getattr(ln, "text", "") or "").strip() for ln in collected]
@@ -1275,7 +1300,10 @@ def build_note_records(layouts: list, result: SolverResult):
                 page_start=int(cand.page),
                 page_end=page_end,
                 confidence=0.95,
-                features={"source": "sequence_solver"},
+                features={
+                    "source": "sequence_solver",
+                    **({"boundary_confidence": "low"} if boundary_confidence_low else {}),
+                },
             )
         )
 
@@ -1296,3 +1324,28 @@ def build_note_records(layouts: list, result: SolverResult):
     # unconditionally.
     ordinality = validate_ordinality(labels, gap_tolerance=2)
     return notes, [], ordinality
+
+
+def _continuation_footnote_font_threshold(layout: Any) -> float | None:
+    """Return the smaller-font cutoff when the existing bimodal rail fires."""
+    lines = list(getattr(layout, "lines", ()) or ())
+    page_height = float(getattr(layout, "height", 0.0) or 0.0)
+    if not lines or page_height <= 0:
+        return None
+
+    # Keep this tied to text_extract's established rail: a page has a usable
+    # font-band signal only when that detector finds a spatial note boundary.
+    from .text_extract import _bimodal_font_split
+
+    if _bimodal_font_split(lines, page_height=page_height) is None:
+        return None
+    sizes = [
+        float(getattr(line, "font_size"))
+        for line in lines
+        if getattr(line, "font_size", None) is not None
+    ]
+    buckets = Counter(int(round(size)) for size in sizes)
+    significant = sorted(size for size, count in buckets.items() if count / len(sizes) >= 0.12)
+    if len(significant) < 2:
+        return None
+    return (float(significant[0]) + float(significant[-1])) / 2.0

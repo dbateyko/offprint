@@ -1,4 +1,5 @@
 """Tests for the sequence-solver footnote extractor."""
+
 from __future__ import annotations
 
 from offprint.pdf_footnotes.note_segment import validate_ordinality
@@ -17,9 +18,7 @@ from offprint.pdf_footnotes.text_extract import _LiteparsePageLayout, ExtractedL
 
 
 def _mk_line(text: str, page: int, top: float, font_size: float = 9.0) -> ExtractedLine:
-    return ExtractedLine(
-        text=text, page_number=page, top=top, bottom=top + 10, font_size=font_size
-    )
+    return ExtractedLine(text=text, page_number=page, top=top, bottom=top + 10, font_size=font_size)
 
 
 def _mk_layout(page: int, lines, items, separator_y: float | None = None) -> _LiteparsePageLayout:
@@ -86,6 +85,86 @@ def test_build_note_records_constructs_note_spans_from_selected_candidates():
     assert not notes[2].text.startswith("3.")
     # Author notes unused by solver path.
     assert author_notes == []
+
+
+def _cross_page_result() -> SolverResult:
+    first = LabelCandidate(page=1, y=700, x=72, font_size=9, digit_value=1, text="1")
+    second = LabelCandidate(page=2, y=600, x=72, font_size=9, digit_value=2, text="2")
+    return SolverResult(
+        page_cutoffs={1: 700, 2: 600},
+        selected_labels=[1, 2],
+        selected_candidates=(first, second),
+        candidate_count=2,
+    )
+
+
+def test_build_note_records_clips_cross_page_body_with_separator_signal():
+    page1 = _mk_layout(
+        1,
+        [_mk_line("1 Note one starts near the page bottom.", 1, 700, 9)],
+        [],
+    )
+    page2 = _mk_layout(
+        2,
+        [
+            _mk_line("Body prose at the top of continuation page.", 2, 120, 11),
+            _mk_line("Note one continues below the separator.", 2, 550, 9),
+            _mk_line("2 Note two starts here.", 2, 600, 9),
+        ],
+        [],
+        separator_y=530,
+    )
+
+    notes, _, _ = build_note_records([page1, page2], _cross_page_result())
+
+    assert "Note one continues" in notes[0].text
+    assert "Body prose" not in notes[0].text
+    assert "boundary_confidence" not in notes[0].features
+
+
+def test_build_note_records_clips_cross_page_body_with_font_band_signal():
+    page1 = _mk_layout(
+        1,
+        [_mk_line("1 Note one starts near the page bottom.", 1, 700, 9)],
+        [],
+    )
+    page2_lines = [
+        _mk_line(f"Body prose line {index}.", 2, 80 + index * 55, 11) for index in range(6)
+    ] + [
+        _mk_line("Note one continues in the smaller font band.", 2, 540, 9),
+        _mk_line("More continuation text.", 2, 560, 9),
+        _mk_line("2 Note two starts here.", 2, 600, 9),
+        _mk_line("Note two continuation.", 2, 620, 9),
+    ]
+    page2 = _mk_layout(2, page2_lines, [])
+
+    notes, _, _ = build_note_records([page1, page2], _cross_page_result())
+
+    assert "smaller font band" in notes[0].text
+    assert "Body prose" not in notes[0].text
+    assert "boundary_confidence" not in notes[0].features
+
+
+def test_build_note_records_flags_cross_page_fallback_without_region_signal():
+    page1 = _mk_layout(
+        1,
+        [_mk_line("1 Note one starts near the page bottom.", 1, 700, 10)],
+        [],
+    )
+    page2 = _mk_layout(
+        2,
+        [
+            _mk_line("Body prose cannot be distinguished on this page.", 2, 120, 10),
+            _mk_line("Note one continuation in the same font.", 2, 550, 10),
+            _mk_line("2 Note two starts here.", 2, 600, 10),
+        ],
+        [],
+    )
+
+    notes, _, _ = build_note_records([page1, page2], _cross_page_result())
+
+    assert "Body prose" in notes[0].text
+    assert notes[0].features["boundary_confidence"] == "low"
 
 
 def test_separator_prior_prefers_below_rule_candidate_over_body_number():
@@ -169,9 +248,7 @@ def test_solve_document_accepts_dense_start_at_2_when_label_1_is_lost():
     ]
     y = 500
     for lbl in range(2, 6):  # 2, 3, 4, 5 on page 1
-        layout_lines_p1.append(
-            _mk_line(f"{lbl}. See some citation text here with words.", 1, y, 9)
-        )
+        layout_lines_p1.append(_mk_line(f"{lbl}. See some citation text here with words.", 1, y, 9))
         layout_items_p1.append(
             {"text": f"{lbl}.", "x": 72, "y": y, "width": 10, "height": 10, "fontSize": 9}
         )
@@ -179,8 +256,14 @@ def test_solve_document_accepts_dense_start_at_2_when_label_1_is_lost():
             {"text": "See", "x": 90, "y": y, "width": 20, "height": 10, "fontSize": 9}
         )
         layout_items_p1.append(
-            {"text": "some citation text here with words.",
-             "x": 115, "y": y, "width": 200, "height": 10, "fontSize": 9}
+            {
+                "text": "some citation text here with words.",
+                "x": 115,
+                "y": y,
+                "width": 200,
+                "height": 10,
+                "fontSize": 9,
+            }
         )
         y += 13
     pages.append(_mk_layout(1, layout_lines_p1, layout_items_p1))
@@ -201,8 +284,14 @@ def test_solve_document_accepts_dense_start_at_2_when_label_1_is_lost():
             {"text": "See", "x": 90, "y": y, "width": 20, "height": 10, "fontSize": 9}
         )
         layout_items_p2.append(
-            {"text": "another citation here with more words.",
-             "x": 115, "y": y, "width": 200, "height": 10, "fontSize": 9}
+            {
+                "text": "another citation here with more words.",
+                "x": 115,
+                "y": y,
+                "width": 200,
+                "height": 10,
+                "fontSize": 9,
+            }
         )
         y += 13
     pages.append(_mk_layout(2, layout_lines_p2, layout_items_p2))
@@ -223,7 +312,14 @@ def test_collect_candidates_synthesizes_split_label_166():
             {"text": "1", "x": 72, "y": 500, "width": 5, "height": 10, "fontSize": 9},
             {"text": "66", "x": 78, "y": 500, "width": 11, "height": 10, "fontSize": 9},
             {"text": "See", "x": 96, "y": 500, "width": 18, "height": 10, "fontSize": 9},
-            {"text": "authority explaining the point.", "x": 118, "y": 500, "width": 150, "height": 10, "fontSize": 9},
+            {
+                "text": "authority explaining the point.",
+                "x": 118,
+                "y": 500,
+                "width": 150,
+                "height": 10,
+                "fontSize": 9,
+            },
         ],
     )
     # The synthetic-label cap follows max(120, page_count * 10), so include
@@ -240,9 +336,7 @@ def test_solve_document_uses_split_166_to_close_sequence_gap():
     label = 1
     for page in range(1, 18):
         lines = [_mk_line(f"Body text page {page}", page, 80, 11)]
-        items = [
-            {"text": "Body", "x": 72, "y": 80, "width": 24, "height": 10, "fontSize": 11}
-        ]
+        items = [{"text": "Body", "x": 72, "y": 80, "width": 24, "height": 10, "fontSize": 11}]
         for offset in range(10):
             if label > 167:
                 break
@@ -303,7 +397,14 @@ def test_collect_candidates_synthesizes_split_label_87():
             {"text": "8", "x": 72, "y": 500, "width": 5, "height": 10, "fontSize": 9},
             {"text": "7", "x": 78, "y": 500, "width": 5, "height": 10, "fontSize": 9},
             {"text": "See", "x": 90, "y": 500, "width": 18, "height": 10, "fontSize": 9},
-            {"text": "authority explaining the point.", "x": 112, "y": 500, "width": 150, "height": 10, "fontSize": 9},
+            {
+                "text": "authority explaining the point.",
+                "x": 112,
+                "y": 500,
+                "width": 150,
+                "height": 10,
+                "fontSize": 9,
+            },
         ],
     )
 
@@ -357,27 +458,80 @@ def test_gap_fill_prefers_high_score_column_aligned_over_low_score_near_bracket(
     # Selected path: 3 candidates at x=144 on page 2, then 1 at x=144 on
     # page 5, forming a dense column at x=144. Gap: label 4.
     selected_cands = [
-        LabelCandidate(page=2, y=500, x=144, font_size=6, digit_value=1, text="1.",
-                       has_punct=True, left_margin=True, cluster_peers=3),
-        LabelCandidate(page=2, y=513, x=144, font_size=6, digit_value=2, text="2.",
-                       has_punct=True, left_margin=True, cluster_peers=3),
-        LabelCandidate(page=2, y=527, x=144, font_size=6, digit_value=3, text="3.",
-                       has_punct=True, left_margin=True, cluster_peers=3),
-        LabelCandidate(page=2, y=540, x=144, font_size=6, digit_value=5, text="5.",
-                       has_punct=True, left_margin=True, cluster_peers=3),
+        LabelCandidate(
+            page=2,
+            y=500,
+            x=144,
+            font_size=6,
+            digit_value=1,
+            text="1.",
+            has_punct=True,
+            left_margin=True,
+            cluster_peers=3,
+        ),
+        LabelCandidate(
+            page=2,
+            y=513,
+            x=144,
+            font_size=6,
+            digit_value=2,
+            text="2.",
+            has_punct=True,
+            left_margin=True,
+            cluster_peers=3,
+        ),
+        LabelCandidate(
+            page=2,
+            y=527,
+            x=144,
+            font_size=6,
+            digit_value=3,
+            text="3.",
+            has_punct=True,
+            left_margin=True,
+            cluster_peers=3,
+        ),
+        LabelCandidate(
+            page=2,
+            y=540,
+            x=144,
+            font_size=6,
+            digit_value=5,
+            text="5.",
+            has_punct=True,
+            left_margin=True,
+            cluster_peers=3,
+        ),
     ]
     # Label 4: low-score candidate on a near-bracket page (p3) AND
     # high-score candidate column-aligned (x=144, peers=3) on a far page (p9).
     # Without the union fix, near would shadow column_anywhere.
     low_near = LabelCandidate(
-        page=3, y=100, x=400, font_size=10, digit_value=4, text="4",
-        is_pure_digit=True, has_punct=False, left_margin=False,
-        cluster_peers=0, citation_nearby=False, substantive_text=False,
+        page=3,
+        y=100,
+        x=400,
+        font_size=10,
+        digit_value=4,
+        text="4",
+        is_pure_digit=True,
+        has_punct=False,
+        left_margin=False,
+        cluster_peers=0,
+        citation_nearby=False,
+        substantive_text=False,
     )
     high_far_aligned = LabelCandidate(
-        page=9, y=600, x=144, font_size=6, digit_value=4, text="4.",
-        has_punct=True, left_margin=True, cluster_peers=3,
-        citation_nearby=True, substantive_text=True,
+        page=9,
+        y=600,
+        x=144,
+        font_size=6,
+        digit_value=4,
+        text="4.",
+        has_punct=True,
+        left_margin=True,
+        cluster_peers=3,
+        citation_nearby=True,
+        substantive_text=True,
     )
     cands = selected_cands + [low_near, high_far_aligned]
     selected_idx = [0, 1, 2, 3]  # 1, 2, 3, 5
@@ -500,13 +654,23 @@ def test_geometry_rescue_recovers_split_labels_outside_conservative_margin():
     for i in range(1, 12):
         y = 500 + i * 20
         if i == 10:
-            items.append({"text": "1", "x": 160.0, "y": y, "width": 4.0, "height": 10, "fontSize": 9})
-            items.append({"text": "0.", "x": 164.0, "y": y, "width": 6.0, "height": 10, "fontSize": 9})
-            items.append({"text": "short", "x": 180, "y": y, "width": 18, "height": 10, "fontSize": 9})
+            items.append(
+                {"text": "1", "x": 160.0, "y": y, "width": 4.0, "height": 10, "fontSize": 9}
+            )
+            items.append(
+                {"text": "0.", "x": 164.0, "y": y, "width": 6.0, "height": 10, "fontSize": 9}
+            )
+            items.append(
+                {"text": "short", "x": 180, "y": y, "width": 18, "height": 10, "fontSize": 9}
+            )
             lines.append(_mk_line(f"{i}. short", 1, y, 9))
         else:
-            items.append({"text": f"{i}.", "x": 160.0, "y": y, "width": 10, "height": 10, "fontSize": 9})
-            items.append({"text": "See", "x": 180, "y": y, "width": 18, "height": 10, "fontSize": 9})
+            items.append(
+                {"text": f"{i}.", "x": 160.0, "y": y, "width": 10, "height": 10, "fontSize": 9}
+            )
+            items.append(
+                {"text": "See", "x": 180, "y": y, "width": 18, "height": 10, "fontSize": 9}
+            )
             lines.append(_mk_line(f"{i}. See authority explaining note.", 1, y, 9))
 
     layout = _mk_layout(1, lines, items, separator_y=None)
@@ -615,6 +779,7 @@ def test_is_ocr_match_S_for_8():
 
 def test_domain_glyph_profile_bclawreview_3_to_5():
     from offprint.pdf_footnotes.sequence_solver import _equivalents_for, _is_ocr_match
+
     # Without domain, `5` does NOT match target `3`.
     assert "5" not in _equivalents_for("3", domain=None)
     assert not _is_ocr_match(330, "550")
@@ -628,6 +793,7 @@ def test_domain_glyph_profile_bclawreview_3_to_5():
 
 def test_domain_glyph_profile_does_not_leak_to_other_domains():
     from offprint.pdf_footnotes.sequence_solver import _is_ocr_match
+
     # A clean publisher must not get BC's `5→3` substitution.
     assert not _is_ocr_match(330, "550", domain="harvardlawreview.org")
     assert not _is_ocr_match(330, "550", domain="example.com")
@@ -635,16 +801,17 @@ def test_domain_glyph_profile_does_not_leak_to_other_domains():
 
 def test_domain_inference_from_pdf_path():
     from offprint.pdf_footnotes.sequence_solver import _domain_from_pdf_path
-    assert _domain_from_pdf_path(
-        "/mnt/data/corpus/scraped/bclawreview.bc.edu/63beb1f9a5219.pdf"
-    ) == "bclawreview.bc.edu"
-    assert _domain_from_pdf_path(
-        "../corpus/scraped/uknowledge.uky.edu/viewcontent.cgi-x.pdf"
-    ) == "uknowledge.uky.edu"
+
+    assert (
+        _domain_from_pdf_path("/mnt/data/corpus/scraped/bclawreview.bc.edu/63beb1f9a5219.pdf")
+        == "bclawreview.bc.edu"
+    )
+    assert (
+        _domain_from_pdf_path("../corpus/scraped/uknowledge.uky.edu/viewcontent.cgi-x.pdf")
+        == "uknowledge.uky.edu"
+    )
     # Fallback: parent dir as domain when no `scraped/` segment.
-    assert _domain_from_pdf_path(
-        "/some/other/path/example.com/file.pdf"
-    ) == "example.com"
+    assert _domain_from_pdf_path("/some/other/path/example.com/file.pdf") == "example.com"
     assert _domain_from_pdf_path(None) is None
     assert _domain_from_pdf_path("") is None
 
@@ -654,6 +821,7 @@ def test_domain_inference_from_pdf_path():
 
 def test_albertalawreview_glyph_profile():
     from offprint.pdf_footnotes.sequence_solver import _is_ocr_match, _equivalents_for
+
     domain = "albertalawreview.com"
     # 8 ↔ M (schachter `IM.`=18)
     assert _is_ocr_match(18, "IM", domain=domain)
@@ -678,6 +846,7 @@ def test_albertalawreview_glyph_profile():
 
 def test_domain_profile_alberta_is_bare_label_friendly():
     from offprint.pdf_footnotes.sequence_solver import _profile_for, DomainProfile
+
     profile = _profile_for("albertalawreview.com")
     assert isinstance(profile, DomainProfile)
     assert profile.bare_label_friendly is True
@@ -685,6 +854,7 @@ def test_domain_profile_alberta_is_bare_label_friendly():
 
 def test_domain_profile_other_publishers_are_not_bare_label_friendly():
     from offprint.pdf_footnotes.sequence_solver import _profile_for
+
     bc = _profile_for("bclawreview.bc.edu")
     assert bc is not None and bc.bare_label_friendly is False
     assert _profile_for("harvardlawreview.org") is None
@@ -701,13 +871,23 @@ def test_bare_label_friendly_promotes_punct_on_alberta_candidates():
     y = 500
     for i in range(1, 6):
         items.append({"text": str(i), "x": 72.0, "y": y, "width": 6.0, "height": 10, "fontSize": 9})
-        items.append({"text": "Smith", "x": 82.0, "y": y, "width": 22.0, "height": 10, "fontSize": 9})
+        items.append(
+            {"text": "Smith", "x": 82.0, "y": y, "width": 22.0, "height": 10, "fontSize": 9}
+        )
         items.append({"text": "v.", "x": 108.0, "y": y, "width": 8.0, "height": 10, "fontSize": 9})
-        items.append({"text": "Jones,", "x": 119.0, "y": y, "width": 26.0, "height": 10, "fontSize": 9})
+        items.append(
+            {"text": "Jones,", "x": 119.0, "y": y, "width": 26.0, "height": 10, "fontSize": 9}
+        )
         items.append({"text": "1", "x": 148.0, "y": y, "width": 5.0, "height": 10, "fontSize": 9})
-        items.append({"text": "Alta", "x": 156.0, "y": y, "width": 18.0, "height": 10, "fontSize": 9})
-        items.append({"text": "L.R.", "x": 178.0, "y": y, "width": 16.0, "height": 10, "fontSize": 9})
-        items.append({"text": "100", "x": 198.0, "y": y, "width": 14.0, "height": 10, "fontSize": 9})
+        items.append(
+            {"text": "Alta", "x": 156.0, "y": y, "width": 18.0, "height": 10, "fontSize": 9}
+        )
+        items.append(
+            {"text": "L.R.", "x": 178.0, "y": y, "width": 16.0, "height": 10, "fontSize": 9}
+        )
+        items.append(
+            {"text": "100", "x": 198.0, "y": y, "width": 14.0, "height": 10, "fontSize": 9}
+        )
         lines.append(_mk_line(f"{i} Smith v. Jones, 1 Alta L.R. 100", 1, y, 9))
         y += 13
     layout = _mk_layout(1, lines, items)
@@ -722,6 +902,7 @@ def test_bare_label_friendly_does_not_apply_to_unprofiled_domain():
     signals are strong) but the candidates are NOT promoted to has_punct.
     Verifies the promotion is gated by domain."""
     from offprint.pdf_footnotes.sequence_solver import _collect_candidates, _pages_from_layouts
+
     items = [
         {"text": "1", "x": 72.0, "y": 500, "width": 6.0, "height": 10, "fontSize": 9},
         {"text": "Smith", "x": 82.0, "y": 500, "width": 22.0, "height": 10, "fontSize": 9},
@@ -743,8 +924,9 @@ def test_bare_label_friendly_does_not_apply_to_unprofiled_domain():
     cands_alberta = _collect_candidates(pages, domain="albertalawreview.com")
     bare_alberta = [c for c in cands_alberta if c.digit_value == 1 and c.x < 80]
     assert bare_alberta
-    assert any(c.has_punct for c in bare_alberta), \
-        "bare label with citation_nearby should be promoted to has_punct"
+    assert any(
+        c.has_punct for c in bare_alberta
+    ), "bare label with citation_nearby should be promoted to has_punct"
 
 
 def test_looks_like_toc_does_not_reject_short_article_starting_at_1():
@@ -752,18 +934,20 @@ def test_looks_like_toc_does_not_reject_short_article_starting_at_1():
     densely packed on pages 1-2) was being killed by the TOC heuristic
     after the bare-label promotion correctly found the full 1-9 sequence."""
     from offprint.pdf_footnotes.sequence_solver import _looks_like_toc, LabelCandidate
+
     # 9 candidates: 5 on p1, 3 on p2, 1 on p3 — top-2 = 8/9 = 89%, would
     # trip the old 80% threshold. But sequence is 1..9 contiguous, so it's
     # a real footnote stream, not a TOC.
     cands = []
     for d in range(1, 6):
-        cands.append(LabelCandidate(page=1, y=500+d, x=50, font_size=9,
-                                     digit_value=d, text=str(d)))
+        cands.append(
+            LabelCandidate(page=1, y=500 + d, x=50, font_size=9, digit_value=d, text=str(d))
+        )
     for d in range(6, 9):
-        cands.append(LabelCandidate(page=2, y=500+d, x=50, font_size=9,
-                                     digit_value=d, text=str(d)))
-    cands.append(LabelCandidate(page=3, y=500, x=50, font_size=9,
-                                 digit_value=9, text="9"))
+        cands.append(
+            LabelCandidate(page=2, y=500 + d, x=50, font_size=9, digit_value=d, text=str(d))
+        )
+    cands.append(LabelCandidate(page=3, y=500, x=50, font_size=9, digit_value=9, text="9"))
     assert _looks_like_toc(cands, n_pages=4) is False
 
 
@@ -771,6 +955,7 @@ def test_looks_like_toc_still_rejects_real_toc_concentration():
     """A real TOC: 6 numeric entries (page numbers) all on page 1, none
     starting at 1 → should still trip the TOC heuristic."""
     from offprint.pdf_footnotes.sequence_solver import _looks_like_toc, LabelCandidate
+
     cands = [
         LabelCandidate(page=1, y=100, x=50, font_size=11, digit_value=23, text="23"),
         LabelCandidate(page=1, y=120, x=50, font_size=11, digit_value=47, text="47"),
@@ -804,4 +989,4 @@ def test_lowercase_s_glyph_matches_8_in_is_ocr_match():
     assert _is_ocr_match(5, "5")
     # Must not match wrong targets
     assert not _is_ocr_match(148, "14b")  # `b` not in equivalents for 8
-    assert not _is_ocr_match(148, "1s")   # length mismatch
+    assert not _is_ocr_match(148, "1s")  # length mismatch
