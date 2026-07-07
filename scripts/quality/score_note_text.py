@@ -22,6 +22,9 @@ from offprint.pdf_footnotes.evaluation import _iter_numbered_notes, _load_gold
 def normalize_note_text(text: str) -> str:
     """Normalize whitespace and line-break hyphenation before token scoring."""
     text = (text or "").replace("\u00ad", "")
+    # HTML footnotes carry a backlink glyph absent from the PDF; without this
+    # every gold note contributes one guaranteed false-negative token.
+    text = text.replace("\u2191", "")
     text = re.sub(r"(?<=\w)-\s+(?=[a-z])", "", text)
     text = text.replace("\u2013", "-").replace("\u2014", "-")
     text = text.replace("\u2018", "'").replace("\u2019", "'")
@@ -49,11 +52,37 @@ def _metrics(tp: int, fp: int, fn: int) -> dict[str, float | int]:
     return {"precision": precision, "recall": recall, "f1": f1, "tp": tp, "fp": fp, "fn": fn}
 
 
+def _pair_qa_reasons(gold_n: int, pred_n: int, label_overlap: float) -> list[str]:
+    """Structural checks that an HTML/PDF pair is the same article.
+
+    Mismatched pairs (e.g. a one-pager PDF paired with a full article's HTML)
+    score ~0 and would dominate the aggregate; these gates are structural
+    (note counts and label-set overlap), NOT score-based, so excluding a pair
+    cannot inflate the metric circularly. A same-length wrong-article pair can
+    still slip through — triage per-document scores for that.
+    """
+    reasons = []
+    if gold_n < 5:
+        reasons.append(f"gold_notes<5 ({gold_n})")
+    if pred_n < 1:
+        reasons.append("no predicted notes")
+    elif gold_n:
+        overlap_min = 0.5
+        if label_overlap < overlap_min:
+            reasons.append(f"label_overlap {label_overlap:.2f}<{overlap_min}")
+        ratio = pred_n / gold_n
+        if not (0.5 <= ratio <= 2.0):
+            reasons.append(f"note_count_ratio {ratio:.2f} outside [0.5,2.0]")
+    return reasons
+
+
 def score_gold(gold_path: Path, predictions_root: Path | None = None) -> dict:
     gold = _load_gold(str(gold_path))
     totals = [0, 0, 0]
+    totals_unfiltered = [0, 0, 0]
     domains: dict[str, list[int]] = defaultdict(lambda: [0, 0, 0])
     documents = []
+    excluded_pairs = []
     for pdf_path, gold_doc in gold.items():
         gold_meta = gold_doc.get("html_gold") or {}
         domain = str(
@@ -73,6 +102,10 @@ def score_gold(gold_path: Path, predictions_root: Path | None = None) -> dict:
         predicted_doc = json.loads(sidecar.read_text(encoding="utf-8"))
         gold_notes = {note["label"]: note for note in _iter_numbered_notes(gold_doc)}
         pred_notes = {note["label"]: note for note in _iter_numbered_notes(predicted_doc)}
+        gold_n, pred_n = len(gold_notes), len(pred_notes)
+        label_overlap = (len(gold_notes.keys() & pred_notes.keys()) / gold_n) if gold_n else 0.0
+        qa_reasons = _pair_qa_reasons(gold_n, pred_n, label_overlap)
+        pair_ok = not qa_reasons
         doc_counts = [0, 0, 0]
         for label in gold_notes.keys() | pred_notes.keys():
             counts = text_prf(
@@ -81,13 +114,40 @@ def score_gold(gold_path: Path, predictions_root: Path | None = None) -> dict:
             )
             for index, count in enumerate(counts):
                 doc_counts[index] += count
-                totals[index] += count
-                domains[domain][index] += count
-        documents.append({"source_pdf_path": pdf_path, "domain": domain, **_metrics(*doc_counts)})
+                totals_unfiltered[index] += count
+                if pair_ok:
+                    totals[index] += count
+                    domains[domain][index] += count
+        entry = {
+            "source_pdf_path": pdf_path,
+            "domain": domain,
+            **_metrics(*doc_counts),
+            "gold_note_count": gold_n,
+            "predicted_note_count": pred_n,
+            "label_overlap": round(label_overlap, 3),
+            "pair_qa": "pass" if pair_ok else "fail",
+        }
+        if not pair_ok:
+            entry["pair_qa_reasons"] = qa_reasons
+            excluded_pairs.append(
+                {"source_pdf_path": pdf_path, "domain": domain, "reasons": qa_reasons}
+            )
+        documents.append(entry)
+    n_scored = sum(1 for d in documents if not d.get("missing"))
     return {
-        "normalization": "lowercase; collapse whitespace; remove soft hyphens; join word-hyphen line breaks; normalize dashes/quotes",
+        "normalization": "lowercase; collapse whitespace; remove soft hyphens; "
+        "strip HTML backlink arrows; join word-hyphen line breaks; "
+        "normalize dashes/quotes",
+        "pair_qa": {
+            "rule": "gold_notes>=5, predicted_notes>=1, label_overlap>=0.5, "
+            "note_count_ratio in [0.5,2.0]",
+            "passed": n_scored - len(excluded_pairs),
+            "excluded": len(excluded_pairs),
+        },
         "summary": _metrics(*totals),
+        "summary_unfiltered": _metrics(*totals_unfiltered),
         "domains": {domain: _metrics(*counts) for domain, counts in sorted(domains.items())},
+        "excluded_pairs": excluded_pairs,
         "documents": documents,
     }
 
@@ -148,6 +208,12 @@ def main() -> int:
         print(f"{domain}\t{metrics['precision']:.4f}\t{metrics['recall']:.4f}\t{metrics['f1']:.4f}")
     summary = report["summary"]
     print(f"ALL\t{summary['precision']:.4f}\t{summary['recall']:.4f}\t{summary['f1']:.4f}")
+    qa = report["pair_qa"]
+    unfiltered = report["summary_unfiltered"]
+    print(
+        f"(pair QA: {qa['passed']} scored, {qa['excluded']} excluded; "
+        f"unfiltered F1 {unfiltered['f1']:.4f})"
+    )
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

@@ -56,9 +56,13 @@ def test_score_gold_five_document_regression_floor(tmp_path: Path) -> None:
     documents = []
     for index, domain in enumerate(domains, start=1):
         pdf = tmp_path / f"doc-{index}.pdf"
+        # Five notes so the pair passes the structural QA gate (gold_notes>=5).
         notes = {
             "1": {"text": "A normalized footnote about constitutional law."},
             "2": {"text": "See Smith v. Jones, 123 U.S. 456."},
+            "3": {"text": "But see Doe v. Roe, 789 F.2d 101, 105 (2d Cir. 1986)."},
+            "4": {"text": "Cf. Restatement (Second) of Contracts § 90 (1981)."},
+            "5": {"text": "Id. at 460 (discussing the remedial framework)."},
         }
         Path(f"{pdf}.footnotes.json").write_text(json.dumps({"notes": notes}))
         documents.append(

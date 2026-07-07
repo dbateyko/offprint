@@ -110,6 +110,25 @@ Existing corpus sidecars and `articles_footnotes.parquet` still contain the
 pre-fix text. Re-extract the corpus and rebuild the parquet only after the live
 labeling run finishes; do not mutate its current inputs mid-run.
 
+### Text-level gold (July 2026)
+
+`scripts/quality/score_note_text.py` scores extracted note text against
+HTML-derived gold (per-note token P/R/F1) behind a structural pair-QA gate
+(gold ≥5 notes, label overlap ≥0.5, note-count ratio in [0.5, 2.0]). First
+corpus: 51 HTML↔PDF pairs across 3 domains; 26 passed QA (the 25 exclusions
+were mismatched pairs or gold-side incomplete HTML — see `excluded_pairs` in
+the score JSON). Post-clipping extraction, QA-passed pairs:
+
+| domain | P | R | F1 | reading |
+|---|---|---|---|---|
+| columbialawreview.org | 0.889 | 0.946 | **0.917** | modern PDFs: note text is solid |
+| houstonlawreview.org | 0.487 | 0.843 | 0.617 | mixed; residual draft-vs-published gold noise |
+| californialawreview.org | 0.193 | 0.237 | 0.213 | 1950s-era scans: labels align ≥0.97 but the text layer is garbled — a text-fidelity case for OCR routing, not a segmentation bug |
+
+These are *text* metrics and move independently of the ordinality numbers
+above. Low-F1 documents with high `label_overlap` are text-fidelity candidates
+for the olmOCR routing path, not solver regressions.
+
 ### Run the full-corpus audit
 
 See **[`docs/full_corpus_audit_roadmap.md`](../../docs/full_corpus_audit_roadmap.md)** for the canonical plan, pre-flight checklist, and definition of "done." Short version:
