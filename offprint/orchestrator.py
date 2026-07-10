@@ -387,6 +387,7 @@ def process_seed(
             robots_allowed = None
             download_status_class = "ok"
             blocked_reason = ""
+            skipped_duplicate = False
 
             if not (links_only or discovery_only or defer_dc_downloads):
                 _set_progress(stage="downloading")
@@ -419,6 +420,7 @@ def process_seed(
                     download_outcome.get("download_status_class") or "network"
                 )
                 blocked_reason = str(download_outcome.get("blocked_reason") or "")
+                skipped_duplicate = bool(download_outcome.get("skipped_duplicate"))
                 if download_outcome.get("content_type"):
                     content_type = str(download_outcome["content_type"])
                 if int(download_outcome.get("http_status") or 0):
@@ -474,6 +476,7 @@ def process_seed(
                 "robots_allowed": robots_allowed,
                 "download_status_class": download_status_class,
                 "blocked_reason": blocked_reason,
+                "skipped_duplicate": skipped_duplicate,
                 "is_dc_seed": is_dc_seed,
                 "download_state": (
                     "downloaded"

@@ -57,6 +57,7 @@ class Adapter:
             "download_status_class": "",
             "blocked_reason": "",
             "retry_after_hint": None,
+            "skipped_duplicate": False,
         }
         normalized = dict(defaults)
         normalized.update(raw or {})

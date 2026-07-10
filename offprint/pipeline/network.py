@@ -113,6 +113,7 @@ def _download_with_retries(
                     "blocked_reason": str(download_meta.get("blocked_reason") or ""),
                     "retry_after_hint": download_meta.get("retry_after_hint"),
                     "retries": attempt - 1,
+                    "skipped_duplicate": bool(download_meta.get("skipped_duplicate")),
                 }
 
         error_type, message, status_code = _classify_error(download_meta)
