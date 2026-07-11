@@ -990,3 +990,137 @@ def test_lowercase_s_glyph_matches_8_in_is_ocr_match():
     # Must not match wrong targets
     assert not _is_ocr_match(148, "14b")  # `b` not in equivalents for 8
     assert not _is_ocr_match(148, "1s")  # length mismatch
+
+
+# --------------------------------------------------------------------------- #
+# Running-header (page-top furniture) suppression on continuation pages.
+# See sequence_solver._detect_running_header_signatures / _line_is_header_furniture.
+# --------------------------------------------------------------------------- #
+def _running_header_result() -> SolverResult:
+    # Note 1 starts on page 1 (bottom); note 2 on page 2 (bottom) — so note 1's
+    # span reaches into page 2's top, where a running head sits.
+    first = LabelCandidate(page=1, y=700, x=72, font_size=9, digit_value=1, text="1")
+    second = LabelCandidate(page=2, y=700, x=72, font_size=9, digit_value=2, text="2")
+    return SolverResult(
+        page_cutoffs={1: 700, 2: 700},
+        selected_labels=[1, 2],
+        selected_candidates=(first, second),
+        candidate_count=2,
+    )
+
+
+def test_build_note_records_drops_recurring_running_header():
+    """A small-font page-top running head that recurs across pages is dropped
+    from a continuation-page note span (doc-level repetition signal)."""
+    # 4 pages, each carrying the SAME running head (differing only in page #) in
+    # the top furniture band, in a SMALLER font than body — the exact shape that
+    # the font-band filter would otherwise admit.
+    pages = []
+    for i, pg in enumerate([1, 2, 3, 4]):
+        head = _mk_line(f"{240 + pg} MITCHELL HAMLINE L.J. PUB. POL'Y & PRAC. [Vol. 40", pg, 25, 8)
+        body = _mk_line(f"Body prose paragraph on page {pg} continuing the argument.", pg, 60, 12)
+        lines = [head, body]
+        if pg == 1:
+            lines.append(_mk_line("1 Note one begins near the bottom of page one.", pg, 700, 9))
+        if pg == 2:
+            lines.append(_mk_line("note one continuation in the footnote font band.", pg, 560, 8))
+            lines.append(_mk_line("2 Note two begins here on page two.", pg, 700, 9))
+        pages.append(_mk_layout(pg, lines, []))
+
+    notes, _, _ = build_note_records(pages, _running_header_result())
+
+    note1 = notes[0].text
+    assert "MITCHELL HAMLINE" not in note1  # running head removed
+    assert "[Vol." not in note1
+    assert "continuation in the footnote font band" in note1  # real note text kept
+    assert "Body prose" not in note1  # body still excluded by font band
+    assert notes[0].features.get("running_header_removed")
+
+
+def test_build_note_records_keeps_smallcaps_citation_not_a_header():
+    """A real small-caps book cite at a continuation-page top (no [Vol/year]
+    anchor) is NOT furniture and must survive."""
+    pages = []
+    for pg in [1, 2, 3]:
+        # A recurring VERSO running head so detection has a real target...
+        head = _mk_line(f"{100 + pg} SOME LAW REVIEW [Vol. 12", pg, 25, 8)
+        lines = [head]
+        if pg == 1:
+            lines.append(_mk_line("1 Note one begins near the bottom.", pg, 700, 9))
+        if pg == 2:
+            # A real small-caps citation sitting just below the head (not the
+            # topmost furniture line): must be kept.
+            lines.append(_mk_line("HENRY WEIHOFEN, LEGAL WRITING STYLE 8 (2d ed. 1980).", pg, 90, 9))
+            lines.append(_mk_line("2 Note two here.", pg, 700, 9))
+        pages.append(_mk_layout(pg, lines, []))
+
+    notes, _, _ = build_note_records(pages, _running_header_result())
+    note1 = notes[0].text
+    assert "SOME LAW REVIEW" not in note1
+    assert "HENRY WEIHOFEN, LEGAL WRITING STYLE" in note1
+
+
+def _load_regression_fixture():
+    import json
+    from pathlib import Path
+
+    path = Path(__file__).parent / "fixtures" / "running_header_regression.json"
+    data = json.loads(path.read_text())
+    cases = {}
+    for name, blob in data.items():
+        layouts = []
+        for p in blob["layouts"]:
+            lines = tuple(
+                ExtractedLine(
+                    text=ln["text"], page_number=p["page_number"],
+                    top=ln["top"], bottom=ln.get("bottom", ln["top"] + 10),
+                    font_size=ln["font_size"],
+                )
+                for ln in p["lines"]
+            )
+            layouts.append(
+                _LiteparsePageLayout(
+                    page_number=p["page_number"], width=p["width"], height=p["height"],
+                    raw_text="", lines=lines, raw_items=(), separator_y=p["separator_y"],
+                )
+            )
+        cands = tuple(
+            LabelCandidate(page=c["page"], y=c["y"], x=c["x"], font_size=c["font_size"],
+                           digit_value=c["digit_value"], text=c["text"])
+            for c in blob["selected_candidates"]
+        )
+        result = SolverResult(
+            page_cutoffs={}, selected_labels=blob["selected_labels"],
+            selected_candidates=cands, candidate_count=blob["candidate_count"],
+        )
+        cases[name] = (layouts, result)
+    return cases
+
+
+def _has_running_header(text: str) -> bool:
+    """Minimal in-test detector mirroring the two header shapes (self-contained
+    so the test does not depend on the offprint-data-ops oracle)."""
+    import re
+
+    caps = r"[A-Z][A-Z'’&.\-]*"
+    run = rf"{caps}(?:\s+(?:v\.|&|{caps})){{1,}}"
+    verso = re.compile(rf"(?:\d{{1,4}}\s+)?{run}\s+\[\s*(?:[Vv][Oo][Ll]\.?\s*)?\d")
+    recto = re.compile(rf"(?<![A-Za-z0-9])(?:1[6-9]\d{{2}}|20\d{{2}})\]\s+{run}\s+\d{{1,4}}(?![\d,/])")
+    return bool(verso.search(text) or recto.search(text))
+
+
+def test_running_header_regression_real_pdfs():
+    """Regression on captured layouts from three real cross-page PDFs
+    (Mississippi College LR, Mitchell Hamline, UMass Dartmouth): after the fix,
+    (near-)zero cross-page notes carry a page-top running-header LINE."""
+    cases = _load_regression_fixture()
+    assert set(cases) >= {"mississippi_college", "mitchell_hamline", "umassd_calderon"}
+    for name, (layouts, result) in cases.items():
+        notes, _, _ = build_note_records(layouts, result)
+        cross = [n for n in notes if n.page_start != n.page_end]
+        resid = [n for n in cross if _has_running_header(n.text)]
+        # The line-level fix removes standalone running heads; a residual few may
+        # be mid-line-fused (handled downstream by citation_cleaning). Require a
+        # hard ceiling well below the ~33-50% pre-fix rate.
+        rate = len(resid) / max(1, len(cross))
+        assert rate <= 0.10, f"{name}: {len(resid)}/{len(cross)} cross-page header residue"

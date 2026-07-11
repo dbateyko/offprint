@@ -1200,6 +1200,101 @@ def solve_document(layouts: list, *, pdf_path: str | None = None) -> SolverResul
     )
 
 
+# --------------------------------------------------------------------------- #
+# Running-header (page-top furniture) suppression on continuation pages.
+#
+# A cross-page note absorbs the next page's lines up to the following footnote
+# label. The page-top RUNNING HEAD ("244 MITCHELL HAMLINE L.J. [Vol. 40",
+# "2010] JUDGES AND THEIR EDITORS 395") sits in the top furniture band and,
+# crucially, is often set in a SMALLER font than body text — so the
+# continuation-page font-band filter (which keeps small-font lines) admits it as
+# footnote text. It then mimics a citation and the downstream labeler mints
+# phantom `law` citations from it. We drop these lines here.
+#
+# The load-bearing signal is doc-level REPETITION: a running head recurs on
+# most pages, differing ONLY in the page number. We normalize the number out
+# and keep signatures that recur in the top band across >=40 % of pages. A
+# tight-top-band SHAPE fallback covers short docs where repetition can't fire.
+# --------------------------------------------------------------------------- #
+# Fraction of page height below which a line is page-top furniture.
+_HEADER_BAND_FRAC = 0.10
+# Tighter band for the shape-based fallback (short docs: repetition can't fire).
+_HEADER_SHAPE_BAND_FRAC = 0.07
+
+_HDR_CAPS_WORD = r"[A-Z][A-Z'’&.\-]*"
+_HDR_TITLE_RUN = rf"{_HDR_CAPS_WORD}(?:\s+(?:v\.|&|{_HDR_CAPS_WORD})){{1,}}"
+# verso: optional page#, ALL-CAPS journal, OPEN volume bracket "[Vol. N" / "[40".
+# recto: YEAR + CLOSE bracket, ALL-CAPS running title, trailing page number.
+# Both anchors (open [Vol bracket / year] close bracket) are absent from real
+# citations like "39 IDAHO L. REV. 273 (2003)" or "53 J. BUS. 259".
+_RUNNING_HEADER_RE = re.compile(
+    rf"(?:(?<![A-Za-z])(?:\d{{1,4}}\s+)?{_HDR_TITLE_RUN}\s+\[\s*(?:[Vv][Oo][Ll]\.?\s*)?\d)"
+    rf"|(?:(?<![A-Za-z0-9])(?:1[6-9]\d{{2}}|20\d{{2}})\]\s+{_HDR_TITLE_RUN}\s+\d{{1,4}}(?![\d,/]))"
+)
+
+_HEADER_SIG_STRIP_RE = re.compile(r"[^a-z]+")
+
+
+def _header_signature(text: str) -> str:
+    """Page-number-normalized signature (running heads differ only in page #)."""
+    return _HEADER_SIG_STRIP_RE.sub(" ", (text or "").lower()).strip()
+
+
+def _detect_running_header_signatures(layouts: list) -> set[str]:
+    """Signatures of top-band lines that recur across >=40 % of pages.
+
+    A running head repeats on nearly every page differing only in its page
+    number; body/footnote text never does. We normalize the number out (via
+    ``_header_signature``) so "244 MITCHELL HAMLINE ... [40" and "246 MITCHELL
+    HAMLINE ... [40" collapse to one recurring signature.
+    """
+    from collections import defaultdict
+
+    counts: dict[str, int] = defaultdict(int)
+    n_pages = 0
+    for layout in layouts:
+        height = float(getattr(layout, "height", 0.0) or 0.0)
+        if height <= 0:
+            continue
+        n_pages += 1
+        seen: set[str] = set()
+        for line in getattr(layout, "lines", ()) or ():
+            top = float(getattr(line, "top", 0.0) or 0.0)
+            if top / height >= _HEADER_BAND_FRAC:
+                continue
+            sig = _header_signature(getattr(line, "text", "") or "")
+            if len(sig.replace(" ", "")) < 3:  # bare numbers / empty
+                continue
+            if sig not in seen:
+                counts[sig] += 1
+                seen.add(sig)
+    if n_pages < 3:
+        return set()
+    thresh = max(3, int(n_pages * 0.4))
+    return {sig for sig, c in counts.items() if c >= thresh}
+
+
+def _line_is_header_furniture(line: Any, page_height: float, header_sigs: set[str]) -> bool:
+    """True if ``line`` is a page-top running head to drop on a continuation page.
+
+    Primary signal: the line sits in the top furniture band and its
+    page-number-normalized signature recurs across the doc. Fallback (for short
+    docs): a very-top-band line whose text matches a running-header SHAPE.
+    """
+    if page_height <= 0:
+        return False
+    y_rel = float(getattr(line, "top", 0.0) or 0.0) / page_height
+    if y_rel >= _HEADER_BAND_FRAC:
+        return False
+    text = getattr(line, "text", "") or ""
+    sig = _header_signature(text)
+    if len(sig.replace(" ", "")) >= 3 and sig in header_sigs:
+        return True
+    if y_rel < _HEADER_SHAPE_BAND_FRAC and _RUNNING_HEADER_RE.search(text):
+        return True
+    return False
+
+
 def build_note_records(layouts: list, result: SolverResult):
     """Given solver output, produce (notes, author_notes, ordinality_report)
     directly — bypassing the heuristic segmenter's re-validation.
@@ -1223,6 +1318,10 @@ def build_note_records(layouts: list, result: SolverResult):
     by_page: dict[int, Any] = {
         int(getattr(layout, "page_number", 0) or 0): layout for layout in layouts
     }
+    # Doc-level running-header signatures (page-top furniture that recurs across
+    # pages). Used to drop running heads that bleed into continuation-page spans.
+    header_sigs = _detect_running_header_signatures(layouts)
+
     ordered = list(result.selected_candidates)
     notes: list[NoteRecord] = []
     for idx, cand in enumerate(ordered):
@@ -1236,12 +1335,14 @@ def build_note_records(layouts: list, result: SolverResult):
         # would poison downstream LLM consumers.
         last_allowed_page = next_cand.page if next_cand is not None else cand.page + 1
         boundary_confidence_low = False
+        header_lines_removed = 0
         for pn in sorted(by_page.keys()):
             if pn < cand.page:
                 continue
             if pn > last_allowed_page:
                 break
             layout = by_page[pn]
+            page_height = float(getattr(layout, "height", 0.0) or 0.0)
             separator_y = getattr(layout, "separator_y", None)
             font_threshold = None
             if pn > cand.page:
@@ -1258,6 +1359,15 @@ def build_note_records(layouts: list, result: SolverResult):
                 if next_cand is not None:
                     if pn == next_cand.page and top >= next_cand.y - 0.5:
                         continue
+                # Drop the next page's running head (page-top furniture): it
+                # rides the seam into this note's span, mimics a citation, and
+                # the font-band filter below would otherwise admit it because
+                # running heads are frequently smaller-font than body text.
+                if pn > cand.page and _line_is_header_furniture(
+                    line, page_height, header_sigs
+                ):
+                    header_lines_removed += 1
+                    continue
                 # A continuation page begins with body text, not the prior
                 # page's footnote. Keep only lines supported by the page's
                 # footnote-region separator or its smaller-font band. When
@@ -1303,6 +1413,8 @@ def build_note_records(layouts: list, result: SolverResult):
                 features={
                     "source": "sequence_solver",
                     **({"boundary_confidence": "low"} if boundary_confidence_low else {}),
+                    **({"running_header_removed": header_lines_removed}
+                       if header_lines_removed else {}),
                 },
             )
         )
