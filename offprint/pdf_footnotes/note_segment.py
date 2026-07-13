@@ -845,6 +845,12 @@ def _collect_endnote_start_pages(document: ExtractedDocument) -> set[int]:
                 starts.add(page.page_number)
 
     if starts:
+        # ``segment_notes_from_text`` intentionally wraps plain text in one
+        # synthetic page.  An explicit NOTES/FOOTNOTES heading in that input is
+        # the only positional signal available; discarding page 1 here made the
+        # public plain-text entry point return zero notes unconditionally.
+        if page_count == 1:
+            return starts
         # Guard against early body headings like "Notes" that are section
         # titles, not true endnote sections.
         min_endnote_page = max(2, int(math.ceil(page_count * 0.60)))
