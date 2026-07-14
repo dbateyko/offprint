@@ -1,0 +1,53 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "journal-of-international-economic-law",
+    "name": "Journal of International Economic Law",
+    "aliases": ["JIEL"],
+    "canonical_url": "https://academic.oup.com/jiel",
+    "registry_refs": [{"source": "data/registry/lawjournals.csv", "key": "Journal of International Economic Law", "notes": "Registry rank 214; current row is no_sitemap and has no mapped adapter."}],
+    "publication_scope": {"host": "academic.oup.com", "path_prefix": "/jiel", "platform": "oxford academic", "repository_slug": "jiel", "notes": "Shared commercial publisher host; every route must remain under the JIEL journal code."}
+  },
+  "reconnaissance": {
+    "status": "blocked_waf",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T14:40:38-04:00",
+    "sample_policy": {"oldest_issue_checked": false, "middle_issue_checked": false, "newest_issue_checked": false, "article_pages_checked": 0},
+    "evidence": [
+      {"id": "robots", "url": "https://academic.oup.com/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:40:14-04:00", "http_status": 200, "content_type": "text/plain", "notes": "No rule disallows /jiel journal pages. Sign-in, search, citation download, store, and chapter PDF routes are restricted; the file also names OUP sitemaps."},
+      {"id": "seed-blocked", "url": "https://academic.oup.com/jiel", "role": "archive", "observed_at": "2026-07-14T14:40:38-04:00", "http_status": 403, "content_type": "text/html; charset=UTF-8", "notes": "Returned a Cloudflare managed challenge titled Just a moment with no journal, issue, article, or metadata content. No challenge solving, browser automation, or retry was attempted."}
+    ],
+    "notes": "The robots-permitted seed failed at the first content request, so the bounded state machine stopped before selector or paywall diagnosis."
+  },
+  "scope": {"include": ["JIEL issue, article, and supplement pages under /jiel"], "exclude": ["Other OUP journals and books", "Search, sign-in, citation-download, and store routes disallowed by robots", "Non-JIEL content reached through publisher navigation"], "supplements": "case_by_case", "whole_issue_pdfs": "record_and_split_later", "notes": "Require /jiel path scope and journal identity on every article candidate."},
+  "site_map": {
+    "entry_points": [{"url": "https://academic.oup.com/jiel", "role": "archive", "evidence_ids": ["seed-blocked"], "notes": "Publisher journal landing page, currently Cloudflare-blocked."}],
+    "route_graph": {
+      "nodes": [{"id": "journal", "role": "archive", "notes": "JIEL landing page; challenge response only."}, {"id": "issue", "role": "issue", "notes": "Expected OUP issue page; not observed."}, {"id": "article", "role": "article", "notes": "Expected OUP article page; not observed."}, {"id": "file", "role": "file", "notes": "Expected PDF delivery; not observed and access status unknown."}],
+      "edges": [{"from": "journal", "to": "issue", "method": "manual", "locator": "Unavailable until an authorized browser session reaches the JIEL landing/archive UI", "evidence_ids": ["seed-blocked"], "notes": "Do not invent selectors from the Cloudflare challenge DOM."}]
+    },
+    "archive_patterns": [{"role": "archive", "url_pattern": "https://academic.oup.com/jiel", "examples": ["https://academic.oup.com/jiel"], "evidence_ids": ["seed-blocked"], "notes": "Only live route tested; response was a challenge."}],
+    "pagination": [{"scope": "JIEL archive", "type": "unknown", "termination": "No publisher content was reachable.", "pages_checked": 0, "evidence_ids": ["seed-blocked"], "notes": "Challenge markup must not be treated as journal pagination."}],
+    "layout_eras": [{"id": "unobserved-oup", "label": "Oxford Academic layout not observed", "url_patterns": ["/jiel"], "evidence_ids": ["seed-blocked"], "notes": "No selectors are defensible from current evidence."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "Publisher content blocked.", "notes": ""},
+    "authors": {"availability": "unknown", "sources": [], "normalization": ["preserve source order"], "missingness": "Publisher content blocked.", "notes": ""},
+    "abstract": {"availability": "unknown", "sources": [], "normalization": ["join paragraphs"], "missingness": "Publisher content blocked.", "notes": ""},
+    "year": {"availability": "unknown", "sources": [], "normalization": ["emit four-digit year"], "missingness": "Publisher content blocked.", "notes": ""},
+    "date": {"availability": "unknown", "sources": [], "normalization": ["emit ISO date when available"], "missingness": "Publisher content blocked.", "notes": ""},
+    "volume": {"availability": "unknown", "sources": [], "normalization": ["strip Volume prefix"], "missingness": "Publisher content blocked.", "notes": ""},
+    "issue": {"availability": "unknown", "sources": [], "normalization": ["strip Issue/Number prefix"], "missingness": "Publisher content blocked.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": ["preserve printed range"], "missingness": "Publisher content blocked.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": ["remove DOI prefix", "lowercase"], "missingness": "Publisher content blocked.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "Publisher content blocked.", "notes": ""}
+  },
+  "file_delivery": {"patterns": [], "validation": {"magic_bytes_checked": false, "content_type_checked": false, "article_vs_issue_checked": false, "evidence_ids": ["seed-blocked"], "notes": "No article or PDF URL was reached; paywall and file requirements remain unknown."}},
+  "access": {
+    "robots": [{"url": "https://academic.oup.com/robots.txt", "decision": "partial", "checked_at": "2026-07-14T14:40:14-04:00", "evidence_ids": ["robots"], "notes": "/jiel is permitted, with publisher-system routes restricted."}],
+    "barriers": [{"type": "waf", "severity": "blocking", "evidence_ids": ["seed-blocked"], "notes": "Cloudflare managed challenge returned HTTP 403 on the journal seed."}],
+    "politeness_notes": "Robots was checked first. The state machine stopped after one 403 challenge response with no retries or challenge bypass."
+  },
+  "verdict": {"status": "blocked_waf", "summary": "OUP robots permits the JIEL path, but the first journal request returned a Cloudflare managed challenge, preventing archive, selector, metadata, paywall, and file diagnosis.", "blockers": ["Cloudflare managed challenge on /jiel.", "No adapter mapping or sitemap exists in the registry.", "Paywall and PDF availability could not be assessed."], "next_action": "From an authorized browser or allowlisted environment, capture one issue and one article page under /jiel, determine subscription/open-access status, and only then map an OUP-specific adapter.", "recommended_adapter": "UnmappedAdapter pending authorized Oxford Academic reconnaissance", "implementation_notes": "Do not automate challenge solving or infer selectors from the challenge page."}
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "arizona-journal-of-international-and-comparative-law",
+    "name": "Arizona Journal of International and Comparative Law",
+    "aliases": ["AJICL", "Arizona Journal"],
+    "canonical_url": "https://arizonajournal.org/archive",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "Arizona Journal of International and Comparative Law", "notes": "Registry has active WordPress and DSpace-oriented rows."},
+      {"source": "offprint/sitemaps/arizonajournal-org.json", "key": "arizonajournal-org.json", "notes": "Existing curated sitemap identifies the University of Arizona repository as the authoritative article archive."}
+    ],
+    "publication_scope": {"host": "repository.arizona.edu", "path_prefix": "/collections/f485d6a1-e579-48f0-90c5-7eac2da40ee2", "platform": "dspace angular behind wordpress journal site", "repository_slug": "f485d6a1-e579-48f0-90c5-7eac2da40ee2", "notes": "The supplied WordPress archive could not be trusted over TLS; legacy handle 10150/679294 redirects to this repository collection."}
+  },
+  "reconnaissance": {
+    "status": "needs_headless",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T14:40:40-04:00",
+    "sample_policy": {"oldest_issue_checked": false, "middle_issue_checked": false, "newest_issue_checked": false, "article_pages_checked": 0},
+    "evidence": [
+      {"id": "journal-robots-tls", "url": "https://arizonajournal.org/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:40:14-04:00", "notes": "TLS verification failed because the site presented a self-signed certificate; the www variant failed identically. No insecure bypass was used and no journal HTML was requested."},
+      {"id": "repo-robots", "url": "https://repository.arizona.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:40:38-04:00", "http_status": 200, "content_type": "text/plain", "notes": "Crawl-delay 10; collection/item pages are allowed without query/full suffixes, but search, browse, OAI, and nearly all /server/api routes are disallowed. Only core mapping and bitstreams API routes are allowed."},
+      {"id": "collection-shell", "url": "https://repository.arizona.edu/handle/10150/679294", "role": "archive", "observed_at": "2026-07-14T14:40:50-04:00", "http_status": 200, "content_type": "text/html", "notes": "Legacy handle redirects to /collections/f485d6a1-e579-48f0-90c5-7eac2da40ee2 and returns only an Angular DSpace ds-app shell with JavaScript bundles; no issue or article records are server-rendered."}
+    ],
+    "notes": "Preflight stopped after the TLS barrier and one robots-permitted repository-shell check. Existing static DSpace selectors are stale against the current Angular frontend and were not treated as live evidence."
+  },
+  "scope": {"include": ["Items belonging to the identified AJICL repository collection", "Article bitstreams mapped to those items"], "exclude": ["Other repository collections", "DSpace search, browse, OAI, disallowed core API routes", "journal site content until trusted TLS is restored"], "supplements": "case_by_case", "whole_issue_pdfs": "record_and_split_later", "notes": "Collection membership must be established without broad or robots-disallowed endpoints."},
+  "site_map": {
+    "entry_points": [{"url": "https://repository.arizona.edu/collections/f485d6a1-e579-48f0-90c5-7eac2da40ee2", "role": "archive", "evidence_ids": ["collection-shell"], "notes": "Canonical collection route, but current response is a JavaScript shell."}],
+    "route_graph": {
+      "nodes": [{"id": "journal-archive", "role": "archive", "notes": "WordPress archive, inaccessible under trusted TLS."}, {"id": "collection", "role": "archive", "notes": "Angular DSpace collection shell."}, {"id": "item", "role": "article", "notes": "Expected DSpace item; live route not discovered within policy."}, {"id": "bitstream", "role": "file", "notes": "Expected core bitstream; no representative URL retrieved."}],
+      "edges": [
+        {"from": "journal-archive", "to": "collection", "method": "manual", "locator": "Existing curated sitemap: repository handle 10150/679294", "evidence_ids": ["journal-robots-tls", "collection-shell"], "notes": "Legacy handle redirect confirms the collection UUID."},
+        {"from": "collection", "to": "item", "method": "manual", "locator": "Requires browser-rendered DSpace collection results or an explicitly permitted mapping workflow", "evidence_ids": ["repo-robots", "collection-shell"], "notes": "Do not use disallowed search/browse/core API enumeration."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "archive", "url_pattern": "https://repository.arizona.edu/collections/{uuid}", "examples": ["https://repository.arizona.edu/collections/f485d6a1-e579-48f0-90c5-7eac2da40ee2"], "evidence_ids": ["collection-shell"], "notes": "Current DSpace collection route. No AJICL item UUID was discovered in the bounded pass."}
+    ],
+    "pagination": [{"scope": "DSpace collection", "type": "infinite_scroll", "termination": "Unknown because records were not server-rendered and query/API discovery is restricted by robots.", "pages_checked": 1, "evidence_ids": ["collection-shell", "repo-robots"], "notes": "Treat as unknown dynamic pagination until an authorized browser renders the collection."}],
+    "layout_eras": [{"id": "dspace-angular-current", "label": "Current Angular DSpace shell", "url_patterns": ["/collections/{uuid}", "/items/{uuid}"], "evidence_ids": ["collection-shell"], "notes": "Static li.ds-artifact-item selectors in the old sitemap do not appear in the current server response."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "No item record rendered.", "notes": "Older sitemap proposed .list-title-clamper; it is unverified on current frontend."},
+    "authors": {"availability": "unknown", "sources": [], "normalization": ["preserve source order"], "missingness": "No item record rendered.", "notes": ""},
+    "abstract": {"availability": "unknown", "sources": [], "normalization": ["join paragraphs"], "missingness": "No item page sampled.", "notes": ""},
+    "year": {"availability": "unknown", "sources": [], "normalization": ["emit four-digit year"], "missingness": "No item record rendered.", "notes": ""},
+    "date": {"availability": "unknown", "sources": [], "normalization": ["emit ISO date when available"], "missingness": "No item record rendered.", "notes": ""},
+    "volume": {"availability": "unknown", "sources": [], "normalization": ["strip Volume prefix"], "missingness": "No item record rendered.", "notes": ""},
+    "issue": {"availability": "unknown", "sources": [], "normalization": ["strip Issue/Number prefix"], "missingness": "No item record rendered.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": ["preserve printed range"], "missingness": "No item record rendered.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": ["remove DOI prefix", "lowercase"], "missingness": "No item record rendered.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "No item record rendered.", "notes": ""}
+  },
+  "file_delivery": {"patterns": [], "validation": {"magic_bytes_checked": false, "content_type_checked": false, "article_vs_issue_checked": false, "evidence_ids": ["collection-shell"], "notes": "No file URL was discovered or fetched."}},
+  "access": {
+    "robots": [{"url": "https://arizonajournal.org/robots.txt", "decision": "unknown", "checked_at": "2026-07-14T14:40:14-04:00", "evidence_ids": ["journal-robots-tls"], "notes": "Rules unreadable under trusted TLS."}, {"url": "https://repository.arizona.edu/robots.txt", "decision": "partial", "checked_at": "2026-07-14T14:40:38-04:00", "evidence_ids": ["repo-robots"], "notes": "Crawl-delay 10 and extensive DSpace route restrictions."}],
+    "barriers": [{"type": "other", "severity": "blocking", "evidence_ids": ["journal-robots-tls"], "notes": "Self-signed certificate blocks trusted access to the journal host."}, {"type": "javascript", "severity": "blocking", "evidence_ids": ["collection-shell"], "notes": "Repository collection is an Angular shell without rendered records."}, {"type": "robots", "severity": "blocking", "evidence_ids": ["repo-robots"], "notes": "The obvious search/browse/core API discovery routes are disallowed."}],
+    "politeness_notes": "No TLS bypass. Repository robots was checked before the single collection request, and its ten-second delay was respected."
+  },
+  "verdict": {"status": "needs_headless", "summary": "The supplied journal host cannot be trusted due to a self-signed certificate; its authoritative DSpace collection is reachable but returns only an Angular shell while likely discovery APIs are robots-restricted.", "blockers": ["Journal robots and archive are inaccessible under trusted TLS.", "DSpace collection records require JavaScript rendering.", "Search, browse, OAI, and most core API routes are disallowed."], "next_action": "Repair or verify the journal certificate, then use an authorized browser to render the permitted collection route while honoring Crawl-delay 10; do not use disallowed repository APIs.", "recommended_adapter": "SelectorDrivenAdapter pending browser-capable DSpace route", "implementation_notes": "Do not promote legacy li.ds-artifact-item selectors until current rendered DOM is observed."}
+}

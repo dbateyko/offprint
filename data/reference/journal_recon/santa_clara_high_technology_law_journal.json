@@ -1,0 +1,69 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "santa-clara-high-technology-law-journal",
+    "name": "Santa Clara High Technology Law Journal",
+    "aliases": ["HTLJ", "Santa Clara Computer & High Technology Law Journal"],
+    "canonical_url": "https://www.htlj.org/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "Santa Clara High Technology Law Journal", "notes": "Registry rank 181 contains canonical WordPress and Digital Commons fallback rows."},
+      {"source": "offprint/sitemaps/htlj-org.json", "key": "htlj-org.json", "notes": "Canonical WordPress archive sitemap."},
+      {"source": "offprint/sitemaps/santa_clara_high_technology_law_journal.json", "key": "santa_clara_high_technology_law_journal.json", "notes": "Publication-scoped Digital Commons archive fallback."}
+    ],
+    "publication_scope": {"host": "digitalcommons.law.scu.edu", "path_prefix": "/chtlj/", "platform": "wordpress canonical with digitalcommons fallback", "repository_slug": "chtlj", "notes": "Canonical WordPress was preferred but failed trusted TLS at robots; bounded evidence therefore uses the publication-scoped fallback with context=chtlj."}
+  },
+  "reconnaissance": {
+    "status": "metadata_only",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T14:41:16-04:00",
+    "sample_policy": {"oldest_issue_checked": false, "middle_issue_checked": false, "newest_issue_checked": true, "article_pages_checked": 1},
+    "evidence": [
+      {"id": "wordpress-robots-tls", "url": "https://www.htlj.org/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:40:14-04:00", "notes": "TLS verification failed because the certificate chain lacked a trusted issuer; apex variant failed identically. No insecure bypass or WordPress page request was attempted."},
+      {"id": "dc-robots", "url": "https://digitalcommons.law.scu.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:40:38-04:00", "http_status": 200, "content_type": "text/plain", "notes": "Publication HTML permitted; /do/ and account/submission routes disallowed."},
+      {"id": "archive", "url": "https://digitalcommons.law.scu.edu/chtlj/all_issues.html", "role": "archive", "observed_at": "2026-07-14T14:40:50-04:00", "http_status": 200, "content_type": "text/html", "notes": "Unpaginated archive visibly begins with volume 41 (2025) and continues through the historical backfile; issue links encode volume and issue."},
+      {"id": "issue", "url": "https://digitalcommons.law.scu.edu/chtlj/vol41/iss2/", "role": "issue", "observed_at": "2026-07-14T14:41:15-04:00", "http_status": 200, "content_type": "text/html", "notes": "Three div.article-list/div.doc records expose direct file link, title landing page, and author. Sample title CROSS-BORDER LIMITATIONS AND EXCEPTIONS TO COPYRIGHT: “POWERED BY AI.” by Marketa Trimble."},
+      {"id": "article", "url": "https://digitalcommons.law.scu.edu/chtlj/vol41/iss2/1/", "role": "article", "observed_at": "2026-07-14T14:41:15-04:00", "http_status": 200, "content_type": "text/html", "notes": "bepress_citation meta tags provide journal, first page 133, author, title, year 2025, volume 41, issue 2, PDF URL, ISSN, and online date; div#abstract contains a substantive abstract."},
+      {"id": "file-blocked", "url": "https://digitalcommons.law.scu.edu/cgi/viewcontent.cgi?article=1707&context=chtlj", "role": "file", "observed_at": "2026-07-14T14:41:16-04:00", "http_status": 403, "content_type": "text/html; charset=UTF-8", "notes": "One ranged GET with article Referer returned 744 bytes of HTML beginning <html>; no retry or bypass was attempted."}
+    ],
+    "notes": "Preferred canonical WordPress preflight stopped at TLS. Two fallback loops established metadata-rich Digital Commons enumeration and a blocked PDF route."
+  },
+  "scope": {"include": ["HTLJ articles under canonical WordPress once trusted", "Fallback records under /chtlj/ and context=chtlj"], "exclude": ["Sibling Santa Clara collections", "Digital Commons /do/ routes", "front matter unless classified"], "supplements": "case_by_case", "whole_issue_pdfs": "record_and_split_later", "notes": "Do not silently replace canonical WordPress with repository data; preserve source provenance and reconcile duplicates later."},
+  "site_map": {
+    "entry_points": [{"url": "https://www.htlj.org/archives/", "role": "archive", "evidence_ids": ["wordpress-robots-tls"], "notes": "Preferred canonical route, currently unusable under trusted TLS."}, {"url": "https://digitalcommons.law.scu.edu/chtlj/all_issues.html", "role": "archive", "evidence_ids": ["archive"], "notes": "Robots-permitted metadata fallback."}],
+    "route_graph": {
+      "nodes": [{"id": "wp-archive", "role": "archive", "notes": "Canonical archive; not fetched due TLS."}, {"id": "dc-archive", "role": "archive", "notes": "Digital Commons all-issues page."}, {"id": "issue", "role": "issue", "notes": "Digital Commons issue page."}, {"id": "article", "role": "article", "notes": "Metadata-rich article landing page."}, {"id": "file", "role": "file", "notes": "Advertised file route, currently 403."}],
+      "edges": [
+        {"from": "dc-archive", "to": "issue", "method": "css_selector", "locator": "h3.issue > a[href*='/chtlj/vol']", "evidence_ids": ["archive", "issue"], "notes": "Heading text supplies year."},
+        {"from": "issue", "to": "article", "method": "css_selector", "locator": "div.article-list div.doc p:not(.pdf) > a[href*='/chtlj/vol']", "evidence_ids": ["issue", "article"], "notes": "span.auth provides byline."},
+        {"from": "issue", "to": "file", "method": "css_selector", "locator": "div.article-list div.doc p.pdf > a[href*='viewcontent.cgi'][href*='context=chtlj']", "evidence_ids": ["issue", "file-blocked"], "notes": "Representative request returned 403 HTML."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "issue", "url_pattern": "https://digitalcommons.law.scu.edu/chtlj/vol{volume}/iss{issue}/", "examples": ["https://digitalcommons.law.scu.edu/chtlj/vol41/iss2/"], "evidence_ids": ["archive", "issue"], "notes": "Numeric path components."},
+      {"role": "article", "url_pattern": "https://digitalcommons.law.scu.edu/chtlj/vol{volume}/iss{issue}/{article}/", "examples": ["https://digitalcommons.law.scu.edu/chtlj/vol41/iss2/1/"], "evidence_ids": ["article"], "notes": "Canonical trailing slash."},
+      {"role": "file", "url_pattern": "https://digitalcommons.law.scu.edu/cgi/viewcontent.cgi?article={id}&context=chtlj", "examples": ["https://digitalcommons.law.scu.edu/cgi/viewcontent.cgi?article=1707&context=chtlj"], "evidence_ids": ["file-blocked"], "notes": "Currently 403 HTML."}
+    ],
+    "pagination": [{"scope": "Digital Commons all-issues archive", "type": "none", "termination": "Single archive response contains the visible volume list.", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "No next control observed."}],
+    "layout_eras": [{"id": "dc-current", "label": "Digital Commons fallback layout", "start_year": 2025, "end_year": 2025, "url_patterns": ["/chtlj/vol{volume}/iss{issue}/", "/chtlj/vol{volume}/iss{issue}/{article}/"], "evidence_ids": ["issue", "article"], "notes": "Only newest issue/article markup was sampled in this bounded wave."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_title']@content", "confidence": "high", "evidence_ids": ["article"], "example": "CROSS-BORDER LIMITATIONS AND EXCEPTIONS TO COPYRIGHT: “POWERED BY AI.”", "notes": "Issue link text is fallback."}], "normalization": ["collapse whitespace", "preserve punctuation"], "missingness": "Present on all sampled issue records and article metadata.", "notes": ""},
+    "authors": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_author']@content", "confidence": "high", "evidence_ids": ["article"], "example": "Trimble, Marketa", "notes": "Repeated tags preserve multiple authors."}], "normalization": ["preserve source order", "normalize unambiguous family-given form"], "missingness": "Present on sampled articles; front matter may differ.", "notes": ""},
+    "abstract": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "css_selector", "locator": "div#abstract", "confidence": "high", "evidence_ids": ["article"], "example": "Businesses and institutions that wish to utilize copyright protected works in multiple countries...", "notes": "Strip Abstract heading."}], "normalization": ["join paragraphs", "collapse whitespace"], "missingness": "Present on sampled article.", "notes": ""},
+    "year": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_date']@content", "confidence": "high", "evidence_ids": ["article"], "example": "2025", "notes": ""}], "normalization": ["emit four-digit year"], "missingness": "Present on sampled metadata and archive headings.", "notes": ""},
+    "date": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_online_date']@content", "confidence": "high", "evidence_ids": ["article"], "example": "2025/10/6", "notes": ""}], "normalization": ["emit YYYY-MM-DD"], "missingness": "Present on sampled article.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_volume']@content", "confidence": "high", "evidence_ids": ["article"], "example": "41", "notes": "URL corroborates it."}], "normalization": ["retain numeric string"], "missingness": "Present.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_issue']@content", "confidence": "high", "evidence_ids": ["article"], "example": "2", "notes": ""}], "normalization": ["retain numeric string"], "missingness": "Present.", "notes": ""},
+    "pages": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_firstpage']@content", "confidence": "high", "evidence_ids": ["article"], "example": "133", "notes": "Starting page only."}], "normalization": ["preserve start page"], "missingness": "Present on sampled article.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": ["remove DOI prefix", "lowercase"], "missingness": "Not observed.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "Not retained in bounded output.", "notes": ""}
+  },
+  "file_delivery": {"patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "meta_tag", "locator": "meta[name='bepress_citation_pdf_url']@content", "url_pattern": "https://digitalcommons.law.scu.edu/cgi/viewcontent.cgi?article={id}&context=chtlj", "requirements": {"referer": "unknown", "cookies": "unknown", "javascript": "unknown", "authentication": "unknown"}, "evidence_ids": ["article", "file-blocked"], "notes": "Advertised direct route returned 403 HTML even with Referer."}], "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": false, "evidence_ids": ["file-blocked"], "notes": "744-byte body began with HTML, not PDF."}},
+  "access": {
+    "robots": [{"url": "https://www.htlj.org/robots.txt", "decision": "unknown", "checked_at": "2026-07-14T14:40:14-04:00", "evidence_ids": ["wordpress-robots-tls"], "notes": "Rules unreadable under trusted TLS."}, {"url": "https://digitalcommons.law.scu.edu/robots.txt", "decision": "partial", "checked_at": "2026-07-14T14:40:38-04:00", "evidence_ids": ["dc-robots"], "notes": "Publication HTML allowed; /do/ disallowed."}],
+    "barriers": [{"type": "other", "severity": "blocking", "evidence_ids": ["wordpress-robots-tls"], "notes": "Canonical WordPress certificate chain is untrusted."}, {"type": "robots", "severity": "degraded", "evidence_ids": ["dc-robots"], "notes": "Fallback /do/ routes cannot be used."}, {"type": "other", "severity": "blocking", "evidence_ids": ["file-blocked"], "notes": "Fallback PDF request returned 403 HTML."}],
+    "politeness_notes": "Canonical site was not bypassed. Fallback robots was checked first; no /do/ and no retry after file 403."
+  },
+  "verdict": {"status": "metadata_only", "summary": "Canonical WordPress is blocked by an untrusted certificate chain; the Digital Commons fallback exposes rich article metadata but its representative file request returned 403 HTML.", "blockers": ["Canonical HTLJ robots/archive cannot be read under trusted TLS.", "Fallback article PDF route returned HTTP 403 HTML.", "Historical issue/article markup was not sampled."], "next_action": "Repair or verify the canonical WordPress certificate, then re-probe /archives/ before using the metadata-only Digital Commons fallback.", "recommended_adapter": "WordPressAcademicBaseAdapter preferred; DigitalCommonsIssueArticleHopAdapter metadata fallback", "implementation_notes": "Keep canonical and fallback provenance separate; never use /do/; do not mark PDF acquisition active until a real file passes magic-byte validation."}
+}
