@@ -68,6 +68,16 @@ _DC_ADAPTER_CONFIG_ALIASES = {
     "dc_session_rotate_threshold": "session_rotate_threshold",
     "use_curl_cffi": "use_curl_cffi",
     "dc_use_curl_cffi": "use_curl_cffi",
+    "waf_browser_fallback": "waf_browser_fallback",
+    "dc_waf_browser_fallback": "waf_browser_fallback",
+    "browser_backend": "browser_backend",
+    "dc_browser_backend": "browser_backend",
+    "browser_headless": "browser_headless",
+    "dc_browser_headless": "browser_headless",
+    "max_attempts_per_profile": "max_attempts_per_profile",
+    "dc_max_attempts_per_profile": "max_attempts_per_profile",
+    "safe_diagnostic": "safe_diagnostic",
+    "dc_safe_diagnostic": "safe_diagnostic",
 }
 
 def _normalize_adapter_config(raw: Any, *, file_label: str) -> Dict[str, Any]:
@@ -132,6 +142,7 @@ def _seed_dc_overrides(seed_context: Optional[Dict[str, Any]]) -> Dict[str, Any]
         label = f"{file_label}.{key}"
         if key in {
             "enum_mode",
+            "browser_backend",
         }:
             text = str(value or "").strip()
             if not text:
@@ -153,6 +164,9 @@ def _seed_dc_overrides(seed_context: Optional[Dict[str, Any]]) -> Dict[str, Any]
             "disable_unscoped_oai_no_slug",
             "allow_generic_fallback",
             "use_curl_cffi",
+            "waf_browser_fallback",
+            "browser_headless",
+            "safe_diagnostic",
         }:
             overrides[key] = _coerce_bool(value, label=label)
         elif key in {
@@ -164,6 +178,7 @@ def _seed_dc_overrides(seed_context: Optional[Dict[str, Any]]) -> Dict[str, Any]
             "waf_fail_threshold",
             "waf_cooldown_seconds",
             "session_rotate_threshold",
+            "max_attempts_per_profile",
         }:
             minimum = 1 if key == "download_timeout" else 0
             overrides[key] = _coerce_int(value, label=label, minimum=minimum)

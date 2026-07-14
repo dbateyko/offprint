@@ -77,6 +77,8 @@ runtime services described in [Operations](../docs/OPERATIONS.md).
 | `python scripts/reporting/site_status_report.py --summary` | Join sitemaps, routes, local PDFs, and recent run state |
 | `python scripts/reporting/holdings_report.py` | Inventory deduplicated downloaded records by journal and article metadata |
 | `python scripts/reporting/metadata_quality_report.py ...` | Report title/author/volume/date coverage by domain |
+| `python scripts/research/validate_journal_recon.py ...` | Validate tracked publication dossiers, evidence references, route graphs, and ready-state gates |
+| `python scripts/research/prioritize_journal_recon.py ...` | Rank registry-defined journal identities from explainable importance, normalized coverage, provenance, and worklist signals |
 | `python scripts/research/aggregate_corpus_audit.py ...` | Aggregate document-audit shards |
 | `python scripts/research/bench_holdout_1k.py ...` | Evaluate parser behavior on a holdout sample |
 | `python scripts/research/end_to_end_1k.py ...` | Run the end-to-end research benchmark |

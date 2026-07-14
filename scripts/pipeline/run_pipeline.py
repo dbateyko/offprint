@@ -139,7 +139,7 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     )
     parser.add_argument(
         "--dc-enum-mode",
-        choices=["oai_sitemap_union", "oai_only", "sitemap_only"],
+        choices=["oai_sitemap_union", "oai_only", "sitemap_only", "all_issues_only"],
         default="oai_sitemap_union",
     )
     parser.add_argument(

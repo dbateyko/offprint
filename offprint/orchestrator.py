@@ -3073,7 +3073,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--dc-enum-mode",
-        choices=["oai_sitemap_union", "oai_only", "sitemap_only"],
+        choices=["oai_sitemap_union", "oai_only", "sitemap_only", "all_issues_only"],
         default="oai_sitemap_union",
         help="Digital Commons enumeration mode (default: oai_sitemap_union)",
     )

@@ -1,0 +1,539 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "example-law-review",
+    "name": "Example Law Review",
+    "aliases": [
+      "ELR"
+    ],
+    "canonical_url": "https://law.example.edu/law-review/",
+    "issn": [
+      "1234-567X"
+    ],
+    "registry_refs": [
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "Example Law Review",
+        "notes": "Illustrative registry reference only."
+      }
+    ],
+    "publication_scope": {
+      "host": "law.example.edu",
+      "path_prefix": "/law-review/",
+      "platform": "wordpress",
+      "repository_slug": "law-review",
+      "notes": "Other publications on the host are out of scope."
+    }
+  },
+  "reconnaissance": {
+    "status": "ready",
+    "researcher": "example-agent",
+    "checked_at": "2026-07-14T16:00:00Z",
+    "sample_policy": {
+      "oldest_issue_checked": true,
+      "middle_issue_checked": true,
+      "newest_issue_checked": true,
+      "article_pages_checked": 3
+    },
+    "evidence": [
+      {
+        "id": "archive",
+        "url": "https://law.example.edu/law-review/archive/",
+        "role": "archive",
+        "observed_at": "2026-07-14T15:00:00Z",
+        "http_status": 200,
+        "content_type": "text/html",
+        "notes": "Archive lists every volume on one page."
+      },
+      {
+        "id": "issue-oldest",
+        "url": "https://law.example.edu/law-review/volume-1/issue-1/",
+        "role": "issue",
+        "observed_at": "2026-07-14T15:05:00Z",
+        "http_status": 200,
+        "content_type": "text/html",
+        "notes": "Oldest available issue."
+      },
+      {
+        "id": "issue-middle",
+        "url": "https://law.example.edu/law-review/volume-25/issue-2/",
+        "role": "issue",
+        "observed_at": "2026-07-14T15:10:00Z",
+        "http_status": 200,
+        "content_type": "text/html",
+        "notes": "Middle-period issue uses the same structure."
+      },
+      {
+        "id": "issue-newest",
+        "url": "https://law.example.edu/law-review/volume-50/issue-1/",
+        "role": "issue",
+        "observed_at": "2026-07-14T15:15:00Z",
+        "http_status": 200,
+        "content_type": "text/html",
+        "notes": "Newest available issue."
+      },
+      {
+        "id": "article-oldest",
+        "url": "https://law.example.edu/law-review/volume-1/issue-1/first-article/",
+        "role": "article",
+        "observed_at": "2026-07-14T15:20:00Z",
+        "http_status": 200,
+        "content_type": "text/html",
+        "notes": "Oldest-period article sample."
+      },
+      {
+        "id": "article-middle",
+        "url": "https://law.example.edu/law-review/volume-25/issue-2/middle-article/",
+        "role": "article",
+        "observed_at": "2026-07-14T15:25:00Z",
+        "http_status": 200,
+        "content_type": "text/html",
+        "notes": "Middle-period article sample."
+      },
+      {
+        "id": "article-newest",
+        "url": "https://law.example.edu/law-review/volume-50/issue-1/current-article/",
+        "role": "article",
+        "observed_at": "2026-07-14T15:30:00Z",
+        "http_status": 200,
+        "content_type": "text/html",
+        "notes": "Current article sample."
+      },
+      {
+        "id": "file-newest",
+        "url": "https://law.example.edu/wp-content/uploads/2026/01/current-article.pdf",
+        "role": "file",
+        "observed_at": "2026-07-14T15:35:00Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "notes": "Response began with PDF magic bytes and contained one article."
+      },
+      {
+        "id": "robots",
+        "url": "https://law.example.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T15:40:00Z",
+        "http_status": 200,
+        "content_type": "text/plain",
+        "notes": "No rule disallows the publication archive or PDF paths."
+      }
+    ],
+    "notes": "Fictitious dossier demonstrating the format; URLs are not research evidence."
+  },
+  "scope": {
+    "include": [
+      "articles",
+      "essays",
+      "notes"
+    ],
+    "exclude": [
+      "event announcements",
+      "submission instructions"
+    ],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Record non-article PDFs by type so downstream acquisition can filter them."
+  },
+  "site_map": {
+    "entry_points": [
+      {
+        "url": "https://law.example.edu/law-review/archive/",
+        "role": "archive",
+        "evidence_ids": [
+          "archive"
+        ],
+        "notes": "Preferred bounded seed."
+      }
+    ],
+    "route_graph": {
+      "nodes": [
+        {
+          "id": "archive-page",
+          "role": "archive",
+          "notes": "Lists volume links."
+        },
+        {
+          "id": "issue-page",
+          "role": "issue",
+          "notes": "Lists article pages for one issue."
+        },
+        {
+          "id": "article-page",
+          "role": "article",
+          "notes": "Contains article metadata and a PDF link."
+        },
+        {
+          "id": "article-file",
+          "role": "file",
+          "notes": "Direct article PDF."
+        }
+      ],
+      "edges": [
+        {
+          "from": "archive-page",
+          "to": "issue-page",
+          "method": "css_selector",
+          "locator": "ol.archive a.issue-link",
+          "evidence_ids": [
+            "archive",
+            "issue-newest"
+          ],
+          "notes": "Volume headings are text labels, while links resolve directly to issues."
+        },
+        {
+          "from": "issue-page",
+          "to": "article-page",
+          "method": "css_selector",
+          "locator": "article.toc-entry h3 a",
+          "evidence_ids": [
+            "issue-oldest",
+            "issue-middle",
+            "issue-newest"
+          ],
+          "notes": "Stable in all sampled eras."
+        },
+        {
+          "from": "article-page",
+          "to": "article-file",
+          "method": "css_selector",
+          "locator": "a.download-pdf",
+          "evidence_ids": [
+            "article-oldest",
+            "article-middle",
+            "article-newest",
+            "file-newest"
+          ],
+          "notes": "The href points directly to a PDF."
+        }
+      ]
+    },
+    "archive_patterns": [
+      {
+        "role": "issue",
+        "url_pattern": "/law-review/volume-{volume}/issue-{issue}/",
+        "examples": [
+          "https://law.example.edu/law-review/volume-50/issue-1/"
+        ],
+        "evidence_ids": [
+          "issue-oldest",
+          "issue-middle",
+          "issue-newest"
+        ],
+        "notes": "Volume and issue can be parsed from the path."
+      },
+      {
+        "role": "file",
+        "url_pattern": "/wp-content/uploads/{year}/{month}/{slug}.pdf",
+        "examples": [
+          "https://law.example.edu/wp-content/uploads/2026/01/current-article.pdf"
+        ],
+        "evidence_ids": [
+          "file-newest"
+        ],
+        "notes": "Upload year is not necessarily the publication year."
+      }
+    ],
+    "pagination": [
+      {
+        "scope": "archive",
+        "type": "none",
+        "termination": "The single archive page lists the oldest through newest volumes.",
+        "pages_checked": 1,
+        "evidence_ids": [
+          "archive"
+        ],
+        "notes": "Do not infer pagination from volume links."
+      }
+    ],
+    "layout_eras": [
+      {
+        "id": "all-volumes",
+        "label": "Single observed layout",
+        "start_year": 1977,
+        "end_year": 2026,
+        "url_patterns": [
+          "/law-review/volume-{volume}/issue-{issue}/"
+        ],
+        "evidence_ids": [
+          "issue-oldest",
+          "issue-middle",
+          "issue-newest"
+        ],
+        "notes": "No distinct historical markup era was observed in the sample."
+      }
+    ]
+  },
+  "metadata_fields": {
+    "title": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "css_selector",
+          "locator": "h1.article-title",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-oldest",
+            "article-middle",
+            "article-newest"
+          ],
+          "example": "A Demonstration Article",
+          "notes": "Prefer the article page over the shorter issue-page label."
+        }
+      ],
+      "normalization": [
+        "collapse whitespace"
+      ],
+      "missingness": "Present on all three sampled article pages.",
+      "notes": ""
+    },
+    "authors": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "css_selector",
+          "locator": ".article-byline .author",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-oldest",
+            "article-middle",
+            "article-newest"
+          ],
+          "example": "Alex Example",
+          "notes": "Multiple elements represent multiple authors."
+        }
+      ],
+      "normalization": [
+        "preserve author order",
+        "strip leading By"
+      ],
+      "missingness": "Present on all three sampled article pages.",
+      "notes": ""
+    },
+    "abstract": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "css_selector",
+          "locator": "section.abstract",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-middle",
+            "article-newest"
+          ],
+          "example": "This article demonstrates the dossier format.",
+          "notes": "Absent from the oldest sampled article."
+        }
+      ],
+      "normalization": [
+        "remove Abstract heading",
+        "collapse whitespace"
+      ],
+      "missingness": "Not present in the oldest observed layout.",
+      "notes": ""
+    },
+    "year": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='citation_publication_date']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-oldest",
+            "article-middle",
+            "article-newest"
+          ],
+          "example": "2026-01-15",
+          "notes": "Extract the four-digit year after parsing the full date."
+        }
+      ],
+      "normalization": [
+        "parse ISO date",
+        "emit four-digit year"
+      ],
+      "missingness": "Present on all sampled article pages.",
+      "notes": "Do not use the WordPress upload year as a fallback without corroboration."
+    },
+    "date": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='citation_publication_date']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-oldest",
+            "article-middle",
+            "article-newest"
+          ],
+          "example": "2026-01-15",
+          "notes": ""
+        }
+      ],
+      "normalization": [
+        "emit YYYY-MM-DD"
+      ],
+      "missingness": "Present on all sampled article pages.",
+      "notes": ""
+    },
+    "volume": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='citation_volume']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-oldest",
+            "article-middle",
+            "article-newest"
+          ],
+          "example": "50",
+          "notes": "The URL is a corroborating fallback."
+        }
+      ],
+      "normalization": [
+        "strip Volume prefix"
+      ],
+      "missingness": "Present on all sampled article pages.",
+      "notes": ""
+    },
+    "issue": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "url_parse",
+          "locator": "/volume-{volume}/issue-{issue}/",
+          "confidence": "medium",
+          "evidence_ids": [
+            "article-oldest",
+            "article-middle",
+            "article-newest"
+          ],
+          "example": "1",
+          "notes": "No dedicated issue meta tag was observed."
+        }
+      ],
+      "normalization": [
+        "strip Issue prefix"
+      ],
+      "missingness": "Present in all sampled article URLs.",
+      "notes": ""
+    },
+    "pages": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='citation_firstpage']@content and meta[name='citation_lastpage']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-middle",
+            "article-newest"
+          ],
+          "example": "101-145",
+          "notes": "The oldest sampled article lacks both tags."
+        }
+      ],
+      "normalization": [
+        "join first and last page with a hyphen"
+      ],
+      "missingness": "Absent from the oldest sampled article.",
+      "notes": ""
+    },
+    "doi": {
+      "availability": "never",
+      "sources": [],
+      "normalization": [],
+      "missingness": "No DOI found in article HTML, metadata tags, or the sampled PDF.",
+      "notes": "Record null rather than synthesizing a DOI."
+    },
+    "citation": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "css_selector",
+          "locator": ".recommended-citation",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-middle",
+            "article-newest"
+          ],
+          "example": "Alex Example, A Demonstration Article, 50 Example L. Rev. 101 (2026).",
+          "notes": ""
+        }
+      ],
+      "normalization": [
+        "collapse whitespace"
+      ],
+      "missingness": "Absent from the oldest sampled article.",
+      "notes": ""
+    }
+  },
+  "file_delivery": {
+    "patterns": [
+      {
+        "file_type": "article_pdf",
+        "delivery": "direct",
+        "discovery_method": "css_selector",
+        "locator": "a.download-pdf",
+        "url_pattern": "/wp-content/uploads/{year}/{month}/{slug}.pdf",
+        "requirements": {
+          "referer": "not_required",
+          "cookies": "not_required",
+          "javascript": "not_required",
+          "authentication": "not_required"
+        },
+        "evidence_ids": [
+          "article-oldest",
+          "article-middle",
+          "article-newest",
+          "file-newest"
+        ],
+        "notes": "A normal GET returned the PDF without a redirect."
+      }
+    ],
+    "validation": {
+      "magic_bytes_checked": true,
+      "content_type_checked": true,
+      "article_vs_issue_checked": true,
+      "evidence_ids": [
+        "file-newest"
+      ],
+      "notes": "The sample began with %PDF and its first page matched the article title."
+    }
+  },
+  "access": {
+    "robots": [
+      {
+        "url": "https://law.example.edu/robots.txt",
+        "decision": "allowed",
+        "checked_at": "2026-07-14T15:40:00Z",
+        "evidence_ids": [
+          "robots"
+        ],
+        "notes": "Recheck at acquisition time because robots rules can change."
+      }
+    ],
+    "barriers": [],
+    "politeness_notes": "Use one publication-scoped seed and the repository's standard per-host delay."
+  },
+  "verdict": {
+    "status": "ready",
+    "summary": "The archive can be enumerated deterministically and article PDFs are directly accessible.",
+    "blockers": [],
+    "next_action": "Translate the observed routes into a publication-scoped sitemap and adapter smoke test.",
+    "recommended_adapter": "SelectorDrivenAdapter",
+    "implementation_notes": "Use the archive entry point and semantic selectors recorded in the route graph."
+  }
+}

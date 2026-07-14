@@ -1,4 +1,4 @@
-.PHONY: help doctor gazetteer gazetteer-check holdings holdings-snapshot docs-check production-help production production-resume production-monitored production-monitored-resume production-delta production-retry production-overnight production-overnight-resume production-dc pull pull-siu qc-quarantine extract-footnotes extract-footnotes-overnight extract-footnotes-olmocr-dual diagnose-footnotes evaluate-footnotes adapter-policy-check repo-layout-check quality-check critical-path-tests promote-run site-status metadata-quality-report
+.PHONY: help doctor gazetteer gazetteer-check holdings holdings-snapshot docs-check recon-check recon-priorities production-help production production-resume production-monitored production-monitored-resume production-delta production-retry production-overnight production-overnight-resume production-dc pull pull-siu qc-quarantine extract-footnotes extract-footnotes-overnight extract-footnotes-olmocr-dual diagnose-footnotes evaluate-footnotes adapter-policy-check repo-layout-check quality-check critical-path-tests promote-run site-status metadata-quality-report
 
 PY ?= python3
 REPOSITORY_TOOLING_PY := \
@@ -7,10 +7,14 @@ REPOSITORY_TOOLING_PY := \
 	offprint/holdings.py \
 	scripts/quality/check_markdown_links.py \
 	scripts/quality/doctor.py \
+	scripts/research/prioritize_journal_recon.py \
+	scripts/research/validate_journal_recon.py \
 	scripts/reporting/gazetteer_report.py \
 	scripts/reporting/holdings_report.py \
 	tests/test_gazetteer.py \
 	tests/test_holdings.py \
+	tests/test_prioritize_journal_recon.py \
+	tests/test_validate_journal_recon.py \
 	tests/test_repository_docs.py
 SITEMAPS_DIR ?= offprint/sitemaps
 OUT_DIR ?= artifacts/pdfs
@@ -85,6 +89,8 @@ help:
 	@echo "make gazetteer-check - verify generated gazetteer tables are current"
 	@echo "make holdings        - inventory local PDF records by journal"
 	@echo "make docs-check      - validate maintained local Markdown links"
+	@echo "make recon-check     - validate tracked journal reconnaissance dossiers"
+	@echo "make recon-priorities - regenerate the top normalized reconnaissance priorities"
 	@echo "make production-help - canonical production command usage"
 	@echo "make production      - canonical full production pipeline run"
 	@echo "make production-resume RUN_ID=<run_id> - resume interrupted pipeline run"
@@ -124,6 +130,17 @@ holdings-snapshot:
 
 docs-check:
 	$(PY) scripts/quality/check_markdown_links.py --repo-root .
+
+recon-check:
+	$(PY) scripts/research/validate_journal_recon.py
+
+recon-priorities:
+	$(PY) scripts/research/prioritize_journal_recon.py \
+		--registry data/registry/lawjournals.csv \
+		--journal-view ../catalog/site_coverage/journal_view.csv \
+		--worklist ../catalog/scrape_worklist.csv \
+		--format markdown --limit 50 \
+		--output docs/generated/JOURNAL_RECON_PRIORITIES.md
 
 production-help:
 	@echo "Canonical production entrypoint:"
@@ -363,8 +380,9 @@ quality-check:
 	$(PY) -m black --check $(REPOSITORY_TOOLING_PY)
 	$(MAKE) repo-layout-check
 	$(MAKE) docs-check
+	$(MAKE) recon-check
 	$(MAKE) gazetteer-check
-	$(PY) -m pytest -q tests/test_gazetteer.py tests/test_holdings.py tests/test_repository_docs.py
+	$(PY) -m pytest -q tests/test_gazetteer.py tests/test_holdings.py tests/test_prioritize_journal_recon.py tests/test_validate_journal_recon.py tests/test_repository_docs.py
 
 promote-run:
 	@if [ -z "$(RUN_ID)" ]; then echo "RUN_ID is required (e.g., make promote-run RUN_ID=20260224T010203Z)"; exit 2; fi

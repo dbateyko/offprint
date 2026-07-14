@@ -1,0 +1,342 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "yale-journal-on-regulation",
+    "name": "Yale Journal on Regulation",
+    "aliases": [
+      "JREG",
+      "Yale JREG"
+    ],
+    "canonical_url": "https://www.yalejreg.com/",
+    "registry_refs": [
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "Yale Journal on Regulation",
+        "notes": "Registry rank 29; the current seed points to the Bulletin on yalejreg.com."
+      },
+      {
+        "source": "offprint/sitemaps/yalejreg-com.json",
+        "key": "yalejreg-com.json",
+        "notes": "Local WordPress sitemap records /bulletin/, /print/, and the site root, with onboarding status paused_waf after Cloudflare 403 preflight responses."
+      }
+    ],
+    "publication_scope": {
+      "host": "www.yalejreg.com",
+      "path_prefix": "/print/",
+      "platform": "wordpress",
+      "repository_slug": "print",
+      "notes": "The main print journal is expected under /print/. The separately named /bulletin/ route must remain a distinct supplement/serial scope until accessible evidence supports a different decision."
+    }
+  },
+  "reconnaissance": {
+    "status": "blocked_waf",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T12:20:06-04:00",
+    "sample_policy": {
+      "oldest_issue_checked": false,
+      "middle_issue_checked": false,
+      "newest_issue_checked": false,
+      "article_pages_checked": 0
+    },
+    "evidence": [
+      {
+        "id": "site-robots",
+        "url": "https://www.yalejreg.com/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T12:20:06-04:00",
+        "http_status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "notes": "User-agent * has an empty Disallow rule, the policy specifies Crawl-delay: 10, and it advertises https://www.yalejreg.com/sitemap_index.xml."
+      },
+      {
+        "id": "print-cloudflare-block",
+        "url": "https://www.yalejreg.com/print/",
+        "role": "archive",
+        "observed_at": "2026-07-14T12:20:20-04:00",
+        "http_status": 403,
+        "content_type": "text/html",
+        "notes": "The bounded onboarding preflight received a Cloudflare Attention Required challenge page. No retry or challenge bypass was attempted."
+      },
+      {
+        "id": "bulletin-cloudflare-block",
+        "url": "https://www.yalejreg.com/bulletin/",
+        "role": "archive",
+        "observed_at": "2026-07-14T12:20:30-04:00",
+        "http_status": 403,
+        "content_type": "text/html",
+        "notes": "The bounded onboarding preflight received a Cloudflare Attention Required challenge page. No retry or challenge bypass was attempted."
+      }
+    ],
+    "notes": "Onboarding is paused at the access gate. Robots permits crawling subject to a ten-second delay, but both publication-scoped seeds were blocked before archive, issue, article, metadata, selector, or PDF evidence could be collected."
+  },
+  "scope": {
+    "include": [
+      "The Yale Journal on Regulation print-edition collection under https://www.yalejreg.com/print/",
+      "Print-journal issues and article landing pages once exact routes are observed",
+      "Primary article PDFs attributed to the print journal once delivery is validated"
+    ],
+    "exclude": [
+      "The Yale Journal on Regulation Bulletin under /bulletin/ pending a separate scope decision",
+      "Notice & Comment, blogs, mastheads, administrative pages, and unrelated WordPress content",
+      "Cloudflare challenge, login, account, search, and analytics routes",
+      "Any file or article whose attribution to the print journal cannot be established"
+    ],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "The current registry seed favors /bulletin/ for PDF density, but that is not evidence that Bulletin holdings should be merged into the ranked print journal. Keep the scopes separate during recovery."
+  },
+  "site_map": {
+    "entry_points": [
+      {
+        "url": "https://www.yalejreg.com/print/",
+        "role": "archive",
+        "evidence_ids": [
+          "print-cloudflare-block"
+        ],
+        "notes": "Intended main-journal seed; currently blocked by Cloudflare."
+      },
+      {
+        "url": "https://www.yalejreg.com/bulletin/",
+        "role": "archive",
+        "evidence_ids": [
+          "bulletin-cloudflare-block"
+        ],
+        "notes": "Separate Bulletin seed recorded locally; currently blocked and not a substitute for print-journal enumeration."
+      }
+    ],
+    "route_graph": {
+      "nodes": [
+        {
+          "id": "print-archive-node",
+          "role": "archive",
+          "notes": "Expected print-edition archive; layout and pagination are unobserved because the route returns a challenge."
+        },
+        {
+          "id": "bulletin-archive-node",
+          "role": "archive",
+          "notes": "Expected Bulletin archive; layout and relationship to the print journal are unobserved because the route returns a challenge."
+        },
+        {
+          "id": "article-node",
+          "role": "article",
+          "notes": "Placeholder for a future observed article landing route."
+        },
+        {
+          "id": "file-node",
+          "role": "file",
+          "notes": "Placeholder for a future observed primary-file route."
+        }
+      ],
+      "edges": []
+    },
+    "archive_patterns": [
+      {
+        "role": "archive",
+        "url_pattern": "https://www.yalejreg.com/print/",
+        "examples": [
+          "https://www.yalejreg.com/print/"
+        ],
+        "evidence_ids": [
+          "print-cloudflare-block"
+        ],
+        "notes": "Configured seed only; no child URL pattern has been observed."
+      },
+      {
+        "role": "archive",
+        "url_pattern": "https://www.yalejreg.com/bulletin/",
+        "examples": [
+          "https://www.yalejreg.com/bulletin/"
+        ],
+        "evidence_ids": [
+          "bulletin-cloudflare-block"
+        ],
+        "notes": "Configured separate seed only; no child URL pattern has been observed."
+      }
+    ],
+    "pagination": [
+      {
+        "scope": "Print-edition archive",
+        "type": "unknown",
+        "termination": "Unknown until an authorized client can load the archive without a Cloudflare challenge.",
+        "pages_checked": 0,
+        "evidence_ids": [
+          "print-cloudflare-block"
+        ],
+        "notes": "Do not infer WordPress pagination selectors from platform identity alone."
+      },
+      {
+        "scope": "Bulletin archive",
+        "type": "unknown",
+        "termination": "Unknown until an authorized client can load the archive without a Cloudflare challenge.",
+        "pages_checked": 0,
+        "evidence_ids": [
+          "bulletin-cloudflare-block"
+        ],
+        "notes": "Bulletin should be investigated separately from the print archive."
+      }
+    ],
+    "layout_eras": [
+      {
+        "id": "blocked-wordpress-route",
+        "label": "Current WordPress route, layout unobserved",
+        "url_patterns": [
+          "https://www.yalejreg.com/print/",
+          "https://www.yalejreg.com/bulletin/"
+        ],
+        "evidence_ids": [
+          "print-cloudflare-block",
+          "bulletin-cloudflare-block"
+        ],
+        "notes": "The local sitemap declares WordPress, and robots responses carry WordPress/WP Engine signals, but publication-page HTML was not available for selector or era analysis."
+      }
+    ]
+  },
+  "metadata_fields": {
+    "title": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Decode HTML entities",
+        "Collapse internal whitespace"
+      ],
+      "missingness": "No article or issue page was accessible.",
+      "notes": "Observe a real source before assigning a selector."
+    },
+    "authors": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Preserve source order",
+        "Do not split names without observed structure"
+      ],
+      "missingness": "No article or issue page was accessible.",
+      "notes": "Unknown."
+    },
+    "abstract": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Preserve paragraph boundaries",
+        "Collapse HTML-only whitespace"
+      ],
+      "missingness": "No article page was accessible.",
+      "notes": "Unknown."
+    },
+    "year": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Extract a four-digit publication year"
+      ],
+      "missingness": "No issue or article metadata was accessible.",
+      "notes": "Unknown."
+    },
+    "date": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Serialize normalized dates as ISO 8601 YYYY-MM-DD"
+      ],
+      "missingness": "No article metadata was accessible.",
+      "notes": "Unknown."
+    },
+    "volume": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Strip an observed Volume label only after its format is confirmed"
+      ],
+      "missingness": "No issue or article metadata was accessible.",
+      "notes": "Unknown."
+    },
+    "issue": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Strip an observed Issue label only after its format is confirmed"
+      ],
+      "missingness": "No issue or article metadata was accessible.",
+      "notes": "Unknown."
+    },
+    "pages": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Retain source page labels"
+      ],
+      "missingness": "No citation or file was accessible.",
+      "notes": "Unknown."
+    },
+    "doi": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Lowercase a DOI after removing any https://doi.org/ prefix"
+      ],
+      "missingness": "No article metadata was accessible.",
+      "notes": "Unknown."
+    },
+    "citation": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Collapse whitespace",
+        "Store persistent identifiers separately"
+      ],
+      "missingness": "No article or file metadata was accessible.",
+      "notes": "Unknown."
+    }
+  },
+  "file_delivery": {
+    "patterns": [],
+    "validation": {
+      "magic_bytes_checked": false,
+      "content_type_checked": false,
+      "article_vs_issue_checked": false,
+      "evidence_ids": [
+        "print-cloudflare-block",
+        "bulletin-cloudflare-block"
+      ],
+      "notes": "No PDF link was discoverable because both scoped archive pages were blocked before article traversal."
+    }
+  },
+  "access": {
+    "robots": [
+      {
+        "url": "https://www.yalejreg.com/robots.txt",
+        "decision": "allowed",
+        "checked_at": "2026-07-14T12:20:06-04:00",
+        "evidence_ids": [
+          "site-robots"
+        ],
+        "notes": "No paths are disallowed for user-agent *, but every future request must honor Crawl-delay: 10."
+      }
+    ],
+    "barriers": [
+      {
+        "type": "waf",
+        "severity": "blocking",
+        "evidence_ids": [
+          "print-cloudflare-block",
+          "bulletin-cloudflare-block"
+        ],
+        "notes": "Cloudflare challenge pages prevent publication-scoped archive access, selector discovery, metadata sampling, and the required one-PDF onboarding smoke."
+      }
+    ],
+    "politeness_notes": "The bounded preflight checked robots first, recognized the ten-second crawl delay, stopped after Cloudflare challenges on the two scoped seeds, and made no challenge retries, article requests, PDF requests, bulk crawl, or bypass attempt."
+  },
+  "verdict": {
+    "status": "blocked_waf",
+    "summary": "The canonical yalejreg.com host is a WordPress site whose robots policy permits crawling with a ten-second delay, but Cloudflare challenges currently block both the print and Bulletin archive seeds. No trustworthy archive graph, selector set, metadata provenance, or PDF path can yet be recorded.",
+    "blockers": [
+      "Cloudflare returns HTTP 403 challenge pages for both publication-scoped archive seeds.",
+      "The ranked print journal and the Bulletin remain unresolved as separate acquisition scopes.",
+      "No oldest, middle, or newest issue sample and no article page is available.",
+      "No representative PDF link or file response has been validated."
+    ],
+    "next_action": "Keep onboarding status paused_waf. After an operator-approved cooldown, retry once from an authorized browser or allowlisted network while honoring the ten-second crawl delay; if the print archive loads, map archive/issue/article selectors and validate exactly one representative PDF before changing status.",
+    "recommended_adapter": "WordPressAcademicBaseAdapter",
+    "implementation_notes": "Do not modify production routing or mark the journal active from platform inference alone. When access is restored, seed /print/ for the ranked journal, investigate /bulletin/ separately, and record observed selectors and pagination before adapter smoke."
+  }
+}

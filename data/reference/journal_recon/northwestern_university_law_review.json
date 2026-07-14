@@ -1,0 +1,638 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "northwestern-university-law-review",
+    "name": "Northwestern University Law Review",
+    "aliases": [
+      "NULR"
+    ],
+    "canonical_url": "https://northwesternlawreview.org/",
+    "issn": [
+      "0029-3571"
+    ],
+    "registry_refs": [
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "Northwestern University Law Review",
+        "notes": "The registry contains main-site WordPress rows and a Digital Commons /nulr row; W&L rank is 18."
+      },
+      {
+        "source": "offprint/sitemaps/scholarlycommons-northwestern-nulr.json",
+        "key": "scholarlycommons-northwestern-nulr.json",
+        "notes": "Publication-scoped Digital Commons seed."
+      }
+    ],
+    "publication_scope": {
+      "host": "scholarlycommons.law.northwestern.edu",
+      "path_prefix": "/nulr/",
+      "platform": "digitalcommons",
+      "repository_slug": "nulr",
+      "notes": "The canonical editorial site is WordPress, but the observed structured issue and article route is the publication-scoped Digital Commons /nulr collection. Host-level counts from sibling Northwestern collections are out of scope."
+    }
+  },
+  "reconnaissance": {
+    "status": "metadata_only",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T15:43:05-04:00",
+    "sample_policy": {
+      "oldest_issue_checked": false,
+      "middle_issue_checked": false,
+      "newest_issue_checked": true,
+      "article_pages_checked": 1
+    },
+    "evidence": [
+      {
+        "id": "main-robots",
+        "url": "https://northwesternlawreview.org/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T15:42:05-04:00",
+        "http_status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "notes": "User-agent * has an empty Disallow block and the file advertises sitemap_index.xml."
+      },
+      {
+        "id": "main-issues",
+        "url": "https://northwesternlawreview.org/issues/",
+        "role": "archive",
+        "observed_at": "2026-07-14T15:42:13-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "WordPress page exposes an unpaginated volume/issue filter for volumes 105 through 120 and renders current article metadata inline."
+      },
+      {
+        "id": "dc-robots",
+        "url": "https://scholarlycommons.law.northwestern.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T15:42:30-04:00",
+        "http_status": 200,
+        "content_type": "text/plain",
+        "notes": "Publication and cgi/viewcontent paths are not disallowed, but /do/ is disallowed for user-agent *, so OAI and Digital Commons search endpoints must not be used."
+      },
+      {
+        "id": "dc-archive",
+        "url": "https://scholarlycommons.law.northwestern.edu/nulr/all_issues.html",
+        "role": "archive",
+        "observed_at": "2026-07-14T15:42:40-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Single page lists publication-scoped volumes 105 through 120 and their issue links; no earlier volume was visible in this route."
+      },
+      {
+        "id": "dc-issue-newest",
+        "url": "https://scholarlycommons.law.northwestern.edu/nulr/vol120/iss6/",
+        "role": "issue",
+        "observed_at": "2026-07-14T15:42:48-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Issue page lists seven article/note records in div.doc containers with title, author, article landing URL, and cgi/viewcontent PDF link."
+      },
+      {
+        "id": "dc-article-newest",
+        "url": "https://scholarlycommons.law.northwestern.edu/nulr/vol120/iss6/1/",
+        "role": "article",
+        "observed_at": "2026-07-14T15:42:56-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Article page exposes bepress_citation meta tags for journal, title, author, year, volume, issue, first/last page, PDF URL, article URL, and ISSN, plus full publication date, abstract, and recommended citation in the DOM."
+      },
+      {
+        "id": "dc-file-blocked",
+        "url": "https://scholarlycommons.law.northwestern.edu/cgi/viewcontent.cgi?article=1645&context=nulr",
+        "role": "file",
+        "observed_at": "2026-07-14T15:43:05-04:00",
+        "http_status": 403,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "A bounded ranged GET with the article landing page as Referer returned 403 HTML, began with <html> rather than %PDF, and set a short-lived original_referer cookie. No retry or control bypass was attempted."
+      }
+    ],
+    "notes": "This first bounded dossier proves the current structured metadata graph but not historical completeness or file acquisition. Older and middle issues were deliberately left unsampled after the representative PDF route returned a blocking 403."
+  },
+  "scope": {
+    "include": [
+      "URLs under https://scholarlycommons.law.northwestern.edu/nulr/",
+      "Issue-page records whose article landing URLs match /nulr/vol{volume}/iss{issue}/{article}/",
+      "Primary article and student-note records attributed to Northwestern University Law Review"
+    ],
+    "exclude": [
+      "All sibling collections on scholarlycommons.law.northwestern.edu",
+      "Northwestern Journal of Law and Social Policy and Journal of Criminal Law and Criminology",
+      "Repository search, author-dashboard, subscription, and /do/ routes",
+      "Mastheads, covers, tables of contents, front matter, and outbound cited documents unless separately classified"
+    ],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "The /nulr publication slug, not the repository host, is the collection boundary. NULR Online must be treated as a separate sub-publication until the project makes an explicit inclusion decision."
+  },
+  "site_map": {
+    "entry_points": [
+      {
+        "url": "https://scholarlycommons.law.northwestern.edu/nulr/all_issues.html",
+        "role": "archive",
+        "evidence_ids": [
+          "dc-archive"
+        ],
+        "notes": "Preferred structured enumeration route because robots permits it and it is publication-scoped."
+      },
+      {
+        "url": "https://northwesternlawreview.org/issues/",
+        "role": "archive",
+        "evidence_ids": [
+          "main-issues"
+        ],
+        "notes": "Canonical WordPress editorial archive and useful cross-check for current volumes and abstracts."
+      }
+    ],
+    "route_graph": {
+      "nodes": [
+        {
+          "id": "main-archive",
+          "role": "archive",
+          "notes": "Canonical WordPress issues page with a client-side volume/issue filter."
+        },
+        {
+          "id": "dc-archive-node",
+          "role": "archive",
+          "notes": "Publication-scoped all-issues page."
+        },
+        {
+          "id": "dc-issue-node",
+          "role": "issue",
+          "notes": "Volume/issue page containing div.doc article records."
+        },
+        {
+          "id": "dc-article-node",
+          "role": "article",
+          "notes": "Landing page with structured citation metadata, abstract, citation, and PDF URL."
+        },
+        {
+          "id": "dc-file-node",
+          "role": "file",
+          "notes": "cgi/viewcontent primary-file route; currently returns 403 HTML to the bounded research client."
+        }
+      ],
+      "edges": [
+        {
+          "from": "dc-archive-node",
+          "to": "dc-issue-node",
+          "method": "css_selector",
+          "locator": "h3.issue a[href^='/nulr/vol'], h3.issue a[href*='/nulr/vol']",
+          "evidence_ids": [
+            "dc-archive"
+          ],
+          "notes": "Issue links encode volume and issue in the path and display the year in adjacent text."
+        },
+        {
+          "from": "dc-issue-node",
+          "to": "dc-article-node",
+          "method": "css_selector",
+          "locator": "div.article-list div.doc p:not(.pdf) > a[href*='/nulr/vol']",
+          "evidence_ids": [
+            "dc-issue-newest"
+          ],
+          "notes": "The non-PDF paragraph contains the landing URL and title; span.auth contains authors."
+        },
+        {
+          "from": "dc-issue-node",
+          "to": "dc-file-node",
+          "method": "css_selector",
+          "locator": "div.article-list div.doc p.pdf > a[href*='viewcontent.cgi']",
+          "evidence_ids": [
+            "dc-issue-newest"
+          ],
+          "notes": "Directly advertised PDF links are discoverable before visiting the article page."
+        },
+        {
+          "from": "dc-article-node",
+          "to": "dc-file-node",
+          "method": "css_selector",
+          "locator": "meta[name='bepress_citation_pdf_url'][content], a#pdf[href*='viewcontent.cgi']",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "notes": "Both a meta tag and visible download control expose the same file route."
+        }
+      ]
+    },
+    "archive_patterns": [
+      {
+        "role": "archive",
+        "url_pattern": "https://scholarlycommons.law.northwestern.edu/nulr/all_issues.html",
+        "examples": [
+          "https://scholarlycommons.law.northwestern.edu/nulr/all_issues.html"
+        ],
+        "evidence_ids": [
+          "dc-archive"
+        ],
+        "notes": "Flat all-issues page."
+      },
+      {
+        "role": "issue",
+        "url_pattern": "https://scholarlycommons.law.northwestern.edu/nulr/vol{volume}/iss{issue}/",
+        "examples": [
+          "https://scholarlycommons.law.northwestern.edu/nulr/vol120/iss6/"
+        ],
+        "evidence_ids": [
+          "dc-archive",
+          "dc-issue-newest"
+        ],
+        "notes": "Volume and issue are path components."
+      },
+      {
+        "role": "article",
+        "url_pattern": "https://scholarlycommons.law.northwestern.edu/nulr/vol{volume}/iss{issue}/{article}/",
+        "examples": [
+          "https://scholarlycommons.law.northwestern.edu/nulr/vol120/iss6/1/"
+        ],
+        "evidence_ids": [
+          "dc-article-newest"
+        ],
+        "notes": "Trailing slash is optional at the HTTP layer but should be canonicalized."
+      },
+      {
+        "role": "file",
+        "url_pattern": "https://scholarlycommons.law.northwestern.edu/cgi/viewcontent.cgi?article={repository_id}&context=nulr",
+        "examples": [
+          "https://scholarlycommons.law.northwestern.edu/cgi/viewcontent.cgi?article=1645&context=nulr"
+        ],
+        "evidence_ids": [
+          "dc-file-blocked"
+        ],
+        "notes": "The required context=nulr query parameter is a useful scope guard, but current GET access is blocked."
+      }
+    ],
+    "pagination": [
+      {
+        "scope": "Digital Commons all-issues archive",
+        "type": "none",
+        "termination": "The single response ends after the last listed issue; the observed archive currently stops at volume 105.",
+        "pages_checked": 1,
+        "evidence_ids": [
+          "dc-archive"
+        ],
+        "notes": "No next link or numbered pagination was observed. This proves enumeration of the visible archive, not completeness before volume 105."
+      },
+      {
+        "scope": "WordPress issues archive",
+        "type": "none",
+        "termination": "All observed volume/issue filter options are in the one HTML response and currently stop at volume 105.",
+        "pages_checked": 1,
+        "evidence_ids": [
+          "main-issues"
+        ],
+        "notes": "Client-side filters change visible records; no page-based traversal was observed."
+      }
+    ],
+    "layout_eras": [
+      {
+        "id": "current-wordpress",
+        "label": "Canonical WordPress archive",
+        "start_year": 2010,
+        "end_year": 2026,
+        "url_patterns": [
+          "https://northwesternlawreview.org/issues/",
+          "https://northwesternlawreview.org/issues/{article-slug}/"
+        ],
+        "evidence_ids": [
+          "main-issues"
+        ],
+        "notes": "Volume 105 onward is represented in the current archive response; exact first-year mapping was not independently verified."
+      },
+      {
+        "id": "digitalcommons-mirror",
+        "label": "Digital Commons publication mirror",
+        "start_year": 2010,
+        "end_year": 2026,
+        "url_patterns": [
+          "https://scholarlycommons.law.northwestern.edu/nulr/vol{volume}/iss{issue}/",
+          "https://scholarlycommons.law.northwestern.edu/nulr/vol{volume}/iss{issue}/{article}/"
+        ],
+        "evidence_ids": [
+          "dc-archive",
+          "dc-issue-newest",
+          "dc-article-newest"
+        ],
+        "notes": "Structured archive visibly spans volumes 105-120. The pre-volume-105 backfile remains an unresolved historical era."
+      }
+    ]
+  },
+  "metadata_fields": {
+    "title": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "issue",
+          "method": "css_selector",
+          "locator": "div.article-list div.doc p:not(.pdf) > a",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-issue-newest"
+          ],
+          "example": "The Military Officer's Oath to Disobey Lawful but Unethical Orders",
+          "notes": "The article landing-link text is the title."
+        },
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_title']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "example": "The Military Officer's Oath to Disobey Lawful but Unethical Orders",
+          "notes": "Structured article-page source."
+        }
+      ],
+      "normalization": [
+        "Decode HTML entities",
+        "Collapse internal whitespace",
+        "Preserve substantive punctuation and capitalization"
+      ],
+      "missingness": "Present on every record in the sampled newest issue; older eras were not sampled.",
+      "notes": "Treat the article-page meta tag as authoritative when issue-link text differs."
+    },
+    "authors": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "issue",
+          "method": "css_selector",
+          "locator": "div.article-list div.doc span.auth",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-issue-newest"
+          ],
+          "example": "Joshua Braver",
+          "notes": "Issue page supplies display-order author text."
+        },
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_author']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "example": "Braver, Joshua",
+          "notes": "The meta tag uses inverted name order and repeats for multiple authors."
+        }
+      ],
+      "normalization": [
+        "Preserve repeated authors in source order",
+        "Convert unambiguous 'Family, Given' forms to display order",
+        "Do not split issue-page author strings on 'and' until compared with repeated meta tags"
+      ],
+      "missingness": "Present on every record in the sampled newest issue; older eras were not sampled.",
+      "notes": "Prefer repeated article-page meta tags for multi-author parsing."
+    },
+    "abstract": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "css_selector",
+          "locator": "div#abstract p",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "example": "How should a military officer respond to a lawful yet unethical order...",
+          "notes": "Join all paragraphs in document order."
+        }
+      ],
+      "normalization": [
+        "Join paragraph text with blank-line boundaries",
+        "Collapse HTML-only whitespace while preserving sentence punctuation"
+      ],
+      "missingness": "Present on the one sampled article; issue pages do not expose abstracts and older articles were not sampled.",
+      "notes": "The canonical WordPress archive also renders abstracts inline for current records."
+    },
+    "year": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_date']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "example": "2026",
+          "notes": "Year-only citation field."
+        }
+      ],
+      "normalization": [
+        "Extract a four-digit publication year"
+      ],
+      "missingness": "Present on the sampled article; older eras were not sampled.",
+      "notes": "Issue-list year text is a second possible source."
+    },
+    "date": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "css_selector",
+          "locator": "div#publication_date p",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "example": "4-12-2026",
+          "notes": "Full publication date appears in the DOM, while the citation meta tag exposes only the year."
+        }
+      ],
+      "normalization": [
+        "Parse the observed month-day-year value",
+        "Serialize normalized dates as ISO 8601 YYYY-MM-DD"
+      ],
+      "missingness": "Present on the sampled article; older eras were not sampled.",
+      "notes": "Retain the raw date alongside the normalized value."
+    },
+    "volume": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_volume']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "example": "120",
+          "notes": "Also encoded in article and issue paths."
+        }
+      ],
+      "normalization": [
+        "Strip a leading 'Volume' label if present",
+        "Retain the numeric string"
+      ],
+      "missingness": "Present on the sampled article; older eras were not sampled.",
+      "notes": "Cross-check against the /vol{volume}/ path component."
+    },
+    "issue": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_issue']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "example": "6",
+          "notes": "Also encoded in article and issue paths."
+        }
+      ],
+      "normalization": [
+        "Strip a leading 'Issue' label if present",
+        "Retain the numeric string"
+      ],
+      "missingness": "Present on the sampled article; older eras were not sampled.",
+      "notes": "Cross-check against the /iss{issue}/ path component."
+    },
+    "pages": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_firstpage']@content + meta[name='bepress_citation_lastpage']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "example": "1487-1572",
+          "notes": "Combine first and last page fields into a range."
+        }
+      ],
+      "normalization": [
+        "Join distinct first and last pages with a hyphen",
+        "Use one value when first and last page are equal"
+      ],
+      "missingness": "Present on the sampled article; older eras were not sampled.",
+      "notes": "Page range is also represented in the recommended citation."
+    },
+    "doi": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Lowercase a DOI after removing any https://doi.org/ prefix"
+      ],
+      "missingness": "No DOI field was observed on the sampled article page.",
+      "notes": "Do not infer a DOI from the Digital Commons repository identifier."
+    },
+    "citation": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "css_selector",
+          "locator": "div#recommended_citation p.citation",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-article-newest"
+          ],
+          "example": "Joshua Braver, The Military Officer's Oath to Disobey Lawful but Unethical Orders, 120 Nw. U. L. Rev. 1487 (2026).",
+          "notes": "Exclude the trailing repository URL when storing the preferred print citation."
+        }
+      ],
+      "normalization": [
+        "Collapse small-caps markup into plain text",
+        "Collapse whitespace",
+        "Store the repository URL separately from the print citation"
+      ],
+      "missingness": "Present on the sampled article; older eras were not sampled.",
+      "notes": "Structured citation components can also be assembled defensively from meta tags."
+    }
+  },
+  "file_delivery": {
+    "patterns": [
+      {
+        "file_type": "article_pdf",
+        "delivery": "direct",
+        "discovery_method": "css_selector",
+        "locator": "div.article-list div.doc p.pdf > a, meta[name='bepress_citation_pdf_url'], a#pdf",
+        "url_pattern": "https://scholarlycommons.law.northwestern.edu/cgi/viewcontent.cgi?article={repository_id}&context=nulr",
+        "requirements": {
+          "referer": "unknown",
+          "cookies": "unknown",
+          "javascript": "unknown",
+          "authentication": "unknown"
+        },
+        "evidence_ids": [
+          "dc-issue-newest",
+          "dc-article-newest",
+          "dc-file-blocked"
+        ],
+        "notes": "Pages advertise a direct article PDF, but the bounded client received 403 HTML even with the landing page as Referer. The response set an original_referer cookie; any cookie/browser requirement remains unverified and must not be assumed."
+      }
+    ],
+    "validation": {
+      "magic_bytes_checked": true,
+      "content_type_checked": true,
+      "article_vs_issue_checked": false,
+      "evidence_ids": [
+        "dc-file-blocked"
+      ],
+      "notes": "The returned body was 744 bytes of HTML beginning with <html>, not a PDF. File granularity could not be validated because no file was retrieved."
+    }
+  },
+  "access": {
+    "robots": [
+      {
+        "url": "https://northwesternlawreview.org/robots.txt",
+        "decision": "allowed",
+        "checked_at": "2026-07-14T15:42:05-04:00",
+        "evidence_ids": [
+          "main-robots"
+        ],
+        "notes": "No paths are disallowed for user-agent *."
+      },
+      {
+        "url": "https://scholarlycommons.law.northwestern.edu/robots.txt",
+        "decision": "partial",
+        "checked_at": "2026-07-14T15:42:30-04:00",
+        "evidence_ids": [
+          "dc-robots"
+        ],
+        "notes": "Publication and viewcontent routes are not disallowed, but /do/ is disallowed; do not use OAI or repository search APIs."
+      }
+    ],
+    "barriers": [
+      {
+        "type": "robots",
+        "severity": "degraded",
+        "evidence_ids": [
+          "dc-robots"
+        ],
+        "notes": "The normal Digital Commons OAI route is disallowed, so enumeration must remain on publication HTML pages."
+      },
+      {
+        "type": "other",
+        "severity": "blocking",
+        "evidence_ids": [
+          "dc-file-blocked"
+        ],
+        "notes": "The representative cgi/viewcontent article-file request returned HTTP 403 HTML; metadata discovery works but PDF acquisition is not yet proven."
+      }
+    ],
+    "politeness_notes": "Reconnaissance used seven bounded GETs across two hosts, no concurrency, and no retry after the representative file returned 403. Recheck both robots files before any future smoke or collection run."
+  },
+  "verdict": {
+    "status": "metadata_only",
+    "summary": "The publication-scoped Digital Commons HTML route deterministically exposes volumes 105-120, issues, article landing pages, and rich metadata, but a representative primary-file request returned 403 HTML and the pre-volume-105 archive remains unidentified.",
+    "blockers": [
+      "Representative Digital Commons primary-file GET returned HTTP 403 HTML.",
+      "Oldest and middle issue/article layouts have not been sampled.",
+      "No archive route for volumes before 105 has been identified.",
+      "Digital Commons /do/ endpoints are disallowed by robots.txt."
+    ],
+    "next_action": "Implement a metadata-only publication-scoped discovery smoke using all_issues and issue/article HTML, then determine through an authorized operator/browser check whether the advertised PDF route is publicly retrievable without bypassing access controls; separately locate the pre-volume-105 archive.",
+    "recommended_adapter": "DigitalCommonsIssueArticleHopAdapter",
+    "implementation_notes": "Use /nulr/all_issues.html with dc_enum_mode=all_issues_only rather than OAI, enforce context=nulr and /nulr/ path scope, record discovery and file outcomes separately, and do not treat the shared scholarlycommons host count as NULR coverage."
+  }
+}

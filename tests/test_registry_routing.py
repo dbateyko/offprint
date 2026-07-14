@@ -17,6 +17,12 @@ from offprint.adapters.registry import _find_sitemap_for_url
         # substring heuristic, registered explicitly.
         ("https://docs.rwu.edu/cpc_justice/sitemap.xml", "DigitalCommonsIssueArticleHopAdapter"),
         ("https://scholars.unh.edu/unh_lr/", "DigitalCommonsIssueArticleHopAdapter"),
+        # Penn's repository is Quartex despite the generic repository.* prefix,
+        # which otherwise looks like Digital Commons to the suffix heuristic.
+        (
+            "https://repository.law.upenn.edu/journal-of-business-law/jbl",
+            "QuartexAdapter",
+        ),
     ],
 )
 def test_blocked_hosts_now_route_without_generic(url: str, expected_cls: str) -> None:

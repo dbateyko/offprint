@@ -1,0 +1,739 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dbateyko/offprint/blob/main/data/reference/journal_recon/schema.json",
+  "title": "Offprint journal reconnaissance dossier",
+  "description": "Evidence-backed description of one journal's archive, metadata, and file-delivery routes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "journal",
+    "reconnaissance",
+    "scope",
+    "site_map",
+    "metadata_fields",
+    "file_delivery",
+    "access",
+    "verdict"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./schema.json"
+    },
+    "schema_version": {
+      "const": "1.1.0"
+    },
+    "journal": {
+      "$ref": "#/$defs/journal"
+    },
+    "reconnaissance": {
+      "$ref": "#/$defs/reconnaissance"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "site_map": {
+      "$ref": "#/$defs/site_map"
+    },
+    "metadata_fields": {
+      "$ref": "#/$defs/metadata_fields"
+    },
+    "file_delivery": {
+      "$ref": "#/$defs/file_delivery"
+    },
+    "access": {
+      "$ref": "#/$defs/access"
+    },
+    "verdict": {
+      "$ref": "#/$defs/verdict"
+    }
+  },
+  "$defs": {
+    "nonempty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "http_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://"
+    },
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+    },
+    "status": {
+      "enum": [
+        "in_progress",
+        "ready",
+        "metadata_only",
+        "blocked_waf",
+        "blocked_login",
+        "blocked_paywall",
+        "stale_route",
+        "needs_headless"
+      ]
+    },
+    "journal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "aliases",
+        "canonical_url",
+        "registry_refs",
+        "publication_scope"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "name": {
+          "$ref": "#/$defs/nonempty_string"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonempty_string"
+          },
+          "uniqueItems": true
+        },
+        "canonical_url": {
+          "$ref": "#/$defs/http_url"
+        },
+        "issn": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9Xx]{4}-[0-9Xx]{4}$"
+          },
+          "uniqueItems": true
+        },
+        "registry_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source", "key"],
+            "properties": {
+              "source": {
+                "$ref": "#/$defs/nonempty_string"
+              },
+              "key": {
+                "$ref": "#/$defs/nonempty_string"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "publication_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["host", "path_prefix", "platform"],
+          "properties": {
+            "host": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9.-]+$"
+            },
+            "path_prefix": {
+              "type": "string",
+              "pattern": "^/"
+            },
+            "platform": {
+              "$ref": "#/$defs/nonempty_string"
+            },
+            "repository_slug": {
+              "$ref": "#/$defs/nonempty_string"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "reconnaissance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "researcher", "checked_at", "sample_policy", "evidence", "notes"],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "researcher": {
+          "$ref": "#/$defs/nonempty_string"
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sample_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "oldest_issue_checked",
+            "middle_issue_checked",
+            "newest_issue_checked",
+            "article_pages_checked"
+          ],
+          "properties": {
+            "oldest_issue_checked": {
+              "type": "boolean"
+            },
+            "middle_issue_checked": {
+              "type": "boolean"
+            },
+            "newest_issue_checked": {
+              "type": "boolean"
+            },
+            "article_pages_checked": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url", "role", "observed_at", "notes"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "url": {
+          "$ref": "#/$defs/http_url"
+        },
+        "role": {
+          "enum": ["homepage", "archive", "volume", "issue", "article", "file", "api", "robots", "other"]
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "http_status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "content_type": {
+          "type": "string"
+        },
+        "artifact_ref": {
+          "$ref": "#/$defs/nonempty_string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include", "exclude", "supplements", "whole_issue_pdfs", "notes"],
+      "properties": {
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/nonempty_string"
+          },
+          "uniqueItems": true
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonempty_string"
+          },
+          "uniqueItems": true
+        },
+        "supplements": {
+          "enum": ["include", "exclude", "case_by_case"]
+        },
+        "whole_issue_pdfs": {
+          "enum": ["include", "exclude", "record_and_split_later"]
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "site_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entry_points", "route_graph", "archive_patterns", "pagination", "layout_eras"],
+      "properties": {
+        "entry_points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["url", "role", "evidence_ids", "notes"],
+            "properties": {
+              "url": {
+                "$ref": "#/$defs/http_url"
+              },
+              "role": {
+                "enum": ["homepage", "archive", "volume", "issue", "article", "api"]
+              },
+              "evidence_ids": {
+                "$ref": "#/$defs/evidence_ids"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "route_graph": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["nodes", "edges"],
+          "properties": {
+            "nodes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["id", "role", "notes"],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/identifier"
+                  },
+                  "role": {
+                    "enum": ["homepage", "archive", "volume", "issue", "article", "file", "api"]
+                  },
+                  "notes": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "edges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["from", "to", "method", "locator", "evidence_ids", "notes"],
+                "properties": {
+                  "from": {
+                    "$ref": "#/$defs/identifier"
+                  },
+                  "to": {
+                    "$ref": "#/$defs/identifier"
+                  },
+                  "method": {
+                    "enum": ["css_selector", "link_relation", "url_pattern", "api_field", "oai_resumption_token", "manual"]
+                  },
+                  "locator": {
+                    "$ref": "#/$defs/nonempty_string"
+                  },
+                  "evidence_ids": {
+                    "$ref": "#/$defs/evidence_ids"
+                  },
+                  "notes": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "archive_patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["role", "url_pattern", "examples", "evidence_ids", "notes"],
+            "properties": {
+              "role": {
+                "enum": ["archive", "volume", "issue", "article", "file", "api"]
+              },
+              "url_pattern": {
+                "$ref": "#/$defs/nonempty_string"
+              },
+              "examples": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/http_url"
+                }
+              },
+              "evidence_ids": {
+                "$ref": "#/$defs/evidence_ids"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "pagination": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["scope", "type", "termination", "pages_checked", "evidence_ids", "notes"],
+            "properties": {
+              "scope": {
+                "$ref": "#/$defs/nonempty_string"
+              },
+              "type": {
+                "enum": ["none", "next_link", "numbered_pages", "query_param", "infinite_scroll", "resumption_token", "unknown"]
+              },
+              "selector": {
+                "$ref": "#/$defs/nonempty_string"
+              },
+              "parameter": {
+                "$ref": "#/$defs/nonempty_string"
+              },
+              "termination": {
+                "$ref": "#/$defs/nonempty_string"
+              },
+              "pages_checked": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "evidence_ids": {
+                "$ref": "#/$defs/evidence_ids"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "layout_eras": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "label", "url_patterns", "evidence_ids", "notes"],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/identifier"
+              },
+              "label": {
+                "$ref": "#/$defs/nonempty_string"
+              },
+              "start_year": {
+                "type": "integer",
+                "minimum": 1700,
+                "maximum": 2200
+              },
+              "end_year": {
+                "type": "integer",
+                "minimum": 1700,
+                "maximum": 2200
+              },
+              "url_patterns": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/nonempty_string"
+                }
+              },
+              "evidence_ids": {
+                "$ref": "#/$defs/evidence_ids"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/identifier"
+      },
+      "uniqueItems": true
+    },
+    "metadata_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["page_type", "method", "locator", "confidence", "evidence_ids", "example", "notes"],
+      "properties": {
+        "page_type": {
+          "enum": ["archive", "volume", "issue", "article", "file", "api", "oai"]
+        },
+        "method": {
+          "enum": ["css_selector", "meta_tag", "json_ld", "api_field", "oai_field", "url_parse", "text_parse", "pdf_text", "manual"]
+        },
+        "locator": {
+          "$ref": "#/$defs/nonempty_string"
+        },
+        "confidence": {
+          "enum": ["high", "medium", "low"]
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_ids"
+        },
+        "example": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "metadata_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["availability", "sources", "normalization", "missingness", "notes"],
+      "properties": {
+        "availability": {
+          "enum": ["always", "sometimes", "never", "unknown"]
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/metadata_source"
+          }
+        },
+        "normalization": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonempty_string"
+          }
+        },
+        "missingness": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "metadata_fields": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "authors", "abstract", "year", "date", "volume", "issue", "pages", "doi", "citation"],
+      "properties": {
+        "title": {
+          "$ref": "#/$defs/metadata_field"
+        },
+        "authors": {
+          "$ref": "#/$defs/metadata_field"
+        },
+        "abstract": {
+          "$ref": "#/$defs/metadata_field"
+        },
+        "year": {
+          "$ref": "#/$defs/metadata_field"
+        },
+        "date": {
+          "$ref": "#/$defs/metadata_field"
+        },
+        "volume": {
+          "$ref": "#/$defs/metadata_field"
+        },
+        "issue": {
+          "$ref": "#/$defs/metadata_field"
+        },
+        "pages": {
+          "$ref": "#/$defs/metadata_field"
+        },
+        "doi": {
+          "$ref": "#/$defs/metadata_field"
+        },
+        "citation": {
+          "$ref": "#/$defs/metadata_field"
+        }
+      }
+    },
+    "file_delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["patterns", "validation"],
+      "properties": {
+        "patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["file_type", "delivery", "discovery_method", "locator", "requirements", "evidence_ids", "notes"],
+            "properties": {
+              "file_type": {
+                "enum": ["article_pdf", "whole_issue_pdf", "front_matter", "masthead", "supplement", "unknown"]
+              },
+              "delivery": {
+                "enum": ["direct", "redirect", "iframe", "viewer", "api", "tokenized", "unknown"]
+              },
+              "discovery_method": {
+                "enum": ["css_selector", "embed_src", "iframe_src", "meta_tag", "api_field", "oai_field", "url_pattern", "manual"]
+              },
+              "locator": {
+                "$ref": "#/$defs/nonempty_string"
+              },
+              "url_pattern": {
+                "type": "string"
+              },
+              "requirements": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["referer", "cookies", "javascript", "authentication"],
+                "properties": {
+                  "referer": {
+                    "$ref": "#/$defs/requirement_state"
+                  },
+                  "cookies": {
+                    "$ref": "#/$defs/requirement_state"
+                  },
+                  "javascript": {
+                    "$ref": "#/$defs/requirement_state"
+                  },
+                  "authentication": {
+                    "$ref": "#/$defs/requirement_state"
+                  }
+                }
+              },
+              "evidence_ids": {
+                "$ref": "#/$defs/evidence_ids"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["magic_bytes_checked", "content_type_checked", "article_vs_issue_checked", "evidence_ids", "notes"],
+          "properties": {
+            "magic_bytes_checked": {
+              "type": "boolean"
+            },
+            "content_type_checked": {
+              "type": "boolean"
+            },
+            "article_vs_issue_checked": {
+              "type": "boolean"
+            },
+            "evidence_ids": {
+              "$ref": "#/$defs/evidence_ids"
+            },
+            "notes": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "requirement_state": {
+      "enum": ["required", "not_required", "unknown"]
+    },
+    "access": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["robots", "barriers", "politeness_notes"],
+      "properties": {
+    "robots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url", "decision", "checked_at", "evidence_ids", "notes"],
+        "properties": {
+          "url": {
+            "$ref": "#/$defs/http_url"
+          },
+          "decision": {
+            "enum": ["allowed", "disallowed", "partial", "unknown"]
+          },
+          "checked_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "evidence_ids": {
+            "$ref": "#/$defs/evidence_ids"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+        },
+        "barriers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["type", "severity", "evidence_ids", "notes"],
+            "properties": {
+              "type": {
+                "enum": ["waf", "login", "paywall", "rate_limit", "javascript", "cookie", "robots", "dead_link", "redirect_drift", "other"]
+              },
+              "severity": {
+                "enum": ["informational", "degraded", "blocking"]
+              },
+              "evidence_ids": {
+                "$ref": "#/$defs/evidence_ids"
+              },
+              "notes": {
+                "$ref": "#/$defs/nonempty_string"
+              }
+            }
+          }
+        },
+        "politeness_notes": {
+          "type": "string"
+        }
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "summary", "blockers", "next_action", "recommended_adapter"],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "summary": {
+          "$ref": "#/$defs/nonempty_string"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonempty_string"
+          },
+          "uniqueItems": true
+        },
+        "next_action": {
+          "$ref": "#/$defs/nonempty_string"
+        },
+        "recommended_adapter": {
+          "$ref": "#/$defs/nonempty_string"
+        },
+        "implementation_notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

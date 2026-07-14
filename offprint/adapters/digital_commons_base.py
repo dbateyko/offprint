@@ -75,8 +75,11 @@ class DigitalCommonsBaseAdapter(Adapter):
         self.dc_max_domain_delay_ms = 4000
         self.dc_waf_fail_threshold = 3
         self.dc_waf_cooldown_seconds = 900
-        self.dc_waf_browser_fallback = True
+        self.dc_waf_browser_fallback = False
         self.dc_browser_backend = "camoufox"
+        self.dc_browser_headless = True
+        self.dc_max_attempts_per_profile = 3
+        self.dc_safe_diagnostic = False
         self.dc_disable_unscoped_oai_no_slug = True
         self.dc_allow_generic_fallback = False
         self.dc_session_rotate_threshold = 300
@@ -103,6 +106,11 @@ class DigitalCommonsBaseAdapter(Adapter):
         allow_generic_fallback: bool = False,
         session_rotate_threshold: int = 300,
         use_curl_cffi: bool = True,
+        waf_browser_fallback: bool = False,
+        browser_backend: str = "camoufox",
+        browser_headless: bool = True,
+        max_attempts_per_profile: int = 3,
+        safe_diagnostic: bool = False,
     ) -> None:
         self.dc_enum_mode = enum_mode or "oai_sitemap_union"
         self.dc_use_siteindex = bool(use_siteindex)
@@ -119,6 +127,17 @@ class DigitalCommonsBaseAdapter(Adapter):
         self.dc_allow_generic_fallback = bool(allow_generic_fallback)
         self.dc_session_rotate_threshold = max(int(session_rotate_threshold or 0), 0)
         self.dc_use_curl_cffi = bool(use_curl_cffi)
+        self.dc_waf_browser_fallback = bool(waf_browser_fallback)
+        self.dc_browser_backend = str(browser_backend or "camoufox")
+        self.dc_browser_headless = bool(browser_headless)
+        self.dc_max_attempts_per_profile = max(int(max_attempts_per_profile or 1), 1)
+        self.dc_safe_diagnostic = bool(safe_diagnostic)
+        if self.dc_safe_diagnostic:
+            self.dc_ua_profiles = ["transparent"]
+            self.dc_use_curl_cffi = False
+            self.dc_waf_browser_fallback = False
+            self.dc_session_rotate_threshold = 0
+            self.dc_max_attempts_per_profile = 1
 
     def _is_unscoped_oai_allowed(self, seed_url: str) -> bool:
         if not self.dc_disable_unscoped_oai_no_slug:
@@ -692,9 +711,20 @@ class DigitalCommonsBaseAdapter(Adapter):
                 seen_urls.add(dedupe_key)
                 yielded_any = True
                 yield _normalize_result(result)
+        elif effective_enum_mode == "all_issues_only":
+            # Publication-scoped HTML traversal is required on repositories whose
+            # robots policy excludes /do/oai/ or whose sitemap route is unsuitable.
+            # Do not widen this explicit mode to the generic BFS fallback.
+            for result in self._discover_via_all_issues(seed_url):
+                dedupe_key = (result.pdf_url or result.page_url or "").strip()
+                if not dedupe_key or dedupe_key in seen_urls:
+                    continue
+                seen_urls.add(dedupe_key)
+                yielded_any = True
+                yield _normalize_result(result)
 
         # Final resort: BFS HTML crawl if no discovery source produced results.
-        if not yielded_any:
+        if not yielded_any and effective_enum_mode != "all_issues_only":
             print(f"  [dc] OAI/Sitemap empty for {seed_url}, falling back to BFS HTML crawl")
             from ..digital_commons_enumerator import discover_html
             for result in discover_html(seed_url, session=self.session):
@@ -738,8 +768,18 @@ class DigitalCommonsBaseAdapter(Adapter):
                         base_url = pdf_url.split("/cgi/")[0]
                         pdf_url = f"{base_url}/cgi/viewcontent.cgi?article={article_id}&context={context}&type=pdf"
 
+                landing_link = (
+                    article.select_one(self.title_selector)
+                    or article.select_one("a.doctitle")
+                    or article.select_one("p a")
+                )
+                landing_url = issue_url
+                if landing_link and landing_link.get("href"):
+                    landing_url = urljoin(issue_url, landing_link["href"])
+
                 # Extract article metadata
                 metadata = self._extract_article_metadata(article, issue_url, issue_metadata)
+                metadata["url"] = landing_url
 
                 # Add PDF filename for metadata-PDF linking
                 parsed_pdf = urlparse(pdf_url)
@@ -755,7 +795,7 @@ class DigitalCommonsBaseAdapter(Adapter):
                 metadata.setdefault("dc_source", "all_issues")
                 metadata.setdefault("dc_set_spec", "")
 
-                yield DiscoveryResult(page_url=issue_url, pdf_url=pdf_url, metadata=metadata)
+                yield DiscoveryResult(page_url=landing_url, pdf_url=pdf_url, metadata=metadata)
 
             except Exception:
                 # Skip malformed articles but continue processing
@@ -986,7 +1026,7 @@ class DigitalCommonsBaseAdapter(Adapter):
             max_domain_delay_ms=self.dc_max_domain_delay_ms,
             robots_enforce=self.dc_robots_enforce,
             robots_cache=self._robots_cache,
-            max_attempts_per_profile=3,
+            max_attempts_per_profile=self.dc_max_attempts_per_profile,
             use_curl_cffi=self.dc_use_curl_cffi,
         )
         # Determine download method from ua_profile_used
@@ -1036,10 +1076,11 @@ class DigitalCommonsBaseAdapter(Adapter):
             )
             return None
         
-        # Aggressive WAF detection: any 403, 429, or known WAF error
+        # Only explicit challenge evidence is a WAF classification. A bare 403 is
+        # an access denial whose trigger remains unknown and must not launch a
+        # browser fallback automatically.
         is_waf_block = (
-            status_code in {403, 429} 
-            or error_type in {"waf_challenge", "blocked_waf", "waf_circuit_open"}
+            error_type in {"waf_challenge", "blocked_waf", "waf_circuit_open"}
             or "waf" in str(outcome.get("message", "")).lower()
         )
 
@@ -1107,6 +1148,12 @@ class DigitalCommonsBaseAdapter(Adapter):
             download_status_class=str(outcome.get("download_status_class") or "network"),
             blocked_reason=str(outcome.get("blocked_reason") or ""),
             retry_after_hint=outcome.get("retry_after_hint"),
+            final_url=str(outcome.get("final_url") or ""),
+            response_body_size=int(outcome.get("response_body_size") or 0),
+            response_body_sha256=str(outcome.get("response_body_sha256") or ""),
+            response_server=str(outcome.get("response_server") or ""),
+            response_location=str(outcome.get("response_location") or ""),
+            response_cookie_names=list(outcome.get("response_cookie_names") or []),
         )
 
         if self.dc_allow_generic_fallback:

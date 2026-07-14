@@ -57,6 +57,12 @@ class Adapter:
             "download_status_class": "",
             "blocked_reason": "",
             "retry_after_hint": None,
+            "final_url": "",
+            "response_body_size": 0,
+            "response_body_sha256": "",
+            "response_server": "",
+            "response_location": "",
+            "response_cookie_names": [],
             "skipped_duplicate": False,
         }
         normalized = dict(defaults)

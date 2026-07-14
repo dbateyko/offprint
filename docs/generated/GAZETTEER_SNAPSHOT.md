@@ -19,10 +19,10 @@
 
 | Registry Status | Rows |
 |---|---:|
-| active | 794 |
+| active | 793 |
 | no_sitemap | 763 |
 | (missing) | 489 |
-| paused_waf | 267 |
+| paused_waf | 268 |
 | paused_login | 79 |
 | paused_paywall | 71 |
 | todo_adapter | 47 |
@@ -41,9 +41,9 @@
 
 | Sitemap Lifecycle | Rows |
 |---|---:|
-| active | 793 |
+| active | 792 |
 | active (inferred) | 587 |
-| paused_waf | 269 |
+| paused_waf | 270 |
 | paused_login | 79 |
 | paused_paywall | 71 |
 | todo_adapter | 47 |

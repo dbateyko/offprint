@@ -37,6 +37,10 @@ Use this page as the task-oriented index for maintained Offprint documentation.
 |---|---|
 | [Data and release policy](DATA_AND_RELEASE_POLICY.md) | What is tracked, local-only, or suitable for release |
 | [GitHub repository roadmap](GITHUB_REPOSITORY_ROADMAP.md) | Design rationale, phases, and success measures for the repository surface |
+| [Journal reconnaissance roadmap](JOURNAL_RECONNAISSANCE_ROADMAP.md) | How priority coverage gaps become evidenced dossiers, scraper changes, and bounded collection runs |
+| [Journal reconnaissance Wave 1](JOURNAL_RECONNAISSANCE_WAVE_1.md) | Dated first-wave targets, evidence denominators, lanes, and completion gates |
+| [Digital Commons file-access diagnostics](DIGITAL_COMMONS_FILE_ACCESS.md) | Evidence, bounded diagnostic mode, and stop policy for shared Bepress PDF 403 responses |
+| [Journal reconnaissance priorities](generated/JOURNAL_RECON_PRIORITIES.md) | Generated, explainable ranking of registry-defined journals using normalized coverage and worklist signals |
 | [Gazetteer snapshot](generated/GAZETTEER_SNAPSHOT.md) | Current generated status, platform, source, and completeness tables |
 | [Journal catalog](generated/JOURNAL_CATALOG.md) | Searchable list of all known journals and crawl configurations |
 | [Holdings snapshot](generated/HOLDINGS_BY_JOURNAL.md) | Operational PDF-record counts grouped by journal or collection |

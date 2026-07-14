@@ -236,7 +236,7 @@ def _content_looks_like_waf(status_code: int, content_type: str, waf_action: str
     lowered_waf = (waf_action or "").lower()
     if lowered_waf == "challenge":
         return True
-    return status_code in {202, 401, 403} and "text/html" in lowered_ct
+    return status_code == 202 and "text/html" in lowered_ct
 
 
 def _html_body_looks_like_waf(content_type: str, body: bytes) -> bool:
@@ -247,8 +247,6 @@ def _html_body_looks_like_waf(content_type: str, body: bytes) -> bool:
     if not snippet:
         return False
     waf_markers = (
-        "access denied",
-        "forbidden",
         "challenge",
         "captcha",
         "cloudflare",
@@ -507,7 +505,9 @@ def _download_with_curl_cffi(
                 continue
             break
         
-        if _content_looks_like_waf(status_code, content_type, waf_action):
+        if _content_looks_like_waf(
+            status_code, content_type, waf_action
+        ) or _html_body_looks_like_waf(content_type, bytes(resp.content or b"")):
             last_error = {
                 "ok": False,
                 "local_path": None,
@@ -816,7 +816,9 @@ def download_pdf_dc(
                     continue
                 break
 
-            if _content_looks_like_waf(status_code, content_type, waf_action):
+            if _content_looks_like_waf(
+                status_code, content_type, waf_action
+            ) or _html_body_looks_like_waf(content_type, bytes(resp.content or b"")):
                 last_error = {
                     "ok": False,
                     "local_path": None,
@@ -830,6 +832,34 @@ def download_pdf_dc(
                     "download_status_class": "blocked_waf",
                     "blocked_reason": "waf_challenge",
                     "retry_after_hint": retry_after_hint,
+                }
+                break
+
+            if status_code in {401, 403}:
+                body = bytes(resp.content or b"")
+                cookie_names = sorted(
+                    str(name)
+                    for name in getattr(getattr(resp, "cookies", None), "keys", lambda: [])()
+                )
+                last_error = {
+                    "ok": False,
+                    "local_path": None,
+                    "error_type": "access_denied",
+                    "message": f"HTTP status {status_code} without a recognized challenge marker",
+                    "status_code": status_code,
+                    "content_type": content_type,
+                    "waf_action": waf_action,
+                    "ua_profile_used": profile,
+                    "robots_allowed": True,
+                    "download_status_class": "access_denied",
+                    "blocked_reason": "generic_403" if status_code == 403 else "generic_401",
+                    "retry_after_hint": retry_after_hint,
+                    "final_url": final_url,
+                    "response_body_size": len(body),
+                    "response_body_sha256": hashlib.sha256(body).hexdigest() if body else "",
+                    "response_server": str(resp.headers.get("Server") or ""),
+                    "response_location": str(resp.headers.get("Location") or ""),
+                    "response_cookie_names": cookie_names,
                 }
                 break
 

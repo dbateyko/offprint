@@ -1,0 +1,520 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "uc-irvine-law-review",
+    "name": "UC Irvine Law Review",
+    "aliases": [
+      "U.C. Irvine Law Review",
+      "UCILR"
+    ],
+    "canonical_url": "https://www.law.uci.edu/lawreview/",
+    "issn": [
+      "2327-4514"
+    ],
+    "registry_refs": [
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "U.C. Irvine Law Review",
+        "notes": "W&L-ranked rows point separately to the law-school landing page and the eScholarship /uc/ucilr collection; W&L rank is 40."
+      },
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "UC Irvine Law Review",
+        "notes": "A second alias row points to the same eScholarship collection and must be merged with the punctuated name during holdings attribution."
+      },
+      {
+        "source": "offprint/sitemaps/law-uci-edu-lawreview.json",
+        "key": "law-uci-edu-lawreview.json",
+        "notes": "The current sitemap calls the law-school page WordPress and predicts issue/article/PDF descendants, but bounded live evidence shows a static editorial landing page whose reading links leave for eScholarship."
+      },
+      {
+        "source": "offprint/sitemaps/registry_u_c_irvine_law_review_1755_a8727e1ea2.json",
+        "key": "registry_u_c_irvine_law_review_1755_a8727e1ea2.json",
+        "notes": "Registry-import seed for the eScholarship collection and existing EScholarshipAdapter route."
+      }
+    ],
+    "publication_scope": {
+      "host": "escholarship.org",
+      "path_prefix": "/uc/ucilr",
+      "platform": "eScholarship",
+      "repository_slug": "ucilr",
+      "notes": "The law-school host is the canonical editorial identity, while article enumeration and delivery are delegated to the publication-scoped eScholarship collection. Preserve host attribution on evidence, but deduplicate both registry name variants and both entry routes into this one journal identity."
+    }
+  },
+  "reconnaissance": {
+    "status": "blocked_waf",
+    "researcher": "Codex U.C. Irvine reconnaissance",
+    "checked_at": "2026-07-14T11:55:28-04:00",
+    "sample_policy": {
+      "oldest_issue_checked": false,
+      "middle_issue_checked": false,
+      "newest_issue_checked": false,
+      "article_pages_checked": 0
+    },
+    "evidence": [
+      {
+        "id": "uci-robots-missing",
+        "url": "https://www.law.uci.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T11:54:26-04:00",
+        "http_status": 404,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "The conventional robots URL returned the UCI Law Page Not Found HTML, so no host policy could be established from this location. Reconnaissance remained limited to one publication landing page."
+      },
+      {
+        "id": "esch-robots",
+        "url": "https://escholarship.org/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T11:54:28-04:00",
+        "http_status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "notes": "User-agent * is allowed and the managed content signal permits search and reference use while reserving model training; several named automated agents are separately disallowed. The bounded client used its own descriptive user agent."
+      },
+      {
+        "id": "uci-home",
+        "url": "https://www.law.uci.edu/lawreview/",
+        "role": "homepage",
+        "observed_at": "2026-07-14T11:54:37-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Static UCI Law editorial page identifies the flagship journal, its 2010 founding, ISSN 2327-4514, a direct eScholarship collection link, and a representative eScholarship Foreword item link with a compact volume/page/year citation. It does not enumerate issues or expose journal PDFs."
+      },
+      {
+        "id": "esch-collection-blocked",
+        "url": "https://escholarship.org/uc/ucilr",
+        "role": "archive",
+        "observed_at": "2026-07-14T11:54:40-04:00",
+        "http_status": 403,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "The publication-scoped collection returned a Cloudflare challenge (cf-mitigated: challenge) requiring JavaScript and cookies. No challenge completion or bypass was attempted."
+      },
+      {
+        "id": "esch-item-blocked",
+        "url": "https://escholarship.org/uc/item/1370j9zm",
+        "role": "article",
+        "observed_at": "2026-07-14T11:55:19-04:00",
+        "http_status": 403,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "The representative item linked by UCI Law returned the same Cloudflare challenge, preventing DOM/meta-tag inspection. It is evidence of an editorially attributed item URL, not a successfully checked article page."
+      },
+      {
+        "id": "esch-file-blocked",
+        "url": "https://escholarship.org/content/qt1370j9zm/qt1370j9zm.pdf",
+        "role": "file",
+        "observed_at": "2026-07-14T11:55:28-04:00",
+        "http_status": 403,
+        "content_type": "text/html",
+        "notes": "A single ranged GET to the conventional eScholarship content path, with the item URL as Referer, returned Cloudflare/CloudFront 403 HTML rather than PDF bytes. The guessed file pattern remains unconfirmed and no retry was attempted."
+      }
+    ],
+    "notes": "Six total HTTP requests were made after robots-first checks. The law-school/eScholarship handoff and identity boundary are clear, but Cloudflare prevented archive, item-metadata, pagination, historical-era, and file validation."
+  },
+  "scope": {
+    "include": [
+      "The eScholarship collection rooted at https://escholarship.org/uc/ucilr",
+      "eScholarship item records attributable to UC Irvine Law Review",
+      "Articles, essays, student notes, and forewords published by the flagship journal"
+    ],
+    "exclude": [
+      "Other UCI Law journals and all unrelated eScholarship units",
+      "General UCI Law news, events, submissions, masthead, and membership pages",
+      "Items linked in article citations but not published by UC Irvine Law Review",
+      "Cloudflare challenge endpoints and challenge tokens"
+    ],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Use the eScholarship collection relationship, not the shared host alone, as the inclusion boundary. Normalize both registry spellings to the canonical journal name while retaining their source labels for provenance."
+  },
+  "site_map": {
+    "entry_points": [
+      {
+        "url": "https://www.law.uci.edu/lawreview/",
+        "role": "homepage",
+        "evidence_ids": [
+          "uci-home"
+        ],
+        "notes": "Canonical editorial identity and cross-check route; not an article archive."
+      },
+      {
+        "url": "https://escholarship.org/uc/ucilr",
+        "role": "archive",
+        "evidence_ids": [
+          "uci-home",
+          "esch-collection-blocked"
+        ],
+        "notes": "Canonical publication-scoped archive target, currently blocked to the bounded research client."
+      }
+    ],
+    "route_graph": {
+      "nodes": [
+        {
+          "id": "uci-editorial-home",
+          "role": "homepage",
+          "notes": "Static UCI Law description page and canonical identity source."
+        },
+        {
+          "id": "esch-collection",
+          "role": "archive",
+          "notes": "Publication-scoped eScholarship collection; response body was a WAF challenge."
+        },
+        {
+          "id": "esch-item",
+          "role": "article",
+          "notes": "eScholarship item route; representative URL is explicitly linked by UCI Law but its page was blocked."
+        },
+        {
+          "id": "esch-file",
+          "role": "file",
+          "notes": "Candidate eScholarship content-file route; a ranged request was blocked before validation."
+        }
+      ],
+      "edges": [
+        {
+          "from": "uci-editorial-home",
+          "to": "esch-collection",
+          "method": "css_selector",
+          "locator": "a[href='https://escholarship.org/uc/ucilr']",
+          "evidence_ids": [
+            "uci-home",
+            "esch-collection-blocked"
+          ],
+          "notes": "The prominent Read control establishes eScholarship as the archive rather than a descendant page on law.uci.edu."
+        },
+        {
+          "from": "uci-editorial-home",
+          "to": "esch-item",
+          "method": "css_selector",
+          "locator": "a[href='https://escholarship.org/uc/item/1370j9zm']",
+          "evidence_ids": [
+            "uci-home",
+            "esch-item-blocked"
+          ],
+          "notes": "This representative Foreword link directly corroborates that eScholarship item URLs can belong to the journal."
+        },
+        {
+          "from": "esch-item",
+          "to": "esch-file",
+          "method": "url_pattern",
+          "locator": "/content/qt{item_id}/qt{item_id}.pdf",
+          "evidence_ids": [
+            "esch-item-blocked",
+            "esch-file-blocked"
+          ],
+          "notes": "Candidate mapping tested once from item identifier 1370j9zm; it must not be treated as confirmed discovery logic until an allowed response or official API/export documents the file field."
+        }
+      ]
+    },
+    "archive_patterns": [
+      {
+        "role": "archive",
+        "url_pattern": "https://escholarship.org/uc/ucilr",
+        "examples": [
+          "https://escholarship.org/uc/ucilr"
+        ],
+        "evidence_ids": [
+          "uci-home",
+          "esch-collection-blocked"
+        ],
+        "notes": "Stable collection slug confirmed by the law-school outbound link and registry."
+      },
+      {
+        "role": "article",
+        "url_pattern": "https://escholarship.org/uc/item/{item_id}",
+        "examples": [
+          "https://escholarship.org/uc/item/1370j9zm"
+        ],
+        "evidence_ids": [
+          "uci-home",
+          "esch-item-blocked"
+        ],
+        "notes": "The opaque item identifier alone does not attribute the item to a journal; retain the collection relationship or another journal-specific source during deduplication."
+      },
+      {
+        "role": "file",
+        "url_pattern": "https://escholarship.org/content/qt{item_id}/qt{item_id}.pdf",
+        "examples": [
+          "https://escholarship.org/content/qt1370j9zm/qt1370j9zm.pdf"
+        ],
+        "evidence_ids": [
+          "esch-file-blocked"
+        ],
+        "notes": "Unconfirmed conventional content path; the only bounded request returned 403 HTML."
+      }
+    ],
+    "pagination": [
+      {
+        "scope": "eScholarship /uc/ucilr collection",
+        "type": "unknown",
+        "termination": "Not observable because the first collection response was a Cloudflare challenge.",
+        "pages_checked": 0,
+        "evidence_ids": [
+          "esch-collection-blocked"
+        ],
+        "notes": "Do not infer collection completeness or pagination behavior from the existing generic adapter's crawl-depth limits."
+      }
+    ],
+    "layout_eras": [
+      {
+        "id": "uci-static-editorial",
+        "label": "UCI Law static editorial handoff",
+        "start_year": 2010,
+        "end_year": 2026,
+        "url_patterns": [
+          "https://www.law.uci.edu/lawreview/"
+        ],
+        "evidence_ids": [
+          "uci-home"
+        ],
+        "notes": "Current page states that the journal was founded in 2010, but this does not prove the same page layout existed throughout the period."
+      },
+      {
+        "id": "escholarship-unresolved",
+        "label": "eScholarship collection and item layouts",
+        "url_patterns": [
+          "https://escholarship.org/uc/ucilr",
+          "https://escholarship.org/uc/item/{item_id}"
+        ],
+        "evidence_ids": [
+          "esch-collection-blocked",
+          "esch-item-blocked"
+        ],
+        "notes": "No archive or item markup was observable, so historical layout eras remain unresolved."
+      }
+    ]
+  },
+  "metadata_fields": {
+    "title": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "archive",
+          "method": "css_selector",
+          "locator": "a[href='https://escholarship.org/uc/item/1370j9zm'] em",
+          "confidence": "high",
+          "evidence_ids": [
+            "uci-home"
+          ],
+          "example": "Foreword",
+          "notes": "This is a one-item editorial citation on the law-school page, not a scalable archive selector."
+        }
+      ],
+      "normalization": [
+        "Decode HTML entities",
+        "Collapse internal whitespace"
+      ],
+      "missingness": "One representative title is visible on the UCI editorial page; title availability within the eScholarship collection could not be sampled.",
+      "notes": "The eventual adapter should prefer eScholarship item metadata over editorial anchor text."
+    },
+    "authors": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Preserve source author order"
+      ],
+      "missingness": "The representative UCI citation does not name an author, and the eScholarship item page was blocked.",
+      "notes": "No author locator is evidence-backed yet."
+    },
+    "abstract": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Preserve paragraph order",
+        "Collapse HTML-only whitespace"
+      ],
+      "missingness": "No article abstract was exposed on the UCI editorial page and the eScholarship item page was blocked.",
+      "notes": "Do not assume the existing generic adapter captures abstracts."
+    },
+    "year": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "archive",
+          "method": "text_parse",
+          "locator": "a[href='https://escholarship.org/uc/item/1370j9zm'] parent citation text",
+          "confidence": "high",
+          "evidence_ids": [
+            "uci-home"
+          ],
+          "example": "2011",
+          "notes": "Parse the terminal parenthesized year only for this corroborating citation, not as collection-wide logic."
+        }
+      ],
+      "normalization": [
+        "Emit a four-digit year"
+      ],
+      "missingness": "Observed only for the representative Foreword citation; collection-wide availability is unknown.",
+      "notes": "The combined holdings alias reportedly spans 2011-2026, but that generated count is prioritization context rather than live-page evidence."
+    },
+    "date": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Parse to ISO 8601 when precision permits"
+      ],
+      "missingness": "The UCI citation supplies only a year and the item page was blocked.",
+      "notes": "Do not synthesize month or day."
+    },
+    "volume": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "archive",
+          "method": "text_parse",
+          "locator": "a[href='https://escholarship.org/uc/item/1370j9zm'] parent citation text",
+          "confidence": "high",
+          "evidence_ids": [
+            "uci-home"
+          ],
+          "example": "1",
+          "notes": "The editorial citation reads 1 U.C. Irvine L. Rev.; eScholarship volume metadata was not observable."
+        }
+      ],
+      "normalization": [
+        "Strip journal abbreviation and surrounding whitespace"
+      ],
+      "missingness": "Observed only for the representative Foreword citation.",
+      "notes": "No collection-wide volume locator is evidence-backed yet."
+    },
+    "issue": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Strip Issue prefix"
+      ],
+      "missingness": "The UCI editorial citation omits issue and the eScholarship archive/item pages were blocked.",
+      "notes": "Do not infer issue from item identifiers."
+    },
+    "pages": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "archive",
+          "method": "text_parse",
+          "locator": "a[href='https://escholarship.org/uc/item/1370j9zm'] parent citation text",
+          "confidence": "high",
+          "evidence_ids": [
+            "uci-home"
+          ],
+          "example": "i",
+          "notes": "The representative citation gives first and pinpoint page i; it does not establish last-page availability."
+        }
+      ],
+      "normalization": [
+        "Preserve Roman page numbers"
+      ],
+      "missingness": "Observed only in the one representative editorial citation.",
+      "notes": "Record first/last pages separately if the eventual API exposes them."
+    },
+    "doi": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Lowercase DOI prefixes while preserving suffix case only when required"
+      ],
+      "missingness": "No DOI appears in the UCI editorial citation; item metadata was inaccessible.",
+      "notes": "Absence from one citation is not evidence that the collection never uses DOIs."
+    },
+    "citation": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "archive",
+          "method": "text_parse",
+          "locator": "paragraph containing a[href='https://escholarship.org/uc/item/1370j9zm']",
+          "confidence": "high",
+          "evidence_ids": [
+            "uci-home"
+          ],
+          "example": "Foreword, 1 U.C. Irvine L. Rev. i, i (2011)",
+          "notes": "One editorially supplied citation; no collection-wide selector was observed."
+        }
+      ],
+      "normalization": [
+        "Collapse internal whitespace",
+        "Preserve journal abbreviation and Roman pagination"
+      ],
+      "missingness": "Available for the one representative link only.",
+      "notes": "Prefer a repository-provided citation field when access is restored."
+    }
+  },
+  "file_delivery": {
+    "patterns": [
+      {
+        "file_type": "article_pdf",
+        "delivery": "unknown",
+        "discovery_method": "url_pattern",
+        "locator": "/content/qt{item_id}/qt{item_id}.pdf",
+        "url_pattern": "https://escholarship.org/content/qt{item_id}/qt{item_id}.pdf",
+        "requirements": {
+          "referer": "unknown",
+          "cookies": "unknown",
+          "javascript": "unknown",
+          "authentication": "unknown"
+        },
+        "evidence_ids": [
+          "esch-item-blocked",
+          "esch-file-blocked"
+        ],
+        "notes": "This is only a candidate content URL. A Referer-bearing ranged request was still challenged, so no direct/redirect/viewer classification or PDF identity claim is justified. JavaScript and cookies describe the observed Cloudflare gate, not an intended acquisition recipe."
+      }
+    ],
+    "validation": {
+      "magic_bytes_checked": true,
+      "content_type_checked": true,
+      "article_vs_issue_checked": false,
+      "evidence_ids": [
+        "esch-file-blocked"
+      ],
+      "notes": "The response began with HTML rather than %PDF and was served as text/html; no article file reached validation."
+    }
+  },
+  "access": {
+    "robots": [
+      {
+        "url": "https://www.law.uci.edu/robots.txt",
+        "decision": "unknown",
+        "checked_at": "2026-07-14T11:54:26-04:00",
+        "evidence_ids": [
+          "uci-robots-missing"
+        ],
+        "notes": "404 at the conventional path; this dossier does not treat a missing file as affirmative permission."
+      },
+      {
+        "url": "https://escholarship.org/robots.txt",
+        "decision": "partial",
+        "checked_at": "2026-07-14T11:54:28-04:00",
+        "evidence_ids": [
+          "esch-robots"
+        ],
+        "notes": "User-agent * is allowed for search/reference use, but several named automated agents are disallowed and training use is reserved. Recheck the exact acquisition user agent and policy at implementation time."
+      }
+    ],
+    "barriers": [
+      {
+        "type": "waf",
+        "severity": "blocking",
+        "evidence_ids": [
+          "esch-collection-blocked",
+          "esch-item-blocked",
+          "esch-file-blocked"
+        ],
+        "notes": "Cloudflare challenges block the collection, representative item, and candidate file route for the bounded non-browser client."
+      }
+    ],
+    "politeness_notes": "Six total requests, two-second delays between same-host probes, robots first, one collection, one item, and one ranged candidate-file request. Do not retry challenges or broaden traversal until an approved official eScholarship API/export or repository-supported access path is identified."
+  },
+  "verdict": {
+    "status": "blocked_waf",
+    "summary": "UCI Law supplies the canonical journal identity and delegates publication access to the /uc/ucilr eScholarship collection, but Cloudflare currently blocks archive, article, and file reconnaissance.",
+    "blockers": [
+      "Cloudflare challenge prevents collection enumeration and pagination analysis",
+      "Article metadata fields and historical layout eras remain unverified",
+      "No PDF response or article-versus-issue file identity has been validated",
+      "Duplicate registry names and the inaccurate WordPress sitemap can split or misattribute holdings"
+    ],
+    "next_action": "Identify and document an official eScholarship API, export, or repository-approved non-challenge route, then sample oldest, middle, and newest items before any acquisition smoke test.",
+    "recommended_adapter": "EScholarshipAdapter",
+    "implementation_notes": "Retain the existing host adapter only as the intended family route, not as proof of readiness. Scope discovery to collection slug ucilr, merge U.C. Irvine Law Review and UC Irvine Law Review before holdings aggregation, treat law.uci.edu/lawreview as an identity/cross-check page rather than a WordPress archive, and replace the current generic high-page crawl with a bounded documented collection/API path once access is approved."
+  }
+}

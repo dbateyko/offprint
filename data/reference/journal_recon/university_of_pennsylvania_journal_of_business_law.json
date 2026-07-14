@@ -1,0 +1,771 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "university-of-pennsylvania-journal-of-business-law",
+    "name": "University of Pennsylvania Journal of Business Law",
+    "aliases": [
+      "Journal of Business Law",
+      "Penn Journal of Business Law",
+      "JBL"
+    ],
+    "canonical_url": "https://repository.law.upenn.edu/journal-of-business-law",
+    "registry_refs": [
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "University of Pennsylvania Journal of Business Law",
+        "notes": "Three registry rows identify a legacy WordPress host, the Penn Carey Law journal page, and the Quartex repository collection; W&L rank is 61."
+      },
+      {
+        "source": "offprint/sitemaps/pennlawbusinesslaw-com.json",
+        "key": "pennlawbusinesslaw-com.json",
+        "notes": "Legacy WordPress configuration points to /archive/, but the host did not resolve during this reconnaissance."
+      },
+      {
+        "source": "offprint/sitemaps/university_of_pennsylvania_journal_of_business_law.json",
+        "key": "university_of_pennsylvania_journal_of_business_law.json",
+        "notes": "Current publication-scoped Quartex seed."
+      }
+    ],
+    "publication_scope": {
+      "host": "repository.law.upenn.edu",
+      "path_prefix": "/journal-of-business-law",
+      "platform": "quartex",
+      "repository_slug": "journal-of-business-law",
+      "notes": "The collection and all-issues routes are publication-scoped, but article records use global /Documents/Detail/{id} paths. A detail record is in scope only when its Source Title is exactly University of Pennsylvania Journal of Business Law or its DOI/citation independently attributes it to JBL."
+    }
+  },
+  "reconnaissance": {
+    "status": "in_progress",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T12:05:50-04:00",
+    "sample_policy": {
+      "oldest_issue_checked": false,
+      "middle_issue_checked": false,
+      "newest_issue_checked": false,
+      "article_pages_checked": 1
+    },
+    "evidence": [
+      {
+        "id": "legacy-custom-robots-dns",
+        "url": "https://www.pennlawbusinesslaw.com/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T12:03:55-04:00",
+        "notes": "The configured legacy WordPress host did not resolve in DNS, so neither robots policy nor the configured /archive/ route could be checked. No bare-host retry was attempted."
+      },
+      {
+        "id": "law-school-robots-blocked",
+        "url": "https://www.law.upenn.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T12:04:03-04:00",
+        "http_status": 403,
+        "content_type": "text/html",
+        "notes": "CloudFront returned a 403 Request blocked page. Per the stop-on-WAF rule, the /journals/jbl page was not requested."
+      },
+      {
+        "id": "repository-robots",
+        "url": "https://repository.law.upenn.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T12:04:11-04:00",
+        "http_status": 200,
+        "content_type": "text/plain",
+        "notes": "User-agent * disallows /login and /cms/* only and advertises /sitemap.xml. The journal, all-issues, document-detail, and public download-init paths used here are not disallowed."
+      },
+      {
+        "id": "repository-home",
+        "url": "https://repository.law.upenn.edu/journal-of-business-law",
+        "role": "homepage",
+        "observed_at": "2026-07-14T12:04:20-04:00",
+        "http_status": 200,
+        "content_type": "text/html",
+        "notes": "The Quartex collection page names the University of Pennsylvania Journal of Business Law, describes its scope, links back to Penn Carey Law, links to /journal-of-business-law/jbl as View all issues, and displays Volume 27 Issue 4 article cards with author affiliations and DOI links."
+      },
+      {
+        "id": "repository-all-issues",
+        "url": "https://repository.law.upenn.edu/journal-of-business-law/jbl",
+        "role": "archive",
+        "observed_at": "2026-07-14T12:04:36-04:00",
+        "http_status": 200,
+        "content_type": "text/html",
+        "notes": "Quartex media-list page statically configures publication-specific controlled vocabularies: 28 volume options from 01 (1998-1999) through 28 (2025-2026), 101 volume.issue options, and 746 records. Results are client-populated with a default 30-record page size and numbered previous/next pagination."
+      },
+      {
+        "id": "doi-robots-redirect",
+        "url": "https://doi.org/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T12:05:05-04:00",
+        "http_status": 301,
+        "notes": "The resolver robots URL redirected to https://www.doi.org/robots.txt."
+      },
+      {
+        "id": "doi-robots-missing",
+        "url": "https://www.doi.org/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T12:05:12-04:00",
+        "http_status": 404,
+        "content_type": "text/html",
+        "notes": "The redirected robots URL returned 404, so no DOI-host policy was available. Only one DOI advertised by the repository was resolved."
+      },
+      {
+        "id": "doi-current-article",
+        "url": "https://doi.org/10.58112/jbl.27-4.1",
+        "role": "article",
+        "observed_at": "2026-07-14T12:05:21-04:00",
+        "http_status": 302,
+        "content_type": "text/html;charset=utf-8",
+        "notes": "The repository-advertised DOI resolved without following to https://repository.law.upenn.edu/Documents/Detail/536307, proving the current DOI-to-detail relation."
+      },
+      {
+        "id": "repository-current-article",
+        "url": "https://repository.law.upenn.edu/Documents/Detail/536307",
+        "role": "article",
+        "observed_at": "2026-07-14T12:05:33-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "notes": "Public Quartex detail page embeds title, author and affiliation, April 03 2026 date, Article format, DOI, exact source journal, preferred citation, full abstract, JBL 27.4, 77 page images, a public full-PDF-enabled flag, and ephemeral viewer/download tokens."
+      },
+      {
+        "id": "quartex-pdf-init",
+        "url": "https://frontend-api.quartexcollections.com/v1/pcl/download/536307/pdf/init?create=true",
+        "role": "api",
+        "observed_at": "2026-07-14T12:05:50-04:00",
+        "http_status": 200,
+        "content_type": "application/json; charset=utf-8",
+        "notes": "Using the short-lived public download token embedded in the detail page, the PDF-init endpoint returned JSON with downloadUrl, encodedImageToken, mimeType, status, and success fields. No token was retained and the returned file URL was not fetched within the request budget."
+      },
+      {
+        "id": "smoke-masthead",
+        "url": "https://repository.law.upenn.edu/journal-of-business-law/jbl",
+        "role": "other",
+        "observed_at": "2026-07-14T16:26:02Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "notes": "Bounded one-site smoke used QuartexAdapter and wrote /tmp/offprint_penn_smoke_pdfs/repository.law.upenn.edu/jblv27-masthead.pdf (54,913 bytes; SHA-256 93f99d4c1b8b3a1c4ce082625f516a78d271288a55d05d3cfbeeaaab4de36668). The first candidate was a Keyboard Shortcuts masthead with no author, volume, or year, so it is valid PDF evidence but not an article-quality pass."
+      },
+      {
+        "id": "smoke-article",
+        "url": "https://repository.law.upenn.edu/Documents/Detail/536307",
+        "role": "file",
+        "observed_at": "2026-07-14T16:50:46Z",
+        "http_status": 200,
+        "content_type": "application/octet-stream",
+        "notes": "Final bounded article smoke used QuartexAdapter and wrote /tmp/offprint_penn_article_smoke5_pdfs/repository.law.upenn.edu/jblv27i4n1.pdf (1,841,160 bytes; SHA-256 dd7b188d8643b59f1395432e2784be20db30c43e492be22c9e8b2b2d440e81cb). Metadata passed the quality gate: title Entrepreneurialism, Process Managerialism, and the Trajectory of Delaware Law; author Martin Edwards; volume 27; issue 4; year 2026."
+      }
+    ],
+    "notes": "Ten bounded reconnaissance attempts plus three controlled smoke iterations were used. The Quartex route provides strong identity, archive-range, metadata, tokenized-delivery evidence, and one article-quality PDF. Full client-populated result enumeration and historical issue sampling remain open."
+  },
+  "scope": {
+    "include": [
+      "The Quartex collection routes under https://repository.law.upenn.edu/journal-of-business-law",
+      "Global /Documents/Detail/{id} records whose Source Title is exactly University of Pennsylvania Journal of Business Law",
+      "DOIs under 10.58112/jbl.* when the repository record confirms journal attribution",
+      "Articles, essays, comments, notes, and symposium contributions published in JBL"
+    ],
+    "exclude": [
+      "All sibling Penn Carey Law collections on repository.law.upenn.edu",
+      "Global detail records lacking exact Source Title or independent JBL attribution",
+      "Login, CMS, account, bookmark, analytics, and unrelated repository search routes",
+      "Mastheads, front matter, end matter, covers, and issue furniture unless separately classified",
+      "The dead pennlawbusinesslaw.com route unless it returns and its relationship is revalidated"
+    ],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Collection path alone cannot scope global Quartex detail pages. Preserve Source Title, DOI prefix, volume/issue tag, and discovery collection as independent provenance guards."
+  },
+  "site_map": {
+    "entry_points": [
+      {
+        "url": "https://repository.law.upenn.edu/journal-of-business-law",
+        "role": "homepage",
+        "evidence_ids": [
+          "repository-home"
+        ],
+        "notes": "Authoritative identity and current-issue cross-check; not the complete enumeration seed."
+      },
+      {
+        "url": "https://repository.law.upenn.edu/journal-of-business-law/jbl",
+        "role": "archive",
+        "evidence_ids": [
+          "repository-all-issues"
+        ],
+        "notes": "Preferred publication-specific enumeration route, with explicit volume and issue vocabularies."
+      }
+    ],
+    "route_graph": {
+      "nodes": [
+        {
+          "id": "legacy-custom-node",
+          "role": "archive",
+          "notes": "Configured WordPress /archive/ route; currently unresolved in DNS."
+        },
+        {
+          "id": "law-school-node",
+          "role": "homepage",
+          "notes": "Penn Carey Law journal route; not inspected because robots.txt itself was CloudFront-blocked."
+        },
+        {
+          "id": "repository-home-node",
+          "role": "homepage",
+          "notes": "Quartex journal landing page with identity, current issue, DOI cards, and all-issues link."
+        },
+        {
+          "id": "repository-archive-node",
+          "role": "archive",
+          "notes": "Publication-specific, client-populated media-list with volume/issue filters and numbered pagination."
+        },
+        {
+          "id": "doi-node",
+          "role": "article",
+          "notes": "Current article DOI that redirects to the repository detail record."
+        },
+        {
+          "id": "detail-node",
+          "role": "article",
+          "notes": "Global Quartex detail page carrying metadata, viewer pages, and download context."
+        },
+        {
+          "id": "pdf-init-node",
+          "role": "api",
+          "notes": "Tokenized public Quartex full-PDF initialization endpoint."
+        },
+        {
+          "id": "pdf-file-node",
+          "role": "file",
+          "notes": "Short-lived full-PDF URL returned by the init response; final bytes not fetched."
+        }
+      ],
+      "edges": [
+        {
+          "from": "repository-home-node",
+          "to": "repository-archive-node",
+          "method": "css_selector",
+          "locator": "a.button[href='/journal-of-business-law/jbl']",
+          "evidence_ids": [
+            "repository-home"
+          ],
+          "notes": "Visible View all issues control."
+        },
+        {
+          "from": "repository-home-node",
+          "to": "doi-node",
+          "method": "css_selector",
+          "locator": "section.card a[href^='https://doi.org/10.58112/jbl.']",
+          "evidence_ids": [
+            "repository-home",
+            "doi-current-article"
+          ],
+          "notes": "Current issue cards expose titles and authors and link through DOI."
+        },
+        {
+          "from": "repository-archive-node",
+          "to": "detail-node",
+          "method": "css_selector",
+          "locator": "ul[data-testid='documentSearchResultContainer'] a[href*='/Documents/Detail/']",
+          "evidence_ids": [
+            "repository-all-issues"
+          ],
+          "notes": "Results are populated by Quartex JavaScript/API rather than serialized in the initial HTML; the runtime result selector needs implementation smoke verification."
+        },
+        {
+          "from": "doi-node",
+          "to": "detail-node",
+          "method": "link_relation",
+          "locator": "HTTP Location header",
+          "evidence_ids": [
+            "doi-current-article",
+            "repository-current-article"
+          ],
+          "notes": "The representative DOI returned the exact global detail URL."
+        },
+        {
+          "from": "detail-node",
+          "to": "pdf-init-node",
+          "method": "url_pattern",
+          "locator": "window WebsiteKey + parentInfo.id + settings.downloadToken",
+          "evidence_ids": [
+            "repository-current-article",
+            "quartex-pdf-init"
+          ],
+          "notes": "Construct /v1/{websiteKey}/download/{documentId}/pdf/init?create=true and send the ephemeral public token as Bearer authorization."
+        },
+        {
+          "from": "pdf-init-node",
+          "to": "pdf-file-node",
+          "method": "api_field",
+          "locator": "downloadUrl + '?jwt=' + encodedImageToken",
+          "evidence_ids": [
+            "quartex-pdf-init"
+          ],
+          "notes": "Both response fields were nonempty; the combined short-lived URL was deliberately not fetched."
+        }
+      ]
+    },
+    "archive_patterns": [
+      {
+        "role": "archive",
+        "url_pattern": "https://repository.law.upenn.edu/journal-of-business-law/jbl",
+        "examples": [
+          "https://repository.law.upenn.edu/journal-of-business-law/jbl"
+        ],
+        "evidence_ids": [
+          "repository-all-issues"
+        ],
+        "notes": "Publication-specific dynamic media list."
+      },
+      {
+        "role": "article",
+        "url_pattern": "https://doi.org/10.58112/jbl.{volume}-{issue}.{article}",
+        "examples": [
+          "https://doi.org/10.58112/jbl.27-4.1"
+        ],
+        "evidence_ids": [
+          "repository-home",
+          "doi-current-article"
+        ],
+        "notes": "Observed current DOI convention; historical DOI coverage is unknown."
+      },
+      {
+        "role": "article",
+        "url_pattern": "https://repository.law.upenn.edu/Documents/Detail/{document_id}",
+        "examples": [
+          "https://repository.law.upenn.edu/Documents/Detail/536307"
+        ],
+        "evidence_ids": [
+          "doi-current-article",
+          "repository-current-article"
+        ],
+        "notes": "Global repository path; scope must be checked from record metadata."
+      },
+      {
+        "role": "api",
+        "url_pattern": "https://frontend-api.quartexcollections.com/v1/{website_key}/download/{document_id}/pdf/init?create=true",
+        "examples": [
+          "https://frontend-api.quartexcollections.com/v1/pcl/download/536307/pdf/init?create=true"
+        ],
+        "evidence_ids": [
+          "quartex-pdf-init"
+        ],
+        "notes": "Requires a short-lived public detail-page download token; do not persist tokens or returned signed URLs."
+      }
+    ],
+    "pagination": [
+      {
+        "scope": "Quartex JBL all-issues media list",
+        "type": "numbered_pages",
+        "selector": "#pagination-page, button[data-bind*='previousPage'], button[data-bind*='nextPage']",
+        "termination": "Stop when currentPage equals totalPages/pageLimit; the observed page configured 746 records and a default page size of 30, implying 25 pages if unchanged.",
+        "pages_checked": 1,
+        "evidence_ids": [
+          "repository-all-issues"
+        ],
+        "notes": "Page state is client-side and mirrored in an lf-state cookie, not a stable page query parameter in the initial URL. Only the first shell/configuration response was inspected; result traversal is unverified."
+      }
+    ],
+    "layout_eras": [
+      {
+        "id": "legacy-wordpress-route",
+        "label": "Legacy custom WordPress archive",
+        "url_patterns": [
+          "https://www.pennlawbusinesslaw.com/archive/",
+          "https://www.pennlawbusinesslaw.com/volume-{volume}/"
+        ],
+        "evidence_ids": [
+          "legacy-custom-robots-dns"
+        ],
+        "notes": "Recorded by the local sitemap as a former route, but the host currently has no DNS resolution; dates and content overlap cannot be verified."
+      },
+      {
+        "id": "quartex-collection",
+        "label": "Penn Carey Law Quartex repository",
+        "start_year": 1998,
+        "end_year": 2026,
+        "url_patterns": [
+          "https://repository.law.upenn.edu/journal-of-business-law/jbl",
+          "https://repository.law.upenn.edu/Documents/Detail/{document_id}"
+        ],
+        "evidence_ids": [
+          "repository-home",
+          "repository-all-issues",
+          "repository-current-article"
+        ],
+        "notes": "Controlled vocabulary visibly spans volumes 1-28 and 1998-2026. Historical detail-page uniformity remains untested because only one current article was opened."
+      }
+    ]
+  },
+  "metadata_fields": {
+    "title": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "api_field",
+          "locator": "parentInfo.allMetadata[id='title'].value",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article"
+          ],
+          "example": "Entrepreneurialism, Process Managerialism, and the Trajectory of Delaware Law",
+          "notes": "The same title appears in the HTML title and current-issue card."
+        }
+      ],
+      "normalization": [
+        "Decode HTML entities",
+        "Collapse internal whitespace",
+        "Preserve substantive punctuation"
+      ],
+      "missingness": "Present on the sampled current article and current issue cards; historical result/detail coverage was not sampled.",
+      "notes": "Prefer exact detail metadata over card text."
+    },
+    "authors": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "api_field",
+          "locator": "parentInfo.allMetadata[id='field_5'].value",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article"
+          ],
+          "example": "Martin Edwards, The University of Mississippi School of Law",
+          "notes": "The field combines author and affiliation; the current issue card marks the author name in strong text and leaves affiliation outside it."
+        }
+      ],
+      "normalization": [
+        "Use current-card strong markup to separate author from affiliation when available",
+        "Preserve affiliation in a separate field",
+        "Do not split a detail value on every comma without a stronger structural signal"
+      ],
+      "missingness": "Present on the sampled current article; historical records and multi-author detail values were not sampled.",
+      "notes": "The existing generic Quartex adapter's comma splitting may incorrectly split affiliations."
+    },
+    "abstract": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "api_field",
+          "locator": "parentInfo.allMetadata[id='field_134'].value",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article"
+          ],
+          "example": "Delaware's role as the undisputed leader in corporate chartering is once again a topic of substantial debate...",
+          "notes": "The full abstract is also serialized into meta[name='description']; br elements separate paragraphs."
+        }
+      ],
+      "normalization": [
+        "Decode HTML entities",
+        "Convert br boundaries to paragraph boundaries",
+        "Collapse other HTML-only whitespace"
+      ],
+      "missingness": "Present on the sampled current article; historical availability is untested.",
+      "notes": "Do not use the full meta description without separating its preceding bibliographic fields."
+    },
+    "year": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "api_field",
+          "locator": "parentInfo.allMetadata[id='field_8'].value",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article"
+          ],
+          "example": "April 03 2026",
+          "notes": "Extract the year; cross-check the preferred citation."
+        },
+        {
+          "page_type": "archive",
+          "method": "api_field",
+          "locator": "settings.controlledVocabs[fieldId='field_190'].options[].value",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-all-issues"
+          ],
+          "example": "27 (2024-2025)",
+          "notes": "Archive volume year ranges are issue-level context, not exact article dates."
+        }
+      ],
+      "normalization": [
+        "Extract a four-digit article publication year",
+        "Retain volume year ranges separately"
+      ],
+      "missingness": "Present on the sampled detail and on every observed volume label; per-record historical coverage is untested.",
+      "notes": "Use the article date when present."
+    },
+    "date": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "api_field",
+          "locator": "parentInfo.allMetadata[id='field_8'].value",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article"
+          ],
+          "example": "April 03 2026",
+          "notes": "Human-readable full date."
+        }
+      ],
+      "normalization": [
+        "Parse month day year",
+        "Serialize as ISO 8601 YYYY-MM-DD"
+      ],
+      "missingness": "Present on the sampled current article; historical availability is untested.",
+      "notes": "Retain the raw date with the normalized value."
+    },
+    "volume": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "api_field",
+          "locator": "parentInfo.allMetadata[id='field_173'].tags[0]",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article"
+          ],
+          "example": "JBL 27.4",
+          "notes": "Composite volume/issue field."
+        },
+        {
+          "page_type": "archive",
+          "method": "api_field",
+          "locator": "settings.controlledVocabs[fieldId='field_190'].options",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-all-issues"
+          ],
+          "example": "01 (1998-1999) through 28 (2025-2026)",
+          "notes": "Defines the complete visible volume vocabulary."
+        }
+      ],
+      "normalization": [
+        "Parse the first numeric component after JBL",
+        "Remove leading zeroes for canonical numeric comparison",
+        "Retain raw label and year range"
+      ],
+      "missingness": "Present on the sampled article and archive vocabulary; client-populated historical results were not sampled.",
+      "notes": "Do not infer the record's volume solely from the current collection heading."
+    },
+    "issue": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "api_field",
+          "locator": "parentInfo.allMetadata[id='field_173'].tags[0]",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article"
+          ],
+          "example": "JBL 27.4",
+          "notes": "Composite volume/issue field."
+        },
+        {
+          "page_type": "archive",
+          "method": "api_field",
+          "locator": "settings.controlledVocabs[fieldId='field_189'].options",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-all-issues"
+          ],
+          "example": "27.4",
+          "notes": "101 issue options identify volume.issue and per-option document counts."
+        }
+      ],
+      "normalization": [
+        "Parse the numeric component after the volume separator",
+        "Remove leading zeroes for canonical numeric comparison",
+        "Retain raw composite label"
+      ],
+      "missingness": "Present on the sampled article and archive vocabulary; per-record historical coverage is untested.",
+      "notes": "Issue labels are composite rather than a standalone issue number."
+    },
+    "pages": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "text_parse",
+          "locator": "parentInfo.allMetadata[id='field_121'].value preferred citation",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article"
+          ],
+          "example": "1051",
+          "notes": "The citation exposes the starting print page; the viewer separately reports 77 scanned page images."
+        }
+      ],
+      "normalization": [
+        "Store starting print page separately from viewer image count",
+        "Do not infer ending print page from image count without PDF validation"
+      ],
+      "missingness": "Starting page and viewer page count are present on the sampled article; historical availability is untested.",
+      "notes": "The first OCR transcript begins substantive text at page 1053 while the citation starts at 1051."
+    },
+    "doi": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "api_field",
+          "locator": "parentInfo.allMetadata[id='field_168'].value",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article",
+            "doi-current-article"
+          ],
+          "example": "10.58112/jbl.27-4.1",
+          "notes": "Link to Source is an HTML anchor containing the DOI URL."
+        }
+      ],
+      "normalization": [
+        "Extract DOI from the anchor href",
+        "Lowercase after removing https://doi.org/"
+      ],
+      "missingness": "Present on the sampled current article; historical DOI coverage is unknown.",
+      "notes": "The DOI prefix also provides a strong current scoping signal."
+    },
+    "citation": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "api_field",
+          "locator": "parentInfo.allMetadata[id='field_121'].value",
+          "confidence": "high",
+          "evidence_ids": [
+            "repository-current-article"
+          ],
+          "example": "27 U. Pa. J. Bus. L. 1051 (2026)",
+          "notes": "Preferred Citation omits author and title, which must be joined from their own fields if a full citation is desired."
+        }
+      ],
+      "normalization": [
+        "Collapse whitespace",
+        "Retain source-provided abbreviated journal title",
+        "Store DOI separately"
+      ],
+      "missingness": "Present on the sampled current article; historical availability is untested.",
+      "notes": "Do not mislabel the abbreviated source fragment as a complete author-title citation."
+    }
+  },
+  "file_delivery": {
+    "patterns": [
+      {
+        "file_type": "article_pdf",
+        "delivery": "tokenized",
+        "discovery_method": "api_field",
+        "locator": "detail settings.downloadToken + PDF init response downloadUrl and encodedImageToken",
+        "url_pattern": "https://frontend-api.quartexcollections.com/v1/{website_key}/download/{document_id}/pdf/init?create=true -> {downloadUrl}?jwt={encodedImageToken}",
+        "requirements": {
+          "referer": "unknown",
+          "cookies": "unknown",
+          "javascript": "unknown",
+          "authentication": "not_required"
+        },
+        "evidence_ids": [
+          "repository-current-article",
+          "quartex-pdf-init"
+        ],
+        "notes": "A requests-only PDF-init call succeeded without Referer or cookies: parse the public detail-page bearer token, call PDF init, then combine the two returned fields. The final signed file was not fetched, so its Referer, cookie, and JavaScript requirements remain unknown. The bearer is short-lived public delivery authorization, not user login; never persist it or signed URLs."
+      }
+    ],
+    "validation": {
+      "magic_bytes_checked": true,
+      "content_type_checked": true,
+      "article_vs_issue_checked": true,
+      "evidence_ids": [
+        "repository-current-article",
+        "quartex-pdf-init",
+        "smoke-article"
+      ],
+      "notes": "The detail page reports 77 pages and enables full-PDF download; PDF init returned a nonempty signed URL and image token. The final article smoke confirmed PDF bytes, response metadata, and article granularity; the first collection candidate remains recorded as a rejected masthead."
+    }
+  },
+  "access": {
+    "robots": [
+      {
+        "url": "https://www.pennlawbusinesslaw.com/robots.txt",
+        "decision": "unknown",
+        "checked_at": "2026-07-14T12:03:55-04:00",
+        "evidence_ids": [
+          "legacy-custom-robots-dns"
+        ],
+        "notes": "Host did not resolve; no policy could be read."
+      },
+      {
+        "url": "https://www.law.upenn.edu/robots.txt",
+        "decision": "unknown",
+        "checked_at": "2026-07-14T12:04:03-04:00",
+        "evidence_ids": [
+          "law-school-robots-blocked"
+        ],
+        "notes": "CloudFront blocked robots.txt; the journal route was not probed."
+      },
+      {
+        "url": "https://repository.law.upenn.edu/robots.txt",
+        "decision": "partial",
+        "checked_at": "2026-07-14T12:04:11-04:00",
+        "evidence_ids": [
+          "repository-robots"
+        ],
+        "notes": "The sampled public journal, archive, detail, and file-init routes are allowed; /login and /cms/* are disallowed and out of scope."
+      },
+      {
+        "url": "https://doi.org/robots.txt",
+        "decision": "unknown",
+        "checked_at": "2026-07-14T12:05:12-04:00",
+        "evidence_ids": [
+          "doi-robots-redirect",
+          "doi-robots-missing"
+        ],
+        "notes": "The canonical robots URL redirected to www.doi.org, where robots.txt returned 404."
+      }
+    ],
+    "barriers": [
+      {
+        "type": "dead_link",
+        "severity": "degraded",
+        "evidence_ids": [
+          "legacy-custom-robots-dns"
+        ],
+        "notes": "The legacy WordPress host no longer resolves, so it cannot serve as an acquisition route."
+      },
+      {
+        "type": "waf",
+        "severity": "degraded",
+        "evidence_ids": [
+          "law-school-robots-blocked"
+        ],
+        "notes": "Penn Carey Law's host blocks the research client at CloudFront, but the independent Quartex repository remains accessible."
+      },
+      {
+        "type": "javascript",
+        "severity": "degraded",
+        "evidence_ids": [
+          "repository-all-issues"
+        ],
+        "notes": "All-issues metadata and controls are in static HTML, but individual result records are populated client-side; requests-based enumeration must reproduce the underlying Quartex result API or use a narrowly scoped browser step."
+      }
+    ],
+    "politeness_notes": "Reconnaissance stopped at ten HTTP attempts, used no concurrency, waited at least two seconds between same-host repository and DOI requests, stopped immediately on the law-school CloudFront block, did not retry the dead legacy host, did not traverse archive pages, and did not fetch a PDF."
+  },
+  "verdict": {
+    "status": "in_progress",
+    "summary": "The Penn Carey Law Quartex collection is the authoritative and apparently complete route: it identifies JBL, exposes 746 records across volumes 1-28 (1998-2026), provides rich detail metadata, and yields a tokenized full-PDF URL through its public init API. The legacy WordPress host is dead and the law-school host is CloudFront-blocked, but neither prevents repository work.",
+    "blockers": [
+      "Client-populated all-issues result enumeration and its exact API contract have not been verified.",
+      "Oldest, middle, and newest issue/result samples and two additional article pages remain unchecked.",
+      "Full client-populated result enumeration, historical issue sampling, and pagination termination remain unvalidated.",
+      "Global /Documents/Detail paths require exact source-journal scoping to prevent sibling-collection leakage."
+    ],
+    "next_action": "Instrument the Quartex media-list request in a bounded browser or inspect its first-party JavaScript to recover the publication-specific result API, then exclude mastheads, sample oldest/middle/newest article records, and validate pagination termination before controlled collection.",
+    "recommended_adapter": "QuartexAdapter",
+    "implementation_notes": "Register repository.law.upenn.edu to QuartexAdapter, seed only /journal-of-business-law/jbl, enforce exact Source Title plus discovery provenance on global detail pages, preserve field_190/field_189 volume-issue values, fix author/affiliation parsing, and reuse the existing requests-only Quartex PDF-init flow without persisting tokens. Do not route through the dead custom site or the blocked law-school page."
+  }
+}

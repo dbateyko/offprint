@@ -75,7 +75,11 @@ class QuartexAdapter(Adapter):
 
         # Cards and thumbnails sometimes put the href on nested elements; capture both
         link_candidates = list(soup.select("a[href]"))
-        link_candidates.extend(soup.select(".card__content[href], .card__media[href], section.featured-thumbnail [href]"))
+        link_candidates.extend(
+            soup.select(
+                ".card__content[href], .card__media[href], section.featured-thumbnail [href]"
+            )
+        )
 
         for a in link_candidates:
             href = a.get("href") or ""
@@ -115,7 +119,11 @@ class QuartexAdapter(Adapter):
         return list(links)
 
     def _extract_metadata(self, soup: BeautifulSoup, page_url: str) -> Dict:
-        metadata: Dict[str, object] = {"source_url": page_url, "url": page_url, "dc_source": "quartex"}
+        metadata: Dict[str, object] = {
+            "source_url": page_url,
+            "url": page_url,
+            "dc_source": "quartex",
+        }
 
         # Structured meta tags first
         meta_title = soup.find("meta", attrs={"name": "citation_title"})
@@ -123,16 +131,63 @@ class QuartexAdapter(Adapter):
             metadata["title"] = (meta_title.get("content") or "").strip()
 
         meta_authors = soup.find_all("meta", attrs={"name": "citation_author"})
-        authors: List[str] = [ma.get("content", "").strip() for ma in meta_authors if ma.get("content")]
+        authors: List[str] = [
+            ma.get("content", "").strip() for ma in meta_authors if ma.get("content")
+        ]
 
         pub_date = soup.find("meta", attrs={"name": "citation_publication_date"})
         if pub_date and (pub_date.get("content") or "").strip():
             metadata["date"] = (pub_date.get("content") or "").strip()
 
         if not metadata.get("title"):
-            title_elem = soup.find(["h1", "h2"], string=True)
+            title_elem = soup.select_one("h1.document-viewer__heading, h1#document-title")
+            if title_elem is None:
+                title_elem = soup.find("h1", string=True)
             if title_elem:
                 metadata["title"] = title_elem.get_text(strip=True)
+
+        # Quartex detail pages keep authoritative fields in the inline
+        # summaryMetadata/allMetadata JSON rather than citation meta tags.
+        page_html = str(soup)
+        author_match = re.search(
+            r'"name"\s*:\s*"Author"\s*,\s*"value"\s*:\s*"([^"]+)"',
+            page_html,
+        )
+        if author_match and not authors:
+            authors.append(author_match.group(1).strip())
+        date_match = re.search(
+            r'"name"\s*:\s*"Date"\s*,\s*"value"\s*:\s*"([^"]+)"',
+            page_html,
+        )
+        if date_match and not metadata.get("date"):
+            metadata["date"] = date_match.group(1).strip()
+        if date_match:
+            inline_year = re.search(r"\b(19|20)\d{2}\b", date_match.group(1))
+            if inline_year:
+                metadata["year"] = inline_year.group(0)
+        volume_match = re.search(
+            r'"name"\s*:\s*"Volume(?:\\/|/)Issue"\s*,.*?"tags"\s*:\s*\[\s*"([^"]+)"',
+            page_html,
+            flags=re.DOTALL,
+        )
+        if volume_match:
+            volume_issue = volume_match.group(1).strip()
+            metadata["volume_issue"] = volume_issue
+            volume_parts = re.search(r"\b(?:[A-Za-z.]+\s*)?(\d+)(?:\.(\d+))?\b", volume_issue)
+            if volume_parts:
+                metadata["volume"] = volume_parts.group(1)
+                if volume_parts.group(2):
+                    metadata["issue"] = volume_parts.group(2)
+        citation_match = re.search(
+            r'"name"\s*:\s*"Preferred Citation"\s*,\s*"value"\s*:\s*"([^"]+)"',
+            page_html,
+        )
+        if citation_match:
+            metadata["citation"] = citation_match.group(1).strip()
+            if not metadata.get("volume"):
+                citation_volume = re.match(r"\s*(\d+)", metadata["citation"])
+                if citation_volume:
+                    metadata["volume"] = citation_volume.group(1)
 
         # Authors: fall back to visible blocks
         author_blocks = soup.select("[class*=author], .authors, .author")
@@ -183,6 +238,38 @@ class QuartexAdapter(Adapter):
                 pdfs.add(urljoin(page_url, href))
 
         return list(pdfs)
+
+    def _is_non_article_record(self, soup: BeautifulSoup, metadata: Dict) -> bool:
+        """Reject Quartex collection furniture before yielding a PDF candidate.
+
+        Publication collections commonly expose mastheads, covers, and keyboard-
+        shortcut/help records alongside articles. Those files are valid PDFs but
+        fail the journal article quality gate and should not be the first smoke
+        candidate. Use explicit metadata/title markers only; do not infer from
+        missing authors because unsigned notes and comments are legitimate.
+        """
+
+        title = str(metadata.get("title") or "").strip().lower()
+        body_text = soup.get_text(" ", strip=True).lower()
+        markers = (
+            "keyboard shortcuts",
+            "masthead",
+            "front matter",
+            "end matter",
+            "table of contents",
+            "contents",
+            "cover page",
+            "volume cover",
+        )
+        if any(marker in title for marker in markers):
+            return True
+
+        # Quartex may not expose a usable title heading in the initial shell, but
+        # its visible format/type labels still identify collection furniture. Do
+        # not use the global "Keyboard Shortcuts" help text here: it is embedded
+        # in every detail page, including real articles.
+        furniture_markers = ("document type: masthead", "format: masthead")
+        return any(marker in body_text for marker in furniture_markers)
 
     def _extract_quartex_download_context(self, page_html: str) -> Optional[tuple[str, str, str]]:
         website_match = re.search(r'window\["WebsiteKey"\]\s*=\s*"([^"]+)"', page_html)
@@ -277,7 +364,7 @@ class QuartexAdapter(Adapter):
                 trigger_selectors = [
                     'button:has-text("Download")',
                     'a:has-text("Download")',
-                    'text=Download',
+                    "text=Download",
                 ]
 
                 for selector in trigger_selectors:
@@ -314,9 +401,7 @@ class QuartexAdapter(Adapter):
 
         results: List[DiscoveryResult] = []
         headed_available = bool(os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY"))
-        with PlaywrightSession(
-            headless=not headed_available, min_delay=1.0, max_delay=2.5
-        ) as pw:
+        with PlaywrightSession(headless=not headed_available, min_delay=1.0, max_delay=2.5) as pw:
             # Replace the adapter session with Playwright for this traversal
             original_session = self.session
             self.session = pw
@@ -329,7 +414,9 @@ class QuartexAdapter(Adapter):
 
         return results
 
-    def _discover_pdfs_requests(self, seed_url: str, max_depth: int = 0) -> Iterable[DiscoveryResult]:
+    def _discover_pdfs_requests(
+        self, seed_url: str, max_depth: int = 0
+    ) -> Iterable[DiscoveryResult]:
         """Internal requests-based discovery (no Playwright fallback)."""
         queue: List[tuple[str, int]] = [(seed_url, 0)]
         host = urlparse(seed_url).netloc
@@ -353,6 +440,8 @@ class QuartexAdapter(Adapter):
 
             if pdf_links:
                 metadata = self._extract_metadata(soup, url)
+                if self._is_non_article_record(soup, metadata):
+                    continue
                 for pdf_url in pdf_links:
                     normalized_pdf = pdf_url
                     if normalized_pdf in self._seen_pdfs:
@@ -396,7 +485,9 @@ class QuartexAdapter(Adapter):
         for r in self._discover_with_playwright(seed_url, max_depth):
             yield r
 
-    def discover_pdfs_with_playwright(self, seed_url: str, max_depth: int = 0) -> Iterable[DiscoveryResult]:
+    def discover_pdfs_with_playwright(
+        self, seed_url: str, max_depth: int = 0
+    ) -> Iterable[DiscoveryResult]:
         """Explicit Playwright entry (for callers who want to force Playwright)."""
         return self._discover_with_playwright(seed_url, max_depth)
 

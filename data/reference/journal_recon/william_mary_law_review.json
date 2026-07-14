@@ -1,0 +1,649 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "william-mary-law-review",
+    "name": "William & Mary Law Review",
+    "aliases": [
+      "WMLR"
+    ],
+    "canonical_url": "https://scholarship.law.wm.edu/wmlr/",
+    "issn": [
+      "0043-5589",
+      "2374-8524"
+    ],
+    "registry_refs": [
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "William & Mary Law Review",
+        "notes": "The registry contains two publication-scoped Digital Commons rows for /wmlr; W&L rank is 36."
+      },
+      {
+        "source": "offprint/sitemaps/william_mary_law_review.json",
+        "key": "william_mary_law_review.json",
+        "notes": "Existing publication-scoped sitemap seed; it currently points to /wmlr/sitemap.xml rather than the observed all-issues archive."
+      }
+    ],
+    "publication_scope": {
+      "host": "scholarship.law.wm.edu",
+      "path_prefix": "/wmlr/",
+      "platform": "digitalcommons",
+      "repository_slug": "wmlr",
+      "notes": "The /wmlr publication slug is the collection boundary on a shared repository that also hosts several other William & Mary journals."
+    }
+  },
+  "reconnaissance": {
+    "status": "metadata_only",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T11:55:02-04:00",
+    "sample_policy": {
+      "oldest_issue_checked": true,
+      "middle_issue_checked": true,
+      "newest_issue_checked": true,
+      "article_pages_checked": 1
+    },
+    "evidence": [
+      {
+        "id": "dc-robots",
+        "url": "https://scholarship.law.wm.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T11:54:05-04:00",
+        "http_status": 200,
+        "content_type": "text/plain",
+        "notes": "User-agent * does not disallow /wmlr/ or /cgi/viewcontent.cgi, but it does disallow /do/ and numerous account and submission routes. OAI and repository search endpoints must not be used."
+      },
+      {
+        "id": "dc-archive",
+        "url": "https://scholarship.law.wm.edu/wmlr/all_issues.html",
+        "role": "archive",
+        "observed_at": "2026-07-14T11:54:13-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "One publication-scoped page lists volumes 1 through 67 and every visible issue link, spanning 1957-2026; no next-page control was observed."
+      },
+      {
+        "id": "issue-newest",
+        "url": "https://scholarship.law.wm.edu/wmlr/vol67/iss6/",
+        "role": "issue",
+        "observed_at": "2026-07-14T11:54:26-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Newest sampled issue contains seven div.doc records: one table of contents and six authored works. Each record advertises an article landing page and cgi/viewcontent file link; authored works expose title and author inline."
+      },
+      {
+        "id": "issue-middle",
+        "url": "https://scholarship.law.wm.edu/wmlr/vol34/iss1/",
+        "role": "issue",
+        "observed_at": "2026-07-14T11:54:33-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Middle sampled issue (1992) uses the same div.article-list/div.doc structure, article landing paths, author spans, and cgi/viewcontent links as the newest sample."
+      },
+      {
+        "id": "issue-oldest",
+        "url": "https://scholarship.law.wm.edu/wmlr/vol1/iss1/",
+        "role": "issue",
+        "observed_at": "2026-07-14T11:54:40-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Oldest sampled issue (1957) uses the same listing structure and includes authored works plus non-article records such as a table of contents and a cumulative predecessor index, which require classification filters."
+      },
+      {
+        "id": "article-newest",
+        "url": "https://scholarship.law.wm.edu/wmlr/vol67/iss6/2/",
+        "role": "article",
+        "observed_at": "2026-07-14T11:54:48-04:00",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Article page exposes bepress_citation meta tags for journal, first page, repeated authors and affiliations, title, year, volume, issue, PDF URL, article URL, print and online ISSNs, and online date. The DOM also contains a multi-paragraph abstract and repository citation."
+      },
+      {
+        "id": "file-blocked",
+        "url": "https://scholarship.law.wm.edu/cgi/viewcontent.cgi?article=4113&context=wmlr",
+        "role": "file",
+        "observed_at": "2026-07-14T11:55:02-04:00",
+        "http_status": 403,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "A bounded ranged GET with the article page as Referer returned 744 bytes of HTML beginning with <html>, not %PDF, and set a short-lived original_referer cookie. No retry or access-control bypass was attempted."
+      }
+    ],
+    "notes": "Seven sequential GETs established a complete visible archive route and a stable issue layout across oldest, middle, and newest samples. Metadata discovery is strong, but primary-file acquisition is not proven because the representative file request was blocked."
+  },
+  "scope": {
+    "include": [
+      "URLs under https://scholarship.law.wm.edu/wmlr/",
+      "Issue records whose landing URLs match /wmlr/vol{volume}/iss{issue}/{article}",
+      "Articles, essays, comments, and notes attributed to William & Mary Law Review"
+    ],
+    "exclude": [
+      "Sibling collections on scholarship.law.wm.edu, including wmborj, wmblr, wmjowl, wmelpr, and wmlronline",
+      "Repository search, account, subscription, submission, and all /do/ routes",
+      "Tables of contents, mastheads, cumulative indexes, covers, and other front matter unless separately classified",
+      "Outbound cited documents and materials from the predecessor William and Mary Review of Virginia Law"
+    ],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Require both /wmlr/ landing-page scope and context=wmlr on cgi file URLs. William & Mary Law Review Online is a separate repository slug and is out of scope."
+  },
+  "site_map": {
+    "entry_points": [
+      {
+        "url": "https://scholarship.law.wm.edu/wmlr/all_issues.html",
+        "role": "archive",
+        "evidence_ids": [
+          "dc-archive"
+        ],
+        "notes": "Preferred enumerator: publication-scoped, robots-permitted, unpaginated, and visibly spans volumes 1-67."
+      }
+    ],
+    "route_graph": {
+      "nodes": [
+        {
+          "id": "archive-node",
+          "role": "archive",
+          "notes": "Flat all-issues page containing volume and issue links."
+        },
+        {
+          "id": "issue-node",
+          "role": "issue",
+          "notes": "Volume/issue page containing one div.doc per repository record."
+        },
+        {
+          "id": "article-node",
+          "role": "article",
+          "notes": "Landing page with structured citation metadata, abstract, citation, and advertised file URL."
+        },
+        {
+          "id": "file-node",
+          "role": "file",
+          "notes": "cgi/viewcontent route advertised as PDF; representative bounded request currently returns 403 HTML."
+        }
+      ],
+      "edges": [
+        {
+          "from": "archive-node",
+          "to": "issue-node",
+          "method": "css_selector",
+          "locator": "h3.issue > a[href*='/wmlr/vol']",
+          "evidence_ids": [
+            "dc-archive"
+          ],
+          "notes": "Issue URLs encode volume and issue; the enclosing h3 text supplies year and occasional symposium labels."
+        },
+        {
+          "from": "issue-node",
+          "to": "article-node",
+          "method": "css_selector",
+          "locator": "div.article-list div.doc p:not(.pdf) > a[href*='/wmlr/vol']",
+          "evidence_ids": [
+            "issue-oldest",
+            "issue-middle",
+            "issue-newest"
+          ],
+          "notes": "Stable across all three sampled eras; span.auth in the same record contains display-order authors when present."
+        },
+        {
+          "from": "issue-node",
+          "to": "file-node",
+          "method": "css_selector",
+          "locator": "div.article-list div.doc p.pdf > a[href*='viewcontent.cgi'][href*='context=wmlr']",
+          "evidence_ids": [
+            "issue-oldest",
+            "issue-middle",
+            "issue-newest"
+          ],
+          "notes": "Each sampled record advertises a file link, including front matter that must be classified before collection."
+        },
+        {
+          "from": "article-node",
+          "to": "file-node",
+          "method": "css_selector",
+          "locator": "meta[name='bepress_citation_pdf_url'][content], a#pdf[href*='viewcontent.cgi']",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "notes": "Structured metadata and the visible Download control advertise the same file route."
+        }
+      ]
+    },
+    "archive_patterns": [
+      {
+        "role": "archive",
+        "url_pattern": "https://scholarship.law.wm.edu/wmlr/all_issues.html",
+        "examples": [
+          "https://scholarship.law.wm.edu/wmlr/all_issues.html"
+        ],
+        "evidence_ids": [
+          "dc-archive"
+        ],
+        "notes": "Single flat archive page."
+      },
+      {
+        "role": "volume",
+        "url_pattern": "https://scholarship.law.wm.edu/wmlr/vol{volume}/",
+        "examples": [
+          "https://scholarship.law.wm.edu/wmlr/vol67/"
+        ],
+        "evidence_ids": [
+          "dc-archive"
+        ],
+        "notes": "Volume links are present, but direct volume pages were not separately fetched because issue links are available on the archive."
+      },
+      {
+        "role": "issue",
+        "url_pattern": "https://scholarship.law.wm.edu/wmlr/vol{volume}/iss{issue}/",
+        "examples": [
+          "https://scholarship.law.wm.edu/wmlr/vol1/iss1/",
+          "https://scholarship.law.wm.edu/wmlr/vol34/iss1/",
+          "https://scholarship.law.wm.edu/wmlr/vol67/iss6/"
+        ],
+        "evidence_ids": [
+          "issue-oldest",
+          "issue-middle",
+          "issue-newest"
+        ],
+        "notes": "Volume and issue are numeric path components."
+      },
+      {
+        "role": "article",
+        "url_pattern": "https://scholarship.law.wm.edu/wmlr/vol{volume}/iss{issue}/{article}/",
+        "examples": [
+          "https://scholarship.law.wm.edu/wmlr/vol67/iss6/2/"
+        ],
+        "evidence_ids": [
+          "article-newest"
+        ],
+        "notes": "Issue pages omit the final slash; canonicalize article landing URLs with a trailing slash."
+      },
+      {
+        "role": "file",
+        "url_pattern": "https://scholarship.law.wm.edu/cgi/viewcontent.cgi?article={repository_id}&context=wmlr",
+        "examples": [
+          "https://scholarship.law.wm.edu/cgi/viewcontent.cgi?article=4113&context=wmlr"
+        ],
+        "evidence_ids": [
+          "article-newest",
+          "file-blocked"
+        ],
+        "notes": "The context=wmlr query is the publication-scope guard; current bounded retrieval returned 403 HTML."
+      }
+    ],
+    "pagination": [
+      {
+        "scope": "Digital Commons all-issues archive",
+        "type": "none",
+        "termination": "The one response ends after volume 1, issue 1; the first record in the response is volume 67, issue 1-6.",
+        "pages_checked": 1,
+        "evidence_ids": [
+          "dc-archive"
+        ],
+        "notes": "No next or numbered pagination was observed. Volumes 1-67 are all represented in the same HTML document."
+      }
+    ],
+    "layout_eras": [
+      {
+        "id": "digitalcommons-unified",
+        "label": "Unified Digital Commons issue and article layout",
+        "start_year": 1957,
+        "end_year": 2026,
+        "url_patterns": [
+          "https://scholarship.law.wm.edu/wmlr/vol{volume}/iss{issue}/",
+          "https://scholarship.law.wm.edu/wmlr/vol{volume}/iss{issue}/{article}/"
+        ],
+        "evidence_ids": [
+          "dc-archive",
+          "issue-oldest",
+          "issue-middle",
+          "issue-newest",
+          "article-newest"
+        ],
+        "notes": "Issue-list markup is stable in 1957, 1992, and 2026 samples. Only a current article landing page was sampled, so historical article-page metadata uniformity remains inferred rather than proven."
+      }
+    ]
+  },
+  "metadata_fields": {
+    "title": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "issue",
+          "method": "css_selector",
+          "locator": "div.article-list div.doc p:not(.pdf) > a",
+          "confidence": "high",
+          "evidence_ids": [
+            "issue-oldest",
+            "issue-middle",
+            "issue-newest"
+          ],
+          "example": "Is Bruen the New Usery?",
+          "notes": "The article landing-link text supplies the record title across all three sampled issues."
+        },
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_title']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "example": "Is <em>Bruen</em> the New <em>Usery</em>?",
+          "notes": "Treat the structured article-page value as authoritative after stripping markup."
+        }
+      ],
+      "normalization": [
+        "Decode HTML entities",
+        "Strip presentational HTML while preserving text",
+        "Collapse internal whitespace"
+      ],
+      "missingness": "Present on every issue-page record in oldest, middle, and newest samples, including front matter.",
+      "notes": "A title alone does not establish that a record is an in-scope article."
+    },
+    "authors": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "issue",
+          "method": "css_selector",
+          "locator": "div.article-list div.doc span.auth",
+          "confidence": "high",
+          "evidence_ids": [
+            "issue-oldest",
+            "issue-middle",
+            "issue-newest"
+          ],
+          "example": "Tonja Jacobi and Cory Conley",
+          "notes": "Issue page supplies display-order author text. Empty spans mark front matter and some institutional records."
+        },
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_author']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "example": "Jacobi, Tonja; Conley, Cory",
+          "notes": "Repeated meta tags preserve author multiplicity; adjacent institution tags align by position."
+        }
+      ],
+      "normalization": [
+        "Preserve repeated authors in source order",
+        "Convert unambiguous Family, Given forms to display order",
+        "Do not split free text on 'and' when repeated meta tags are available"
+      ],
+      "missingness": "Authored works have names in all three issue samples; tables of contents and a cumulative index have empty author spans.",
+      "notes": "Missing author is also a useful, but not sufficient, front-matter classification signal."
+    },
+    "abstract": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "css_selector",
+          "locator": "div#abstract > p",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "example": "In 2022, in New York State Rifle & Pistol Ass'n v. Bruen, the Supreme Court revolutionized the Second Amendment...",
+          "notes": "Join all abstract paragraphs in document order."
+        }
+      ],
+      "normalization": [
+        "Join paragraph text with blank-line boundaries",
+        "Collapse HTML-only whitespace while preserving punctuation"
+      ],
+      "missingness": "Present on the one sampled current article; issue pages do not expose abstracts and historical article pages were not sampled.",
+      "notes": "Do not claim universal abstract coverage from this sample."
+    },
+    "year": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_date']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "example": "2026",
+          "notes": "Year-only citation field. Issue headings provide a fallback for every visible issue."
+        },
+        {
+          "page_type": "archive",
+          "method": "text_parse",
+          "locator": "h3.issue text matching \\((\\d{4})\\)",
+          "confidence": "high",
+          "evidence_ids": [
+            "dc-archive"
+          ],
+          "example": "Issue 6 (2026)",
+          "notes": "Propagate the issue year to its articles only when article-page metadata is absent."
+        }
+      ],
+      "normalization": [
+        "Extract a four-digit publication year"
+      ],
+      "missingness": "A year is visible for every issue in the archive; present on the sampled article meta tags.",
+      "notes": "Prefer the article value and cross-check it against the issue heading."
+    },
+    "date": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_online_date']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "example": "2026/5/13",
+          "notes": "Full online-publication date was present in the sampled article head."
+        }
+      ],
+      "normalization": [
+        "Parse year/month/day",
+        "Serialize as ISO 8601 YYYY-MM-DD"
+      ],
+      "missingness": "Present on the sampled current article; historical coverage was not tested.",
+      "notes": "Retain the raw source value with the normalized date."
+    },
+    "volume": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_volume']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "example": "67",
+          "notes": "Also encoded in every issue and article path."
+        }
+      ],
+      "normalization": [
+        "Strip a leading Volume label if present",
+        "Retain the numeric string"
+      ],
+      "missingness": "Encoded in all visible archive, issue, and article paths; present on the sampled article meta tags.",
+      "notes": "Cross-check against /vol{volume}/."
+    },
+    "issue": {
+      "availability": "always",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_issue']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "example": "6",
+          "notes": "Also encoded in every issue and article path."
+        }
+      ],
+      "normalization": [
+        "Strip a leading Issue label if present",
+        "Retain the numeric string"
+      ],
+      "missingness": "Encoded in all visible issue and article paths; present on the sampled article meta tags.",
+      "notes": "Cross-check against /iss{issue}/."
+    },
+    "pages": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "meta_tag",
+          "locator": "meta[name='bepress_citation_firstpage']@content",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "example": "1529",
+          "notes": "The sampled page exposes a first page but no bepress_citation_lastpage tag."
+        }
+      ],
+      "normalization": [
+        "Store a single starting page when no ending page is supplied",
+        "Do not infer an ending page from the next article without validation"
+      ],
+      "missingness": "Starting page is present on the sampled article; ending page is not exposed in its citation meta tags or repository citation.",
+      "notes": "PDF inspection may later recover a full range after file access is resolved."
+    },
+    "doi": {
+      "availability": "unknown",
+      "sources": [],
+      "normalization": [
+        "Lowercase a DOI after removing any https://doi.org/ prefix"
+      ],
+      "missingness": "No DOI field was observed on the sampled article page.",
+      "notes": "Do not treat the Digital Commons repository article number as a DOI."
+    },
+    "citation": {
+      "availability": "sometimes",
+      "sources": [
+        {
+          "page_type": "article",
+          "method": "css_selector",
+          "locator": "div#recommended_citation",
+          "confidence": "high",
+          "evidence_ids": [
+            "article-newest"
+          ],
+          "example": "Tonja Jacobi and Cory Conley, Is Bruen the New Usery?, 67 Wm. & Mary L. Rev. 1529 (2026).",
+          "notes": "Exclude the trailing repository URL when storing the preferred print citation."
+        }
+      ],
+      "normalization": [
+        "Strip presentational HTML",
+        "Collapse whitespace",
+        "Store the repository URL separately from the print citation"
+      ],
+      "missingness": "Present on the sampled article; historical article pages were not sampled.",
+      "notes": "Structured fields can be assembled defensively if citation DOM markup varies."
+    }
+  },
+  "file_delivery": {
+    "patterns": [
+      {
+        "file_type": "article_pdf",
+        "delivery": "direct",
+        "discovery_method": "css_selector",
+        "locator": "div.article-list div.doc p.pdf > a, meta[name='bepress_citation_pdf_url'], a#pdf",
+        "url_pattern": "https://scholarship.law.wm.edu/cgi/viewcontent.cgi?article={repository_id}&context=wmlr",
+        "requirements": {
+          "referer": "unknown",
+          "cookies": "unknown",
+          "javascript": "unknown",
+          "authentication": "unknown"
+        },
+        "evidence_ids": [
+          "issue-oldest",
+          "issue-middle",
+          "issue-newest",
+          "article-newest",
+          "file-blocked"
+        ],
+        "notes": "Pages consistently advertise a direct PDF route, but the representative bounded GET returned 403 HTML even with the article page as Referer. The response set an original_referer cookie; any cookie or browser requirement remains unverified and must not be assumed."
+      },
+      {
+        "file_type": "front_matter",
+        "delivery": "direct",
+        "discovery_method": "css_selector",
+        "locator": "div.article-list div.doc:has(span.auth:empty) p.pdf > a",
+        "url_pattern": "https://scholarship.law.wm.edu/cgi/viewcontent.cgi?article={repository_id}&context=wmlr",
+        "requirements": {
+          "referer": "unknown",
+          "cookies": "unknown",
+          "javascript": "unknown",
+          "authentication": "unknown"
+        },
+        "evidence_ids": [
+          "issue-oldest",
+          "issue-middle",
+          "issue-newest"
+        ],
+        "notes": "Tables of contents and cumulative indexes share the normal file route. Classification should primarily use title patterns and empty-author evidence; :has is descriptive and need not be used by the adapter."
+      }
+    ],
+    "validation": {
+      "magic_bytes_checked": true,
+      "content_type_checked": true,
+      "article_vs_issue_checked": false,
+      "evidence_ids": [
+        "file-blocked"
+      ],
+      "notes": "The returned body was 744 bytes of HTML beginning with <html>, not a PDF. File granularity could not be validated because no primary file was retrieved."
+    }
+  },
+  "access": {
+    "robots": [
+      {
+        "url": "https://scholarship.law.wm.edu/robots.txt",
+        "decision": "partial",
+        "checked_at": "2026-07-14T11:54:05-04:00",
+        "evidence_ids": [
+          "dc-robots"
+        ],
+        "notes": "Publication and cgi/viewcontent routes are not disallowed, but /do/ is disallowed; do not use OAI, Digital Commons search, or other /do/ endpoints."
+      }
+    ],
+    "barriers": [
+      {
+        "type": "robots",
+        "severity": "degraded",
+        "evidence_ids": [
+          "dc-robots"
+        ],
+        "notes": "The normal Digital Commons /do/ family is disallowed, so enumeration must remain on publication HTML pages."
+      },
+      {
+        "type": "other",
+        "severity": "blocking",
+        "evidence_ids": [
+          "file-blocked"
+        ],
+        "notes": "The representative cgi/viewcontent article-file request returned HTTP 403 HTML; metadata discovery works but PDF acquisition is not yet proven."
+      }
+    ],
+    "politeness_notes": "Reconnaissance used seven sequential GETs, at least two seconds apart after robots, with no concurrency, no /do/ requests, and no retry after the file returned 403. Recheck robots.txt before any later smoke or collection run."
+  },
+  "verdict": {
+    "status": "metadata_only",
+    "summary": "The publication-scoped Digital Commons archive deterministically exposes volumes 1-67, stable issue records across 1957, 1992, and 2026, and rich current article metadata, but a representative advertised primary-file request returned 403 HTML.",
+    "blockers": [
+      "Representative Digital Commons primary-file GET returned HTTP 403 HTML.",
+      "Historical article landing-page metadata uniformity has not been sampled.",
+      "Digital Commons /do/ endpoints are disallowed by robots.txt."
+    ],
+    "next_action": "Run a metadata-only adapter smoke from /wmlr/all_issues.html, with strict /wmlr/ and context=wmlr scope guards, then use an authorized operator/browser check to determine whether the advertised file route is publicly retrievable without bypassing access controls.",
+    "recommended_adapter": "DigitalCommonsIssueArticleHopAdapter",
+    "implementation_notes": "Replace the broad sitemap.xml seed with /wmlr/all_issues.html and set dc_enum_mode=all_issues_only for deterministic publication-scoped enumeration; never use /do/; classify title/authorless front matter before queuing files; keep discovery success separate from file-delivery success."
+  }
+}
