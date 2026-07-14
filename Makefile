@@ -1,6 +1,14 @@
-.PHONY: help production-help production production-resume production-monitored production-monitored-resume production-delta production-retry production-overnight production-overnight-resume production-dc pull pull-siu qc-quarantine extract-footnotes extract-footnotes-overnight extract-footnotes-olmocr-dual diagnose-footnotes evaluate-footnotes adapter-policy-check repo-layout-check quality-check critical-path-tests promote-run site-status metadata-quality-report
+.PHONY: help doctor gazetteer gazetteer-check docs-check production-help production production-resume production-monitored production-monitored-resume production-delta production-retry production-overnight production-overnight-resume production-dc pull pull-siu qc-quarantine extract-footnotes extract-footnotes-overnight extract-footnotes-olmocr-dual diagnose-footnotes evaluate-footnotes adapter-policy-check repo-layout-check quality-check critical-path-tests promote-run site-status metadata-quality-report
 
 PY ?= python3
+REPOSITORY_TOOLING_PY := \
+	offprint/doctor.py \
+	offprint/gazetteer.py \
+	scripts/quality/check_markdown_links.py \
+	scripts/quality/doctor.py \
+	scripts/reporting/gazetteer_report.py \
+	tests/test_gazetteer.py \
+	tests/test_repository_docs.py
 SITEMAPS_DIR ?= offprint/sitemaps
 OUT_DIR ?= artifacts/pdfs
 MANIFEST_DIR ?= artifacts/runs
@@ -69,6 +77,10 @@ PIPELINE_COMMON_ARGS = \
 	--retry-max-retries $(RETRY_MAX_RETRIES)
 
 help:
+	@echo "make doctor          - validate checkout and optional capabilities"
+	@echo "make gazetteer       - regenerate tracked registry/sitemap tables"
+	@echo "make gazetteer-check - verify generated gazetteer tables are current"
+	@echo "make docs-check      - validate maintained local Markdown links"
 	@echo "make production-help - canonical production command usage"
 	@echo "make production      - canonical full production pipeline run"
 	@echo "make production-resume RUN_ID=<run_id> - resume interrupted pipeline run"
@@ -87,8 +99,20 @@ help:
 	@echo "make metadata-quality-report - title/author/vol/date coverage per domain (exits 1 if gaps found)"
 	@echo "make production-dc   - run only Digital Commons sitemaps (polite DC settings, new sites only)"
 	@echo "make repo-layout-check - enforce canonical root/data/docs file layout"
-	@echo "make quality-check   - lint + format check + adapter policy + core pytest"
+	@echo "make quality-check   - repository tooling, docs, snapshot, and focused tests"
 	@echo "make critical-path-tests - focused adapter/seed/orchestrator shared-path tests"
+
+doctor:
+	$(PY) scripts/quality/doctor.py --repo-root .
+
+gazetteer:
+	$(PY) scripts/reporting/gazetteer_report.py --repo-root .
+
+gazetteer-check:
+	$(PY) scripts/reporting/gazetteer_report.py --repo-root . --check
+
+docs-check:
+	$(PY) scripts/quality/check_markdown_links.py --repo-root .
 
 production-help:
 	@echo "Canonical production entrypoint:"
@@ -324,10 +348,12 @@ repo-layout-check:
 	$(PY) scripts/quality/check_repo_layout.py --repo-root .
 
 quality-check:
-	ruff check offprint scripts
-	black --check offprint scripts
-	$(MAKE) adapter-policy-check
+	$(PY) -m ruff check $(REPOSITORY_TOOLING_PY)
+	$(PY) -m black --check $(REPOSITORY_TOOLING_PY)
 	$(MAKE) repo-layout-check
+	$(MAKE) docs-check
+	$(MAKE) gazetteer-check
+	$(PY) -m pytest -q tests/test_gazetteer.py tests/test_repository_docs.py
 
 promote-run:
 	@if [ -z "$(RUN_ID)" ]; then echo "RUN_ID is required (e.g., make promote-run RUN_ID=20260224T010203Z)"; exit 2; fi

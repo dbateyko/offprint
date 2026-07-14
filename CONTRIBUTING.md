@@ -23,8 +23,9 @@ make quality-check
 pytest -q
 ```
 
-The quality target checks Ruff, Black, repository layout, adapter policy, maintained
-documentation links, and generated gazetteer freshness.
+The quality target checks the repository-facing Python tooling, repository layout, maintained
+documentation links, generated gazetteer freshness, and its focused tests. Run the full test
+suite separately.
 
 ## Choose the Smallest Extension Point
 

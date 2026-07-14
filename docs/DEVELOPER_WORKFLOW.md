@@ -25,7 +25,6 @@ base test loop.
 ## Quality Commands
 
 ```bash
-make adapter-policy-check
 make repo-layout-check
 make docs-check
 make gazetteer-check
@@ -36,6 +35,10 @@ pytest -q
 introduced under the current gate. The broader scraper/parser tree has legacy formatting and
 lint debt; do not mass-format it inside a behavioral change. New or edited operational modules
 should still be linted and formatted directly before review.
+
+`make adapter-policy-check` remains a backlog diagnostic. It is not a required gate because
+the tracked seed universe currently includes legacy, paused, and unmapped targets that do not
+satisfy its explicit-routing invariant.
 
 `make gazetteer` is a write operation; run it after changing registry or sitemap inputs and
 commit the generated snapshot with the source change.

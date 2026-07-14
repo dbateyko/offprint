@@ -63,6 +63,8 @@ hf = [
 [project.scripts]
 offprint = "offprint.orchestrator:main"
 offprint-cli = "offprint.command_cli:main"
+offprint-doctor = "offprint.doctor:main"
+offprint-gazetteer = "offprint.gazetteer:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
