@@ -1,0 +1,60 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "georgetown-immigration-law-journal",
+    "name": "Georgetown Immigration Law Journal",
+    "aliases": ["GILJ"],
+    "canonical_url": "https://www.law.georgetown.edu/immigration-law-journal/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "Georgetown Immigration Law Journal", "notes": "Registry rank 158 with active WordPress rows."},
+      {"source": "offprint/sitemaps/georgetown_immigration_law_journal.json", "key": "georgetown_immigration_law_journal.json", "notes": "Existing sitemap records sites/19 PDFs and .published_author bylines."}
+    ],
+    "publication_scope": {"host": "www.law.georgetown.edu", "path_prefix": "/immigration-law-journal/", "platform": "wordpress", "repository_slug": "immigration-law-journal", "notes": "WordPress subsite on a host shared by multiple Georgetown journals; sites/19 is the upload-scope guard."}
+  },
+  "reconnaissance": {
+    "status": "in_progress",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T14:25:31-04:00",
+    "sample_policy": {"oldest_issue_checked": true, "middle_issue_checked": true, "newest_issue_checked": true, "article_pages_checked": 1},
+    "evidence": [
+      {"id": "robots", "url": "https://www.law.georgetown.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:24:20-04:00", "http_status": 200, "content_type": "text/plain", "notes": "No rule disallows /immigration-law-journal/ or sites/19 uploads."},
+      {"id": "archive", "url": "https://www.law.georgetown.edu/immigration-law-journal/in-print/", "role": "archive", "observed_at": "2026-07-14T14:24:40-04:00", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "One page contains issue sections and article links from volume 40 number 3 (Spring 2026) through volume 32 number 1 (Fall 2017), including Articles and Note(s) headings."},
+      {"id": "article", "url": "https://www.law.georgetown.edu/immigration-law-journal/in-print/volume-40-number-3-spring-2026/deportations-to-perilous-places-protecting-against-third-country-removal-in-immigration-court/", "role": "article", "observed_at": "2026-07-14T14:25:30-04:00", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Newest issue article landing page was reachable and contained a direct sites/19 PDF URL. Existing curated sitemap identifies h1 title and .published_author byline selectors."},
+      {"id": "file", "url": "https://www.law.georgetown.edu/immigration-law-journal/wp-content/uploads/sites/19/2026/06/40.3-Elman-Welch.pdf", "role": "file", "observed_at": "2026-07-14T14:25:31-04:00", "http_status": 200, "content_type": "application/pdf", "notes": "Single bounded smoke returned PDF magic bytes and 460,090 bytes; server ignored Range and returned the complete article PDF."}
+    ],
+    "notes": "Three loops covered robots, the complete visible archive page, and one newest article/file. Historical article-page markup remains inferred from the single archive layout rather than separately fetched."
+  },
+  "scope": {"include": ["Print issues and article pages under /immigration-law-journal/in-print/", "Article PDFs under /immigration-law-journal/wp-content/uploads/sites/19/"], "exclude": ["Other Georgetown journal subsites", "mastheads and site administration", "online-only material outside In Print unless separately scoped"], "supplements": "case_by_case", "whole_issue_pdfs": "record_and_split_later", "notes": "Require both the journal path and sites/19 upload prefix."},
+  "site_map": {
+    "entry_points": [{"url": "https://www.law.georgetown.edu/immigration-law-journal/in-print/", "role": "archive", "evidence_ids": ["archive"], "notes": "Preferred single-page issue/article index."}],
+    "route_graph": {
+      "nodes": [{"id": "archive", "role": "archive", "notes": "Issue sections and article links on one page."}, {"id": "article", "role": "article", "notes": "HTML detail page with title/byline and PDF link."}, {"id": "file", "role": "file", "notes": "Direct WordPress article PDF."}],
+      "edges": [
+        {"from": "archive", "to": "article", "method": "css_selector", "locator": "main a[href*='/immigration-law-journal/in-print/volume-']", "evidence_ids": ["archive", "article"], "notes": "Nearest preceding volume heading supplies volume, number, season, and year; deduplicate navigation/content repetitions."},
+        {"from": "article", "to": "file", "method": "css_selector", "locator": "a.pdfemb-viewer[href$='.pdf'], main a[href*='/wp-content/uploads/sites/19/'][href$='.pdf' i]", "evidence_ids": ["article", "file"], "notes": "Representative sites/19 PDF passed smoke."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "article", "url_pattern": "https://www.law.georgetown.edu/immigration-law-journal/in-print/volume-{volume}-number-{issue}-{season}-{year}/{article-slug}/", "examples": ["https://www.law.georgetown.edu/immigration-law-journal/in-print/volume-40-number-3-spring-2026/deportations-to-perilous-places-protecting-against-third-country-removal-in-immigration-court/"], "evidence_ids": ["archive", "article"], "notes": "Issue metadata is encoded in the ancestor slug and archive heading."},
+      {"role": "file", "url_pattern": "https://www.law.georgetown.edu/immigration-law-journal/wp-content/uploads/sites/19/{upload_year}/{month}/{filename}.pdf", "examples": ["https://www.law.georgetown.edu/immigration-law-journal/wp-content/uploads/sites/19/2026/06/40.3-Elman-Welch.pdf"], "evidence_ids": ["file"], "notes": "Upload year must not override issue year without corroboration."}
+    ],
+    "pagination": [{"scope": "In Print archive", "type": "none", "termination": "Single observed page ends at volume 32 number 1 (Fall 2017).", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "No next control observed; earlier backfile is not visible here."}],
+    "layout_eras": [{"id": "current-wordpress-archive", "label": "Single-page Georgetown In Print layout", "start_year": 2017, "end_year": 2026, "url_patterns": ["/immigration-law-journal/in-print/", "/immigration-law-journal/in-print/volume-{volume}-number-{issue}-{season}-{year}/{article}/"], "evidence_ids": ["archive", "article"], "notes": "Archive exposes all visible eras on one page; only one article detail was fetched."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "archive", "method": "css_selector", "locator": "main a[href*='/immigration-law-journal/in-print/volume-']", "confidence": "high", "evidence_ids": ["archive"], "example": "Deportations to Perilous Places: Protecting Against Third Country Removal in Immigration Court", "notes": "Article h1 is the detail-page authoritative source."}], "normalization": ["collapse whitespace"], "missingness": "Present on observed archive article links.", "notes": ""},
+    "authors": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "css_selector", "locator": ".published_author", "confidence": "medium", "evidence_ids": ["article"], "example": "Byline selector documented in the existing curated sitemap", "notes": "The name text was not retained in this bounded parser output; verify before collection."}], "normalization": ["strip leading by", "preserve display order"], "missingness": "Selector is established, but the representative name value was not captured.", "notes": ""},
+    "abstract": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "css_selector", "locator": "main .abstract_alt p, main .entry-content p", "confidence": "low", "evidence_ids": ["article"], "example": "Article lead or abstract text", "notes": "Distinguish a formal abstract from HTML article body before labeling."}], "normalization": ["join paragraphs", "exclude viewer controls"], "missingness": "Not retained in the bounded parser output.", "notes": ""},
+    "year": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "nearest preceding issue heading or ancestor issue slug", "confidence": "high", "evidence_ids": ["archive", "article"], "example": "2026", "notes": ""}], "normalization": ["emit four-digit year"], "missingness": "Encoded in visible issue headings/slugs.", "notes": ""},
+    "date": {"availability": "sometimes", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "season and year in issue heading", "confidence": "medium", "evidence_ids": ["archive"], "example": "Spring 2026", "notes": "Season-level precision."}], "normalization": ["retain raw season-year"], "missingness": "Present on visible issue headings.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "article", "method": "url_parse", "locator": "/volume-{volume}-number-{issue}-", "confidence": "high", "evidence_ids": ["article"], "example": "40", "notes": ""}], "normalization": ["retain numeric string"], "missingness": "Encoded in article path.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "article", "method": "url_parse", "locator": "-number-{issue}-", "confidence": "high", "evidence_ids": ["article"], "example": "3", "notes": ""}], "normalization": ["retain numeric string"], "missingness": "Encoded in article path.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": ["preserve printed range"], "missingness": "Not captured.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": ["remove DOI URL prefix", "lowercase"], "missingness": "Not observed.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "Not captured.", "notes": ""}
+  },
+  "file_delivery": {"patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": "a.pdfemb-viewer[href$='.pdf'], main a[href*='/wp-content/uploads/sites/19/'][href$='.pdf' i]", "url_pattern": "https://www.law.georgetown.edu/immigration-law-journal/wp-content/uploads/sites/19/{upload_year}/{month}/{filename}.pdf", "requirements": {"referer": "not_required", "cookies": "not_required", "javascript": "not_required", "authentication": "not_required"}, "evidence_ids": ["article", "file"], "notes": "Direct sites/19 article PDF; Range ignored on smoke."}], "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": true, "evidence_ids": ["file"], "notes": "Response began %PDF-1.7; filename 40.3-Elman-Welch and article landing context indicate article granularity."}},
+  "access": {"robots": [{"url": "https://www.law.georgetown.edu/robots.txt", "decision": "allowed", "checked_at": "2026-07-14T14:24:20-04:00", "evidence_ids": ["robots"], "notes": "Scoped routes are not disallowed."}], "barriers": [], "politeness_notes": "Robots first; three bounded loops; only one representative PDF fetched and no bulk traversal."},
+  "verdict": {"status": "in_progress", "summary": "The unpaginated In Print page exposes issues and article links for 2017-2026, and the representative sites/19 article PDF smoke passed.", "blockers": ["Pre-2017 backfile is not visible on the live archive.", "Representative author and abstract text values were not retained and need a selector smoke."], "next_action": "Run a selector-only smoke on one newest, middle, and oldest visible article, then search for a publication-scoped pre-2017 archive route.", "recommended_adapter": "WordPressAcademicBaseAdapter with Georgetown In Print selectors", "implementation_notes": "Segment article links by nearest volume heading, use .published_author for bylines, scope PDFs to sites/19, and do not infer publication year from upload path."}
+}

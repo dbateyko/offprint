@@ -1,0 +1,65 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "michigan-journal-of-international-law",
+    "name": "Michigan Journal of International Law",
+    "aliases": ["MJIL"],
+    "canonical_url": "https://repository.law.umich.edu/mjil/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "Michigan Journal of International Law", "notes": "Registry rank 156; Digital Commons rows are currently todo_adapter or sitemap-backed."},
+      {"source": "offprint/sitemaps/michigan_journal_of_international_law.json", "key": "michigan_journal_of_international_law.json", "notes": "Existing sitemap records the publication-scoped all-issues route."}
+    ],
+    "publication_scope": {"host": "repository.law.umich.edu", "path_prefix": "/mjil/", "platform": "digitalcommons", "repository_slug": "mjil", "notes": "Shared repository; require /mjil/ landing paths and context=mjil file URLs."}
+  },
+  "reconnaissance": {
+    "status": "metadata_only",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T14:25:31-04:00",
+    "sample_policy": {"oldest_issue_checked": true, "middle_issue_checked": true, "newest_issue_checked": true, "article_pages_checked": 1},
+    "evidence": [
+      {"id": "robots", "url": "https://repository.law.umich.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:24:21-04:00", "http_status": 200, "content_type": "text/plain", "notes": "Publication HTML is permitted; /do/ and account/submission routes are disallowed."},
+      {"id": "archive", "url": "https://repository.law.umich.edu/mjil/all_issues.html", "role": "archive", "observed_at": "2026-07-14T14:24:40-04:00", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Single page lists volumes 1 through 47; visible newest issue is volume 47 issue 2 (2026)."},
+      {"id": "issue-new", "url": "https://repository.law.umich.edu/mjil/vol47/iss2/", "role": "issue", "observed_at": "2026-07-14T14:24:55-04:00", "http_status": 200, "content_type": "text/html", "notes": "Stable div.article-list/div.doc records expose PDF, title landing link, author, and starting page. Sample article: Human Rights, Between Peace and Dignity by Ryan Liss, page 159."},
+      {"id": "issue-middle", "url": "https://repository.law.umich.edu/mjil/vol24/iss1/", "role": "issue", "observed_at": "2026-07-14T14:24:56-04:00", "http_status": 200, "content_type": "text/html", "notes": "Middle-volume issue was reachable in the same Digital Commons issue family."},
+      {"id": "issue-old", "url": "https://repository.law.umich.edu/mjil/vol1/iss1/", "role": "issue", "observed_at": "2026-07-14T14:24:57-04:00", "http_status": 200, "content_type": "text/html", "notes": "Oldest-volume issue was reachable in the same Digital Commons issue family."},
+      {"id": "article", "url": "https://repository.law.umich.edu/mjil/vol47/iss2/2/", "role": "article", "observed_at": "2026-07-14T14:25:30-04:00", "http_status": 200, "content_type": "text/html", "notes": "Canonical article landing page resolved after a trailing-slash redirect; issue evidence supplies title, author, volume, issue, year, and first page."},
+      {"id": "file-blocked", "url": "https://repository.law.umich.edu/cgi/viewcontent.cgi?article=2183&context=mjil", "role": "file", "observed_at": "2026-07-14T14:25:31-04:00", "http_status": 403, "content_type": "text/html; charset=UTF-8", "notes": "One ranged GET with article Referer returned 744 bytes of HTML beginning <html> and set original_referer; no retry or bypass was attempted."}
+    ],
+    "notes": "Three bounded loops established archive, issue-era stability, one article landing page, and the primary-file blocker."
+  },
+  "scope": {"include": ["Articles, essays, comments, and notes under /mjil/"], "exclude": ["Sibling repository collections", "Digital Commons /do/ routes", "front matter unless classified"], "supplements": "case_by_case", "whole_issue_pdfs": "record_and_split_later", "notes": "Require both /mjil/ and context=mjil scope guards."},
+  "site_map": {
+    "entry_points": [{"url": "https://repository.law.umich.edu/mjil/all_issues.html", "role": "archive", "evidence_ids": ["archive"], "notes": "Preferred unpaginated publication-scoped seed."}],
+    "route_graph": {
+      "nodes": [{"id": "archive", "role": "archive", "notes": "All-issues page."}, {"id": "issue", "role": "issue", "notes": "Volume/issue page."}, {"id": "article", "role": "article", "notes": "Article landing page."}, {"id": "file", "role": "file", "notes": "Advertised cgi/viewcontent PDF route, currently blocked."}],
+      "edges": [
+        {"from": "archive", "to": "issue", "method": "css_selector", "locator": "h3.issue > a[href*='/mjil/vol']", "evidence_ids": ["archive"], "notes": "Path encodes volume and issue; heading text supplies year."},
+        {"from": "issue", "to": "article", "method": "css_selector", "locator": "div.article-list div.doc p:not(.pdf) a[href*='/mjil/vol']", "evidence_ids": ["issue-old", "issue-middle", "issue-new"], "notes": "Sibling span.auth and span.pageno provide author and start page."},
+        {"from": "issue", "to": "file", "method": "css_selector", "locator": "div.article-list div.doc p.pdf > a[href*='viewcontent.cgi'][href*='context=mjil']", "evidence_ids": ["issue-new", "file-blocked"], "notes": "Representative file request returned 403 HTML."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "issue", "url_pattern": "https://repository.law.umich.edu/mjil/vol{volume}/iss{issue}/", "examples": ["https://repository.law.umich.edu/mjil/vol47/iss2/"], "evidence_ids": ["archive", "issue-new"], "notes": "Numeric path components."},
+      {"role": "article", "url_pattern": "https://repository.law.umich.edu/mjil/vol{volume}/iss{issue}/{article}/", "examples": ["https://repository.law.umich.edu/mjil/vol47/iss2/2/"], "evidence_ids": ["article"], "notes": "Canonical URL has a trailing slash."},
+      {"role": "file", "url_pattern": "https://repository.law.umich.edu/cgi/viewcontent.cgi?article={id}&context=mjil", "examples": ["https://repository.law.umich.edu/cgi/viewcontent.cgi?article=2183&context=mjil"], "evidence_ids": ["file-blocked"], "notes": "Currently returns 403 HTML."}
+    ],
+    "pagination": [{"scope": "all-issues archive", "type": "none", "termination": "Single page ends at volume 1 issue 1.", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "No next control observed."}],
+    "layout_eras": [{"id": "digitalcommons-unified", "label": "Unified Digital Commons issue layout", "url_patterns": ["/mjil/vol{volume}/iss{issue}/"], "evidence_ids": ["issue-old", "issue-middle", "issue-new"], "notes": "Oldest, middle, and newest issue URLs were reachable in the same structural family; only newest markup was inspected in detail."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "issue", "method": "css_selector", "locator": "div.article-list div.doc span.doctitle > a", "confidence": "high", "evidence_ids": ["issue-new"], "example": "Human Rights, Between Peace and Dignity", "notes": ""}], "normalization": ["collapse whitespace"], "missingness": "Present on newest issue records.", "notes": ""},
+    "authors": {"availability": "sometimes", "sources": [{"page_type": "issue", "method": "css_selector", "locator": "div.article-list div.doc span.auth", "confidence": "high", "evidence_ids": ["issue-new"], "example": "Ryan Liss", "notes": "Front matter may use institutional authors or empty values."}], "normalization": ["preserve display order"], "missingness": "Present on sampled article record.", "notes": ""},
+    "abstract": {"availability": "unknown", "sources": [], "normalization": ["join paragraphs"], "missingness": "Not captured in the bounded sample.", "notes": ""},
+    "year": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "h3.issue text matching four-digit year", "confidence": "high", "evidence_ids": ["archive"], "example": "Issue 2 (2026)", "notes": "Propagate issue year."}], "normalization": ["emit four-digit year"], "missingness": "Visible for archive issues.", "notes": ""},
+    "date": {"availability": "unknown", "sources": [], "normalization": ["emit YYYY-MM-DD when found"], "missingness": "Not captured.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "issue", "method": "url_parse", "locator": "/mjil/vol{volume}/", "confidence": "high", "evidence_ids": ["issue-new"], "example": "47", "notes": ""}], "normalization": ["retain numeric string"], "missingness": "Encoded in every issue path.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "issue", "method": "url_parse", "locator": "/iss{issue}/", "confidence": "high", "evidence_ids": ["issue-new"], "example": "2", "notes": ""}], "normalization": ["retain numeric string"], "missingness": "Encoded in every issue path.", "notes": ""},
+    "pages": {"availability": "sometimes", "sources": [{"page_type": "issue", "method": "css_selector", "locator": "div.article-list div.doc span.pageno", "confidence": "high", "evidence_ids": ["issue-new"], "example": "159", "notes": "Starting page only."}], "normalization": ["preserve start page"], "missingness": "Present on sampled article record.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": ["remove DOI URL prefix", "lowercase"], "missingness": "Not observed.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "Not captured.", "notes": ""}
+  },
+  "file_delivery": {"patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": "div.article-list div.doc p.pdf > a", "url_pattern": "https://repository.law.umich.edu/cgi/viewcontent.cgi?article={id}&context=mjil", "requirements": {"referer": "unknown", "cookies": "unknown", "javascript": "unknown", "authentication": "unknown"}, "evidence_ids": ["issue-new", "file-blocked"], "notes": "Advertised direct route returned 403 HTML even with Referer."}], "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": false, "evidence_ids": ["file-blocked"], "notes": "744-byte response began with HTML, not PDF."}},
+  "access": {"robots": [{"url": "https://repository.law.umich.edu/robots.txt", "decision": "partial", "checked_at": "2026-07-14T14:24:21-04:00", "evidence_ids": ["robots"], "notes": "Publication HTML allowed; /do/ disallowed."}], "barriers": [{"type": "robots", "severity": "degraded", "evidence_ids": ["robots"], "notes": "Do not use /do/."}, {"type": "other", "severity": "blocking", "evidence_ids": ["file-blocked"], "notes": "Representative primary-file GET returned 403 HTML."}], "politeness_notes": "Robots first; three bounded loops; no /do/ use and no retry after file 403."},
+  "verdict": {"status": "metadata_only", "summary": "Volumes 1-47 and article metadata are deterministically enumerable through publication HTML, but the representative PDF route returned 403 HTML.", "blockers": ["Representative cgi/viewcontent request returned HTTP 403 HTML.", "Digital Commons /do/ routes are disallowed."], "next_action": "Run metadata-only all_issues enumeration with strict mjil guards and resolve file access through an authorized operator path before acquisition.", "recommended_adapter": "DigitalCommonsIssueArticleHopAdapter", "implementation_notes": "Use all_issues_only mode; classify front matter; keep metadata and file-delivery success separate."}
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "uc-law-journal",
+    "name": "UC Law Journal",
+    "aliases": ["Hastings Law Journal", "UC Law Journal (Hastings Law Journal)"],
+    "canonical_url": "https://repository.uclawsf.edu/hastings_law_journal/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "UC Law Journal", "notes": "Registry rank 43; Digital Commons rows retain the historical slug."},
+      {"source": "offprint/sitemaps/hastings_law_journal.json", "key": "hastings_law_journal.json", "notes": "Existing sitemap records the 2023 renaming and archive route."}
+    ],
+    "publication_scope": {"host": "repository.uclawsf.edu", "path_prefix": "/hastings_law_journal/", "platform": "digitalcommons", "repository_slug": "hastings_law_journal", "notes": "The title changed in 2023, but the complete archive and context slug remain hastings_law_journal."}
+  },
+  "reconnaissance": {
+    "status": "metadata_only",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T14:25:31-04:00",
+    "sample_policy": {"oldest_issue_checked": true, "middle_issue_checked": true, "newest_issue_checked": true, "article_pages_checked": 1},
+    "evidence": [
+      {"id": "robots", "url": "https://repository.uclawsf.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:24:21-04:00", "http_status": 200, "content_type": "text/plain", "notes": "Publication HTML is permitted; /do/ and account/submission routes are disallowed."},
+      {"id": "archive", "url": "https://repository.uclawsf.edu/hastings_law_journal/all_issues.html", "role": "archive", "observed_at": "2026-07-14T14:24:40-04:00", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Single page lists volumes 1 (1950) through 77 (2026), including special issue 77:7."},
+      {"id": "issue-new", "url": "https://repository.uclawsf.edu/hastings_law_journal/vol77/iss3/", "role": "issue", "observed_at": "2026-07-14T14:24:55-04:00", "http_status": 200, "content_type": "text/html", "notes": "div.article-list/div.doc records expose PDF, title landing link, author, and record type. Front matter includes masthead, copyright, and table of contents; sampled article From Relic to Relevance, The Resurgence of Tariffs has three authors."},
+      {"id": "issue-middle", "url": "https://repository.uclawsf.edu/hastings_law_journal/vol39/iss1/", "role": "issue", "observed_at": "2026-07-14T14:24:56-04:00", "http_status": 200, "content_type": "text/html", "notes": "Middle-volume issue was reachable in the same Digital Commons issue family."},
+      {"id": "issue-old", "url": "https://repository.uclawsf.edu/hastings_law_journal/vol1/iss1/", "role": "issue", "observed_at": "2026-07-14T14:24:57-04:00", "http_status": 200, "content_type": "text/html", "notes": "Oldest-volume issue was reachable in the same Digital Commons issue family."},
+      {"id": "article", "url": "https://repository.uclawsf.edu/hastings_law_journal/vol77/iss3/4/", "role": "article", "observed_at": "2026-07-14T14:25:30-04:00", "http_status": 200, "content_type": "text/html", "notes": "Canonical article landing page resolved after trailing-slash redirect; issue record supplies title, authors, volume, issue, and year."},
+      {"id": "file-blocked", "url": "https://repository.uclawsf.edu/cgi/viewcontent.cgi?article=4192&context=hastings_law_journal", "role": "file", "observed_at": "2026-07-14T14:25:31-04:00", "http_status": 403, "content_type": "text/html; charset=UTF-8", "notes": "One ranged GET with article Referer returned 744 bytes of HTML beginning <html> and set original_referer; no retry or bypass was attempted."}
+    ],
+    "notes": "Three loops established the rename-aware archive, stable issue family, one landing page, and the primary-file blocker."
+  },
+  "scope": {"include": ["UC Law Journal and predecessor Hastings Law Journal records under the historical slug"], "exclude": ["Sibling repository collections", "Digital Commons /do/ routes", "mastheads, copyright, tables of contents, and other front matter unless classified"], "supplements": "case_by_case", "whole_issue_pdfs": "record_and_split_later", "notes": "Require /hastings_law_journal/ and context=hastings_law_journal; preserve the journal-name era."},
+  "site_map": {
+    "entry_points": [{"url": "https://repository.uclawsf.edu/hastings_law_journal/all_issues.html", "role": "archive", "evidence_ids": ["archive"], "notes": "Preferred unpaginated publication-scoped seed."}],
+    "route_graph": {
+      "nodes": [{"id": "archive", "role": "archive", "notes": "All-issues page."}, {"id": "issue", "role": "issue", "notes": "Volume/issue page."}, {"id": "article", "role": "article", "notes": "Article landing page."}, {"id": "file", "role": "file", "notes": "Advertised cgi/viewcontent route, currently blocked."}],
+      "edges": [
+        {"from": "archive", "to": "issue", "method": "css_selector", "locator": "h3.issue > a[href*='/hastings_law_journal/vol']", "evidence_ids": ["archive"], "notes": "Volume headings carry year; issue paths carry numbers and special-issue labels may be in heading text."},
+        {"from": "issue", "to": "article", "method": "css_selector", "locator": "div.article-list div.doc p:not(.pdf) > a[href*='/hastings_law_journal/vol']", "evidence_ids": ["issue-old", "issue-middle", "issue-new"], "notes": "span.auth supplies byline; filter title/authorless front matter."},
+        {"from": "issue", "to": "file", "method": "css_selector", "locator": "div.article-list div.doc p.pdf > a[href*='viewcontent.cgi'][href*='context=hastings_law_journal']", "evidence_ids": ["issue-new", "file-blocked"], "notes": "Representative request returned 403 HTML."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "issue", "url_pattern": "https://repository.uclawsf.edu/hastings_law_journal/vol{volume}/iss{issue}/", "examples": ["https://repository.uclawsf.edu/hastings_law_journal/vol77/iss3/"], "evidence_ids": ["archive", "issue-new"], "notes": "Numeric path components, with non-sequential special issue numbers possible."},
+      {"role": "article", "url_pattern": "https://repository.uclawsf.edu/hastings_law_journal/vol{volume}/iss{issue}/{article}/", "examples": ["https://repository.uclawsf.edu/hastings_law_journal/vol77/iss3/4/"], "evidence_ids": ["article"], "notes": "Canonical trailing slash."},
+      {"role": "file", "url_pattern": "https://repository.uclawsf.edu/cgi/viewcontent.cgi?article={id}&context=hastings_law_journal", "examples": ["https://repository.uclawsf.edu/cgi/viewcontent.cgi?article=4192&context=hastings_law_journal"], "evidence_ids": ["file-blocked"], "notes": "Currently 403 HTML."}
+    ],
+    "pagination": [{"scope": "all-issues archive", "type": "none", "termination": "Single page ends at volume 1 issue 1/2.", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "No next control observed."}],
+    "layout_eras": [{"id": "digitalcommons-unified", "label": "Unified Digital Commons archive across Hastings and UC naming eras", "start_year": 1950, "end_year": 2026, "url_patterns": ["/hastings_law_journal/vol{volume}/iss{issue}/"], "evidence_ids": ["issue-old", "issue-middle", "issue-new"], "notes": "Oldest, middle, and newest issue URLs were reachable in the same family; newest markup was inspected in detail."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "issue", "method": "css_selector", "locator": "div.article-list div.doc p:not(.pdf) > a", "confidence": "high", "evidence_ids": ["issue-new"], "example": "From Relic to Relevance, The Resurgence of Tariffs", "notes": ""}], "normalization": ["collapse whitespace"], "missingness": "Present on sampled records.", "notes": ""},
+    "authors": {"availability": "sometimes", "sources": [{"page_type": "issue", "method": "css_selector", "locator": "div.article-list div.doc span.auth", "confidence": "high", "evidence_ids": ["issue-new"], "example": "Reuven S. Avi-Yonah, Doron Narotzki, and Tamir Shanan", "notes": "Empty for front matter."}], "normalization": ["preserve source order"], "missingness": "Authored works populated; front matter empty.", "notes": ""},
+    "abstract": {"availability": "unknown", "sources": [], "normalization": ["join paragraphs"], "missingness": "Not captured.", "notes": ""},
+    "year": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "volume heading matching four-digit year", "confidence": "high", "evidence_ids": ["archive"], "example": "Volume 77 (2026)", "notes": "Propagate to issues and articles."}], "normalization": ["emit four-digit year"], "missingness": "Visible for volumes.", "notes": ""},
+    "date": {"availability": "unknown", "sources": [], "normalization": ["emit YYYY-MM-DD when found"], "missingness": "Not captured.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "issue", "method": "url_parse", "locator": "/vol{volume}/", "confidence": "high", "evidence_ids": ["issue-new"], "example": "77", "notes": ""}], "normalization": ["retain numeric string"], "missingness": "Encoded in paths.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "issue", "method": "url_parse", "locator": "/iss{issue}/", "confidence": "high", "evidence_ids": ["issue-new"], "example": "3", "notes": ""}], "normalization": ["retain numeric string"], "missingness": "Encoded in paths.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": ["preserve printed range"], "missingness": "Not captured in the inspected UC record markup.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": ["remove DOI URL prefix", "lowercase"], "missingness": "Not observed.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "Not captured.", "notes": ""}
+  },
+  "file_delivery": {"patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": "div.article-list div.doc p.pdf > a", "url_pattern": "https://repository.uclawsf.edu/cgi/viewcontent.cgi?article={id}&context=hastings_law_journal", "requirements": {"referer": "unknown", "cookies": "unknown", "javascript": "unknown", "authentication": "unknown"}, "evidence_ids": ["issue-new", "file-blocked"], "notes": "Advertised route returned 403 HTML."}], "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": false, "evidence_ids": ["file-blocked"], "notes": "744-byte response began with HTML, not PDF."}},
+  "access": {"robots": [{"url": "https://repository.uclawsf.edu/robots.txt", "decision": "partial", "checked_at": "2026-07-14T14:24:21-04:00", "evidence_ids": ["robots"], "notes": "Publication HTML allowed; /do/ disallowed."}], "barriers": [{"type": "robots", "severity": "degraded", "evidence_ids": ["robots"], "notes": "Do not use /do/."}, {"type": "other", "severity": "blocking", "evidence_ids": ["file-blocked"], "notes": "Representative primary-file GET returned 403 HTML."}], "politeness_notes": "Robots first; three bounded loops; no /do/ and no retry after 403."},
+  "verdict": {"status": "metadata_only", "summary": "The historical slug exposes volumes 1-77 across the Hastings-to-UC rename, but the representative article PDF request returned 403 HTML.", "blockers": ["Representative cgi/viewcontent request returned HTTP 403 HTML.", "Digital Commons /do/ routes are disallowed."], "next_action": "Run metadata-only all_issues enumeration with strict historical-slug guards and resolve file access through an authorized operator path.", "recommended_adapter": "DigitalCommonsIssueArticleHopAdapter", "implementation_notes": "Use all_issues_only mode; retain journal-name era; filter front matter; keep metadata and file status separate."}
+}

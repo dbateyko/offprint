@@ -1,0 +1,62 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "clinical-law-review",
+    "name": "Clinical Law Review",
+    "aliases": ["CLR"],
+    "canonical_url": "https://www.law.nyu.edu/journals/clinicallawreview",
+    "issn": ["1079-1159"],
+    "registry_refs": [{"source": "data/registry/lawjournals.csv", "key": "Clinical Law Review", "notes": "NYU host; W&L rank 154."}, {"source": "offprint/sitemaps/law-nyu-edu.json", "key": "law-nyu-edu.json", "notes": "Existing generic NYU sitemap."}],
+    "publication_scope": {"host": "www.law.nyu.edu", "path_prefix": "/journals/clinicallawreview", "platform": "drupal-10", "repository_slug": "clinical-law-review", "notes": "Issue PDFs are under /sites/default/files and must be accepted only when reached from scoped CLR issue pages."}
+  },
+  "reconnaissance": {
+    "status": "in_progress",
+    "researcher": "Codex journal onboarding",
+    "checked_at": "2026-07-14T18:26:30Z",
+    "sample_policy": {"oldest_issue_checked": false, "middle_issue_checked": false, "newest_issue_checked": true, "article_pages_checked": 0},
+    "evidence": [
+      {"id": "robots", "url": "https://www.law.nyu.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T18:24:18Z", "http_status": 200, "content_type": "text/plain", "notes": "No rule disallows CLR issue pages or /sites/default/files PDF assets."},
+      {"id": "homepage", "url": "https://www.law.nyu.edu/journals/clinicallawreview", "role": "homepage", "observed_at": "2026-07-14T18:24:27Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Drupal page sidebar lists issue routes from Volume 17.1 (2010) through Volume 32.2 (2026). Some labels and slugs disagree; neighboring journal navigation is interleaved."},
+      {"id": "issue", "url": "https://www.law.nyu.edu/journals/clinicallawreview/vol32-no2-spring2026", "role": "issue", "observed_at": "2026-07-14T18:25:10Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "h1 supplies volume/issue/season/year; main content paragraphs contain title text followed by author-linked article PDFs, plus a whole-issue PDF."},
+      {"id": "file", "url": "https://www.law.nyu.edu/sites/default/files/2026-03/Alexajian-Speidel--Wick---Listening-Midstream_1.pdf", "role": "file", "observed_at": "2026-07-14T18:26:30Z", "http_status": 200, "content_type": "application/pdf", "notes": "Single smoke GET returned a 361,004-byte, 58-page article PDF beginning %PDF-1.7."}
+    ],
+    "notes": "Newest issue discovery and direct PDF delivery pass. The homepage has known navigation defects and historical issue layouts are unsampled."
+  },
+  "scope": {"include": ["Clinical Law Review issues and article PDFs"], "exclude": ["Annual Survey of American Law", "Journal of Law & Liberty", "Other NYU journals", "Editorial recruitment and workshop pages"], "supplements": "case_by_case", "whole_issue_pdfs": "record_and_split_later", "notes": "Strict path and issue-heading checks are needed because Drupal sidebar navigation interleaves other journals."},
+  "site_map": {
+    "entry_points": [{"url": "https://www.law.nyu.edu/journals/clinicallawreview", "role": "archive", "evidence_ids": ["homepage"], "notes": "Homepage doubles as issue archive via sidebar links."}],
+    "route_graph": {
+      "nodes": [{"id": "archive-page", "role": "archive", "notes": "Journal homepage with issue links."}, {"id": "issue-page", "role": "issue", "notes": "Inline article title/author/PDF list."}, {"id": "article-pdf", "role": "file", "notes": "Direct local PDF."}, {"id": "whole-issue-pdf", "role": "file", "notes": "Direct local full issue."}],
+      "edges": [
+        {"from": "archive-page", "to": "issue-page", "method": "css_selector", "locator": "a[href^='/journals/clinicallawreview/vol'], a[href^='https://www.law.nyu.edu/journals/clinicallawreview/vol']", "evidence_ids": ["homepage"], "notes": "Accept only CLR-prefixed paths; validate displayed label against issue h1 because several labels/slugs disagree."},
+        {"from": "issue-page", "to": "article-pdf", "method": "css_selector", "locator": "main p a[href$='.pdf'][data-entity-type='media']:not(:first-child), article p a[href$='.pdf'][data-entity-type='media']", "evidence_ids": ["issue", "file"], "notes": "Article title is paragraph text before br; anchor text is author."},
+        {"from": "issue-page", "to": "whole-issue-pdf", "method": "css_selector", "locator": "main p:first-of-type a[href$='.pdf'], article p:first-of-type a[href$='.pdf']", "evidence_ids": ["issue"], "notes": "Paragraph begins Entire Issue."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "issue", "url_pattern": "https://www.law.nyu.edu/journals/clinicallawreview/{volume-issue-season-year-slug}", "examples": ["https://www.law.nyu.edu/journals/clinicallawreview/vol32-no2-spring2026"], "evidence_ids": ["homepage", "issue"], "notes": "Historical slug punctuation and capitalization vary; follow links rather than synthesize."},
+      {"role": "file", "url_pattern": "https://www.law.nyu.edu/sites/default/files/{year-month}/{filename}.pdf", "examples": ["https://www.law.nyu.edu/sites/default/files/2026-03/Alexajian-Speidel--Wick---Listening-Midstream_1.pdf"], "evidence_ids": ["issue", "file"], "notes": "Upload month is not the publication date; derive issue date from h1."}
+    ],
+    "pagination": [{"scope": "CLR issue archive", "type": "none", "termination": "Sidebar list currently ends at Volume 17.1 (Fall 2010).", "pages_checked": 1, "evidence_ids": ["homepage"], "notes": "Pre-2010 backfile location unknown."}],
+    "layout_eras": [{"id": "drupal-visible", "label": "NYU Drupal issue pages", "start_year": 2010, "end_year": 2026, "url_patterns": ["/journals/clinicallawreview/vol*"], "evidence_ids": ["homepage", "issue"], "notes": "Only newest page sampled; historical markup may vary."}, {"id": "pre-2010-unresolved", "label": "Earlier Clinical Law Review backfile", "url_patterns": ["unknown"], "evidence_ids": ["homepage"], "notes": "Not exposed by current issue navigation."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "article/main p text before br and PDF author anchor", "confidence": "high", "evidence_ids": ["issue"], "example": "LISTENING MIDSTREAM: MID-SEMESTER FEEDBACK FROM STUDENTS FOR CLINICIANS", "notes": "No article HTML page; title is a text node."}], "normalization": ["Collapse whitespace", "Preserve source capitalization or title-case in a derived display field"], "missingness": "Present in newest issue.", "notes": ""},
+    "authors": {"availability": "always", "sources": [{"page_type": "issue", "method": "css_selector", "locator": "article p a[href$='.pdf'] em, main p a[href$='.pdf'] em", "confidence": "high", "evidence_ids": ["issue"], "example": "Tamar Alexajian, Christine Speidel, & Caroline Wick", "notes": "Anchor itself is the article PDF."}], "normalization": ["Preserve source order", "Split conservatively on comma and ampersand"], "missingness": "Present.", "notes": ""},
+    "abstract": {"availability": "never", "sources": [], "normalization": ["Collapse whitespace"], "missingness": "No abstract or article landing page in sampled route.", "notes": "May require PDF-text enrichment."},
+    "year": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1", "confidence": "high", "evidence_ids": ["issue"], "example": "2026", "notes": "Use displayed h1, not upload path."}], "normalization": ["Emit four-digit year"], "missingness": "Present.", "notes": ""},
+    "date": {"availability": "sometimes", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1", "confidence": "high", "evidence_ids": ["issue"], "example": "Spring 2026", "notes": "Season/year only."}], "normalization": ["Preserve source season", "Do not invent exact day"], "missingness": "Exact date absent.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1", "confidence": "high", "evidence_ids": ["issue"], "example": "32", "notes": "Pattern Vol.32/No.2."}], "normalization": ["Strip Vol. prefix"], "missingness": "Present.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1", "confidence": "high", "evidence_ids": ["issue"], "example": "2", "notes": "Pattern No.2."}], "normalization": ["Strip No. prefix"], "missingness": "Present.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Not exposed in HTML; may be parsed from PDF.", "notes": ""},
+    "doi": {"availability": "never", "sources": [], "normalization": [], "missingness": "No DOI observed.", "notes": ""},
+    "citation": {"availability": "sometimes", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1 + article paragraph title/author", "confidence": "medium", "evidence_ids": ["issue"], "example": "Tamar Alexajian et al., Listening Midstream, 32 Clinical L. Rev. (Spring 2026)", "notes": "Pages require PDF enrichment."}], "normalization": ["Collapse whitespace"], "missingness": "Partial citation only.", "notes": ""}
+  },
+  "file_delivery": {
+    "patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": "article p a[href$='.pdf'][data-entity-type='media'], main p a[href$='.pdf'][data-entity-type='media']", "url_pattern": "/sites/default/files/{year-month}/{filename}.pdf", "requirements": {"referer": "not_required", "cookies": "not_required", "javascript": "not_required", "authentication": "not_required"}, "evidence_ids": ["issue", "file"], "notes": "Normal direct GET passed."}, {"file_type": "whole_issue_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": "article p:first-of-type a[href$='.pdf'], main p:first-of-type a[href$='.pdf']", "requirements": {"referer": "not_required", "cookies": "not_required", "javascript": "not_required", "authentication": "not_required"}, "evidence_ids": ["issue"], "notes": "Visible but not downloaded in bounded smoke."}],
+    "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": true, "evidence_ids": ["file"], "notes": "361,004-byte, 58-page article PDF; application/pdf and %PDF-1.7."}
+  },
+  "access": {"robots": [{"url": "https://www.law.nyu.edu/robots.txt", "decision": "allowed", "checked_at": "2026-07-14T18:24:18Z", "evidence_ids": ["robots"], "notes": "Scoped issue and PDF routes are not disallowed."}], "barriers": [{"type": "redirect_drift", "severity": "degraded", "evidence_ids": ["homepage"], "notes": "Sidebar includes mislabeled/mismatched CLR slugs and neighboring-journal PDF Archive navigation; validate h1 and path on every issue."}], "politeness_notes": "Robots first; one homepage, newest issue, and article PDF smoke only."},
+  "verdict": {"status": "in_progress", "summary": "NYU's visible 2010-2026 CLR archive has deterministic issue pages and direct article PDFs; the newest smoke passes, but older layouts and the pre-2010 backfile remain unresolved.", "blockers": ["Pre-2010 backfile route unknown", "Oldest and middle layouts unsampled", "Sidebar labels and slugs contain defects", "Abstracts and pages absent from HTML"], "next_action": "Implement the scoped Drupal issue parser, sample one middle and oldest visible issue, then locate the pre-2010 backfile before acquisition.", "recommended_adapter": "NyuClinicalLawReviewAdapter", "implementation_notes": "Title is the paragraph text node and author is the PDF anchor text; reject whole-issue rows from article corpus and validate issue h1 against sidebar labels."}
+}
