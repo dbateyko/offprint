@@ -1,0 +1,274 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "harvard-law-policy-review",
+    "name": "Harvard Law & Policy Review",
+    "aliases": ["HLPR", "Harvard Law and Policy Review"],
+    "canonical_url": "https://journals.law.harvard.edu/lpr/",
+    "registry_refs": [
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "wlu_mainid=1387",
+        "notes": "Two duplicate registry routes aggregate to this publication."
+      }
+    ],
+    "publication_scope": {
+      "host": "journals.law.harvard.edu",
+      "path_prefix": "/lpr/",
+      "platform": "WordPress",
+      "repository_slug": "lpr",
+      "notes": "The shared Harvard journals host contains many unrelated publications."
+    }
+  },
+  "reconnaissance": {
+    "status": "in_progress",
+    "researcher": "codex-onboard-journal",
+    "checked_at": "2026-07-14T18:12:00Z",
+    "sample_policy": {
+      "oldest_issue_checked": true,
+      "middle_issue_checked": true,
+      "newest_issue_checked": true,
+      "article_pages_checked": 0
+    },
+    "evidence": [
+      {
+        "id": "robots",
+        "url": "https://journals.law.harvard.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T18:08:45Z",
+        "http_status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "notes": "Journal paths are allowed; Crawl-delay is 10 seconds."
+      },
+      {
+        "id": "archive",
+        "url": "https://journals.law.harvard.edu/lpr/hlprvolumes/",
+        "role": "archive",
+        "observed_at": "2026-07-14T18:09:40Z",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "One page lists Volume 1, Number 1 through Volume 20, Number 1; no pagination was present."
+      },
+      {
+        "id": "issue-newest",
+        "url": "https://journals.law.harvard.edu/lpr/volume-20-1/",
+        "role": "issue",
+        "observed_at": "2026-07-14T18:10:20Z",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Gutenberg-era issue page. .wp-block-file elements link to full volume, front matter, and article PDFs; following paragraphs hold authors."
+      },
+      {
+        "id": "issue-middle",
+        "url": "https://journals.law.harvard.edu/lpr/hlprvolumes/volume-10-1/",
+        "role": "issue",
+        "observed_at": "2026-07-14T18:10:30Z",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Legacy issue page: each entry is a paragraph containing a direct PDF link followed by author text."
+      },
+      {
+        "id": "issue-oldest",
+        "url": "https://journals.law.harvard.edu/lpr/hlprvolumes/volume-1-1/",
+        "role": "issue",
+        "observed_at": "2026-07-14T18:10:40Z",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "Oldest listed issue, Winter 2007, uses the legacy paragraph layout."
+      },
+      {
+        "id": "file-smoke",
+        "url": "https://journals.law.harvard.edu/lpr/wp-content/uploads/sites/89/2026/01/HLPR-20.1-Coll.pdf",
+        "role": "file",
+        "observed_at": "2026-07-14T18:11:11Z",
+        "http_status": 200,
+        "content_type": "application/pdf",
+        "artifact_ref": "/tmp/hlpr-smoke.pdf",
+        "notes": "1,124,720 bytes; begins %PDF-1.3. First-page text matches the linked article and names Ally Coll."
+      }
+    ],
+    "notes": "The site has no separate HTML article pages; issue pages link directly to article PDFs. This prevents the dossier from satisfying the schema's three-article-page ready gate even though one PDF smoke passed."
+  },
+  "scope": {
+    "include": ["articles", "essays", "forewords", "student notes"],
+    "exclude": ["front matter", "mastheads", "navigation duplicates"],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Issue pages mix article PDFs with front matter, mastheads, and whole-volume files; classify by link text before acquisition."
+  },
+  "site_map": {
+    "entry_points": [
+      {
+        "url": "https://journals.law.harvard.edu/lpr/hlprvolumes/",
+        "role": "archive",
+        "evidence_ids": ["archive"],
+        "notes": "Preferred publication-scoped seed."
+      }
+    ],
+    "route_graph": {
+      "nodes": [
+        {"id": "archive-page", "role": "archive", "notes": "Lists every volume and issue."},
+        {"id": "issue-page", "role": "issue", "notes": "Lists direct PDF links and issue-level metadata."},
+        {"id": "article-file", "role": "file", "notes": "Direct article PDF."}
+      ],
+      "edges": [
+        {
+          "from": "archive-page",
+          "to": "issue-page",
+          "method": "css_selector",
+          "locator": ".entry-content a[href*='volume-'], .entry-content a[href*='print-archive']",
+          "evidence_ids": ["archive", "issue-oldest", "issue-middle", "issue-newest"],
+          "notes": "Route shapes vary, so follow observed links instead of synthesizing paths."
+        },
+        {
+          "from": "issue-page",
+          "to": "article-file",
+          "method": "css_selector",
+          "locator": ".entry-content .wp-block-file a[href$='.pdf'], .entry-content p a[href$='.pdf']",
+          "evidence_ids": ["issue-oldest", "issue-middle", "issue-newest", "file-smoke"],
+          "notes": "Filter link text to exclude Full Volume, Front Matter, and Masthead."
+        }
+      ]
+    },
+    "archive_patterns": [
+      {
+        "role": "issue",
+        "url_pattern": "Observed linked paths under /lpr/{optional-section}/volume-{volume}-{issue}/",
+        "examples": [
+          "https://journals.law.harvard.edu/lpr/volume-20-1/",
+          "https://journals.law.harvard.edu/lpr/hlprvolumes/volume-10-1/"
+        ],
+        "evidence_ids": ["archive", "issue-middle", "issue-newest"],
+        "notes": "Some issues use /print-archive/, some /hlprvolumes/, and some the publication root."
+      },
+      {
+        "role": "file",
+        "url_pattern": "/lpr/wp-content/uploads/sites/89/{year}/{month}/{filename}.pdf",
+        "examples": ["https://journals.law.harvard.edu/lpr/wp-content/uploads/sites/89/2026/01/HLPR-20.1-Coll.pdf"],
+        "evidence_ids": ["issue-newest", "file-smoke"],
+        "notes": "Upload year is not reliable for migrated legacy issues."
+      }
+    ],
+    "pagination": [
+      {
+        "scope": "archive",
+        "type": "none",
+        "termination": "The single archive page reaches Volume 1, Number 1 and exposes no next link.",
+        "pages_checked": 1,
+        "evidence_ids": ["archive"],
+        "notes": "Navigation-menu duplicates should be deduplicated by normalized URL."
+      }
+    ],
+    "layout_eras": [
+      {
+        "id": "legacy-paragraph-issues",
+        "label": "Legacy paragraph issue layout",
+        "start_year": 2007,
+        "end_year": 2016,
+        "url_patterns": ["/lpr/hlprvolumes/volume-{volume}-{issue}/", "/lpr/print-archive/volume-{volume}-{issue}/"],
+        "evidence_ids": ["issue-oldest", "issue-middle"],
+        "notes": "PDF link and author text share one paragraph."
+      },
+      {
+        "id": "gutenberg-file-block-issues",
+        "label": "Gutenberg file-block issue layout",
+        "start_year": 2026,
+        "end_year": 2026,
+        "url_patterns": ["/lpr/volume-{volume}-{issue}/"],
+        "evidence_ids": ["issue-newest"],
+        "notes": "Each PDF uses .wp-block-file and its author is in the following paragraph. Intermediate unsampled years may contain either layout."
+      }
+    ]
+  },
+  "metadata_fields": {
+    "title": {
+      "availability": "always",
+      "sources": [
+        {"page_type": "issue", "method": "css_selector", "locator": ".wp-block-file a[href$='.pdf'], .entry-content p a[href$='.pdf']", "confidence": "high", "evidence_ids": ["issue-oldest", "issue-middle", "issue-newest"], "example": "Redefining Efficiency in the DOGE Era: The Value of Equitable Evidence-based Policymaking in Federal Agencies", "notes": "Exclude non-article labels by policy."}
+      ],
+      "normalization": ["collapse whitespace"],
+      "missingness": "Present for all sampled article links.",
+      "notes": ""
+    },
+    "authors": {
+      "availability": "sometimes",
+      "sources": [
+        {"page_type": "issue", "method": "css_selector", "locator": ".wp-block-file + p", "confidence": "high", "evidence_ids": ["issue-newest"], "example": "Ally Coll", "notes": "Current layout."},
+        {"page_type": "issue", "method": "text_parse", "locator": ".entry-content p:has(a[href$='.pdf']) text after the link", "confidence": "medium", "evidence_ids": ["issue-oldest", "issue-middle"], "example": "Elizabeth E. Joh", "notes": "Legacy layout requires separating title-link text from trailing author text."}
+      ],
+      "normalization": ["collapse whitespace", "preserve author order"],
+      "missingness": "Some legacy entries, including one sampled issue, place an author in the next paragraph.",
+      "notes": "Use PDF first-page text as a verification fallback."
+    },
+    "abstract": {
+      "availability": "sometimes",
+      "sources": [
+        {"page_type": "file", "method": "pdf_text", "locator": "first pages following the article title and author", "confidence": "medium", "evidence_ids": ["file-smoke"], "example": "In one of the first actions of his second term...", "notes": "No abstract was present in issue HTML."}
+      ],
+      "normalization": ["remove Abstract heading", "collapse whitespace"],
+      "missingness": "Requires PDF text and may be absent by document type.",
+      "notes": ""
+    },
+    "year": {
+      "availability": "always",
+      "sources": [
+        {"page_type": "issue", "method": "text_parse", "locator": ".entry-content issue heading or opening paragraph", "confidence": "high", "evidence_ids": ["issue-oldest", "issue-middle", "issue-newest"], "example": "Winter 2016", "notes": "For current pages, corroborate with the file URL or PDF."}
+      ],
+      "normalization": ["emit four-digit year"],
+      "missingness": "Observed on all sampled issues after issue-level parsing.",
+      "notes": "Do not use upload year alone for migrated legacy files."
+    },
+    "date": {"availability": "sometimes", "sources": [{"page_type": "issue", "method": "text_parse", "locator": ".entry-content opening issue label", "confidence": "medium", "evidence_ids": ["issue-oldest", "issue-middle"], "example": "Winter 2007", "notes": "Season-level precision only."}], "normalization": ["retain source precision"], "missingness": "The newest sampled page did not show a full publication date.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "issue", "method": "url_parse", "locator": "volume-{volume}-{issue}", "confidence": "high", "evidence_ids": ["issue-oldest", "issue-middle", "issue-newest"], "example": "20", "notes": "Corroborated by h1.entry-title."}], "normalization": ["emit numeric volume"], "missingness": "Present in all sampled issue URLs.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "issue", "method": "url_parse", "locator": "volume-{volume}-{issue}", "confidence": "high", "evidence_ids": ["issue-oldest", "issue-middle", "issue-newest"], "example": "1", "notes": "Corroborated by issue text."}], "normalization": ["emit numeric issue"], "missingness": "Present in all sampled issue URLs.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No page range was exposed in sampled issue HTML.", "notes": "PDF parsing may recover it."},
+    "doi": {"availability": "never", "sources": [], "normalization": [], "missingness": "No DOI was observed in sampled HTML or the smoke PDF.", "notes": "Record null unless later evidence supplies one."},
+    "citation": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No recommended citation block was present in sampled issue HTML.", "notes": "Construct only downstream from verified metadata."}
+  },
+  "file_delivery": {
+    "patterns": [
+      {
+        "file_type": "article_pdf",
+        "delivery": "direct",
+        "discovery_method": "css_selector",
+        "locator": ".entry-content .wp-block-file a[href$='.pdf'], .entry-content p a[href$='.pdf']",
+        "url_pattern": "/lpr/wp-content/uploads/sites/89/{year}/{month}/{filename}.pdf",
+        "requirements": {"referer": "not_required", "cookies": "not_required", "javascript": "not_required", "authentication": "not_required"},
+        "evidence_ids": ["issue-oldest", "issue-middle", "issue-newest", "file-smoke"],
+        "notes": "One normal GET returned an article PDF directly."
+      },
+      {
+        "file_type": "whole_issue_pdf",
+        "delivery": "direct",
+        "discovery_method": "css_selector",
+        "locator": "a[href$='.pdf'] with link text Full Volume",
+        "requirements": {"referer": "unknown", "cookies": "unknown", "javascript": "not_required", "authentication": "not_required"},
+        "evidence_ids": ["issue-newest"],
+        "notes": "Record separately from article PDFs."
+      }
+    ],
+    "validation": {
+      "magic_bytes_checked": true,
+      "content_type_checked": true,
+      "article_vs_issue_checked": true,
+      "evidence_ids": ["file-smoke"],
+      "notes": "The smoke file began %PDF-1.3, returned application/pdf, and first-page text matched the article rather than a whole issue."
+    }
+  },
+  "access": {
+    "robots": [
+      {"url": "https://journals.law.harvard.edu/robots.txt", "decision": "allowed", "checked_at": "2026-07-14T18:08:45Z", "evidence_ids": ["robots"], "notes": "Respect Crawl-delay: 10 and recheck before acquisition."}
+    ],
+    "barriers": [],
+    "politeness_notes": "Use the /lpr/ publication prefix, deduplicate URLs, and wait at least 10 seconds between requests to the shared Harvard journals host."
+  },
+  "verdict": {
+    "status": "in_progress",
+    "summary": "All listed HLPR issues are enumerable and direct article PDFs work across two observed layouts, but the site has no HTML article pages and some metadata requires issue-text or PDF parsing.",
+    "blockers": ["No HTML article-detail pages for the three-page dossier ready gate", "Pages and citations are not exposed in issue HTML"],
+    "next_action": "Implement the two issue-layout extractors, classify non-article PDFs by link text, and run a one-target adapter smoke.",
+    "recommended_adapter": "WordPressAcademicBaseAdapter with publication-scoped issue-page overrides",
+    "implementation_notes": "The host is already mapped to WordPressAcademicBaseAdapter. Preserve the archive's observed URLs rather than synthesizing one route shape."
+  }
+}

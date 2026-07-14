@@ -1,0 +1,63 @@
+{
+  "$schema": "./schema.json", "schema_version": "1.1.0",
+  "journal": {
+    "id": "american-criminal-law-review", "name": "American Criminal Law Review", "aliases": ["ACLR"],
+    "canonical_url": "https://www.law.georgetown.edu/american-criminal-law-review/",
+    "registry_refs": [{"source": "data/registry/lawjournals.csv", "key": "American Criminal Law Review", "notes": "W&L rank 90; four duplicate rows point to the same journal."}, {"source": "offprint/sitemaps/american_criminal_law_review.json", "key": "american_criminal_law_review.json", "notes": "Existing curated WordPress seed."}],
+    "publication_scope": {"host": "www.law.georgetown.edu", "path_prefix": "/american-criminal-law-review/in-print/", "platform": "wordpress", "repository_slug": "american-criminal-law-review", "notes": "Exclude ACLR Online and other Georgetown journals."}
+  },
+  "reconnaissance": {
+    "status": "in_progress", "researcher": "Codex journal onboarding", "checked_at": "2026-07-14T18:10:34Z",
+    "sample_policy": {"oldest_issue_checked": false, "middle_issue_checked": false, "newest_issue_checked": true, "article_pages_checked": 1},
+    "evidence": [
+      {"id": "robots", "url": "https://www.law.georgetown.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T18:08:52Z", "http_status": 200, "content_type": "text/plain", "notes": "No rule disallows the ACLR in-print or wp-content paths."},
+      {"id": "archive", "url": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/", "role": "archive", "observed_at": "2026-07-14T18:09:05Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Unpaginated page lists 24 issue headings and article links from Volume 56 (2019) through Volume 63 (2026); several labels and slugs disagree."},
+      {"id": "issue-newest", "url": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/volume-63-number-2-spring-2026/", "role": "issue", "observed_at": "2026-07-14T18:09:35Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Issue page .typography paragraphs contain five article title links followed by author text; volume/number/season/year are in h1.page_title and URL."},
+      {"id": "article-newest", "url": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/volume-63-number-2-spring-2026/misjudging-suspicion/", "role": "article", "observed_at": "2026-07-14T18:10:05Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Article page exposes title, 'by' author, abstract in .abstract_alt, and a direct wp-content PDF link."},
+      {"id": "file-newest", "url": "https://www.law.georgetown.edu/american-criminal-law-review/wp-content/uploads/sites/15/2026/04/GT-ACLR260002.pdf", "role": "file", "observed_at": "2026-07-14T18:10:34Z", "http_status": 200, "content_type": "application/pdf", "notes": "Single smoke GET returned a 449,563-byte PDF beginning %PDF-1.6; SHA-256 c1b851fd6eaa55b4a5f68b79dbbe1d1d26e3ff8b8e7728e7e6e428fd1b04e702."}
+    ],
+    "notes": "Current route passes discovery, metadata, and file smoke. Pre-2019 backfile and archive label/slug defects remain unresolved."
+  },
+  "scope": {"include": ["Print issues and works under /american-criminal-law-review/in-print/"], "exclude": ["ACLR Online", "Other Georgetown journals", "Navigation and subscription pages"], "supplements": "case_by_case", "whole_issue_pdfs": "record_and_split_later", "notes": "Path scope is mandatory because the host contains many publications."},
+  "site_map": {
+    "entry_points": [{"url": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/", "role": "archive", "evidence_ids": ["archive"], "notes": "Preferred scoped seed."}],
+    "route_graph": {
+      "nodes": [{"id": "archive-page", "role": "archive", "notes": "Issue/article index."}, {"id": "issue-page", "role": "issue", "notes": "Article/author list."}, {"id": "article-page", "role": "article", "notes": "Title, author, abstract, PDF."}, {"id": "pdf-file", "role": "file", "notes": "Direct wp-content file."}],
+      "edges": [
+        {"from": "archive-page", "to": "issue-page", "method": "css_selector", "locator": ".typography h2 > a[href*='/in-print/volume-']", "evidence_ids": ["archive"], "notes": "Some displayed volume labels disagree with slugs; store both and flag."},
+        {"from": "issue-page", "to": "article-page", "method": "css_selector", "locator": ".typography p > a[href^='https://www.law.georgetown.edu/american-criminal-law-review/in-print/volume-']", "evidence_ids": ["issue-newest"], "notes": "Paragraph trailing text is author."},
+        {"from": "article-page", "to": "pdf-file", "method": "css_selector", "locator": ".abstract_alt a[href$='.pdf'], .main_content a[href$='.pdf']", "evidence_ids": ["article-newest", "file-newest"], "notes": "Normal direct PDF."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "issue", "url_pattern": "https://www.law.georgetown.edu/american-criminal-law-review/in-print/volume-{volume}-number-{issue}-{optional-season-year}/", "examples": ["https://www.law.georgetown.edu/american-criminal-law-review/in-print/volume-63-number-2-spring-2026/"], "evidence_ids": ["archive", "issue-newest"], "notes": "Several malformed legacy slugs require displayed-heading validation."},
+      {"role": "article", "url_pattern": "{issue_url}{article_slug}/", "examples": ["https://www.law.georgetown.edu/american-criminal-law-review/in-print/volume-63-number-2-spring-2026/misjudging-suspicion/"], "evidence_ids": ["article-newest"], "notes": "Article nested below issue."},
+      {"role": "file", "url_pattern": "https://www.law.georgetown.edu/american-criminal-law-review/wp-content/uploads/sites/15/{year}/{month}/{filename}.pdf", "examples": ["https://www.law.georgetown.edu/american-criminal-law-review/wp-content/uploads/sites/15/2026/04/GT-ACLR260002.pdf"], "evidence_ids": ["file-newest"], "notes": "Upload path year should be corroborated by issue heading."}
+    ],
+    "pagination": [{"scope": "In Print archive", "type": "none", "termination": "Single page currently ends at Volume 56, Number 1.", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "Only 2019-2026 visible; earlier backfile location unknown."}],
+    "layout_eras": [{"id": "current-wordpress", "label": "Georgetown WordPress issue/article pages", "start_year": 2019, "end_year": 2026, "url_patterns": ["/american-criminal-law-review/in-print/volume-{volume}-number-{issue}/"], "evidence_ids": ["archive", "issue-newest", "article-newest"], "notes": "Only newest issue/article sampled."}, {"id": "pre-2019-unresolved", "label": "Earlier print backfile", "url_patterns": ["unknown"], "evidence_ids": ["archive"], "notes": "Not exposed by observed archive."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "article", "method": "css_selector", "locator": "h1.abstract_alt_volume_title", "confidence": "high", "evidence_ids": ["article-newest"], "example": "(Mis)judging Suspicion", "notes": "Issue link corroborates."}], "normalization": ["Collapse whitespace"], "missingness": "Present in sample.", "notes": ""},
+    "authors": {"availability": "always", "sources": [{"page_type": "article", "method": "css_selector", "locator": ".main_content title-adjacent byline", "confidence": "medium", "evidence_ids": ["issue-newest", "article-newest"], "example": "Sherri Lee Keene", "notes": "Issue paragraph trailing text is cleaner selector source."}], "normalization": ["Strip leading by"], "missingness": "Present in newest issue sample.", "notes": ""},
+    "abstract": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "css_selector", "locator": ".abstract_alt", "confidence": "high", "evidence_ids": ["article-newest"], "example": "Twenty-five years ago, the Supreme Court decided Illinois v. Wardlow...", "notes": "Remove Continue reading and subscription controls."}], "normalization": ["Remove controls", "Collapse whitespace"], "missingness": "Present in sample.", "notes": ""},
+    "year": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1.page_title", "confidence": "high", "evidence_ids": ["issue-newest"], "example": "2026", "notes": ""}], "normalization": ["Emit four-digit year"], "missingness": "Issue headings carry year in observed archive.", "notes": ""},
+    "date": {"availability": "unknown", "sources": [], "normalization": ["Emit ISO date when known"], "missingness": "Only season/year observed.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1.page_title", "confidence": "high", "evidence_ids": ["issue-newest"], "example": "63", "notes": "Displayed heading outranks slug."}], "normalization": ["Strip Volume prefix"], "missingness": "Present.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1.page_title", "confidence": "high", "evidence_ids": ["issue-newest"], "example": "2", "notes": ""}], "normalization": ["Strip Number prefix"], "missingness": "Present.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Not exposed in sampled HTML.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Not observed.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["Collapse whitespace"], "missingness": "No citation element observed.", "notes": ""}
+  },
+  "file_delivery": {
+    "patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": ".abstract_alt a[href$='.pdf'], .main_content a[href$='.pdf']", "url_pattern": "/american-criminal-law-review/wp-content/uploads/sites/15/{year}/{month}/{filename}.pdf", "requirements": {"referer": "not_required", "cookies": "not_required", "javascript": "not_required", "authentication": "not_required"}, "evidence_ids": ["article-newest", "file-newest"], "notes": "Normal GET returned PDF."}],
+    "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": true, "evidence_ids": ["file-newest"], "notes": "PDF title route corresponds to sampled article."}
+  },
+  "access": {"robots": [{"url": "https://www.law.georgetown.edu/robots.txt", "decision": "allowed", "checked_at": "2026-07-14T18:08:52Z", "evidence_ids": ["robots"], "notes": "No scoped disallow."}], "barriers": [], "politeness_notes": "Robots first, then one archive, issue, article, and PDF smoke request."},
+  "verdict": {
+    "status": "in_progress", "summary": "Current print issues expose deterministic title/author/abstract metadata and directly accessible PDFs, but the visible archive stops at 2019 and contains label/slug inconsistencies.",
+    "blockers": ["Pre-2019 backfile route unknown", "Oldest and middle layouts unsampled", "Several archive labels disagree with linked slugs"],
+    "next_action": "Locate the pre-2019 archive and sample one middle and oldest issue before broad acquisition.",
+    "recommended_adapter": "WordPressAcademicBaseAdapter", "implementation_notes": "Scope to /american-criminal-law-review/in-print/, use displayed h1 for volume/issue/year, and exclude ACLR Online."
+  }
+}

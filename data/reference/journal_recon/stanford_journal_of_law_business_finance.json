@@ -1,0 +1,112 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "stanford-journal-of-law-business-finance",
+    "name": "Stanford Journal of Law, Business & Finance",
+    "aliases": ["SJLBF", "Stanford Journal of Law, Business and Finance"],
+    "canonical_url": "https://law.stanford.edu/stanford-journal-of-law-business-finance-sjlbf/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "wlu_mainid=319", "notes": "Two duplicate registry routes aggregate to this publication."}
+    ],
+    "publication_scope": {
+      "host": "law.stanford.edu",
+      "path_prefix": "/stanford-journal-of-law-business-finance-sjlbf/",
+      "platform": "WordPress",
+      "repository_slug": "stanford-journal-of-law-business-finance-sjlbf",
+      "notes": "Stanford Law hosts many other publications on the same domain."
+    }
+  },
+  "reconnaissance": {
+    "status": "in_progress",
+    "researcher": "codex-onboard-journal",
+    "checked_at": "2026-07-14T18:12:00Z",
+    "sample_policy": {"oldest_issue_checked": false, "middle_issue_checked": false, "newest_issue_checked": false, "article_pages_checked": 0},
+    "evidence": [
+      {
+        "id": "robots",
+        "url": "https://law.stanford.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T18:08:45Z",
+        "http_status": 200,
+        "content_type": "text/plain",
+        "notes": "The journal archive path is not disallowed, but Crawl-delay is 600 seconds."
+      },
+      {
+        "id": "archive-deferred",
+        "url": "https://law.stanford.edu/stanford-journal-of-law-business-finance-sjlbf/sjlbf-archive/",
+        "role": "archive",
+        "observed_at": "2026-07-14T18:08:45Z",
+        "artifact_ref": "offprint/sitemaps/stanford_journal_of_law_business_finance.json",
+        "notes": "Not fetched after robots discovery because the 600-second crawl delay exceeded the bounded onboarding window. The checked-in sitemap proposes article.loop-item.pt-publication and a[href$='.pdf'], but those selectors were not revalidated live."
+      }
+    ],
+    "notes": "Robots-first preflight intentionally stopped before the archive request. All layout and metadata eras remain unsampled."
+  },
+  "scope": {
+    "include": ["print-journal articles", "notes and comments"],
+    "exclude": ["other Stanford Law publications", "events", "staff pages"],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Scope rules are provisional until the archive can be sampled politely."
+  },
+  "site_map": {
+    "entry_points": [
+      {"url": "https://law.stanford.edu/stanford-journal-of-law-business-finance-sjlbf/sjlbf-archive/", "role": "archive", "evidence_ids": ["archive-deferred"], "notes": "Registry and checked-in sitemap seed; live response deferred."}
+    ],
+    "route_graph": {
+      "nodes": [
+        {"id": "archive-page", "role": "archive", "notes": "Proposed archive page; not live-validated."},
+        {"id": "article-file", "role": "file", "notes": "Proposed direct PDF route from the checked-in sitemap."}
+      ],
+      "edges": [
+        {"from": "archive-page", "to": "article-file", "method": "css_selector", "locator": "article.loop-item.pt-publication a[href$='.pdf']", "evidence_ids": ["archive-deferred"], "notes": "Provisional local selector, not live evidence."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "archive", "url_pattern": "/stanford-journal-of-law-business-finance-sjlbf/sjlbf-archive/", "examples": ["https://law.stanford.edu/stanford-journal-of-law-business-finance-sjlbf/sjlbf-archive/"], "evidence_ids": ["archive-deferred"], "notes": "Publication-scoped seed from registry and sitemap."}
+    ],
+    "pagination": [
+      {"scope": "archive", "type": "unknown", "termination": "Unknown until a crawl-delay-compliant archive response can be inspected.", "pages_checked": 0, "evidence_ids": ["archive-deferred"], "notes": "Do not infer pagination from the provisional sitemap."}
+    ],
+    "layout_eras": [
+      {"id": "unsampled-current-site", "label": "Current Stanford Law layout, unsampled", "url_patterns": ["/stanford-journal-of-law-business-finance-sjlbf/sjlbf-archive/"], "evidence_ids": ["archive-deferred"], "notes": "No year bounds or historical markup claims can be made from this run."}
+    ]
+  },
+  "metadata_fields": {
+    "title": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": "Provisional local sitemap lacks a title selector."},
+    "authors": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": ""},
+    "abstract": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": ""},
+    "year": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": ""},
+    "date": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": ""},
+    "volume": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": ""},
+    "issue": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Archive not fetched.", "notes": ""}
+  },
+  "file_delivery": {
+    "patterns": [
+      {"file_type": "unknown", "delivery": "unknown", "discovery_method": "css_selector", "locator": "article.loop-item.pt-publication a[href$='.pdf']", "requirements": {"referer": "unknown", "cookies": "unknown", "javascript": "unknown", "authentication": "unknown"}, "evidence_ids": ["archive-deferred"], "notes": "Provisional checked-in sitemap selector; no response was requested."}
+    ],
+    "validation": {"magic_bytes_checked": false, "content_type_checked": false, "article_vs_issue_checked": false, "evidence_ids": ["archive-deferred"], "notes": "No PDF smoke was attempted."
+    }
+  },
+  "access": {
+    "robots": [
+      {"url": "https://law.stanford.edu/robots.txt", "decision": "allowed", "checked_at": "2026-07-14T18:08:45Z", "evidence_ids": ["robots"], "notes": "Archive path is not disallowed; Crawl-delay is 600 seconds."}
+    ],
+    "barriers": [
+      {"type": "rate_limit", "severity": "blocking", "evidence_ids": ["robots", "archive-deferred"], "notes": "A 600-second crawl delay is incompatible with the requested short onboarding loop; the archive was not fetched."}
+    ],
+    "politeness_notes": "Schedule future probes with at least 600 seconds between requests to law.stanford.edu and coordinate them with other Stanford work."
+  },
+  "verdict": {
+    "status": "in_progress",
+    "summary": "Robots permits the publication path but imposes a 600-second crawl delay, so the bounded run stopped before live archive or PDF validation.",
+    "blockers": ["Crawl-delay: 600 prevents a short interactive onboarding loop", "Archive selectors and metadata remain unvalidated"],
+    "next_action": "Run a scheduled, crawl-delay-compliant three-request probe of the archive, one item page, and one PDF.",
+    "recommended_adapter": "SelectorDrivenAdapter (provisional)",
+    "implementation_notes": "The host is already mapped to SelectorDrivenAdapter; do not activate the provisional sitemap until title and pagination selectors are live-validated."
+  }
+}

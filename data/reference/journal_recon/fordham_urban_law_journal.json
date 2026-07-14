@@ -1,0 +1,76 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "fordham-urban-law-journal", "name": "Fordham Urban Law Journal", "aliases": ["FULJ"],
+    "canonical_url": "https://ir.lawnet.fordham.edu/ulj/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "Fordham Urban Law Journal", "notes": "W&L rank 97; Digital Commons rows include a broad sitemap seed and publication root."},
+      {"source": "offprint/sitemaps/fordham_urban_law_journal.json", "key": "fordham_urban_law_journal.json", "notes": "Existing file records all_issues.html but currently seeds sitemap.xml."}
+    ],
+    "publication_scope": {"host": "ir.lawnet.fordham.edu", "path_prefix": "/ulj/", "platform": "digitalcommons", "repository_slug": "ulj", "notes": "Use context=ulj and /ulj/ landing paths as scope guards on the shared repository."}
+  },
+  "reconnaissance": {
+    "status": "metadata_only", "researcher": "Codex journal onboarding", "checked_at": "2026-07-14T18:10:34Z",
+    "sample_policy": {"oldest_issue_checked": false, "middle_issue_checked": false, "newest_issue_checked": true, "article_pages_checked": 1},
+    "evidence": [
+      {"id": "robots", "url": "https://ir.lawnet.fordham.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T18:08:50Z", "http_status": 200, "content_type": "text/plain", "notes": "Publication and viewcontent paths are not disallowed; /do/ is disallowed and must not be used."},
+      {"id": "archive", "url": "https://ir.lawnet.fordham.edu/ulj/all_issues.html", "role": "archive", "observed_at": "2026-07-14T18:09:05Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Flat publication archive exposes 237 issue links across Volumes 1-53 with no pagination."},
+      {"id": "issue-newest", "url": "https://ir.lawnet.fordham.edu/ulj/vol53/iss4/", "role": "issue", "observed_at": "2026-07-14T18:09:35Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Issue uses div.article-list div.doc records with PDF control, landing title, and span.auth; five works visible."},
+      {"id": "article-newest", "url": "https://ir.lawnet.fordham.edu/ulj/vol53/iss4/1/", "role": "article", "observed_at": "2026-07-14T18:10:05Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Bepress meta tags provide journal, title, author, year, volume, issue, first page, PDF URL, and article URL; no abstract was visible."},
+      {"id": "file-blocked", "url": "https://ir.lawnet.fordham.edu/cgi/viewcontent.cgi?article=3029&context=ulj&type=pdf", "role": "file", "observed_at": "2026-07-14T18:10:34Z", "http_status": 403, "content_type": "text/html; charset=UTF-8", "notes": "One normal GET with article Referer returned the shared 744-byte Digital Commons 403 HTML and original_referer cookie; no retry or bypass."}
+    ],
+    "notes": "Archive and metadata routes pass; primary-file delivery does not. Oldest and middle layouts remain unsampled."
+  },
+  "scope": {
+    "include": ["Works whose landing paths are under /ulj/ and whose file context is ulj", "Articles and student notes"],
+    "exclude": ["Sibling Fordham collections", "Repository /do/ routes", "Front matter unless separately classified"],
+    "supplements": "case_by_case", "whole_issue_pdfs": "record_and_split_later", "notes": "Publication slug and context are both required for attribution."
+  },
+  "site_map": {
+    "entry_points": [{"url": "https://ir.lawnet.fordham.edu/ulj/all_issues.html", "role": "archive", "evidence_ids": ["archive"], "notes": "Preferred deterministic seed."}],
+    "route_graph": {
+      "nodes": [{"id": "archive-page", "role": "archive", "notes": "All issues."}, {"id": "issue-page", "role": "issue", "notes": "Article list."}, {"id": "article-page", "role": "article", "notes": "Structured metadata."}, {"id": "pdf-file", "role": "file", "notes": "Blocked viewcontent route."}],
+      "edges": [
+        {"from": "archive-page", "to": "issue-page", "method": "css_selector", "locator": "h3.issue a[href*='/ulj/vol'], a[href*='/ulj/vol'][href*='/iss']", "evidence_ids": ["archive"], "notes": "Volume and issue are encoded in path."},
+        {"from": "issue-page", "to": "article-page", "method": "css_selector", "locator": "div.article-list div.doc p:not(.pdf) > a[href*='/ulj/vol']", "evidence_ids": ["issue-newest"], "notes": "Title link; sibling span.auth is author."},
+        {"from": "issue-page", "to": "pdf-file", "method": "css_selector", "locator": "div.article-list div.doc p.pdf > a[href*='viewcontent.cgi']", "evidence_ids": ["issue-newest", "file-blocked"], "notes": "Advertised PDF route."},
+        {"from": "article-page", "to": "pdf-file", "method": "css_selector", "locator": "meta[name='bepress_citation_pdf_url'], a#pdf", "evidence_ids": ["article-newest", "file-blocked"], "notes": "Same route advertised by meta and controls."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "issue", "url_pattern": "https://ir.lawnet.fordham.edu/ulj/vol{volume}/iss{issue}/", "examples": ["https://ir.lawnet.fordham.edu/ulj/vol53/iss4/"], "evidence_ids": ["archive", "issue-newest"], "notes": "Stable Digital Commons path."},
+      {"role": "article", "url_pattern": "https://ir.lawnet.fordham.edu/ulj/vol{volume}/iss{issue}/{article}/", "examples": ["https://ir.lawnet.fordham.edu/ulj/vol53/iss4/1/"], "evidence_ids": ["article-newest"], "notes": "Opaque article ordinal."},
+      {"role": "file", "url_pattern": "https://ir.lawnet.fordham.edu/cgi/viewcontent.cgi?article={repository_id}&context=ulj&type=pdf", "examples": ["https://ir.lawnet.fordham.edu/cgi/viewcontent.cgi?article=3029&context=ulj&type=pdf"], "evidence_ids": ["file-blocked"], "notes": "Currently denied to bounded client."}
+    ],
+    "pagination": [{"scope": "All Issues archive", "type": "none", "termination": "Single page ends at Volume 1, Issue 3.", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "237 issue links observed."}],
+    "layout_eras": [{"id": "digitalcommons-visible", "label": "Digital Commons issue/article route", "url_patterns": ["/ulj/vol{volume}/iss{issue}/", "/ulj/vol{volume}/iss{issue}/{article}/"], "evidence_ids": ["archive", "issue-newest", "article-newest"], "notes": "Archive suggests Volumes 1-53; only newest layout was sampled."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_title']@content", "confidence": "high", "evidence_ids": ["article-newest"], "example": "Federalism and Fair Housing: State Innovation Amidst Federal Retrenchment", "notes": "Issue link corroborates."}], "normalization": ["Collapse whitespace"], "missingness": "Present in newest issue sample.", "notes": ""},
+    "authors": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_author']@content", "confidence": "high", "evidence_ids": ["article-newest"], "example": "Paula A. Franzese", "notes": "Issue span.auth corroborates."}], "normalization": ["Preserve repeated source order"], "missingness": "Present in sampled article.", "notes": ""},
+    "abstract": {"availability": "unknown", "sources": [], "normalization": ["Preserve paragraph order"], "missingness": "No abstract visible in sampled article HTML.", "notes": ""},
+    "year": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_date']@content", "confidence": "high", "evidence_ids": ["article-newest"], "example": "2026", "notes": ""}], "normalization": ["Emit four-digit year"], "missingness": "Present in sampled article.", "notes": ""},
+    "date": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='description']@content", "confidence": "medium", "evidence_ids": ["article-newest"], "example": "01/01/26", "notes": "Parse Published on value."}], "normalization": ["Emit YYYY-MM-DD"], "missingness": "Observed in sampled article description.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_volume']@content", "confidence": "high", "evidence_ids": ["article-newest"], "example": "53", "notes": "URL corroborates."}], "normalization": ["Strip Volume prefix"], "missingness": "Present.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_issue']@content", "confidence": "high", "evidence_ids": ["article-newest"], "example": "4", "notes": "URL corroborates."}], "normalization": ["Strip Issue prefix"], "missingness": "Present.", "notes": ""},
+    "pages": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='bepress_citation_firstpage']@content", "confidence": "high", "evidence_ids": ["article-newest"], "example": "971", "notes": "Last page not observed."}], "normalization": [], "missingness": "First page present in sample.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Not observed.", "notes": ""},
+    "citation": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "css_selector", "locator": "div#recommended_citation", "confidence": "high", "evidence_ids": ["article-newest"], "example": "Paula A. Franzese, Federalism and Fair Housing...", "notes": "Recommended citation section visible."}], "normalization": ["Collapse whitespace"], "missingness": "Present in sample.", "notes": ""}
+  },
+  "file_delivery": {
+    "patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "meta_tag", "locator": "meta[name='bepress_citation_pdf_url'], p.pdf > a", "url_pattern": "/cgi/viewcontent.cgi?article={repository_id}&context=ulj&type=pdf", "requirements": {"referer": "unknown", "cookies": "unknown", "javascript": "unknown", "authentication": "unknown"}, "evidence_ids": ["issue-newest", "article-newest", "file-blocked"], "notes": "Advertised direct route returned 403 HTML even with article Referer."}],
+    "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": false, "evidence_ids": ["file-blocked"], "notes": "744-byte HTML, not PDF."}
+  },
+  "access": {
+    "robots": [{"url": "https://ir.lawnet.fordham.edu/robots.txt", "decision": "partial", "checked_at": "2026-07-14T18:08:50Z", "evidence_ids": ["robots"], "notes": "/do/ disallowed; publication/viewcontent not disallowed."}],
+    "barriers": [{"type": "robots", "severity": "degraded", "evidence_ids": ["robots"], "notes": "OAI/search routes cannot be used."}, {"type": "other", "severity": "blocking", "evidence_ids": ["file-blocked"], "notes": "Representative primary-file GET returned Digital Commons 403 HTML."}],
+    "politeness_notes": "Robots first, one archive, one issue, one article, and one PDF smoke; no retry or /do/ access."
+  },
+  "verdict": {
+    "status": "metadata_only", "summary": "Volumes 1-53 and rich article metadata are deterministically discoverable, but representative Digital Commons PDF delivery returned 403 HTML.",
+    "blockers": ["Primary-file route returned HTTP 403", "Oldest and middle article layouts remain unsampled", "/do/ is disallowed"],
+    "next_action": "Use all_issues_only metadata discovery with strict ulj scope and seek an approved file-access route before acquisition.",
+    "recommended_adapter": "DigitalCommonsIssueArticleHopAdapter", "implementation_notes": "Replace sitemap.xml with all_issues.html, never use /do/, preserve article landing Referer, and stop after the first file 403."
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "harvard-journal-on-legislation",
+    "name": "Harvard Journal on Legislation",
+    "aliases": ["JOL"],
+    "canonical_url": "https://journals.law.harvard.edu/jol/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "Harvard Journal on Legislation", "notes": "W&L rank 93; two registry rows resolve to the same WordPress publication."},
+      {"source": "offprint/sitemaps/journals-law-harvard-edu-jol.json", "key": "journals-law-harvard-edu-jol.json", "notes": "Existing curated archive seed."}
+    ],
+    "publication_scope": {
+      "host": "journals.law.harvard.edu",
+      "path_prefix": "/jol/",
+      "platform": "wordpress",
+      "repository_slug": "jol",
+      "notes": "Other Harvard journal subdirectories on the shared host are excluded."
+    }
+  },
+  "reconnaissance": {
+    "status": "in_progress",
+    "researcher": "Codex journal onboarding",
+    "checked_at": "2026-07-14T18:10:34Z",
+    "sample_policy": {"oldest_issue_checked": false, "middle_issue_checked": false, "newest_issue_checked": true, "article_pages_checked": 1},
+    "evidence": [
+      {"id": "robots", "url": "https://journals.law.harvard.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T18:08:47Z", "http_status": 200, "content_type": "text/plain; charset=utf-8", "notes": "Only /wp-admin/ is disallowed for user-agent *; Crawl-delay is 10 seconds and was honored."},
+      {"id": "archive", "url": "https://journals.law.harvard.edu/jol/archive/", "role": "archive", "observed_at": "2026-07-14T18:09:04Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "One unpaginated WordPress page exposes 153 labeled issue links spanning Volume 1 (1964) through Volume 63 (2026). Current eras use issue pages; older entries link directly to whole-issue PDFs."},
+      {"id": "issue-newest", "url": "https://journals.law.harvard.edu/jol/volume-63-number-2/", "role": "issue", "observed_at": "2026-07-14T18:09:35Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Current issue uses wp-block-columns records with linked title, author text, and direct wp-content PDF control; five primary works were visible."},
+      {"id": "article-newest", "url": "https://journals.law.harvard.edu/jol/2026/06/07/the-congressional-review-act-congresss-new-favorite-tool-for-restoring-its-constitutional-authority/", "role": "article", "observed_at": "2026-07-14T18:10:05Z", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Article page exposes h1.entry-title, author text at the start of .entry-content, an Abstract heading followed by abstract text, full HTML article text, and a direct PDF link."},
+      {"id": "file-newest", "url": "https://journals.law.harvard.edu/jol/wp-content/uploads/sites/86/2026/06/Cramer_JOL63.2_PDF-1.pdf", "role": "file", "observed_at": "2026-07-14T18:10:34Z", "http_status": 200, "content_type": "application/pdf", "notes": "Single smoke GET returned a 367,538-byte, eight-page PDF beginning with %PDF-1.3; SHA-256 582cfb41f815faecedd9fbe376c284067710e6587664dcdaf2e9818d1e7870bb."}
+    ],
+    "notes": "Current discovery and PDF delivery pass, but historical layout transitions and whole-issue granularity require oldest/middle sampling before collection readiness."
+  },
+  "scope": {
+    "include": ["Print-journal articles, policy essays, and student notes under /jol/", "Issue and article PDFs linked by the journal archive"],
+    "exclude": ["JOL Online and Markup Blog posts unless separately scoped", "Other Harvard journals", "Navigation, submission, and membership pages"],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Archive labels, rather than WordPress upload dates, define issue attribution."
+  },
+  "site_map": {
+    "entry_points": [
+      {"url": "https://journals.law.harvard.edu/jol/archive/", "role": "archive", "evidence_ids": ["archive"], "notes": "Preferred publication-scoped seed."}
+    ],
+    "route_graph": {
+      "nodes": [
+        {"id": "archive-page", "role": "archive", "notes": "Flat issue list."},
+        {"id": "issue-page", "role": "issue", "notes": "Current article/PDF listing."},
+        {"id": "article-page", "role": "article", "notes": "HTML article and abstract."},
+        {"id": "pdf-file", "role": "file", "notes": "Direct wp-content article or historical issue PDF."}
+      ],
+      "edges": [
+        {"from": "archive-page", "to": "issue-page", "method": "css_selector", "locator": ".entry-content a[href*='volume-'], .entry-content a[href*='volume_']", "evidence_ids": ["archive"], "notes": "Current issue-page URLs vary between root and /archive/ prefixes."},
+        {"from": "archive-page", "to": "pdf-file", "method": "css_selector", "locator": ".entry-content a[href$='.pdf']", "evidence_ids": ["archive"], "notes": "Older issue labels may resolve directly to whole-issue PDFs."},
+        {"from": "issue-page", "to": "article-page", "method": "css_selector", "locator": "div.wp-block-columns div.wp-block-column:first-child p a[href*='/jol/']", "evidence_ids": ["issue-newest"], "notes": "First column contains linked title and trailing author text."},
+        {"from": "issue-page", "to": "pdf-file", "method": "css_selector", "locator": "div.wp-block-columns a[href$='.pdf']", "evidence_ids": ["issue-newest", "file-newest"], "notes": "Direct article PDF."},
+        {"from": "article-page", "to": "pdf-file", "method": "css_selector", "locator": ".entry-content a[href$='.pdf']", "evidence_ids": ["article-newest", "file-newest"], "notes": "Visible View PDF Version link."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "issue", "url_pattern": "https://journals.law.harvard.edu/jol/{optional-archive/}volume-{volume}-{number-or-issue}-{issue}/", "examples": ["https://journals.law.harvard.edu/jol/volume-63-number-2/"], "evidence_ids": ["archive", "issue-newest"], "notes": "Several historical slug variants exist."},
+      {"role": "article", "url_pattern": "https://journals.law.harvard.edu/jol/{year}/{month}/{day}/{slug}/", "examples": ["https://journals.law.harvard.edu/jol/2026/06/07/the-congressional-review-act-congresss-new-favorite-tool-for-restoring-its-constitutional-authority/"], "evidence_ids": ["article-newest"], "notes": "Post date can corroborate year but issue heading remains authoritative."},
+      {"role": "file", "url_pattern": "https://journals.law.harvard.edu/jol/wp-content/uploads/sites/86/{year}/{month}/{filename}.pdf", "examples": ["https://journals.law.harvard.edu/jol/wp-content/uploads/sites/86/2026/06/Cramer_JOL63.2_PDF-1.pdf"], "evidence_ids": ["file-newest"], "notes": "Upload date is not necessarily publication date for retrospective uploads."}
+    ],
+    "pagination": [
+      {"scope": "Past Issues archive", "type": "none", "termination": "Single page ends at Volume 1, Number 1 (January 1964).", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "153 issue labels observed."}
+    ],
+    "layout_eras": [
+      {"id": "current-issue-pages", "label": "WordPress issue and article pages", "start_year": 2008, "end_year": 2026, "url_patterns": ["/jol/volume-{volume}-number-{issue}/", "/jol/{year}/{month}/{day}/{slug}/"], "evidence_ids": ["archive", "issue-newest", "article-newest"], "notes": "Approximate transition: Volume 45 Number 2 is an issue page while Volume 45 Number 1 is a direct PDF; boundary needs sampling."},
+      {"id": "historical-whole-issue", "label": "Archive labels linking directly to issue PDFs", "start_year": 1964, "end_year": 2008, "url_patterns": ["/jol/wp-content/uploads/sites/86/2023/{month}/{filename}.pdf"], "evidence_ids": ["archive"], "notes": "Granularity and embedded article metadata remain unsampled."}
+    ]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "issue", "method": "css_selector", "locator": "div.wp-block-columns div.wp-block-column:first-child p a", "confidence": "high", "evidence_ids": ["issue-newest"], "example": "The Congressional Review Act: Congress’s New Favorite Tool For Restoring Its Constitutional Authority", "notes": "Article page h1.entry-title corroborates."}], "normalization": ["Collapse whitespace"], "missingness": "Present for all current sampled records; historical PDFs unsampled.", "notes": ""},
+    "authors": {"availability": "sometimes", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "div.wp-block-columns div.wp-block-column:first-child p text after title link", "confidence": "medium", "evidence_ids": ["issue-newest", "article-newest"], "example": "Senator Kevin Cramer", "notes": "Article page repeats author at start of .entry-content."}], "normalization": ["Remove footnote marker", "Preserve honorific when substantive"], "missingness": "Observed in newest issue; historical whole-issue PDFs unsampled.", "notes": ""},
+    "abstract": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "text_parse", "locator": ".entry-content text after Abstract heading and before next section heading", "confidence": "medium", "evidence_ids": ["article-newest"], "example": "Recent Supreme Court decisions have reined in the runaway bureaucracy...", "notes": "Abstract is not wrapped in a dedicated semantic container."}], "normalization": ["Remove Abstract heading", "Preserve paragraph boundaries"], "missingness": "Present on sampled article page; historical availability unknown.", "notes": ""},
+    "year": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "archive issue-label year", "confidence": "high", "evidence_ids": ["archive", "issue-newest"], "example": "2026", "notes": "Prefer issue label over upload path."}], "normalization": ["Emit four-digit year"], "missingness": "Archive labels include years throughout observed range.", "notes": ""},
+    "date": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "url_parse", "locator": "/jol/{year}/{month}/{day}/{slug}/", "confidence": "medium", "evidence_ids": ["article-newest"], "example": "2026-06-07", "notes": "WordPress post date may differ from issue publication date."}], "normalization": ["Emit YYYY-MM-DD"], "missingness": "Available for current post URLs only.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "Volume {volume}, Number {issue}", "confidence": "high", "evidence_ids": ["archive", "issue-newest"], "example": "63", "notes": ""}], "normalization": ["Strip Volume prefix"], "missingness": "Present on all archive issue labels.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "Volume {volume}, Number {issue}", "confidence": "high", "evidence_ids": ["archive", "issue-newest"], "example": "2", "notes": "Normalize Number and Issue labels."}], "normalization": ["Strip Number or Issue prefix"], "missingness": "Present on all observed archive labels.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Not exposed in sampled HTML.", "notes": "May require PDF first-page parsing."},
+    "doi": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Not observed in sampled HTML.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["Collapse whitespace"], "missingness": "No recommended-citation element observed in sampled HTML.", "notes": ""}
+  },
+  "file_delivery": {
+    "patterns": [
+      {"file_type": "article_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": "div.wp-block-columns a[href$='.pdf'], .entry-content a[href$='.pdf']", "url_pattern": "/jol/wp-content/uploads/sites/86/{year}/{month}/{filename}.pdf", "requirements": {"referer": "not_required", "cookies": "not_required", "javascript": "not_required", "authentication": "not_required"}, "evidence_ids": ["issue-newest", "article-newest", "file-newest"], "notes": "Normal GET returned PDF."},
+      {"file_type": "whole_issue_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": ".entry-content a[href$='.pdf']", "url_pattern": "/jol/wp-content/uploads/sites/86/2023/{month}/{filename}.pdf", "requirements": {"referer": "unknown", "cookies": "unknown", "javascript": "unknown", "authentication": "unknown"}, "evidence_ids": ["archive"], "notes": "Historical archive links appear to be issue-level; no historical file was downloaded."}
+    ],
+    "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": true, "evidence_ids": ["file-newest"], "notes": "Current sample is an eight-page article PDF matching the HTML title."}
+  },
+  "access": {
+    "robots": [{"url": "https://journals.law.harvard.edu/robots.txt", "decision": "partial", "checked_at": "2026-07-14T18:08:47Z", "evidence_ids": ["robots"], "notes": "Publication paths allowed; honor Crawl-delay 10."}],
+    "barriers": [],
+    "politeness_notes": "Robots first, Crawl-delay 10 honored, then one archive, one issue, one article, and one PDF smoke request."
+  },
+  "verdict": {
+    "status": "in_progress",
+    "summary": "Current WordPress issue/article discovery and direct article PDF delivery pass, while the historical archive changes to whole-issue PDFs and still requires representative sampling.",
+    "blockers": ["Oldest and middle whole-issue PDFs have not been sampled", "Historical PDFs require article-level splitting or indexing policy"],
+    "next_action": "Sample one Volume 45 transition issue and one Volume 1 PDF, then define historical whole-issue splitting before collection.",
+    "recommended_adapter": "SelectorDrivenAdapter",
+    "implementation_notes": "Use the archive as the sole seed, preserve its displayed volume/number/year, distinguish issue-page and direct-PDF links, and enforce the /jol/ path plus ten-second host delay."
+  }
+}

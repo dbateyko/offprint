@@ -1,0 +1,176 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "yale-journal-of-health-policy-law-and-ethics",
+    "name": "Yale Journal of Health Policy, Law, and Ethics",
+    "aliases": ["YJHPLE"],
+    "canonical_url": "https://yaleconnect.yale.edu/yjhple/archive",
+    "registry_refs": [
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "wlu_mainid=686",
+        "notes": "The registry contains one Yale Connect route for this publication."
+      }
+    ],
+    "publication_scope": {
+      "host": "yaleconnect.yale.edu",
+      "path_prefix": "/yjhple/",
+      "platform": "Yale Connect / CampusGroups",
+      "repository_slug": "yjhple",
+      "notes": "Other Yale Connect organizations are out of scope."
+    }
+  },
+  "reconnaissance": {
+    "status": "needs_headless",
+    "researcher": "codex-onboard-journal",
+    "checked_at": "2026-07-14T18:12:00Z",
+    "sample_policy": {
+      "oldest_issue_checked": false,
+      "middle_issue_checked": false,
+      "newest_issue_checked": false,
+      "article_pages_checked": 0
+    },
+    "evidence": [
+      {
+        "id": "robots",
+        "url": "https://yaleconnect.yale.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T18:08:45Z",
+        "http_status": 200,
+        "content_type": "text/plain",
+        "notes": "Allows the visible archive path but disallows /*ajax_widget_new and /downloads/."
+      },
+      {
+        "id": "archive-redirect",
+        "url": "https://yaleconnect.yale.edu/yjhple/archive",
+        "role": "archive",
+        "observed_at": "2026-07-14T18:08:58Z",
+        "http_status": 302,
+        "content_type": "text/html",
+        "notes": "Redirects to the generic archive shell at /archive/?club_url=yjhple."
+      },
+      {
+        "id": "archive-shell",
+        "url": "https://yaleconnect.yale.edu/archive/?club_url=yjhple",
+        "role": "archive",
+        "observed_at": "2026-07-14T18:09:05Z",
+        "http_status": 200,
+        "content_type": "text/html; charset=utf-8",
+        "notes": "Static HTML contains only the Yale Connect loading shell and no issue, article, or PDF links. Three bounded probes found no embedded archive data or permitted API route."
+      }
+    ],
+    "notes": "Stopped after three short archive probes. The content-bearing client route appears to belong to a robots-disallowed AJAX family, so no browser or endpoint bypass was attempted."
+  },
+  "scope": {
+    "include": ["print-journal articles", "essays", "notes and comments"],
+    "exclude": ["Yale Connect group events", "membership pages", "other Yale Connect organizations"],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Publication contents could not be enumerated during the bounded static probe."
+  },
+  "site_map": {
+    "entry_points": [
+      {
+        "url": "https://yaleconnect.yale.edu/archive/?club_url=yjhple",
+        "role": "archive",
+        "evidence_ids": ["archive-redirect", "archive-shell"],
+        "notes": "Canonical shell after redirect; not yet a usable scraper seed."
+      }
+    ],
+    "route_graph": {
+      "nodes": [
+        {
+          "id": "archive-shell-node",
+          "role": "archive",
+          "notes": "Client-rendered Yale Connect archive shell."
+        }
+      ],
+      "edges": []
+    },
+    "archive_patterns": [
+      {
+        "role": "archive",
+        "url_pattern": "/archive/?club_url={publication_slug}",
+        "examples": ["https://yaleconnect.yale.edu/archive/?club_url=yjhple"],
+        "evidence_ids": ["archive-shell"],
+        "notes": "The pattern identifies the group but does not expose records in static HTML."
+      }
+    ],
+    "pagination": [
+      {
+        "scope": "archive",
+        "type": "unknown",
+        "termination": "Unknown because archive records were not present in static HTML.",
+        "pages_checked": 1,
+        "evidence_ids": ["archive-shell"],
+        "notes": "Do not probe the robots-disallowed AJAX widget route."
+      }
+    ],
+    "layout_eras": [
+      {
+        "id": "current-yale-connect-shell",
+        "label": "Current Yale Connect client shell",
+        "url_patterns": ["/archive/?club_url=yjhple"],
+        "evidence_ids": ["archive-shell"],
+        "notes": "No publication records were statically visible, so historical eras remain unsampled."
+      }
+    ]
+  },
+  "metadata_fields": {
+    "title": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No article records were visible.", "notes": ""},
+    "authors": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No article records were visible.", "notes": ""},
+    "abstract": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No article records were visible.", "notes": ""},
+    "year": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No issue records were visible.", "notes": ""},
+    "date": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No issue records were visible.", "notes": ""},
+    "volume": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No issue records were visible.", "notes": ""},
+    "issue": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No issue records were visible.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No article records were visible.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No article records were visible.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No article records were visible.", "notes": ""}
+  },
+  "file_delivery": {
+    "patterns": [],
+    "validation": {
+      "magic_bytes_checked": false,
+      "content_type_checked": false,
+      "article_vs_issue_checked": false,
+      "evidence_ids": ["archive-shell"],
+      "notes": "No permitted PDF route was discovered and no file was requested."
+    }
+  },
+  "access": {
+    "robots": [
+      {
+        "url": "https://yaleconnect.yale.edu/robots.txt",
+        "decision": "partial",
+        "checked_at": "2026-07-14T18:08:45Z",
+        "evidence_ids": ["robots"],
+        "notes": "The archive shell is allowed, but the apparent AJAX widget and /downloads/ families are disallowed."
+      }
+    ],
+    "barriers": [
+      {
+        "type": "javascript",
+        "severity": "blocking",
+        "evidence_ids": ["archive-shell"],
+        "notes": "The allowed static response contains only a loading shell."
+      },
+      {
+        "type": "robots",
+        "severity": "blocking",
+        "evidence_ids": ["robots", "archive-shell"],
+        "notes": "The likely content-bearing AJAX widget route is disallowed, so it was not probed."
+      }
+    ],
+    "politeness_notes": "Recheck robots before any browser session and do not request disallowed AJAX or download routes."
+  },
+  "verdict": {
+    "status": "needs_headless",
+    "summary": "The publication-scoped URL resolves, but only to a JavaScript loading shell; static reconnaissance cannot enumerate issues or files without touching a robots-disallowed route.",
+    "blockers": ["Client-rendered archive shell", "Apparent content route is robots-disallowed"],
+    "next_action": "Manually inspect an authorized browser session to determine whether a robots-permitted archive endpoint exists; otherwise treat the site as metadata-unavailable.",
+    "recommended_adapter": "YaleConnectArchiveAdapter (new; only if a robots-permitted endpoint is confirmed)",
+    "implementation_notes": "Do not map the host to a broad generic adapter because many Yale organizations share it."
+  }
+}

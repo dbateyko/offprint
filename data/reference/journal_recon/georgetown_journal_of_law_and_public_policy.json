@@ -1,0 +1,95 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "georgetown-journal-of-law-and-public-policy",
+    "name": "Georgetown Journal of Law & Public Policy",
+    "aliases": ["GJLPP"],
+    "canonical_url": "https://www.law.georgetown.edu/public-policy-journal/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "Georgetown Journal of Law & Public Policy", "notes": "Registry rank 122 currently duplicates the stale /in-print-2/ seed."},
+      {"source": "offprint/sitemaps/georgetown_journal_of_law_public_policy.json", "key": "georgetown_journal_of_law_public_policy.json", "notes": "Existing sitemap documents article PDF paths but retains the stale seed."}
+    ],
+    "publication_scope": {
+      "host": "www.law.georgetown.edu",
+      "path_prefix": "/public-policy-journal/",
+      "platform": "wordpress",
+      "repository_slug": "public-policy-journal",
+      "notes": "This is a WordPress subsite on a host shared with other Georgetown journals."
+    }
+  },
+  "reconnaissance": {
+    "status": "in_progress",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T14:11:41-04:00",
+    "sample_policy": {"oldest_issue_checked": false, "middle_issue_checked": false, "newest_issue_checked": true, "article_pages_checked": 1},
+    "evidence": [
+      {"id": "robots", "url": "https://www.law.georgetown.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:09:28-04:00", "http_status": 200, "content_type": "text/plain", "notes": "No rule disallows /public-policy-journal/ or its WordPress upload paths."},
+      {"id": "stale-seed", "url": "https://www.law.georgetown.edu/public-policy-journal/in-print-2/", "role": "archive", "observed_at": "2026-07-14T14:09:59-04:00", "http_status": 404, "content_type": "text/html; charset=UTF-8", "notes": "Supplied and registry seed is stale; site navigation points to /public-policy-journal/in-print/."},
+      {"id": "archive", "url": "https://www.law.georgetown.edu/public-policy-journal/in-print/", "role": "archive", "observed_at": "2026-07-14T14:10:20-04:00", "http_status": 200, "content_type": "text/html", "notes": "Live page lists issue links from volume 23 issue 2 (Summer 2025) back through volume 18 number 2 (Summer 2020), including special issues."},
+      {"id": "issue", "url": "https://www.law.georgetown.edu/public-policy-journal/in-print/volume-23-issue-2-summer-2025/", "role": "issue", "observed_at": "2026-07-14T14:11:15-04:00", "http_status": 200, "content_type": "text/html", "notes": "Issue page title encodes volume, issue, season, and year; article groups appear under Articles and Notes headings, with article landing links in content and subnavigation."},
+      {"id": "article", "url": "https://www.law.georgetown.edu/public-policy-journal/in-print/volume-23-issue-2-summer-2025/the-fiduciary-constitution-the-separation-of-powers-and-the-legal-landscape-after-sec-v-jarkesy/", "role": "article", "observed_at": "2026-07-14T14:11:31-04:00", "http_status": 200, "content_type": "text/html", "notes": "Article page exposes title in h1.abstract_alt_volume_title, authors in div.published_author, a multi-paragraph full-text/abstract lead, and a direct WordPress PDF link."},
+      {"id": "file", "url": "https://www.law.georgetown.edu/public-policy-journal/wp-content/uploads/sites/23/2026/06/23.2-Garrison-Kerkhoff-Slattery.pdf", "role": "file", "observed_at": "2026-07-14T14:11:41-04:00", "http_status": 200, "content_type": "application/pdf", "notes": "Single bounded smoke returned PDF magic bytes and 392,959 bytes; server ignored the Range header and delivered the complete article PDF."}
+    ],
+    "notes": "The live route is clear and file delivery works. Historical layout consistency remains untested because this wave intentionally stopped after the newest issue and one article."
+  },
+  "scope": {
+    "include": ["Print issues and article pages under /public-policy-journal/in-print/", "Article PDFs under /public-policy-journal/wp-content/uploads/sites/23/"],
+    "exclude": ["GJLPP Online unless separately scoped", "other Georgetown journal subsites", "editor letters and front matter unless classified"],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Require the journal path and sites/23 upload directory; do not follow generic Georgetown links."
+  },
+  "site_map": {
+    "entry_points": [{"url": "https://www.law.georgetown.edu/public-policy-journal/in-print/", "role": "archive", "evidence_ids": ["archive"], "notes": "Replace the stale /in-print-2/ registry and sitemap seeds with this route."}],
+    "route_graph": {
+      "nodes": [
+        {"id": "archive", "role": "archive", "notes": "In Print issue index."},
+        {"id": "issue", "role": "issue", "notes": "Volume/issue page grouping article links."},
+        {"id": "article", "role": "article", "notes": "HTML article page with title, byline, body/abstract lead, and PDF link."},
+        {"id": "file", "role": "file", "notes": "Direct WordPress article PDF."}
+      ],
+      "edges": [
+        {"from": "archive", "to": "issue", "method": "css_selector", "locator": "a.sub_nav_link[href*='/public-policy-journal/in-print/volume-']", "evidence_ids": ["archive"], "notes": "Anchor text carries volume, issue/special issue, season, and year."},
+        {"from": "issue", "to": "article", "method": "css_selector", "locator": "main a[href^='https://www.law.georgetown.edu/public-policy-journal/in-print/volume-']:not(.sub_nav_link)", "evidence_ids": ["issue"], "notes": "Filter out breadcrumbs and deduplicate repeated subnavigation/content links."},
+        {"from": "article", "to": "file", "method": "css_selector", "locator": "main a[href*='/public-policy-journal/wp-content/uploads/sites/23/'][href$='.pdf' i]", "evidence_ids": ["article", "file"], "notes": "Direct article PDF appears as the Continue reading link."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "issue", "url_pattern": "https://www.law.georgetown.edu/public-policy-journal/in-print/{volume-issue-slug}/", "examples": ["https://www.law.georgetown.edu/public-policy-journal/in-print/volume-23-issue-2-summer-2025/"], "evidence_ids": ["archive", "issue"], "notes": "Slugs vary for number, issue, special issue, season, and year; parse labels rather than relying only on path tokens."},
+      {"role": "article", "url_pattern": "https://www.law.georgetown.edu/public-policy-journal/in-print/{volume-issue-slug}/{article-slug}/", "examples": ["https://www.law.georgetown.edu/public-policy-journal/in-print/volume-23-issue-2-summer-2025/the-fiduciary-constitution-the-separation-of-powers-and-the-legal-landscape-after-sec-v-jarkesy/"], "evidence_ids": ["article"], "notes": "Article slug is nested beneath its issue."},
+      {"role": "file", "url_pattern": "https://www.law.georgetown.edu/public-policy-journal/wp-content/uploads/sites/23/{upload_year}/{month}/{filename}.pdf", "examples": ["https://www.law.georgetown.edu/public-policy-journal/wp-content/uploads/sites/23/2026/06/23.2-Garrison-Kerkhoff-Slattery.pdf"], "evidence_ids": ["file"], "notes": "Upload year can differ from issue year and must not be used as publication year."}
+    ],
+    "pagination": [{"scope": "In Print archive", "type": "none", "termination": "Single observed page lists visible issue navigation through volume 18 number 2.", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "No next control observed; older volumes may be absent from the live navigation."}],
+    "layout_eras": [{"id": "current-wordpress", "label": "Current Georgetown journal WordPress layout", "start_year": 2025, "end_year": 2025, "url_patterns": ["/public-policy-journal/in-print/{issue}/", "/public-policy-journal/in-print/{issue}/{article}/"], "evidence_ids": ["issue", "article"], "notes": "Only the newest issue/article layout was sampled, so the era bounds are deliberately narrow."}]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "article", "method": "css_selector", "locator": "h1.abstract_alt_volume_title", "confidence": "high", "evidence_ids": ["article"], "example": "The Fiduciary Constitution, the Separation of Powers, and the Legal Landscape After SEC v. Jarkesy", "notes": "Issue anchor text is a fallback."}], "normalization": ["collapse whitespace"], "missingness": "Present on the sampled issue and article page.", "notes": ""},
+    "authors": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "css_selector", "locator": "div.published_author", "confidence": "high", "evidence_ids": ["article"], "example": "by Frank Garrison, John Kerkhoff and Elizabeth Slattery", "notes": "Strip leading by and split conservatively."}], "normalization": ["strip leading by", "preserve display order"], "missingness": "Present on the sampled article; issue page does not expose bylines.", "notes": ""},
+    "abstract": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "css_selector", "locator": "main p before the Continue reading PDF link", "confidence": "medium", "evidence_ids": ["article"], "example": "For decades, the American people’s right to a jury trial under the Seventh Amendment was severely curtailed...", "notes": "The page contains extensive HTML full text; determine whether the opening paragraphs are an abstract or article body before labeling."}], "normalization": ["join paragraphs in order", "exclude footnote UI text"], "missingness": "Substantial text is present on the sampled page, but abstract semantics are ambiguous.", "notes": ""},
+    "year": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1.page_title", "confidence": "high", "evidence_ids": ["issue"], "example": "Volume 23, Issue 2 (Summer 2025)", "notes": "Inherit issue year; never use the PDF upload year."}], "normalization": ["emit four-digit year"], "missingness": "Present on the sampled issue heading and visible archive labels.", "notes": ""},
+    "date": {"availability": "sometimes", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "season and year in h1.page_title", "confidence": "medium", "evidence_ids": ["issue"], "example": "Summer 2025", "notes": "Season is not a precise date."}], "normalization": ["retain raw season-year"], "missingness": "Present on the sampled issue.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1.page_title matching Volume {number}", "confidence": "high", "evidence_ids": ["issue"], "example": "23", "notes": "Issue URL corroborates it."}], "normalization": ["retain numeric string"], "missingness": "Present on sampled issue and archive labels.", "notes": ""},
+    "issue": {"availability": "sometimes", "sources": [{"page_type": "issue", "method": "text_parse", "locator": "h1.page_title matching Issue or Number {value}", "confidence": "high", "evidence_ids": ["issue"], "example": "2", "notes": "Special issues require a textual value."}], "normalization": ["normalize Issue and Number labels", "preserve special issue"], "missingness": "Numeric on sampled issue; archive also contains special issues.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": ["preserve printed page range"], "missingness": "Not exposed in sampled HTML.", "notes": "PDF first-page extraction may recover it."},
+    "doi": {"availability": "unknown", "sources": [], "normalization": ["remove DOI URL prefix", "lowercase"], "missingness": "No DOI observed.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "No citation block observed in the bounded sample.", "notes": ""}
+  },
+  "file_delivery": {
+    "patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": "main a[href*='/wp-content/uploads/sites/23/'][href$='.pdf' i]", "url_pattern": "https://www.law.georgetown.edu/public-policy-journal/wp-content/uploads/sites/23/{upload_year}/{month}/{filename}.pdf", "requirements": {"referer": "not_required", "cookies": "not_required", "javascript": "not_required", "authentication": "not_required"}, "evidence_ids": ["article", "file"], "notes": "Single smoke passed; server ignored Range and returned the full small PDF."}],
+    "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": true, "evidence_ids": ["file"], "notes": "Response began %PDF-1.7; article-specific filename and landing-page context support article granularity."}
+  },
+  "access": {
+    "robots": [{"url": "https://www.law.georgetown.edu/robots.txt", "decision": "allowed", "checked_at": "2026-07-14T14:09:28-04:00", "evidence_ids": ["robots"], "notes": "No rule disallows the scoped journal or upload routes."}],
+    "barriers": [{"type": "dead_link", "severity": "degraded", "evidence_ids": ["stale-seed", "archive"], "notes": "The registry and existing sitemap seed /in-print-2/ now returns 404; /in-print/ is live."}],
+    "politeness_notes": "Robots was checked first. Requests were publication-scoped and only one small representative PDF was retrieved."
+  },
+  "verdict": {
+    "status": "in_progress",
+    "summary": "The supplied /in-print-2/ route is stale, but the live /in-print/ archive exposes issue and article pages; the sampled article has title, authors, extensive text, and a direct PDF whose smoke passed.",
+    "blockers": ["Oldest and middle issue layouts were not sampled.", "The live archive navigation visibly reaches only 2020, so earlier coverage needs a bounded discovery strategy.", "Opening article text may be full text rather than a formal abstract."],
+    "next_action": "Replace /in-print-2/ with /in-print/, sample one middle and one oldest visible issue, then run the mapped WordPress adapter with strict journal and sites/23 scope guards.",
+    "recommended_adapter": "WordPressAcademicBaseAdapter with Georgetown in-print selectors",
+    "implementation_notes": "Deduplicate issue/article links repeated in navigation and content; parse volume metadata from issue headings; use div.published_author for bylines; prefer sites/23 direct PDFs; never derive publication year from upload paths."
+  }
+}

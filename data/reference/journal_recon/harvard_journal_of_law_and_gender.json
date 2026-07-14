@@ -1,0 +1,97 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "harvard-journal-of-law-and-gender",
+    "name": "Harvard Journal of Law & Gender",
+    "aliases": ["Harvard JLG", "JLG"],
+    "canonical_url": "https://journals.law.harvard.edu/jlg/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "Harvard Journal of Law & Gender", "notes": "Registry rank 109 contains both harvardjlg.com and journals.law.harvard.edu/jlg rows."},
+      {"source": "offprint/sitemaps/harvardjlg-com.json", "key": "harvardjlg-com.json", "notes": "Existing sitemap records the Harvard Journals host as the canonical working archive."}
+    ],
+    "publication_scope": {
+      "host": "journals.law.harvard.edu",
+      "path_prefix": "/jlg/",
+      "platform": "wordpress",
+      "repository_slug": "jlg",
+      "notes": "The user-supplied harvardjlg.com host is currently HTTP Basic-auth protected; the existing registry's Harvard Journals route is public and journal-scoped."
+    }
+  },
+  "reconnaissance": {
+    "status": "metadata_only",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T14:11:50-04:00",
+    "sample_policy": {"oldest_issue_checked": true, "middle_issue_checked": true, "newest_issue_checked": true, "article_pages_checked": 0},
+    "evidence": [
+      {"id": "requested-robots", "url": "https://harvardjlg.com/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:09:28-04:00", "http_status": 401, "content_type": "text/html", "notes": "Returned HTTP Basic authentication challenge; no further requests were made to this host."},
+      {"id": "canonical-robots", "url": "https://journals.law.harvard.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:09:49-04:00", "http_status": 200, "content_type": "text/plain; charset=utf-8", "notes": "Allows public paths, disallows /wp-admin/ except admin-ajax.php, and specifies Crawl-delay: 10."},
+      {"id": "archive", "url": "https://journals.law.harvard.edu/jlg/past-volumes/", "role": "archive", "observed_at": "2026-07-14T14:11:50-04:00", "http_status": 200, "content_type": "text/html", "notes": "Single WordPress page has 43 volume/issue headings from volume 47 (2024) back to volume 26 (2003), 109 direct PDF links, and row text combining title, author(s), and first page. Several older rows lack PDF links."}
+    ],
+    "notes": "The protected vanity host is a blocker only for that route. The already-recorded canonical Harvard Journals archive is public and structurally rich, but no PDF was fetched after the bounded preflight."
+  },
+  "scope": {
+    "include": ["Print-volume table rows under /jlg/past-volumes/", "Direct PDFs under /jlg/wp-content/uploads/sites/88/"],
+    "exclude": ["Other Harvard journals on the shared host", "WordPress admin routes", "contents, boards, and front matter unless separately classified"],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Keep the /jlg/ prefix and sites/88 upload directory as independent scope guards."
+  },
+  "site_map": {
+    "entry_points": [{"url": "https://journals.law.harvard.edu/jlg/past-volumes/", "role": "archive", "evidence_ids": ["archive"], "notes": "Preferred single-page direct-PDF archive; obey the host's ten-second crawl delay."}],
+    "route_graph": {
+      "nodes": [
+        {"id": "archive", "role": "archive", "notes": "One page containing volume sections and article rows."},
+        {"id": "issue-section", "role": "issue", "notes": "h2 heading followed by a table of works."},
+        {"id": "file", "role": "file", "notes": "Most linked works go directly to WordPress PDF uploads."}
+      ],
+      "edges": [
+        {"from": "archive", "to": "issue-section", "method": "css_selector", "locator": "main h2.wp-block-heading", "evidence_ids": ["archive"], "notes": "Heading text encodes volume, optional issue, season, and year, with inconsistent case and punctuation."},
+        {"from": "issue-section", "to": "file", "method": "css_selector", "locator": "figure.wp-block-table tr td:first-child a[href$='.pdf' i]", "evidence_ids": ["archive"], "notes": "The first cell's anchor supplies title and file URL; remaining row text supplies authors and the second cell supplies starting page."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "archive", "url_pattern": "https://journals.law.harvard.edu/jlg/past-volumes/", "examples": ["https://journals.law.harvard.edu/jlg/past-volumes/"], "evidence_ids": ["archive"], "notes": "Unpaginated archive."},
+      {"role": "file", "url_pattern": "https://journals.law.harvard.edu/jlg/wp-content/uploads/sites/88/{year}/{month}/{filename}.pdf", "examples": ["https://journals.law.harvard.edu/jlg/wp-content/uploads/sites/88/2024/07/Online-Shaming-and-the-Power-of-Informal-Justice.pdf"], "evidence_ids": ["archive"], "notes": "Upload year is not necessarily publication year; older files also use legacy law.harvard.edu URLs."}
+    ],
+    "pagination": [{"scope": "past volumes archive", "type": "none", "termination": "Single page ends at volume 26, Spring 2003.", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "No next-page control observed."}],
+    "layout_eras": [
+      {"id": "wordpress-direct-pdf", "label": "WordPress table archive with direct PDFs", "start_year": 2003, "end_year": 2024, "url_patterns": ["/jlg/past-volumes/", "/jlg/wp-content/uploads/sites/88/{year}/{month}/{file}.pdf"], "evidence_ids": ["archive"], "notes": "A single page includes newest, middle, and oldest sections; link coverage becomes incomplete in older rows."}
+    ]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "archive", "method": "css_selector", "locator": "figure.wp-block-table tr td:first-child a", "confidence": "high", "evidence_ids": ["archive"], "example": "Online Shaming and the Power of Informal Justice", "notes": "Rows without links still retain styled title text."}], "normalization": ["decode entities", "collapse whitespace"], "missingness": "Visible for sampled newest, middle, and oldest rows.", "notes": ""},
+    "authors": {"availability": "sometimes", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "figure.wp-block-table tr td:first-child text after the title anchor", "confidence": "medium", "evidence_ids": ["archive"], "example": "Hadar Dancig-Rosenberg & Anat Peleg", "notes": "Parse the trailing byline conservatively; markup is not separately classed."}], "normalization": ["strip leading comma", "preserve display order"], "missingness": "Authored works expose names; contents/front matter do not.", "notes": ""},
+    "abstract": {"availability": "never", "sources": [], "normalization": ["collapse whitespace"], "missingness": "The direct-PDF archive provides no abstracts and no article landing pages were observed.", "notes": "PDF-derived abstracts may be possible later."},
+    "year": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "nearest preceding h2.wp-block-heading", "confidence": "high", "evidence_ids": ["archive"], "example": "Volume 47, Spring 2024", "notes": "Extract four-digit year from issue heading, not upload path."}], "normalization": ["emit four-digit year"], "missingness": "Visible on sampled volume headings.", "notes": ""},
+    "date": {"availability": "sometimes", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "nearest preceding h2.wp-block-heading season and year", "confidence": "medium", "evidence_ids": ["archive"], "example": "Spring 2024", "notes": "Season is less precise than a date."}], "normalization": ["retain raw season-year"], "missingness": "Season is present on most sampled headings.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "nearest preceding h2.wp-block-heading matching Volume {number}", "confidence": "high", "evidence_ids": ["archive"], "example": "47", "notes": ""}], "normalization": ["retain numeric string"], "missingness": "Present on observed headings.", "notes": ""},
+    "issue": {"availability": "sometimes", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "optional suffix after volume number in h2 heading", "confidence": "medium", "evidence_ids": ["archive"], "example": "2", "notes": "Some headings give only a volume and season."}], "normalization": ["retain numeric string when explicit"], "missingness": "Not explicit for volume 47 and several other headings.", "notes": ""},
+    "pages": {"availability": "sometimes", "sources": [{"page_type": "archive", "method": "css_selector", "locator": "figure.wp-block-table tr td:nth-child(2)", "confidence": "high", "evidence_ids": ["archive"], "example": "1", "notes": "Appears to be starting page only."}], "normalization": ["store starting page", "preserve roman numerals"], "missingness": "Present for most authored rows.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": ["remove DOI URL prefix", "lowercase"], "missingness": "No DOI observed on the archive.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "No complete citation string observed.", "notes": "Can be assembled from volume, year, and starting page after journal abbreviation policy is defined."}
+  },
+  "file_delivery": {
+    "patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "css_selector", "locator": "figure.wp-block-table tr td:first-child a[href$='.pdf' i]", "url_pattern": "https://journals.law.harvard.edu/jlg/wp-content/uploads/sites/88/{year}/{month}/{filename}.pdf", "requirements": {"referer": "unknown", "cookies": "unknown", "javascript": "not_required", "authentication": "unknown"}, "evidence_ids": ["archive"], "notes": "109 direct PDF hrefs were observed, but no file request was made in this bounded pass."}],
+    "validation": {"magic_bytes_checked": false, "content_type_checked": false, "article_vs_issue_checked": false, "evidence_ids": ["archive"], "notes": "PDF delivery and granularity remain unverified."}
+  },
+  "access": {
+    "robots": [
+      {"url": "https://harvardjlg.com/robots.txt", "decision": "unknown", "checked_at": "2026-07-14T14:09:28-04:00", "evidence_ids": ["requested-robots"], "notes": "HTTP 401 prevented reading rules; stop this host."},
+      {"url": "https://journals.law.harvard.edu/robots.txt", "decision": "partial", "checked_at": "2026-07-14T14:09:49-04:00", "evidence_ids": ["canonical-robots"], "notes": "Public paths allowed; /wp-admin/ disallowed; Crawl-delay 10."}
+    ],
+    "barriers": [
+      {"type": "login", "severity": "blocking", "evidence_ids": ["requested-robots"], "notes": "The user-supplied vanity host requires HTTP Basic authentication."},
+      {"type": "rate_limit", "severity": "degraded", "evidence_ids": ["canonical-robots"], "notes": "Canonical host requires a ten-second crawl delay."}
+    ],
+    "politeness_notes": "The protected vanity host was stopped after robots returned 401. The canonical archive was requested only after its robots check and ten-second delay."
+  },
+  "verdict": {
+    "status": "metadata_only",
+    "summary": "The requested vanity host is login-protected, but the public canonical Harvard Journals WordPress page exposes an unpaginated volume archive with direct article-PDF links and row-level title, author, year, volume, issue, and starting-page metadata.",
+    "blockers": ["harvardjlg.com robots and content are behind HTTP Basic authentication.", "No representative PDF smoke was performed.", "Older archive rows have incomplete PDF-link coverage and no abstracts."],
+    "next_action": "Use the canonical /jlg/past-volumes/ route with Crawl-delay 10, run one direct-PDF smoke, and build a table-row parser that records unlinked older works as metadata-only gaps.",
+    "recommended_adapter": "WordPressAcademicBaseAdapter with JLG past-volumes table parser",
+    "implementation_notes": "Do not use harvardjlg.com while protected. Segment rows by preceding h2 volume heading; parse title from the first-cell anchor, authors from trailing cell text, first page from the second cell, and filter contents/board records."
+  }
+}

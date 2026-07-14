@@ -1,0 +1,187 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "harvard-international-law-journal",
+    "name": "Harvard International Law Journal",
+    "aliases": ["HILJ"],
+    "canonical_url": "https://journals.law.harvard.edu/ilj/",
+    "registry_refs": [
+      {
+        "source": "data/registry/lawjournals.csv",
+        "key": "wlu_mainid=1956",
+        "notes": "Registry apex harvardilj.org no longer resolves; the working publication moved to the shared Harvard journals host."
+      }
+    ],
+    "publication_scope": {
+      "host": "journals.law.harvard.edu",
+      "path_prefix": "/ilj/",
+      "platform": "WordPress",
+      "repository_slug": "ilj",
+      "notes": "Other publications on the shared host are out of scope."
+    }
+  },
+  "reconnaissance": {
+    "status": "in_progress",
+    "researcher": "codex-onboard-journal",
+    "checked_at": "2026-07-14T18:12:00Z",
+    "sample_policy": {
+      "oldest_issue_checked": false,
+      "middle_issue_checked": false,
+      "newest_issue_checked": false,
+      "article_pages_checked": 0
+    },
+    "evidence": [
+      {
+        "id": "robots",
+        "url": "https://journals.law.harvard.edu/robots.txt",
+        "role": "robots",
+        "observed_at": "2026-07-14T18:08:45Z",
+        "http_status": 200,
+        "content_type": "text/plain; charset=utf-8",
+        "notes": "Allows /ilj/ paths and specifies Crawl-delay: 10."
+      },
+      {
+        "id": "stale-apex",
+        "url": "https://harvardilj.org/",
+        "role": "homepage",
+        "observed_at": "2026-07-14T18:08:45Z",
+        "notes": "DNS resolution failed; local sitemap history records migration to journals.law.harvard.edu/ilj/."
+      },
+      {
+        "id": "archive-page-one",
+        "url": "https://journals.law.harvard.edu/ilj/category/archives/",
+        "role": "archive",
+        "observed_at": "2026-07-14T18:12:10Z",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "notes": "First of six numbered archive pages. It contains issue posts, direct PDF links, titles, By-lines, volume/issue labels, front matter, mastheads, and a next-page link."
+      }
+    ],
+    "notes": "Stopped after the first canonical archive page when asked to finalize. Oldest, middle, and newest issue pages and PDF response behavior remain unsampled."
+  },
+  "scope": {
+    "include": ["print articles", "notes", "keynote addresses"],
+    "exclude": ["front matter", "mastheads", "tables of contents", "events and symposia pages"],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "The WIPO special edition and HILJ/HALO collaboration should be classified as supplements before inclusion."
+  },
+  "site_map": {
+    "entry_points": [
+      {
+        "url": "https://journals.law.harvard.edu/ilj/category/archives/",
+        "role": "archive",
+        "evidence_ids": ["archive-page-one"],
+        "notes": "Working publication-scoped archive after the apex migration."
+      }
+    ],
+    "route_graph": {
+      "nodes": [
+        {"id": "archive-page", "role": "archive", "notes": "Paginated list of issue posts."},
+        {"id": "issue-post", "role": "issue", "notes": "Archive post containing issue metadata and direct PDFs."},
+        {"id": "article-file", "role": "file", "notes": "Direct article PDF under the ILJ upload directory."}
+      ],
+      "edges": [
+        {
+          "from": "archive-page",
+          "to": "issue-post",
+          "method": "css_selector",
+          "locator": "article.category-archives h2 a, article.category-archives .entry-title a",
+          "evidence_ids": ["archive-page-one"],
+          "notes": "The first page embeds issue contents as well as links to issue posts."
+        },
+        {
+          "from": "issue-post",
+          "to": "article-file",
+          "method": "css_selector",
+          "locator": "article.category-archives a[href$='.pdf']",
+          "evidence_ids": ["archive-page-one"],
+          "notes": "Exclude Front Matter, Masthead, and Table of Contents link text."
+        }
+      ]
+    },
+    "archive_patterns": [
+      {
+        "role": "archive",
+        "url_pattern": "/ilj/category/archives/page/{page}/",
+        "examples": ["https://journals.law.harvard.edu/ilj/category/archives/page/2/"],
+        "evidence_ids": ["archive-page-one"],
+        "notes": "Page one omits /page/1/."
+      },
+      {
+        "role": "file",
+        "url_pattern": "/ilj/wp-content/uploads/sites/84/{filename}.pdf",
+        "examples": ["https://journals.law.harvard.edu/ilj/wp-content/uploads/sites/84/HLI204_crop-3.pdf"],
+        "evidence_ids": ["archive-page-one"],
+        "notes": "Some older file paths may add year/month segments; not yet sampled."
+      }
+    ],
+    "pagination": [
+      {
+        "scope": "print archive",
+        "type": "next_link",
+        "selector": ".nav-links a.next.page-numbers",
+        "termination": "Stop when the next link is absent; page one indicated six total pages.",
+        "pages_checked": 1,
+        "evidence_ids": ["archive-page-one"],
+        "notes": "Only page one was fetched in this bounded run."
+      }
+    ],
+    "layout_eras": [
+      {
+        "id": "observed-wordpress-archive",
+        "label": "Observed WordPress issue-post archive",
+        "start_year": 2019,
+        "end_year": 2023,
+        "url_patterns": ["/ilj/category/archives/", "/ilj/{year}/{month}/volume-{volume}-issue-{issue}/"],
+        "evidence_ids": ["archive-page-one"],
+        "notes": "Page one exposed volumes 60-63 in post bodies; menu links showed later volumes, but those pages were not sampled. Earlier archive pages remain unsampled."
+      }
+    ]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "archive", "method": "css_selector", "locator": "article.category-archives a[href$='.pdf']", "confidence": "high", "evidence_ids": ["archive-page-one"], "example": "A New Framework for Digital Taxation", "notes": "Filter non-article labels."}], "normalization": ["collapse whitespace"], "missingness": "Present for observed PDF links.", "notes": ""},
+    "authors": {"availability": "sometimes", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "article.category-archives text following 'By:'", "confidence": "medium", "evidence_ids": ["archive-page-one"], "example": "Reuven Avi-Yonah, Young Ran (Christine) Kim & Karen Sam", "notes": "Author text is not a dedicated link selector in the sampled output."}], "normalization": ["strip By prefix", "preserve author order"], "missingness": "Non-article PDFs lack by-lines.", "notes": ""},
+    "abstract": {"availability": "never", "sources": [], "normalization": [], "missingness": "No abstracts appeared on the sampled archive page.", "notes": "PDF or issue-page inspection remains untested."},
+    "year": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "issue-post date and issue URL year segment", "confidence": "high", "evidence_ids": ["archive-page-one"], "example": "2023", "notes": "Use post date only after confirming it tracks publication year."}], "normalization": ["emit four-digit year"], "missingness": "Present on sampled issue posts.", "notes": ""},
+    "date": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "article.category-archives entry date", "confidence": "medium", "evidence_ids": ["archive-page-one"], "example": "February 15, 2023", "notes": "May be a WordPress post date rather than print publication date."}], "normalization": ["emit YYYY-MM-DD when day precision exists"], "missingness": "Present on sampled issue posts.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "article.category-archives issue heading", "confidence": "high", "evidence_ids": ["archive-page-one"], "example": "63", "notes": ""}], "normalization": ["strip Volume prefix"], "missingness": "Present on sampled issue posts.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "archive", "method": "text_parse", "locator": "article.category-archives issue heading", "confidence": "high", "evidence_ids": ["archive-page-one"], "example": "2", "notes": "Special editions require a nonnumeric issue label."}], "normalization": ["strip Issue prefix", "preserve special-edition labels"], "missingness": "Present on sampled issue posts.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No page ranges were visible in the sampled archive.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "Not checked beyond the archive page.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": [], "missingness": "No recommended citations appeared on the archive page.", "notes": ""}
+  },
+  "file_delivery": {
+    "patterns": [
+      {
+        "file_type": "article_pdf",
+        "delivery": "direct",
+        "discovery_method": "css_selector",
+        "locator": "article.category-archives a[href$='.pdf']",
+        "url_pattern": "/ilj/wp-content/uploads/sites/84/{filename}.pdf",
+        "requirements": {"referer": "unknown", "cookies": "unknown", "javascript": "not_required", "authentication": "unknown"},
+        "evidence_ids": ["archive-page-one"],
+        "notes": "Links appear direct, but no PDF response was requested after the parent asked to finalize."
+      }
+    ],
+    "validation": {"magic_bytes_checked": false, "content_type_checked": false, "article_vs_issue_checked": false, "evidence_ids": ["archive-page-one"], "notes": "No file smoke was performed."}
+  },
+  "access": {
+    "robots": [
+      {"url": "https://journals.law.harvard.edu/robots.txt", "decision": "allowed", "checked_at": "2026-07-14T18:08:45Z", "evidence_ids": ["robots"], "notes": "Respect Crawl-delay: 10."}
+    ],
+    "barriers": [
+      {"type": "dead_link", "severity": "degraded", "evidence_ids": ["stale-apex"], "notes": "The registry apex harvardilj.org does not resolve; use the canonical /ilj/ path on the Harvard journals host."}
+    ],
+    "politeness_notes": "Keep all requests under /ilj/, wait at least 10 seconds between requests on the shared host, and stop pagination when next is absent."
+  },
+  "verdict": {
+    "status": "in_progress",
+    "summary": "The migrated WordPress archive exposes direct PDFs and deterministic next-link pagination, but only page one was sampled and no file response was validated.",
+    "blockers": ["Oldest and middle archive pages remain unsampled", "No PDF smoke evidence", "Legacy apex is dead"],
+    "next_action": "Sample archive pages 3 and 6 plus one issue page, then perform one article-PDF smoke while respecting the 10-second crawl delay.",
+    "recommended_adapter": "WordPressAcademicBaseAdapter with /ilj/ publication scoping",
+    "implementation_notes": "Update future routing to the canonical Harvard journals host; do not use harvardilj.org as a seed."
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "./schema.json",
+  "schema_version": "1.1.0",
+  "journal": {
+    "id": "washington-university-journal-of-law-and-policy",
+    "name": "Washington University Journal of Law & Policy",
+    "aliases": ["Washington University Journal of Law and Policy", "WUJLP"],
+    "canonical_url": "https://journals.library.wustl.edu/lawpolicy/",
+    "registry_refs": [
+      {"source": "data/registry/lawjournals.csv", "key": "Washington University Journal of Law and Policy", "notes": "Registry rank 102; legacy host is mapped as Digital Commons."},
+      {"source": "offprint/sitemaps/washington_university_journal_of_law_policy.json", "key": "washington_university_journal_of_law_policy.json", "notes": "Existing publication-scoped seed."}
+    ],
+    "publication_scope": {
+      "host": "journals.library.wustl.edu",
+      "path_prefix": "/lawpolicy/",
+      "platform": "janeway with digitalcommons legacy archive",
+      "repository_slug": "lawpolicy",
+      "notes": "The complete visible archive remains under openscholarship.wustl.edu/law_journal_law_policy/, whose issue records hand off to Janeway article pages under /lawpolicy/."
+    }
+  },
+  "reconnaissance": {
+    "status": "in_progress",
+    "researcher": "Codex journal reconnaissance",
+    "checked_at": "2026-07-14T14:11:07-04:00",
+    "sample_policy": {"oldest_issue_checked": true, "middle_issue_checked": true, "newest_issue_checked": true, "article_pages_checked": 1},
+    "evidence": [
+      {"id": "legacy-robots", "url": "https://openscholarship.wustl.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:09:28-04:00", "http_status": 200, "content_type": "text/plain", "notes": "Publication HTML is permitted; /do/ and account/submission routes are disallowed."},
+      {"id": "archive", "url": "https://openscholarship.wustl.edu/law_journal_law_policy/all_issues.html", "role": "archive", "observed_at": "2026-07-14T14:09:59-04:00", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Unpaginated legacy archive visibly lists volumes 1 through 66, ending in 2021."},
+      {"id": "issue-new", "url": "https://openscholarship.wustl.edu/law_journal_law_policy/vol66/iss1/", "role": "issue", "observed_at": "2026-07-14T14:10:20-04:00", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Thirteen div.doc records expose title, author, a legacy landing URL, and a Link to a Janeway article ID."},
+      {"id": "issue-middle", "url": "https://openscholarship.wustl.edu/law_journal_law_policy/vol33/iss1/", "role": "issue", "observed_at": "2026-07-14T14:10:21-04:00", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Middle-volume issue uses the same Digital Commons issue-list structure."},
+      {"id": "issue-old", "url": "https://openscholarship.wustl.edu/law_journal_law_policy/vol1/iss1/", "role": "issue", "observed_at": "2026-07-14T14:10:22-04:00", "http_status": 200, "content_type": "text/html; charset=UTF-8", "notes": "Oldest-volume issue remains reachable in the same archive family."},
+      {"id": "janeway-robots", "url": "https://journals.library.wustl.edu/robots.txt", "role": "robots", "observed_at": "2026-07-14T14:10:49-04:00", "http_status": 200, "content_type": "text/plain", "notes": "User-agent * is allowed across the host."},
+      {"id": "article", "url": "https://journals.library.wustl.edu/lawpolicy/article/id/1814/", "role": "article", "observed_at": "2026-07-14T14:10:58-04:00", "http_status": 200, "content_type": "text/html", "notes": "Janeway page exposes DC.Description and citation_* meta tags for title, author, affiliation, publication date, volume, issue, journal, ISSN, keywords, and PDF URL."},
+      {"id": "file", "url": "https://journals.library.wustl.edu/lawpolicy/article/id/1814/download/pdf/", "role": "file", "observed_at": "2026-07-14T14:11:07-04:00", "http_status": 200, "content_type": "application/pdf", "notes": "Single bounded smoke returned PDF magic bytes and 415,214 bytes; server ignored the Range header and delivered the complete article PDF."}
+    ],
+    "notes": "Bounded reconnaissance found a two-host migration path: Digital Commons archive and issue enumeration, then Janeway article metadata and files. Only one Janeway article page was sampled."
+  },
+  "scope": {
+    "include": ["Legacy issue and article records under /law_journal_law_policy/", "Janeway article pages and PDFs under /lawpolicy/"],
+    "exclude": ["Sibling WUSTL publications", "Digital Commons /do/ routes", "front matter unless separately classified"],
+    "supplements": "case_by_case",
+    "whole_issue_pdfs": "record_and_split_later",
+    "notes": "Require either the legacy publication slug or the Janeway /lawpolicy/ prefix; never broaden to the shared hosts."
+  },
+  "site_map": {
+    "entry_points": [{"url": "https://openscholarship.wustl.edu/law_journal_law_policy/all_issues.html", "role": "archive", "evidence_ids": ["archive"], "notes": "Deterministic complete legacy issue index."}],
+    "route_graph": {
+      "nodes": [
+        {"id": "archive", "role": "archive", "notes": "Legacy all-issues page."},
+        {"id": "issue", "role": "issue", "notes": "Digital Commons issue listing."},
+        {"id": "article", "role": "article", "notes": "Janeway article landing page."},
+        {"id": "file", "role": "file", "notes": "Janeway article PDF."}
+      ],
+      "edges": [
+        {"from": "archive", "to": "issue", "method": "css_selector", "locator": "h3.issue > a[href*='/law_journal_law_policy/vol']", "evidence_ids": ["archive"], "notes": "Issue path encodes volume and issue; heading text contains year."},
+        {"from": "issue", "to": "article", "method": "css_selector", "locator": "div.article-list div.doc a[href*='journals.library.wustl.edu/lawpolicy/article/id/']", "evidence_ids": ["issue-old", "issue-middle", "issue-new"], "notes": "The first Link in each migrated record is the Janeway target; retain the legacy title and author from the same div.doc."},
+        {"from": "article", "to": "file", "method": "css_selector", "locator": "meta[name='citation_pdf_url'][content], a[href*='/galley/'][href*='/download/']", "evidence_ids": ["article", "file"], "notes": "Read the meta content attribute first; visible Download pdf links provide a galley URL fallback."}
+      ]
+    },
+    "archive_patterns": [
+      {"role": "issue", "url_pattern": "https://openscholarship.wustl.edu/law_journal_law_policy/vol{volume}/iss{issue}/", "examples": ["https://openscholarship.wustl.edu/law_journal_law_policy/vol66/iss1/"], "evidence_ids": ["archive", "issue-new"], "notes": "Numeric volume and issue path."},
+      {"role": "article", "url_pattern": "https://journals.library.wustl.edu/lawpolicy/article/id/{id}/", "examples": ["https://journals.library.wustl.edu/lawpolicy/article/id/1814/"], "evidence_ids": ["article"], "notes": "Janeway stable article ID."},
+      {"role": "file", "url_pattern": "https://journals.library.wustl.edu/lawpolicy/article/id/{id}/download/pdf/", "examples": ["https://journals.library.wustl.edu/lawpolicy/article/id/1814/download/pdf/"], "evidence_ids": ["file"], "notes": "Canonical citation_pdf_url; galley URLs also appear in page links."}
+    ],
+    "pagination": [{"scope": "legacy all-issues archive", "type": "none", "termination": "Single response ends at volume 1.", "pages_checked": 1, "evidence_ids": ["archive"], "notes": "No next control observed."}],
+    "layout_eras": [
+      {"id": "legacy-issues", "label": "Digital Commons legacy archive and issues", "start_year": 1999, "end_year": 2021, "url_patterns": ["/law_journal_law_policy/vol{volume}/iss{issue}/"], "evidence_ids": ["issue-old", "issue-middle", "issue-new"], "notes": "Issue structure is stable across sampled volumes; displayed years begin with the predecessor-era volume 1."},
+      {"id": "janeway-articles", "label": "Janeway article and file delivery", "start_year": 2021, "end_year": 2021, "url_patterns": ["/lawpolicy/article/id/{id}/"], "evidence_ids": ["article", "file"], "notes": "Only one migrated article was sampled, so temporal coverage is not yet established."}
+    ]
+  },
+  "metadata_fields": {
+    "title": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='citation_title']@content", "confidence": "high", "evidence_ids": ["article"], "example": "Judges for British Subjects in Spanish East Florida", "notes": "Legacy issue link text is a fallback."}], "normalization": ["decode entities", "collapse whitespace"], "missingness": "Present in the sampled issue records and article page.", "notes": ""},
+    "authors": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='citation_author']@content", "confidence": "high", "evidence_ids": ["article"], "example": "M.C. Mirow", "notes": "Repeated tags should preserve order."}], "normalization": ["preserve source order"], "missingness": "Present on the sampled article; front matter may lack authors.", "notes": ""},
+    "abstract": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='DC.Description']@content", "confidence": "high", "evidence_ids": ["article"], "example": "In 1784, the sovereignty of St. Augustine and East Florida was transferred to Spain.", "notes": "og:description duplicates it."}], "normalization": ["collapse whitespace"], "missingness": "Present on the one sampled Janeway article.", "notes": ""},
+    "year": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='citation_publication_date']@content", "confidence": "high", "evidence_ids": ["article"], "example": "2021-01-01", "notes": "Extract the year."}], "normalization": ["emit four-digit year"], "missingness": "Present on the sampled page; archive headings supply a fallback.", "notes": ""},
+    "date": {"availability": "sometimes", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='citation_publication_date']@content", "confidence": "high", "evidence_ids": ["article"], "example": "2021-01-01", "notes": ""}], "normalization": ["emit YYYY-MM-DD"], "missingness": "Present on the sampled article.", "notes": ""},
+    "volume": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='citation_volume']@content", "confidence": "high", "evidence_ids": ["article"], "example": "66", "notes": "Legacy URL is a fallback."}], "normalization": ["retain numeric string"], "missingness": "Encoded in issue URLs and sampled metadata.", "notes": ""},
+    "issue": {"availability": "always", "sources": [{"page_type": "article", "method": "meta_tag", "locator": "meta[name='citation_issue']@content", "confidence": "high", "evidence_ids": ["article"], "example": "1", "notes": "Legacy URL is a fallback."}], "normalization": ["retain numeric string"], "missingness": "Encoded in issue URLs and sampled metadata.", "notes": ""},
+    "pages": {"availability": "unknown", "sources": [], "normalization": ["preserve printed range when found"], "missingness": "Not established in the bounded sample.", "notes": ""},
+    "doi": {"availability": "unknown", "sources": [], "normalization": ["remove DOI URL prefix", "lowercase"], "missingness": "No DOI observed.", "notes": ""},
+    "citation": {"availability": "unknown", "sources": [], "normalization": ["collapse whitespace"], "missingness": "Not established in the bounded sample.", "notes": ""}
+  },
+  "file_delivery": {
+    "patterns": [{"file_type": "article_pdf", "delivery": "direct", "discovery_method": "meta_tag", "locator": "meta[name='citation_pdf_url']@content", "url_pattern": "https://journals.library.wustl.edu/lawpolicy/article/id/{id}/download/pdf/", "requirements": {"referer": "not_required", "cookies": "not_required", "javascript": "not_required", "authentication": "not_required"}, "evidence_ids": ["article", "file"], "notes": "Single smoke returned a complete article PDF; Range was ignored."}],
+    "validation": {"magic_bytes_checked": true, "content_type_checked": true, "article_vs_issue_checked": true, "evidence_ids": ["file"], "notes": "PDF began %PDF-1.7; filename lawpolicy-1814-mirow.pdf and article-specific metadata identify article granularity."}
+  },
+  "access": {
+    "robots": [
+      {"url": "https://openscholarship.wustl.edu/robots.txt", "decision": "partial", "checked_at": "2026-07-14T14:09:28-04:00", "evidence_ids": ["legacy-robots"], "notes": "Use publication HTML only; /do/ is disallowed."},
+      {"url": "https://journals.library.wustl.edu/robots.txt", "decision": "allowed", "checked_at": "2026-07-14T14:10:49-04:00", "evidence_ids": ["janeway-robots"], "notes": "User-agent * Allow: /."}
+    ],
+    "barriers": [{"type": "robots", "severity": "degraded", "evidence_ids": ["legacy-robots"], "notes": "Legacy /do/ endpoints cannot be used; the all-issues route avoids them."}],
+    "politeness_notes": "Robots were checked on both hosts before journal pages. Reconnaissance was publication-scoped and downloaded only one small smoke PDF."
+  },
+  "verdict": {
+    "status": "in_progress",
+    "summary": "The journal is enumerable through a stable Digital Commons all-issues archive, but current article metadata and PDFs live on a Janeway host; the representative Janeway PDF smoke passed.",
+    "blockers": ["Only one Janeway article page was sampled.", "Existing DigitalCommonsIssueArticleHopAdapter does not yet document the cross-host Janeway handoff."],
+    "next_action": "Add a publication-scoped Janeway handoff to the mapped Digital Commons adapter, then smoke three article pages across eras without using /do/.",
+    "recommended_adapter": "DigitalCommonsIssueArticleHopAdapter with Janeway handoff",
+    "implementation_notes": "Enumerate /law_journal_law_policy/all_issues.html, retain title/author/year/volume/issue from legacy issue records, follow only /lawpolicy/article/id/ links, and prefer citation_* meta tags plus citation_pdf_url."
+  }
+}
