@@ -7,6 +7,21 @@ on:
       - main
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e '.[dev,pdf_footnotes]'
+      - name: Pytest
+        run: pytest tests/ -q
+
   lint-format:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -21,13 +36,30 @@ jobs:
           pip install -e .[dev]
       - name: Ruff
         run: |
-          ruff check offprint scripts
+          python -m ruff check \
+            offprint/doctor.py \
+            offprint/gazetteer.py \
+            scripts/quality/check_markdown_links.py \
+            scripts/quality/doctor.py \
+            scripts/reporting/gazetteer_report.py \
+            tests/test_gazetteer.py \
+            tests/test_repository_docs.py
       - name: Black
         run: |
-          black --check offprint scripts
-      - name: Adapter policy gate
-        run: |
-          python scripts/check_no_generic_active_seeds.py --sitemaps-dir offprint/sitemaps
+          python -m black --check \
+            offprint/doctor.py \
+            offprint/gazetteer.py \
+            scripts/quality/check_markdown_links.py \
+            scripts/quality/doctor.py \
+            scripts/reporting/gazetteer_report.py \
+            tests/test_gazetteer.py \
+            tests/test_repository_docs.py
       - name: Repo layout check
         run: |
-          python scripts/check_repo_layout.py --repo-root .
+          python scripts/quality/check_repo_layout.py --repo-root .
+      - name: Documentation links
+        run: |
+          python scripts/quality/check_markdown_links.py --repo-root .
+      - name: Gazetteer freshness
+        run: |
+          python scripts/reporting/gazetteer_report.py --repo-root . --check

@@ -42,7 +42,7 @@ dev = [
     "ruff>=0.1.0",
 ]
 pdf_footnotes = [
-    "pdfplumber>=0.11.0",
+    "liteparse>=1.2,<2",
     "pdfminer.six>=20231228",
     "pymupdf>=1.24.0",
     "docling>=2.78.0; python_version >= '3.10'",
@@ -50,20 +50,21 @@ pdf_footnotes = [
     "eyecite>=2.6.0",
     "spacy>=3.7.0",
     "pypdf>=4.0.0",
-    "opendataloader-pdf>=0.3.0; python_version >= '3.10'",
 ]
 hf = [
     "pyarrow>=14.0.0",
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/dbateyko/law-review-scrapers"
-"Bug Reports" = "https://github.com/dbateyko/law-review-scrapers/issues"
-"Source" = "https://github.com/dbateyko/law-review-scrapers"
+"Homepage" = "https://github.com/dbateyko/offprint"
+"Bug Reports" = "https://github.com/dbateyko/offprint/issues"
+"Source" = "https://github.com/dbateyko/offprint"
 
 [project.scripts]
 offprint = "offprint.orchestrator:main"
 offprint-cli = "offprint.command_cli:main"
+offprint-doctor = "offprint.doctor:main"
+offprint-gazetteer = "offprint.gazetteer:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

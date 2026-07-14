@@ -1,47 +1,65 @@
-# Contributor Start Here
+# Contributor Start
 
-Fast onboarding path for new contributors.
+This path gets a clean checkout to a small, validated contribution without private data or
+production infrastructure.
 
-## 1) Understand Runtime Shape (10 min)
-1. Read [`ARCHITECTURE.md`](ARCHITECTURE.md)
-2. Read [`REPO_LAYOUT.md`](REPO_LAYOUT.md)
-3. Skim adapter routing in [`../offprint/adapters/registry.py`](../offprint/adapters/registry.py)
+## 1. Install the Base Environment
 
-## 2) Understand Operations (15 min)
-1. Read [`OPERATIONS.md`](OPERATIONS.md)
-2. Skim [`OPERATOR_PLAYBOOK.md`](OPERATOR_PLAYBOOK.md) for run lifecycle and resume conventions
-3. Review canonical wrappers in [`../Makefile`](../Makefile)
-
-## 3) Understand Adapter Rules (10 min)
-1. Read [`ADAPTER_DEVELOPMENT.md`](ADAPTER_DEVELOPMENT.md)
-2. Read shared-base safety policy in [`../CONTRIBUTING.md`](../CONTRIBUTING.md)
-
-## 4) Use the Right Script for the Job
-Use [`../scripts/README.md`](../scripts/README.md), especially the workflow index table.
-
-Common first actions:
-- Coverage/status view: `python scripts/site_status_report.py --summary`
-- Preflight checks: `python scripts/run_preflight.py --sitemaps-dir sitemaps`
-- Production: `make production`
-- Resume: `make production-resume RUN_ID=<RUN_ID>`
-- Smoke validation: `python scripts/smoke_one_pdf_per_site.py`
-
-## 5) Contributor Baseline Checks
-Run before opening a PR:
 ```bash
-ruff check .
-black --check .
-make repo-layout-check
-pytest -q
-make adapter-policy-check
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e '.[dev]'
 ```
 
-## 6) Quick Triage Flow
-1. Confirm seed quality/status metadata in `sitemaps/*.json`
-2. Fingerprint candidate hosts: `python scripts/fingerprint_site.py <url>`
-3. For TODO backlog triage, use structure/evidence probes before broad smoke
-4. Only promote `todo_adapter -> active` after adapter mapping + smoke evidence
+Install `.[pdf_footnotes]` only when working on document parsing. Browser and OCR workflows
+have additional system/runtime requirements and are not needed for registry, adapter-fixture,
+or documentation changes.
 
-## Single Source of Truth Notes
-- Runtime policy, including non-DC-first posture: [`OPERATIONS.md`](OPERATIONS.md)
-- Historical snapshots and long-form run notes: [`attic/README_legacy_20260316.md`](attic/README_legacy_20260316.md)
+## 2. Check the Checkout
+
+```bash
+make doctor
+make gazetteer-check
+pytest -q tests/test_imports.py tests/test_gazetteer.py
+```
+
+Optional dependency warnings from `make doctor` are expected unless you are working on that
+capability. Required failures should be fixed before continuing.
+
+## 3. Learn the Relevant Path
+
+| Change | Read first | Typical files |
+|---|---|---|
+| Add a journal using an existing adapter | [Journal onboarding](skills/onboard-journal.md) | `offprint/sitemaps/*.json` |
+| Change scraping behavior | [Adapter development](ADAPTER_DEVELOPMENT.md) | `offprint/adapters/`, `tests/` |
+| Change registry/reporting | [Gazetteer](GAZETTEER.md) | `data/registry/`, `offprint/gazetteer.py` |
+| Change text or footnotes | [Architecture](ARCHITECTURE.md#document-lifecycle) | `offprint/pdf_footnotes/`, `tests/fixtures/` |
+| Change run behavior | [Operations](OPERATIONS.md) | `offprint/orchestrator.py`, `scripts/pipeline/` |
+
+## 4. Make a Narrow Change
+
+- Prefer sitemap `adapter_config` for isolated site differences.
+- Add a host-specific adapter when the behavior is genuinely unique.
+- Change a shared platform adapter only with regression coverage for the target and a nearby
+  existing site.
+- Keep runtime outputs, downloaded PDFs, and local paths out of the commit.
+
+## 5. Validate
+
+Run the targeted test while developing, then the repository gates:
+
+```bash
+make quality-check
+pytest -q
+```
+
+Network smoke evidence is useful for adapter changes but should not replace deterministic
+fixtures. Include the command, target, date, and result in the pull request without committing
+the downloaded corpus.
+
+## 6. Open the Change
+
+Explain the behavior changed, why the existing behavior was insufficient, what evidence
+supports the new behavior, and any expected effect on request volume or corpus inclusion.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full review contract.

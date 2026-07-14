@@ -1,119 +1,151 @@
 <p align="center">
-  <img src="./offprint.png" width="600" alt="Offprint Logo" />
+  <img src="./offprint.png" width="520" alt="Offprint" />
 </p>
 
-# Offprint V0.1
+<h1 align="center">Offprint</h1>
 
-*Offprint* *(noun)*: a reprint of an article that originally appeared as part of a larger publication.
+<p align="center">
+  A reproducible toolkit for cataloging law journals, collecting article PDFs, and extracting research-ready text and footnotes.
+</p>
 
-This repository catalogs law review journals and gathers downloadable PDFs for personal use.
+<p align="center">
+  <a href="https://github.com/dbateyko/offprint/actions/workflows/quality.yml"><img alt="quality checks" src="https://github.com/dbateyko/offprint/actions/workflows/quality.yml/badge.svg"></a>
+  <a href="./LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-1f6f5c.svg"></a>
+  <a href="https://www.python.org/"><img alt="Python 3.8+" src="https://img.shields.io/badge/python-3.8%2B-3776ab.svg"></a>
+</p>
 
-`875 domains tracked` | `112,264 PDFs landed` | `W&L Top-50: 48/50`
+Offprint joins four pieces that are usually scattered across one-off research scripts: a
+versioned journal gazetteer, site-specific acquisition adapters, auditable run manifests,
+and document parsers with explicit quality checks. It is designed for legal-research
+collections where provenance and failure accounting matter as much as download volume.
 
-`Seed -> Crawl -> PDF -> Footnotes/Text -> Dataset`
+> Offprint tracks metadata and code in Git. Downloaded PDFs and derived corpus artifacts
+> stay local and are not distributed by this repository.
 
-## Start In 10 Seconds
+## Pipeline
 
-```text
-/onboard-journal https://example.edu/law-review/
+```mermaid
+flowchart LR
+    G[Journal gazetteer] --> S[Sitemap seeds]
+    S --> A[Platform and site adapters]
+    A --> R[Run records and PDFs]
+    R --> Q[Document QC]
+    Q --> P[Text and footnote parsers]
+    P --> E[Research exports]
 ```
 
-Run this in Claude Code. If you omit the URL, the skill can pick the next unonboarded journal from the registry.
-
-Skill reference: [docs/skills/onboard-journal.md](docs/skills/onboard-journal.md)
-
-## Project Goals
-
-- Expand high-quality coverage across U.S. law review hosts.
-- Keep scraping runs reproducible, resumable, and evidence-backed.
-- Produce article-grade PDF, text, and footnote outputs for downstream research.
-- Prefer conservative filtering over false-positive article inclusion.
-
-## Coverage So Far
-
-As of **March 31, 2026** (`python3 scripts/reporting/site_status_report.py --summary`) and Top-50 evidence as of **March 26, 2026** (`artifacts/top50_coverage_report_20260326_rerun.json`):
-
-| Metric | Value |
-|---|---:|
-| Total known domains | 875 |
-| Total PDFs on disk | 112,264 |
-| Domains with adapter mapping | 92 |
-| Domains with landed PDFs | 350 |
-| Active sitemap domains | 523 |
-| Paused domains (`paused_*`) | 255 |
-| `todo_adapter` domains | 10 |
-| W&L Top-50 landed coverage | 48 / 50 |
-| W&L Top-50 non-DC missing | 0 |
-
-## Document Processing
-
-1. Quarantine non-article PDFs (high-precision QC):
-
-```bash
-python scripts/qc_quarantine_pdfs.py \
-  --pdf-root artifacts/pdfs \
-  --quarantine-root artifacts/quarantine \
-  --dry-run false
-```
-
-2. Extract footnotes and article text:
-
-```bash
-python scripts/extract_footnotes.py \
-  --pdf-root artifacts/pdfs \
-  --features legal \
-  --respect-qc-exclusions true
-
-python scripts/extract_text_jsonl.py \
-  --pdf-root artifacts/pdfs \
-  --respect-qc-exclusions true
-```
-
-More detail: [docs/FOOTNOTE_QC_WORKFLOW.md](docs/FOOTNOTE_QC_WORKFLOW.md) and [scripts/README.md](scripts/README.md).
-
-## Footnote Extraction Quality
-
-We use a Dynamic Programming (DP) sequence solver over LiteParse layouts to extract ordinal footnote streams. 
-
-As of **April 25, 2026**, the pipeline achieves high-fidelity extraction on standard text-based PDFs. Benchmarks on a 1k random sample (v3) show:
-
-| Metric | LiteParse Only | Roadmap (w/ OCR) |
+| Stage | What Offprint provides | Canonical entry point |
 |---|---|---|
-| **Articles Identified** | 672 / 1000 | 672 / 1000 |
-| **Strict-Valid (Honest)** | **84.2%** | **~95% (Est.)** |
-| **Valid with Gaps (Honest)** | **87.8%** | **~98% (Est.)** |
-| **Empty (Image-only)** | 6.5% | < 1% |
-| **Invalid (Garbled/OCR)** | 5.7% | < 2% |
+| Find | Journal names, hosts, platforms, provenance, and lifecycle state | `data/registry/lawjournals.csv` |
+| Configure | One JSON seed per crawl target | `offprint/sitemaps/` |
+| Collect | Adapter routing, polite requests, resume/retry, immutable run records | `scripts/pipeline/run_pipeline.py` |
+| Inspect | Reproducible gazetteer tables and local run/corpus reports | `scripts/reporting/` |
+| Parse | PDF QC, metadata, article text, citations, and ordinal footnotes | `scripts/processing/` |
+| Evaluate | Fixture tests, gold scoring, corpus diagnostics, and policy gates | `scripts/quality/` |
 
-*Honest Denominator:* Only includes documents identified as "articles" by `doc_policy` (excludes mastheads, TOCs, transcripts, and agendas).
+## Tracked Coverage
 
-### The OCR Frontier
-The remaining ~12% of failures are primarily:
-1. **Empty (6.5%):** Image-only scans (e.g. old volumes or scanned submissions) with zero text.
-2. **Invalid (5.7%):** Existing OCR scans with highly garbled text that LiteParse cannot reliably parse.
+These figures are generated from the versioned registry and sitemap files. They describe
+what the repository knows and can address, not what any one machine has downloaded.
 
-**Next Step:** Route these documents through the `olmOCR/vLLM` pipeline to rescue the remaining scanned articles.
+| Tracked measure | Current value |
+|---|---:|
+| Journal registry rows | 2,600 |
+| Registry rows linked to a sitemap | 1,850 |
+| Sitemap files | 1,958 |
+| Unique sitemap hosts | 839 |
+| Invalid sitemap JSON files | 0 |
 
-## Operational Lessons
+See the full [gazetteer snapshot](docs/generated/GAZETTEER_SNAPSHOT.md) for status,
+platform, source, and metadata-completeness tables. Regenerate it with `make gazetteer`.
 
-### Don't double-stack bepress hosts from one IP
+## Quickstart
 
-Bepress (Digital Commons) sites enforce rate limits at the **IP** level, not just per-host or per-circuit. The pipeline's per-host polite delay (`--dc-min-domain-delay-ms`) and per-circuit cooldown (`--dc-waf-fail-threshold`/`--dc-waf-cooldown-seconds`) only protect *within* a single host's reputation; they do nothing to limit aggregate request rate from your IP across many bepress hosts.
+The base install supports registry inspection, requests-based collection, and the unit-test
+suite. It does not require a browser, GPU, or private corpus.
 
-**What we observed (2026-05-02)**: 4 screens scraping 9 bepress hosts ran cleanly for 18+ hours. Adding a second 4-screen run (4 more bepress hosts) tripped 10 new WAF circuits within 5 minutes — and not just on the new run: previously-stable hosts in the original run also started 403'ing (BYU 29/585 fail, LMU 37/634 fail). The patched headless-Playwright fallback also fails because the WAF fingerprints beyond user-agent. Effective rule of thumb:
+```bash
+git clone https://github.com/dbateyko/offprint.git
+cd offprint
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev]'
 
-- **One ~4-worker bepress run per IP at a time**. If you need more parallelism, use distinct IPs (proxies, separate egress).
-- **Stagger when adding new bepress targets** to a running cluster: let the existing run wind down to ~1-2 active hosts before bringing more bepress online.
-- **Non-bepress (WordPress / OJS / Squarespace) is safe to stack** — those sites generally don't share an IP rep. We've run a third batch of 117 WP/OJS seeds concurrent with bepress without issue.
-- After a WAF cascade, **wait 24h** for IP reputation to clear before resuming bepress work. A cron entry one calendar day out is the cleanest pattern (`scripts/cron/flagship_batch_resume.sh` shows the shape).
+make doctor
+make gazetteer-check
+pytest -q tests/test_gazetteer.py tests/test_imports.py
+```
 
-The pipeline doesn't yet expose a global "max-concurrent-bepress-hosts" knob — feature opportunity. For now, scale your scraping fleet by *batch* not by *worker count*.
+Optional parsing dependencies are installed separately because OCR and layout packages are
+large:
 
-## Disclaimer
+```bash
+python -m pip install -e '.[pdf_footnotes]'
+```
 
-This project is for scholarly research workflows. Respect publisher terms and `robots.txt`, apply polite request behavior, and do not redistribute PDFs without verifying rights.
+## Try One Journal
 
-## Full Documentation
+Scope exploratory runs to a copied seed and temporary outputs. This example performs
+requests-based discovery for one OJS journal without downloading the entire registry:
 
-- Long-form overview moved from README: [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)
-- Documentation index: [docs/README.md](docs/README.md)
+```bash
+mkdir -p /tmp/offprint-seeds
+cp offprint/sitemaps/aalj-org.json /tmp/offprint-seeds/
+
+python scripts/pipeline/run_pipeline.py \
+  --mode full \
+  --sitemaps-dir /tmp/offprint-seeds \
+  --out-dir /tmp/offprint-pdfs \
+  --manifest-dir /tmp/offprint-runs \
+  --export-dir /tmp/offprint-exports \
+  --max-workers 1 \
+  --max-depth 1 \
+  --links-only \
+  --no-use-playwright \
+  --skip-retry-pass
+```
+
+To parse a local PDF directory after installing `pdf_footnotes`:
+
+```bash
+python scripts/processing/extract_footnotes.py \
+  --pdf-root /path/to/pdfs \
+  --features legal \
+  --ocr-mode off
+```
+
+Collection touches third-party sites. Review the seed, source terms, and request settings
+before running it; use conservative concurrency and honor backoff signals.
+
+## Start by Task
+
+| I want to... | Start here |
+|---|---|
+| Understand the system and artifact flow | [Architecture](docs/ARCHITECTURE.md) |
+| Understand journal counts and readiness | [Gazetteer and coverage](docs/GAZETTEER.md) |
+| Add or repair a journal scraper | [Adapter development](docs/ADAPTER_DEVELOPMENT.md) |
+| Run or recover a collection job | [Operations](docs/OPERATIONS.md) |
+| Work on parsing or footnotes | [Script catalog](scripts/README.md#document-processing) |
+| Make a first contribution | [Contributor start](docs/CONTRIBUTOR_START_HERE.md) |
+| Understand what may be committed or released | [Data and release policy](docs/DATA_AND_RELEASE_POLICY.md) |
+| See every maintained guide | [Documentation index](docs/README.md) |
+
+## Repository Boundaries
+
+This public repository contains the reusable package, scraper adapters, parser code,
+versioned journal metadata, tests, and reporting definitions. Runtime outputs under
+`artifacts/` are gitignored. A separate private data-operations workspace may combine local
+Offprint outputs with donated or licensed collections and research labels; it is not required
+to install, test, or contribute to Offprint.
+
+## Contributing
+
+Use focused changes with fixture-based tests and evidence for scraper behavior. Run
+`make quality-check` before opening a pull request. See [CONTRIBUTING.md](CONTRIBUTING.md)
+for setup, adapter policy, data rules, and review expectations.
+
+## Responsible Use
+
+Offprint is for scholarly research workflows. Respect publisher terms, access controls,
+copyright, and `robots.txt`; identify your client appropriately; keep request rates polite;
+and do not redistribute collected documents without verifying rights.

@@ -1,60 +1,44 @@
 # Repository Layout
 
-## Top-Level Structure
-
-```
-offprint/           Core Python package: orchestrator, adapters, PDF footnotes, coverage tools
-scripts/               Operational CLIs and maintenance tools (see scripts/README.md)
-tests/                 All executable tests and fixtures
-offprint/sitemaps/     Seed JSON configs — one per journal, source of truth for scrape targets
-data/registry/         Versioned registry CSVs and reference datasets
-docs/                  Documentation, skills, and operational playbooks
-autoresearch/          LLM-powered site discovery (placeholder — see autoresearch/README.md)
-research/              Experimental analysis projects (e.g., facial unconstitutionality scan)
-hf/                    Hugging Face dataset exports (parquet, metadata, footnotes)
-ci/                    CI configuration (coverage targets)
-.github/workflows/     GitHub Actions (quality checks, coverage gate)
-.claude/commands/      Claude Code skill definitions (local use — canonical copies in docs/skills/)
-prompts/               Agent prompt templates (used by opencode.json)
-```
-
-## Key Directories
-
-### `offprint/` — Core Package
-- `orchestrator.py` — Main CLI and PDF download orchestrator
-- `adapters/` — 60+ platform adapters (Digital Commons, OJS, WordPress, Drupal, Scholastica, etc.)
-- `adapters/registry.py` — Adapter routing by domain
-- `adapters/selector_driven.py` — CSS selector-based generic adapter
-- `pdf_footnotes/` — Footnote extraction pipeline (text extraction, segmentation, OCR, evaluation)
-- `coverage_tools/` — Quality gate and coverage validation
-- `seed_catalog.py` — Seed file management
-- `polite_requests.py` — Rate-limited HTTP with robots.txt respect
-
-### `scripts/` — Operational Tools
-Organized by workflow — see `scripts/README.md` for the full index.
-- `pipeline/` — run orchestrator, smoke crawler, baseline promotion
-- `onboarding/` — site fingerprinting + seed/adapter onboarding
-- `processing/` — QC quarantine and PDF/text/footnote/data extraction
-- `quality/` — policy/lint checks and extraction evaluation
-- `reporting/` — status and metadata coverage reporting
-
-### `docs/skills/` — Claude Code Skills
-Shareable prompt-based workflows. See `docs/skills/README.md`.
-
-## Runtime Artifacts (gitignored)
-
-```
-artifacts/             All runtime outputs
-  pdfs/                Downloaded PDFs
-  smoke/               Smoke test outputs
-  runs/                Production run manifests and reports
-  cache/http/          HTTP provenance cache
-archive/               Archived files from repo cleanups (gitignored)
+```text
+offprint/
+├── offprint/             Python package, adapters, parsers, and sitemap seeds
+│   ├── adapters/         Platform and host-specific acquisition logic
+│   ├── coverage_tools/   Completeness and sequence checks
+│   ├── pdf_footnotes/    Document policy, text, citation, and note extraction
+│   └── sitemaps/         One tracked JSON configuration per crawl target
+├── data/registry/        Public journal gazetteer and versioned upstream snapshots
+├── scripts/              Workflow-oriented command-line entry points
+│   ├── onboarding/       Fingerprint and bootstrap one site
+│   ├── pipeline/         Collect, smoke-test, resume, and promote runs
+│   ├── processing/       QC, metadata, text, footnotes, OCR, and exports
+│   ├── quality/          Evaluation, policy, doctor, and repository checks
+│   ├── reporting/        Gazetteer and local corpus/run tables
+│   └── research/         Reproducible analysis and benchmark drivers
+├── tests/                Unit, contract, regression, and fixture tests
+├── docs/                 Maintained architecture, contributor, and operations guides
+├── config/               Versioned runtime configuration
+├── references/           Small tracked research/reference inputs
+├── artifacts/            Local runtime products; gitignored
+├── pyproject.toml         Package metadata, dependencies, and tool configuration
+└── Makefile               Canonical contributor and operator commands
 ```
 
-## Policy
-- Test code goes in `tests/` only.
-- Runtime outputs go in `artifacts/` only.
-- Do not commit runtime artifacts or large binaries.
-- Seed JSON is the source of truth — one file per journal in `offprint/sitemaps/`.
-- Skills live canonically in `docs/skills/`; `.claude/commands/` is for local use.
+## Placement Rules
+
+| Item | Location | Tracked? |
+|---|---|---:|
+| Reusable Python behavior | `offprint/` | Yes |
+| User/operator CLI | Appropriate `scripts/<workflow>/` directory | Yes |
+| Journal crawl configuration | `offprint/sitemaps/` | Yes |
+| Public reference/gazetteer input | `data/registry/` | Yes |
+| Deterministic generated documentation | `docs/generated/` | Yes |
+| Tests and small fixtures | `tests/` | Yes |
+| Run records, PDFs, caches, parse outputs | `artifacts/` | No |
+| Temporary investigation output | `tmp/` or outside the repository | No |
+
+Historical scripts that no longer define supported entry points live in `scripts/archive/`.
+They may explain past outputs but should not be linked as current onboarding commands.
+
+The layout gate is `make repo-layout-check`. Data and artifact rules are detailed in
+[Data and release policy](DATA_AND_RELEASE_POLICY.md).

@@ -55,6 +55,13 @@ class OCRWorkerPool:
         server_url = os.getenv("OLMOCR_SERVER_URL", "").strip()
         if server_url:
             cmd.extend(["--server", server_url])
+        # Render resolution. olmocr's default (1288px ~= 117 DPI) leaves small
+        # law-review footnote text below the model's legibility threshold, so it
+        # silently drops bottom-of-page footnote blocks. 2048px (~185 DPI)
+        # recovers them with no token-budget risk under --max-model-len 16384.
+        target_dim = os.getenv("OLMOCR_TARGET_DIM", "").strip()
+        if target_dim:
+            cmd.extend(["--target_longest_image_dim", target_dim])
         model_name = os.getenv("OLMOCR_MODEL", "").strip()
         if model_name:
             cmd.extend(["--model", model_name])

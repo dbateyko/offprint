@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 import re
 import time
@@ -19,6 +20,8 @@ from .utils import (
     request_verify_for_url,
     validate_pdf_magic_bytes,
 )
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_HEADERS = {
     # Browser-like UA to reduce simple 403/406 blocks on journal sites.
@@ -1211,6 +1214,37 @@ class GenericAdapter(Adapter):
                 return None
 
             pdf_sha256, pdf_size_bytes = compute_pdf_sha256_and_size(path)
+
+            # Re-download dedup: when this file landed on a `-N` suffixed name
+            # (because the base name already existed on disk), the site may have
+            # served byte-identical content we already have. Skip the redundant
+            # copy instead of accreting foo-2.pdf, foo-3.pdf, ... of the same PDF.
+            existing = self._existing_identical_sibling(path, out_dir, pdf_sha256)
+            if existing is not None:
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
+                logger.info(
+                    "skipped_duplicate: %s is byte-identical to existing %s (sha256=%s)",
+                    os.path.basename(path),
+                    os.path.basename(existing),
+                    (pdf_sha256 or "")[:16],
+                )
+                self._set_download_meta(
+                    ok=True,
+                    error_type="",
+                    message=f"skipped_duplicate: identical to {os.path.basename(existing)}",
+                    status_code=status_code,
+                    content_type=content_type,
+                    pdf_sha256=pdf_sha256,
+                    pdf_size_bytes=pdf_size_bytes,
+                    waf_action=str(waf_action or ""),
+                    download_method="requests",
+                    skipped_duplicate=True,
+                )
+                return existing
+
             self._set_download_meta(
                 ok=True,
                 error_type="",
@@ -1315,6 +1349,44 @@ class GenericAdapter(Adapter):
             candidate = f"{base}-{counter}{ext}"
             counter += 1
         return candidate
+
+    def _existing_identical_sibling(
+        self, path: str, out_dir: str, sha256: Optional[str]
+    ) -> Optional[str]:
+        """Return an already-present byte-identical file this download duplicates.
+
+        ``_ensure_unique_filename`` renames re-downloads that collide with an
+        existing name to ``<stem>-2.pdf``, ``<stem>-3.pdf``, ... — even when the
+        bytes are identical to the file already on disk. That accretes redundant
+        copies (one essay was stored 9x) and, downstream, stamps many distinct
+        filenames with one PDF's metadata.
+
+        Given the freshly written ``path`` (which carries a ``-N`` suffix,
+        N>=2, only when the base name pre-existed), compare its sha256 against
+        the un-suffixed base and the lower-numbered siblings. Return the first
+        byte-identical existing file, or ``None`` when this download is new
+        content (including a legitimately different ``-N`` article variant,
+        which will not be byte-identical).
+        """
+        if not sha256:
+            return None
+        fname = os.path.basename(path)
+        base, ext = os.path.splitext(fname)
+        m = re.match(r"^(.*)-(\d+)$", base)
+        if not m or int(m.group(2)) < 2:
+            # No dedup suffix was applied; nothing pre-existing to compare to.
+            return None
+        stem = m.group(1)
+        cur = int(m.group(2))
+        candidates = [f"{stem}{ext}"] + [f"{stem}-{k}{ext}" for k in range(2, cur)]
+        for cand in candidates:
+            cand_path = os.path.join(out_dir, cand)
+            if cand_path == path or not os.path.exists(cand_path):
+                continue
+            cand_sha, _ = compute_pdf_sha256_and_size(cand_path)
+            if cand_sha and cand_sha == sha256:
+                return cand_path
+        return None
 
     def _clean_filename(self, filename: str) -> str:
         filename = filename.split("?")[0].split("#")[0]

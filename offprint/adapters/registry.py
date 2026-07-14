@@ -92,15 +92,47 @@ def register_many(domains: list[str], adapter_cls: Type[Adapter] | Adapter) -> N
 
 
 def _find_sitemap_for_url(url: str) -> Optional[Dict]:
-    import os, json, glob
-    for sdir in ["offprint/sitemaps", "offprint/sitemaps/from_nav_maps", "../adapter-autoresearch-pack/sitemaps", "../adapter-autoresearch-pack/sitemaps/from_nav_maps"]:
-        if not os.path.exists(sdir): continue
+    import glob
+    import json
+    import os
+
+    def normalized(candidate: str) -> str:
+        parsed = urlparse(candidate)
+        host = (parsed.netloc or "").lower()
+        if host.startswith("www."):
+            host = host[4:]
+        path = (parsed.path or "/").rstrip("/") or "/"
+        return f"{host}{path}"
+
+    search_dirs = (
+        "offprint/sitemaps",
+        "offprint/sitemaps/from_nav_maps",
+        "../adapter-autoresearch-pack/sitemaps",
+        "../adapter-autoresearch-pack/sitemaps/from_nav_maps",
+    )
+    for sdir in search_dirs:
+        if not os.path.exists(sdir):
+            continue
         for spath in glob.glob(os.path.join(sdir, "*.json")):
             try:
-                with open(spath, encoding="utf-8") as f: data = json.load(f)
-                if any(u in url for u in (data.get("start_urls") or [])) or data.get("metadata", {}).get("url") == url:
+                with open(spath, encoding="utf-8") as handle:
+                    data = json.load(handle)
+                raw_start_urls = data.get("start_urls") or []
+                candidates = (
+                    [raw_start_urls]
+                    if isinstance(raw_start_urls, str)
+                    else list(raw_start_urls)
+                )
+                metadata = data.get("metadata") or {}
+                candidates.extend(
+                    candidate
+                    for candidate in (data.get("url"), metadata.get("url"))
+                    if candidate
+                )
+                if normalized(url) in {normalized(candidate) for candidate in candidates}:
                     return data
-            except: continue
+            except (AttributeError, OSError, TypeError, json.JSONDecodeError):
+                continue
     return None
 
 
@@ -109,7 +141,6 @@ def pick_adapter_for(
     session: Optional[requests.Session] = None,
     allow_generic: bool = True,
 ) -> Adapter:
-    import os, json, glob
     parsed = urlparse(url)
     host = (parsed.netloc or "").lower()
     path = (parsed.path or "").lower()
@@ -136,6 +167,8 @@ def pick_adapter_for(
             if session and hasattr(cls_or_inst, "session"): cls_or_inst.session = session
             return cls_or_inst
     if host == "escholarship.org" or host.endswith(".escholarship.org"): return EScholarshipAdapter(session=session)
+    # Every *.scholasticahq.com subdomain is a Scholastica-hosted journal.
+    if host.endswith(".scholasticahq.com"): return ScholasticaBaseAdapter(session=session)
     if any(sub in host for sub in ["digitalcommons.", "scholarlycommons.", "scholarship.", "scholarworks.", "engagedscholarship.", "repository.", "uknowledge.", "via.library.", "ir.lawnet.", "commons.", "academicworks.", "archives."]):
         return DigitalCommonsIssueArticleHopAdapter(session=session)
     if allow_generic:
@@ -443,6 +476,10 @@ register("jlsp.law.columbia.edu", WordPressAcademicBaseAdapter)
 register("digitalcommons.law.uga.edu", DigitalCommonsIssueArticleHopAdapter)
 register("digitalcommons.osgoode.yorku.ca", DigitalCommonsIssueArticleHopAdapter)
 register("digitalcommons.schulichlaw.dal.ca", DigitalCommonsIssueArticleHopAdapter)
+# bepress/Digital Commons repos whose host prefix (docs./scholars.) is too
+# generic for the substring heuristic above — register explicitly.
+register("docs.rwu.edu", DigitalCommonsIssueArticleHopAdapter)
+register("scholars.unh.edu", DigitalCommonsIssueArticleHopAdapter)
 register("scholarlycommons.law.northwestern.edu", DigitalCommonsIssueArticleHopAdapter)
 register("law.emory.edu", DigitalCommonsIssueArticleHopAdapter)
 register("law.ku.edu", DrupalAdapter)

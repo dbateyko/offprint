@@ -144,7 +144,7 @@ Adapter hierarchy:
 
 ### Orchestrator Pipeline
 
-Entry point: `scripts/run_pipeline.py --mode {full|delta|retry}`
+Entry point: `scripts/pipeline/run_pipeline.py --mode {full|delta|retry}`
 
 Flow: load seeds from `sitemaps/*.json` → create timestamped run_id → parallel worker threads per seed → adapter selection → discovery → download with retry (max 3, exponential backoff) → PDF validation (magic bytes + SHA-256) → write JSONL records/errors/stats to `artifacts/runs/<run_id>/`.
 
@@ -178,11 +178,9 @@ Each run produces in `artifacts/runs/<run_id>/`:
 
 `offprint/pdf_footnotes/`: OCR + footnote parsing pipeline, legal citation classification, QC filtering. Requires `[pdf_footnotes]` optional deps.
 
-**Docling-primary extraction**: The pipeline uses docling as the sole text source for footnote extraction. Docling produces clean text without the small-caps mangling issues seen in pdfplumber/pdftotext (e.g., "U. PA. L. REV." rendered correctly instead of garbled). Key details:
-
-1. `_normalize_docling_text()` cleans docling's systematic spacing artifacts at extraction time: spaces before punctuation, spaced reporter citations (`A. 2 d` → `A.2d`), star-page spacing, etc.
-2. `_split_merged_note_lines()` handles docling's one known weakness — occasionally merging consecutive short notes into a single text block (e.g., "25 Id. 26 See..."). The splitter detects sentence-ending punctuation followed by a new numeric label and splits them.
-3. Fallback: if docling is unavailable, the pipeline falls back to pdfplumber/pypdf for the main pipeline or pdftotext for the standalone script (`scripts/extract_footnotes_from_docling.py`).
+LiteParse layout extraction plus the dynamic-programming sequence solver is the
+canonical text-footnote path. OCR is an optional rescue stage for scanned or
+pathological PDFs; pdfplumber is limited to guarded geometry/fallback roles.
 
 ### Metadata Extraction Stages
 

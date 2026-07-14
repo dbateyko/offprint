@@ -1,10 +1,12 @@
-import pytest
+import importlib
+
 
 def test_core_imports():
-    from offprint import orchestrator
-    from offprint import command_cli
-    from offprint.adapters import registry
-    
+    for module in ("offprint.orchestrator", "offprint.command_cli", "offprint.adapters.registry"):
+        importlib.import_module(module)
+
+
 def test_registry_loads_without_error():
-    from offprint.adapters.registry import ADAPTER_REGISTRY
-    assert isinstance(ADAPTER_REGISTRY, dict)
+    from offprint.adapters.registry import ADAPTERS
+
+    assert isinstance(ADAPTERS, dict)

@@ -17,6 +17,7 @@ Usage:
 The script prints (and writes to ``/tmp/<batch_id>_launch.sh``) the screen
 commands. Pass ``--launch`` to actually start them.
 """
+
 from __future__ import annotations
 import argparse
 import datetime as dt
@@ -28,10 +29,7 @@ from pathlib import Path
 
 import pandas as pd
 
-ROOT = Path("/mnt/shared_storage/law-review-corpus")
-WORKLIST = ROOT / "catalog" / "scrape_worklist.csv"
-SITEMAPS = ROOT / "offprint" / "offprint" / "sitemaps"
-OFFPRINT = ROOT / "offprint"
+DEFAULT_ROOT = Path(os.environ.get("OFFPRINT_ROOT", "/mnt/shared_storage/law-review-corpus"))
 
 BEPRESS_PATTERNS = re.compile(
     r"(digitalcommons\.|scholarship\.|scholarlycommons\.|scholarworks\.|"
@@ -50,7 +48,7 @@ def is_bepress(host: str, platform: str) -> bool:
 
 SCRIPT_TEMPLATE = """#!/usr/bin/env bash
 set -u
-cd /mnt/shared_storage/law-review-corpus/offprint
+cd {offprint_dir}
 export LRS_VERBOSE_PDF_LOG=0
 export LRS_MAX_BROWSERS=1
 export LRS_WORDPRESS_FAST_MODE=1
@@ -78,44 +76,66 @@ exec timeout --kill-after=60s {wall_clock} python3 scripts/pipeline/run_pipeline
 
 def main() -> None:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--root", type=Path, default=DEFAULT_ROOT)
     ap.add_argument("--batch-id", required=True, help="Short ID, e.g. 'b1' or '20260504'")
-    ap.add_argument("--worklist", type=Path, default=WORKLIST)
-    ap.add_argument("--max-bepress-screens", type=int, default=4,
-                    help="Cap on concurrent bepress-targeted screens (WAF safety)")
+    ap.add_argument("--worklist", type=Path)
+    ap.add_argument(
+        "--max-bepress-screens",
+        type=int,
+        default=4,
+        help="Cap on concurrent bepress-targeted screens (WAF safety)",
+    )
     ap.add_argument("--max-other-screens", type=int, default=12)
     ap.add_argument("--seeds-per-screen", type=int, default=7)
-    ap.add_argument("--well-covered-threshold", type=int, default=200,
-                    help="Pipeline-side per-host skip threshold")
-    ap.add_argument("--wall-clock", default="4h")
-    ap.add_argument("--out-dir", default="artifacts/scraped_v2",
-                    help="Where the pipeline writes downloaded PDFs (host-level subdirs)")
-    ap.add_argument("--launch", action="store_true",
-                    help="Actually start the screens (default: write scripts only)")
-    ap.add_argument("--screen-prefix", default="sc",
-                    help="Screen name prefix (e.g. 'sc' -> sc_a, sc_b, ...)")
-    args = ap.parse_args()
-
-    df = pd.read_csv(args.worklist)
-    df = df[df.recommendation == "scrape"].copy()
-    df["is_bepress"] = df.apply(
-        lambda r: is_bepress(str(r.host), str(r.platform)), axis=1
+    ap.add_argument(
+        "--well-covered-threshold",
+        type=int,
+        default=200,
+        help="Pipeline-side per-host skip threshold",
     )
+    ap.add_argument("--wall-clock", default="4h")
+    ap.add_argument(
+        "--out-dir",
+        default="artifacts/scraped_v2",
+        help="Where the pipeline writes downloaded PDFs (host-level subdirs)",
+    )
+    ap.add_argument(
+        "--launch",
+        action="store_true",
+        help="Actually start the screens (default: write scripts only)",
+    )
+    ap.add_argument(
+        "--screen-prefix", default="sc", help="Screen name prefix (e.g. 'sc' -> sc_a, sc_b, ...)"
+    )
+    args = ap.parse_args()
+    root = args.root.expanduser().resolve()
+    worklist = args.worklist or root / "catalog" / "scrape_worklist.csv"
+    sitemaps = root / "offprint" / "offprint" / "sitemaps"
+    offprint_dir = root / "offprint"
+
+    df = pd.read_csv(worklist)
+    df = df[df.recommendation == "scrape"].copy()
+    df["is_bepress"] = df.apply(lambda r: is_bepress(str(r.host), str(r.platform)), axis=1)
 
     bepress = df[df.is_bepress].sort_values(["host", "slug"])
     other = df[~df.is_bepress].sort_values(["host", "slug"])
 
     print(f"Worklist: {len(df)} eligible ({len(bepress)} bepress, {len(other)} other)")
 
-    bepress_screens_n = min(args.max_bepress_screens,
-                            (len(bepress) + args.seeds_per_screen - 1) // args.seeds_per_screen)
-    other_screens_n = min(args.max_other_screens,
-                          (len(other) + args.seeds_per_screen - 1) // args.seeds_per_screen)
+    bepress_screens_n = min(
+        args.max_bepress_screens,
+        (len(bepress) + args.seeds_per_screen - 1) // args.seeds_per_screen,
+    )
+    other_screens_n = min(
+        args.max_other_screens, (len(other) + args.seeds_per_screen - 1) // args.seeds_per_screen
+    )
     bepress_take = bepress_screens_n * args.seeds_per_screen
     other_take = other_screens_n * args.seeds_per_screen
-    print(f"  scheduling {bepress_screens_n} bepress screens "
-          f"({min(bepress_take, len(bepress))} seeds)")
-    print(f"  scheduling {other_screens_n} other screens "
-          f"({min(other_take, len(other))} seeds)")
+    print(
+        f"  scheduling {bepress_screens_n} bepress screens "
+        f"({min(bepress_take, len(bepress))} seeds)"
+    )
+    print(f"  scheduling {other_screens_n} other screens " f"({min(other_take, len(other))} seeds)")
 
     bepress_seeds = bepress.head(bepress_take).sitemap_file.tolist()
     other_seeds = other.head(other_take).sitemap_file.tolist()
@@ -131,26 +151,30 @@ def main() -> None:
         for chunk_start in range(0, len(seeds), args.seeds_per_screen):
             letter = next(letter_iter)
             screen_name = f"{args.screen_prefix}_{letter}"
-            chunk = seeds[chunk_start: chunk_start + args.seeds_per_screen]
+            chunk = seeds[chunk_start : chunk_start + args.seeds_per_screen]
             screen_dir = batch_root / letter
             screen_dir.mkdir(exist_ok=True)
             for sf in chunk:
-                src = SITEMAPS / sf
+                src = sitemaps / sf
                 if src.exists():
                     shutil.copy(src, screen_dir / sf)
             run_id = f"{ts}_{args.batch_id}_{letter}"
             script_path = batch_root / f"run_{letter}.sh"
-            script_path.write_text(SCRIPT_TEMPLATE.format(
-                wall_clock=args.wall_clock,
-                sitemaps_dir=str(screen_dir),
-                out_dir=args.out_dir,
-                run_id=run_id,
-                well_covered=args.well_covered_threshold,
-            ))
+            script_path.write_text(
+                SCRIPT_TEMPLATE.format(
+                    offprint_dir=offprint_dir,
+                    wall_clock=args.wall_clock,
+                    sitemaps_dir=str(screen_dir),
+                    out_dir=args.out_dir,
+                    run_id=run_id,
+                    well_covered=args.well_covered_threshold,
+                )
+            )
             script_path.chmod(0o755)
             log_path = batch_root / f"{letter}.log"
-            launch_cmd = (f'screen -dmS {screen_name} bash -lc '
-                          f'"{script_path} 2>&1 | tee {log_path}"')
+            launch_cmd = (
+                f"screen -dmS {screen_name} bash -lc " f'"{script_path} 2>&1 | tee {log_path}"'
+            )
             plan_lines.append(f"# {label} chunk {letter}: {len(chunk)} seeds -> {screen_name}")
             plan_lines.append(launch_cmd)
 
@@ -170,9 +194,8 @@ def main() -> None:
             if line.startswith("screen "):
                 subprocess.run(line, shell=True, check=True)
         print("Verifying...")
-        out = subprocess.check_output(
-            ["screen", "-ls"], text=True, stderr=subprocess.STDOUT)
-        print("\n".join(l for l in out.splitlines() if args.screen_prefix in l))
+        out = subprocess.check_output(["screen", "-ls"], text=True, stderr=subprocess.STDOUT)
+        print("\n".join(line for line in out.splitlines() if args.screen_prefix in line))
     else:
         print("\nTo launch: bash " + str(plan_path))
 

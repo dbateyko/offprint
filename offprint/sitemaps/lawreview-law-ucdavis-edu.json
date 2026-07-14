@@ -9,6 +9,9 @@
     "platform": "unknown",
     "url": "https://lawreview.law.ucdavis.edu/",
     "created_date": "2026-03-26",
-    "status": "active"
+    "status": "paused_waf",
+    "status_reason": "zero-PDF triage 2026-06-09T23:04:51Z: seed unreachable (status=403 )",
+    "status_updated_at": "2026-06-09T23:04:51Z",
+    "status_evidence_ref": "inventory/triage_zero_pdf_seeds.py"
   }
 }

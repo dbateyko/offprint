@@ -1,78 +1,71 @@
 # Contributing
 
-Thanks for contributing to Law Review Scrapers.
+Offprint welcomes focused improvements to journal coverage, acquisition reliability,
+document parsing, quality evaluation, and public metadata.
 
-## Project Focus
-This repository prioritizes production scraping reliability:
-- accurate PDF discovery/download,
-- metadata quality,
-- completeness validation,
-- resilient operations (retry/resume/auditability).
+## Setup
 
-## Development Setup
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-pip install -e .[dev] responses playwright
-playwright install chromium
+python -m pip install --upgrade pip
+python -m pip install -e '.[dev]'
+make doctor
 ```
 
-## Required Checks
+For parser work, also install `python -m pip install -e '.[pdf_footnotes]'`. For browser
+fallback work, install Playwright separately and run `playwright install chromium`.
+
+## Before a Pull Request
+
 ```bash
-ruff check .
-black --check .
+make quality-check
 pytest -q
-make adapter-policy-check
 ```
 
-## Monitored Runtime Workflow
-- Use `make production-monitored` for headed, operator-supervised runs (manual captcha/auth handoff).
-- Pause with `Ctrl+C` and resume with `make production-monitored-resume RUN_ID=<RUN_ID>`.
-- Prefer resume over fresh reruns to preserve incremental progress and avoid duplicate load.
+The quality target checks the repository-facing Python tooling, repository layout, maintained
+documentation links, generated gazetteer freshness, and its focused tests. Run the full test
+suite separately.
 
-## Code Guidelines
-- Python 3.8+ with type hints.
-- Prefer small composable functions and explicit failure handling.
-- Keep adapter logic deterministic and traceable.
-- Preserve compatibility contracts unless intentionally versioned.
+## Choose the Smallest Extension Point
 
-## Adding a New Journal (Easiest Contribution)
+1. Adjust sitemap metadata or `adapter_config` for one target.
+2. Add a host-specific adapter for genuinely unique behavior.
+3. Change a shared platform adapter only when the behavior generalizes.
 
-The fastest way to contribute is to onboard a journal that isn't covered yet:
+Shared adapter changes must include regression tests for the target and at least one nearby
+existing-family behavior. Keep routing deterministic, failures structured, and request
+behavior observable.
 
-- **With Claude Code**: Run `/onboard-journal <url>` — it handles everything. See `docs/skills/README.md` for setup.
-- **With Python scripts**: Run `python scripts/auto_onboard_site.py --url <url>`, then smoke test and submit a PR.
+## Add a Journal
 
-## Adapter Workflow
-1. Add/modify adapter in `offprint/adapters/`.
-2. Register routing in `offprint/adapters/registry.py` when needed.
-3. Add/update sitemap seed in `sitemaps/` with required status metadata:
-   - `metadata.status` (`active`, `todo_adapter`, `paused_404`, `paused_waf`, `paused_login`, `paused_paywall`, `paused_other`)
-   - `metadata.status_reason`
-   - `metadata.status_updated_at` (ISO UTC)
-   - `metadata.status_evidence_ref`
-4. For unresolved/deferred hosts, set `metadata.status=todo_adapter` instead of relying on runtime generic fallback.
-5. Add tests in `tests/`.
-6. Validate with targeted smoke run when touching discovery/download paths.
+Follow [the journal-onboarding guide](docs/skills/onboard-journal.md). A contribution should
+include:
 
-### Shared Base Adapter Policy (Required)
-- Do **not** make direct changes to shared base adapters (for example `WordPressAcademicBaseAdapter`, `DigitalCommonsIssueArticleHopAdapter`, `OJSAdapter`, `DrupalAdapter`) to fix a single site.
-- Preferred order:
-  1. site-level tuning in sitemap metadata,
-  2. host-specific adapter,
-  3. shared-base change only if necessary.
-- If a shared-base change is unavoidable, keep it domain-guarded where possible and include regression tests for both:
-  - the target host behavior, and
-  - nearby existing-family behavior.
+- a sitemap JSON with identity, platform, lifecycle status, and evidence;
+- adapter routing or configuration when the existing route does not fit;
+- a deterministic fixture test for new logic; and
+- dated smoke evidence for the live target when feasible.
 
-## Pull Request Expectations
-- Use focused, reviewable PRs.
-- Describe what changed, why, and expected operational impact.
-- Include relevant run/report evidence when behavior changes.
-- Do not include generated runtime artifacts (`pdfs/`, `runs/`, `cache/http/`).
+Do not mark a target successful merely because its homepage responds. The smoke must exercise
+article discovery and PDF validation.
 
-## Security and Compliance
-- Never commit credentials or tokens.
-- Respect publisher terms and `robots.txt`.
-- Keep request rates polite and honor backoff signals.
+## Parser Changes
+
+Use real-layout regression fixtures or minimal synthetic documents that reproduce the failure.
+Report which denominator changes: document qualification, native extraction, OCR routing,
+note ordinality, or field coverage. Avoid aggregate quality claims that mix non-articles,
+scans, and parser failures.
+
+## Data and Security
+
+- Never commit credentials, cookies, browser profiles, or tokens.
+- Do not commit downloaded PDFs, corpus text, run caches, or large runtime logs.
+- Document provenance for registry inputs and small evaluation fixtures.
+- Respect publisher terms, `robots.txt`, access controls, and backoff signals.
+- Review [data and release policy](docs/DATA_AND_RELEASE_POLICY.md) before adding datasets.
+
+## Review Notes
+
+Describe what changed, why, test and smoke evidence, operational impact, and any migration or
+rerun required. Keep commits scoped and do not include unrelated generated artifacts.

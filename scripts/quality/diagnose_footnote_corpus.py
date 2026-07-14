@@ -474,17 +474,37 @@ def build_report(pdf_root: str, non_article_inventory: str = "") -> dict[str, An
     article_valid_with_gaps = by_doc_type.get("article", {}).get("valid_with_gaps", 0)
     article_invalid = by_doc_type.get("article", {}).get("invalid", 0)
     article_zero_note = by_doc_type.get("article", {}).get("zero_note", 0)
-    # Numerator counts only strictly valid (no gaps, non-zero notes) articles.
-    # Denominator: all docs classified as article. Zero-note articles are NOT free.
-    article_strict_valid = article_valid - sum(
-        1
-        for d in docs
-        if d.doc_type == "article"
-        and d.ordinality_status == "valid"
-        and d.note_count == 0
+    # Honest strict-valid: zero-gap, non-zero-note articles, computed from
+    # gap_count DIRECTLY so the number is robust to any cosmetic-gap promotion
+    # baked into the stored ordinality_status. Denominator: all article docs
+    # (zero-note articles are NOT free).
+    article_docs = [d for d in docs if d.doc_type == "article"]
+    article_strict_valid = sum(
+        1 for d in article_docs
+        if d.note_count > 0 and d.gap_count == 0 and d.ordinality_status != "invalid"
+    )
+    # Inclusive validity: strict-valid PLUS near-miss (valid_with_gaps) articles.
+    article_incl_valid = sum(
+        1 for d in article_docs
+        if d.note_count > 0 and d.ordinality_status in ("valid", "valid_with_gaps")
+    )
+    # Promotion sensitivity: how many extra docs a cosmetic-gap promotion
+    # (<=2 gaps in a >=10-note stream) would shift INTO strict-valid. Surfaced
+    # so the headline's dependence on that knob is explicit, never silent.
+    article_promoted_extra = sum(
+        1 for d in article_docs
+        if d.note_count > 0 and 0 < d.gap_count <= 2 and d.note_count >= 10
+        and d.ordinality_status != "invalid"
     )
     article_validity_rate = (
         round(article_strict_valid / article_total * 100, 2) if article_total else 0.0
+    )
+    article_incl_rate = (
+        round(article_incl_valid / article_total * 100, 2) if article_total else 0.0
+    )
+    article_promoted_rate = (
+        round((article_strict_valid + article_promoted_extra) / article_total * 100, 2)
+        if article_total else 0.0
     )
     # "Total validity" over all docs under article_only policy, where frontmatter/other
     # zero-note docs are counted as valid (not a failure of extraction).
@@ -519,7 +539,12 @@ def build_report(pdf_root: str, non_article_inventory: str = "") -> dict[str, An
         "article_invalid": article_invalid,
         "article_zero_note": article_zero_note,
         "article_validity_rate_pct": article_validity_rate,
+        "article_inclusive_valid": article_incl_valid,
+        "article_inclusive_rate_pct": article_incl_rate,
+        "article_promoted_extra": article_promoted_extra,
+        "article_promoted_rate_pct": article_promoted_rate,
         "corpus_validity_rate_pct": corpus_validity_rate,
+        "corpus_total_docs": len(docs),
     }
 
     return report
@@ -683,14 +708,20 @@ def _print_summary(report: dict[str, Any]) -> None:
             )
         print()
     if asc:
-        print("ARTICLE-SCOPED VALIDITY (strict; zero-note articles not counted as valid)")
-        print(f"  article total:           {asc['article_total']}")
-        print(f"  strict valid:            {asc['article_strict_valid']}")
-        print(f"  valid_with_gaps:         {asc['article_valid_with_gaps']}")
-        print(f"  invalid:                 {asc['article_invalid']}")
-        print(f"  zero-note articles:      {asc['article_zero_note']}")
-        print(f"  article_validity_rate:   {asc['article_validity_rate_pct']}%")
-        print(f"  corpus_validity_rate:    {asc['corpus_validity_rate_pct']}% (frontmatter/other zero-note counted valid)")
+        at = asc['article_total']
+        print("VALIDITY (denominators shown — no single number is 'the headline')")
+        print(f"  article docs (denominator):   {at}")
+        print(f"  strict-valid (zero gaps):     {asc['article_strict_valid']:>5}  "
+              f"= {asc['article_validity_rate_pct']}% of articles")
+        print(f"  + near-miss (>=valid_w_gaps): {asc['article_inclusive_valid']:>5}  "
+              f"= {asc['article_inclusive_rate_pct']}% of articles (inclusive)")
+        print(f"    [cosmetic-gap promotion would add {asc.get('article_promoted_extra', 0)} "
+              f"to strict -> {asc.get('article_promoted_rate_pct', 0)}%; OFF by default]")
+        print(f"  invalid:                      {asc['article_invalid']:>5}")
+        print(f"  zero-note articles:           {asc['article_zero_note']:>5}")
+        print(f"  ALL-DOCS corpus validity:     {asc['corpus_validity_rate_pct']}% "
+              f"of {asc.get('corpus_total_docs', '?')} docs "
+              f"(frontmatter/other zero-note counted valid)")
         print()
 
     worst = report.get("worst_domains_by_invalid_rate", [])
