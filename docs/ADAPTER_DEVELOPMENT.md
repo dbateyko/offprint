@@ -62,7 +62,7 @@ pytest -q
 
 When touching discovery/download logic, also run a targeted smoke pass:
 ```bash
-python scripts/smoke_one_pdf_per_site.py --target-file <targets.txt> --limit 10
+python scripts/pipeline/smoke_one_pdf_per_site.py --target-file <targets.txt> --limit 10
 ```
 
 ## Operational Notes

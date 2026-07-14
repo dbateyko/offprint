@@ -1,30 +1,43 @@
-# Documentation Index
+# Documentation
 
-Start here for contributor navigation. This index is task-oriented and points to canonical docs.
+Use this page as the task-oriented index for maintained Offprint documentation.
 
-## Start Here
-- [`PROJECT_OVERVIEW.md`](PROJECT_OVERVIEW.md): long-form project context and workflows moved out of the root README.
-- [`CONTRIBUTOR_START_HERE.md`](CONTRIBUTOR_START_HERE.md): fastest onboarding sequence.
-- [`DEVELOPER_WORKFLOW.md`](DEVELOPER_WORKFLOW.md): local setup, quality gates, and daily workflow.
-- [`REPO_LAYOUT.md`](REPO_LAYOUT.md): current repository structure and artifact policy.
+## Understand
 
-## Run and Operate
-- [`OPERATIONS.md`](OPERATIONS.md): canonical run commands, resume/recovery, and quality checks.
-- [`FOOTNOTE_FULL_CORPUS_AUDIT.md`](FOOTNOTE_FULL_CORPUS_AUDIT.md): full-corpus footnote audit contract, denominator accounting, and OCR backlog routing.
-- [`OPERATOR_PLAYBOOK.md`](OPERATOR_PLAYBOOK.md): operator workflows and practical run lifecycle guidance.
+| Document | What it answers |
+|---|---|
+| [Architecture](ARCHITECTURE.md) | How registry, seeds, adapters, run records, QC, and parsers fit together |
+| [Gazetteer and coverage](GAZETTEER.md) | What a journal row or status means and how coverage tables are generated |
+| [Repository layout](REPO_LAYOUT.md) | Where code, tracked metadata, tests, and local artifacts belong |
+| [Project overview](PROJECT_OVERVIEW.md) | Longer project history, goals, and operational context |
 
-## Build and Extend
-- [`ARCHITECTURE.md`](ARCHITECTURE.md): orchestrator + adapter architecture.
-- [`ADAPTER_DEVELOPMENT.md`](ADAPTER_DEVELOPMENT.md): adapter implementation and testing policy.
-- [`scripts/README.md`](../scripts/README.md): workflow-indexed script catalog.
-- [`skills/README.md`](skills/README.md): Claude Code skills (onboard-journal, probe-selectors, etc.).
+## Start and Contribute
 
-## Data and Backlogs
-- [`data/registry/README.md`](../data/registry/README.md): versioned registry/reference datasets.
-- [`registry/input/README.md`](registry/input/README.md): canonical registry input datasets used by scripts.
-- [`ADAPTER_BACKLOG.md`](ADAPTER_BACKLOG.md): adapter backlog policy and triage context.
+| Document | What it answers |
+|---|---|
+| [Contributor start](CONTRIBUTOR_START_HERE.md) | The shortest path from clone to first validated change |
+| [Developer workflow](DEVELOPER_WORKFLOW.md) | Environment setup and daily quality gates |
+| [Contributing](../CONTRIBUTING.md) | Review expectations, adapter safety, and data rules |
+| [Adapter development](ADAPTER_DEVELOPMENT.md) | How to add or change discovery logic safely |
+| [Journal onboarding](skills/onboard-journal.md) | Evidence required to add one journal seed |
 
-## Historical
-- [`OPERATIONS_LOG.md`](OPERATIONS_LOG.md): pointer to archived long-form operations history.
-- [`archive/OPERATIONS_LOG_legacy.md`](archive/OPERATIONS_LOG_legacy.md): historical session logs and snapshots.
-- [`attic/README_legacy_20260316.md`](attic/README_legacy_20260316.md): legacy snapshot references.
+## Run and Evaluate
+
+| Document | What it answers |
+|---|---|
+| [Operations](OPERATIONS.md) | Canonical collection, resume, retry, and promotion commands |
+| [Operator playbook](OPERATOR_PLAYBOOK.md) | Supervised run lifecycle and recovery decisions |
+| [Script catalog](../scripts/README.md) | Which maintained CLI handles each workflow |
+| [Footnote corpus audit](FOOTNOTE_FULL_CORPUS_AUDIT.md) | Parser-quality denominators, audit outputs, and OCR routing |
+
+## Govern and Plan
+
+| Document | What it answers |
+|---|---|
+| [Data and release policy](DATA_AND_RELEASE_POLICY.md) | What is tracked, local-only, or suitable for release |
+| [GitHub repository roadmap](GITHUB_REPOSITORY_ROADMAP.md) | Design rationale, phases, and success measures for the repository surface |
+| [Gazetteer snapshot](generated/GAZETTEER_SNAPSHOT.md) | Current generated status, platform, source, and completeness tables |
+
+Long session logs and superseded instructions are historical evidence, not current runbooks.
+When a historical document conflicts with this index or the Makefile, use the maintained
+document and executable command as authoritative.

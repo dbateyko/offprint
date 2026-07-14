@@ -135,9 +135,10 @@ stale coverage tables.
 
 After the repository surface is stable:
 
-1. publish versioned gazetteer releases with machine-readable checksums;
-2. add a lightweight static coverage site generated from the same reporting module;
-3. expose normalized article records through a documented export schema;
-4. add per-platform fixture-based adapter contract tests; and
-5. report parser quality by document era, scan status, and journal platform rather than only
+1. pay down the existing repository-wide Ruff and Black baseline, then expand the lint gate;
+2. publish versioned gazetteer releases with machine-readable checksums;
+3. add a lightweight static coverage site generated from the same reporting module;
+4. expose normalized article records through a documented export schema;
+5. add per-platform fixture-based adapter contract tests; and
+6. report parser quality by document era, scan status, and journal platform rather than only
    as an aggregate.
