@@ -4,7 +4,12 @@ import csv
 import json
 from pathlib import Path
 
-from offprint.gazetteer import build_snapshot, main, render_markdown
+from offprint.gazetteer import (
+    build_snapshot,
+    main,
+    render_journal_catalog,
+    render_markdown,
+)
 
 
 def _write_registry(path: Path) -> None:
@@ -80,6 +85,22 @@ def test_snapshot_counts_and_normalizes_platforms(tmp_path: Path) -> None:
     rendered = render_markdown(snapshot)
     assert "| Journal registry rows | 2 |" in rendered
     assert "active (inferred)" in rendered
+
+    catalog = render_journal_catalog(
+        [
+            {
+                "journal_name": "Example | Review",
+                "host": "law.example.edu",
+                "url": "https://law.example.edu/review",
+                "platform": "digital_commons",
+                "status": "active",
+                "sitemap_file": "example.json",
+            }
+        ]
+    )
+    assert "Example \\| Review" in catalog
+    assert "[law.example.edu](https://law.example.edu/review)" in catalog
+    assert "../../offprint/sitemaps/example.json" in catalog
 
 
 def test_check_mode_detects_stale_snapshot(tmp_path: Path) -> None:

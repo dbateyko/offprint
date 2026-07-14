@@ -8,6 +8,7 @@ offprint/
 │   ├── pdf_footnotes/    Document policy, text, citation, and note extraction
 │   └── sitemaps/         One tracked JSON configuration per crawl target
 ├── data/registry/        Public journal gazetteer and versioned upstream snapshots
+├── data/reference/       Small tracked research and onboarding references
 ├── scripts/              Workflow-oriented command-line entry points
 │   ├── onboarding/       Fingerprint and bootstrap one site
 │   ├── pipeline/         Collect, smoke-test, resume, and promote runs
@@ -18,7 +19,6 @@ offprint/
 ├── tests/                Unit, contract, regression, and fixture tests
 ├── docs/                 Maintained architecture, contributor, and operations guides
 ├── config/               Versioned runtime configuration
-├── references/           Small tracked research/reference inputs
 ├── artifacts/            Local runtime products; gitignored
 ├── pyproject.toml         Package metadata, dependencies, and tool configuration
 └── Makefile               Canonical contributor and operator commands
@@ -37,7 +37,8 @@ offprint/
 | Run records, PDFs, caches, parse outputs | `artifacts/` | No |
 | Temporary investigation output | `tmp/` or outside the repository | No |
 
-Historical scripts that no longer define supported entry points live in `scripts/archive/`.
+Historical scripts and diagnostics that no longer define supported entry points live in
+`scripts/archive/`.
 They may explain past outputs but should not be linked as current onboarding commands.
 
 The layout gate is `make repo-layout-check`. Data and artifact rules are detailed in

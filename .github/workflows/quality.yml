@@ -39,20 +39,26 @@ jobs:
           python -m ruff check \
             offprint/doctor.py \
             offprint/gazetteer.py \
+            offprint/holdings.py \
             scripts/quality/check_markdown_links.py \
             scripts/quality/doctor.py \
             scripts/reporting/gazetteer_report.py \
+            scripts/reporting/holdings_report.py \
             tests/test_gazetteer.py \
+            tests/test_holdings.py \
             tests/test_repository_docs.py
       - name: Black
         run: |
           python -m black --check \
             offprint/doctor.py \
             offprint/gazetteer.py \
+            offprint/holdings.py \
             scripts/quality/check_markdown_links.py \
             scripts/quality/doctor.py \
             scripts/reporting/gazetteer_report.py \
+            scripts/reporting/holdings_report.py \
             tests/test_gazetteer.py \
+            tests/test_holdings.py \
             tests/test_repository_docs.py
       - name: Repo layout check
         run: |

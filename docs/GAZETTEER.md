@@ -8,7 +8,8 @@ configuration state. It is a discovery and planning index, not a claim that ever
 been scraped.
 
 The generated [gazetteer snapshot](generated/GAZETTEER_SNAPSHOT.md) converts this table and
-the sitemap directory into readable GitHub tables.
+the sitemap directory into readable GitHub tables. The generated
+[journal catalog](generated/JOURNAL_CATALOG.md) exposes the individual rows for browsing.
 
 ```bash
 make gazetteer        # rewrite the committed snapshot

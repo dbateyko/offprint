@@ -7,6 +7,7 @@ Use this page as the task-oriented index for maintained Offprint documentation.
 | Document | What it answers |
 |---|---|
 | [Architecture](ARCHITECTURE.md) | How registry, seeds, adapters, run records, QC, and parsers fit together |
+| [Inventory](INVENTORY.md) | Which journals are known and which PDF records are held locally |
 | [Gazetteer and coverage](GAZETTEER.md) | What a journal row or status means and how coverage tables are generated |
 | [Repository layout](REPO_LAYOUT.md) | Where code, tracked metadata, tests, and local artifacts belong |
 | [Project overview](PROJECT_OVERVIEW.md) | Longer project history, goals, and operational context |
@@ -37,6 +38,8 @@ Use this page as the task-oriented index for maintained Offprint documentation.
 | [Data and release policy](DATA_AND_RELEASE_POLICY.md) | What is tracked, local-only, or suitable for release |
 | [GitHub repository roadmap](GITHUB_REPOSITORY_ROADMAP.md) | Design rationale, phases, and success measures for the repository surface |
 | [Gazetteer snapshot](generated/GAZETTEER_SNAPSHOT.md) | Current generated status, platform, source, and completeness tables |
+| [Journal catalog](generated/JOURNAL_CATALOG.md) | Searchable list of all known journals and crawl configurations |
+| [Holdings snapshot](generated/HOLDINGS_BY_JOURNAL.md) | Operational PDF-record counts grouped by journal or collection |
 
 Long session logs and superseded instructions are historical evidence, not current runbooks.
 When a historical document conflicts with this index or the Makefile, use the maintained

@@ -65,6 +65,7 @@ offprint = "offprint.orchestrator:main"
 offprint-cli = "offprint.command_cli:main"
 offprint-doctor = "offprint.doctor:main"
 offprint-gazetteer = "offprint.gazetteer:main"
+offprint-holdings = "offprint.holdings:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

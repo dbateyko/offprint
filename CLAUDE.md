@@ -32,7 +32,7 @@ When working with large datasets (millions of rows), use streaming/chunked loadi
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt && pip install -e .[dev] responses playwright && playwright install chromium
+pip install -e '.[dev]' playwright && playwright install chromium
 ```
 
 ## Common Commands
