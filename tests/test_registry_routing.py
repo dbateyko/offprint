@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 from offprint.adapters import UnmappedAdapterError, pick_adapter_for
+from offprint.adapters.registry import _find_sitemap_for_url
 
 
 @pytest.mark.parametrize(
@@ -31,3 +32,17 @@ def test_scholastica_marketing_host_is_not_a_journal() -> None:
     # rule only matches subdomains, so it must still block under the prod gate.
     with pytest.raises(UnmappedAdapterError):
         pick_adapter_for("https://scholasticahq.com/", allow_generic=False)
+
+
+def test_selector_lookup_matches_top_level_url_and_ignores_www(tmp_path, monkeypatch) -> None:
+    sitemaps = tmp_path / "offprint/sitemaps"
+    sitemaps.mkdir(parents=True)
+    (sitemaps / "journal.json").write_text(
+        '{"id":"journal","url":"https://example.edu/"}', encoding="utf-8"
+    )
+    monkeypatch.chdir(tmp_path)
+
+    sitemap = _find_sitemap_for_url("https://www.example.edu/")
+
+    assert sitemap is not None
+    assert sitemap["id"] == "journal"
