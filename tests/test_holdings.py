@@ -56,3 +56,18 @@ def test_holdings_deduplicate_and_infer_journal(tmp_path: Path) -> None:
     assert holdings[0].file_present is True
     summary = render_summary(holdings, invalid)
     assert "| Example Law Review | 1 | 1 | 1 | 2024 | repository.example.edu |" in summary
+
+
+def test_holdings_supplement_filesystem_only_pdfs(tmp_path: Path) -> None:
+    _write_registry(tmp_path / "data/registry/lawjournals.csv")
+    pdf_dir = tmp_path / "artifacts/pdfs/repository.example.edu"
+    pdf_dir.mkdir(parents=True)
+    (pdf_dir / "historical.pdf").write_bytes(b"%PDF-1.4\n")
+
+    holdings, invalid = load_holdings(tmp_path, tmp_path / "artifacts/runs")
+
+    assert invalid == 0
+    assert len(holdings) == 1
+    assert holdings[0].journal == "Example Law Review"
+    assert holdings[0].context == "filesystem"
+    assert holdings[0].file_present is True

@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import re
+from datetime import datetime, timezone
 from collections import defaultdict
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -133,7 +134,9 @@ def _holding_score(holding: Holding) -> tuple[int, int, int, int]:
     )
 
 
-def load_holdings(repo_root: Path, runs_dir: Path) -> tuple[list[Holding], int]:
+def load_holdings(
+    repo_root: Path, runs_dir: Path, pdf_root: Optional[Path] = None
+) -> tuple[list[Holding], int]:
     registry_index = build_registry_index(
         load_registry(repo_root / "data/registry/lawjournals.csv")
     )
@@ -184,6 +187,47 @@ def load_holdings(repo_root: Path, runs_dir: Path) -> tuple[list[Holding], int]:
                 existing = holdings.get(identity)
                 if existing is None or _holding_score(holding) > _holding_score(existing):
                     holdings[identity] = holding
+
+    # Historical corpus files can outlive their run manifests.  Supplement the
+    # record-derived view from the host-partitioned PDF store so those files are
+    # still represented (with filename-only metadata) rather than silently
+    # disappearing from the holdings report.
+    pdf_root = pdf_root or (repo_root / "artifacts/pdfs")
+    if pdf_root.exists():
+        recorded_paths = {
+            str(Path(item.local_path).resolve())
+            for item in holdings.values()
+            if item.local_path
+        }
+        for host_dir in pdf_root.iterdir():
+            if not host_dir.is_dir():
+                continue
+            host = _host(host_dir.name)
+            if not host:
+                continue
+            for path in host_dir.glob("*.pdf"):
+                resolved = str(path.resolve())
+                if resolved in recorded_paths:
+                    continue
+                relative = path.relative_to(repo_root) if path.is_relative_to(repo_root) else path
+                retrieved = datetime.fromtimestamp(
+                    path.stat().st_mtime, tz=timezone.utc
+                ).isoformat().replace("+00:00", "Z")
+                holding = Holding(
+                    journal=infer_journal(host, (), registry_index),
+                    host=host,
+                    context="filesystem",
+                    title="",
+                    authors="",
+                    year="",
+                    pdf_url="",
+                    local_path=str(relative),
+                    file_present=True,
+                    pdf_sha256="",
+                    retrieved_at=retrieved,
+                )
+                holdings[f"path:{resolved}"] = holding
+                recorded_paths.add(resolved)
 
     return (
         sorted(holdings.values(), key=lambda item: (item.journal.casefold(), item.title)),
@@ -243,7 +287,9 @@ def render_summary(holdings: Sequence[Holding], invalid_lines: int) -> str:
             "",
             "## Reading This Table",
             "",
-            "- Records are deduplicated by PDF SHA-256, then by URL or local path when no hash exists.",
+            "- Records are deduplicated by PDF SHA-256, then by URL or local path when no hash exists;",
+            "  PDFs found in the host-partitioned corpus without a surviving run record are included",
+            "  as filesystem-only entries with blank title/author/year metadata.",
             "- Journal names are matched from registry host/path metadata. Ambiguous collections are",
             "  labeled with their repository context and host rather than forced to the wrong journal.",
             "- `Present at recorded path` is a filesystem check at report time. A recorded download may",
