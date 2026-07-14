@@ -32,7 +32,7 @@ def _clean(value: object) -> str:
     return str(value or "").strip()
 
 
-def _normalized_platform(value: object) -> str:
+def normalized_platform(value: object) -> str:
     raw = _clean(value)
     if not raw:
         return "Unspecified"
@@ -84,7 +84,7 @@ def build_snapshot(registry_path: Path, sitemaps_dir: Path) -> GazetteerSnapshot
     rows = load_registry(registry_path)
     registry_hosts = {_clean(row.get("host")) for row in rows if _clean(row.get("host"))}
     registry_statuses = Counter(_clean(row.get("status")) or "(missing)" for row in rows)
-    registry_platforms = Counter(_normalized_platform(row.get("platform")) for row in rows)
+    registry_platforms = Counter(normalized_platform(row.get("platform")) for row in rows)
     registry_sources = Counter(_clean(row.get("source")) or "(missing)" for row in rows)
 
     registry_missing = {
@@ -224,32 +224,87 @@ def render_markdown(snapshot: GazetteerSnapshot) -> str:
     return "\n".join(lines)
 
 
+def _escape_cell(value: object) -> str:
+    return _clean(value).replace("|", "\\|").replace("\n", " ")
+
+
+def render_journal_catalog(rows: Sequence[Mapping[str, str]]) -> str:
+    sorted_rows = sorted(
+        rows,
+        key=lambda row: (
+            _clean(row.get("journal_name")).casefold(),
+            _clean(row.get("host")).casefold(),
+        ),
+    )
+    lines = [
+        "# Journal Catalog",
+        "",
+        "> Generated from `data/registry/lawjournals.csv`. Use your browser's find command",
+        "> to search by journal, host, platform, or status.",
+        "",
+        f"**{len(sorted_rows):,} registry rows** are shown. A row means Offprint knows about",
+        "the journal; it does not establish that an article has been downloaded. See",
+        "[Gazetteer and Coverage](../GAZETTEER.md) for the stage definitions.",
+        "",
+        "| Journal | Host | Platform | Status | Crawl configuration |",
+        "|---|---|---|---|---|",
+    ]
+    for row in sorted_rows:
+        journal = _escape_cell(row.get("journal_name")) or "(unnamed)"
+        host = _escape_cell(row.get("host")) or "(missing)"
+        url = _clean(row.get("url"))
+        host_cell = f"[{host}]({url})" if url.startswith(("http://", "https://")) else host
+        platform = _escape_cell(normalized_platform(row.get("platform")))
+        status = _escape_cell(row.get("status")) or "(missing)"
+        sitemap = _clean(row.get("sitemap_file"))
+        sitemap_cell = (
+            f"[`{_escape_cell(sitemap)}`](../../offprint/sitemaps/{sitemap})" if sitemap else "-"
+        )
+        lines.append(f"| {journal} | {host_cell} | {platform} | {status} | {sitemap_cell} |")
+    lines.append("")
+    return "\n".join(lines)
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Build the tracked Offprint gazetteer snapshot")
     parser.add_argument("--repo-root", type=Path, default=Path("."))
     parser.add_argument("--out", type=Path, default=Path("docs/generated/GAZETTEER_SNAPSHOT.md"))
+    parser.add_argument(
+        "--catalog-out", type=Path, default=Path("docs/generated/JOURNAL_CATALOG.md")
+    )
     parser.add_argument(
         "--check", action="store_true", help="Fail if the output is missing or stale"
     )
     args = parser.parse_args(argv)
 
     root = args.repo_root.resolve()
-    rendered = render_markdown(
-        build_snapshot(root / "data/registry/lawjournals.csv", root / "offprint/sitemaps")
-    )
+    registry_path = root / "data/registry/lawjournals.csv"
+    rendered = render_markdown(build_snapshot(registry_path, root / "offprint/sitemaps"))
+    catalog_rendered = render_journal_catalog(load_registry(registry_path))
     output = args.out if args.out.is_absolute() else root / args.out
+    catalog_output = args.catalog_out if args.catalog_out.is_absolute() else root / args.catalog_out
 
     if args.check:
-        if not output.exists() or output.read_text(encoding="utf-8") != rendered:
-            print(f"Gazetteer snapshot is stale: {output}")
+        stale = [
+            path
+            for path, expected in ((output, rendered), (catalog_output, catalog_rendered))
+            if not path.exists() or path.read_text(encoding="utf-8") != expected
+        ]
+        if stale:
+            print("Gazetteer outputs are stale:")
+            for path in stale:
+                print(f"- {path}")
             print("Run: make gazetteer")
             return 1
-        print(f"Gazetteer snapshot is current: {output}")
+        print(f"Gazetteer outputs are current: {output}, {catalog_output}")
         return 0
 
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(rendered, encoding="utf-8")
+    catalog_output.parent.mkdir(parents=True, exist_ok=True)
+    catalog_output.write_text(catalog_rendered, encoding="utf-8")
     print(f"Wrote {output}")
+    print(f"Wrote {catalog_output}")
     return 0
 
 

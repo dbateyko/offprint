@@ -10,6 +10,7 @@ and default paths resolve consistently. Commands that need only tracked metadata
 |---|---|---|
 | `python scripts/quality/doctor.py` | Check checkout, registry, sitemap JSON, imports, and writable outputs | tracked-only |
 | `python scripts/reporting/gazetteer_report.py` | Generate the committed registry/sitemap Markdown tables | tracked-only |
+| `python scripts/reporting/holdings_report.py` | Generate local per-journal counts and article-level CSV from run records | local artifacts |
 | `python scripts/quality/check_markdown_links.py` | Validate local links in maintained docs | tracked-only |
 | `python scripts/quality/check_repo_layout.py --repo-root .` | Enforce repository placement policy | tracked-only |
 | `python scripts/quality/check_no_generic_active_seeds.py --sitemaps-dir offprint/sitemaps` | Enforce adapter-routing policy | tracked-only |
@@ -74,6 +75,7 @@ runtime services described in [Operations](../docs/OPERATIONS.md).
 | Command | Purpose |
 |---|---|
 | `python scripts/reporting/site_status_report.py --summary` | Join sitemaps, routes, local PDFs, and recent run state |
+| `python scripts/reporting/holdings_report.py` | Inventory deduplicated downloaded records by journal and article metadata |
 | `python scripts/reporting/metadata_quality_report.py ...` | Report title/author/volume/date coverage by domain |
 | `python scripts/research/aggregate_corpus_audit.py ...` | Aggregate document-audit shards |
 | `python scripts/research/bench_holdout_1k.py ...` | Evaluate parser behavior on a holdout sample |
