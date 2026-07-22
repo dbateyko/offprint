@@ -1,3 +1,9 @@
+> **SUPERSEDED (stamped 2026-07-22).** The headline **81.6% strict-valid**
+> figure in this guide is denominator-inflated: `REVIEW_2026-06-09.md` §A1
+> showed it filters the denominator and applies two hardcoded relabel rules.
+> Do not quote it. This guide also predates the 2026-07-06 cross-page
+> note-boundary fix and the 204,060-PDF corpus. Retained for provenance.
+
 # Handoff: next steps for the footnote extractor
 
 State as of this handoff (see `offprint/pdf_footnotes/README.md` for full detail):
