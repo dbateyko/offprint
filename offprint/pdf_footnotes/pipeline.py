@@ -72,6 +72,7 @@ class FootnoteProfile:
 @dataclass
 class BatchConfig:
     pdf_root: str
+    pdf_list: str | None = None
     features: str = "legal"
     workers: int = 6
     classifier_workers: int = 6
@@ -328,6 +329,37 @@ def _path_in_shard(pdf_path: str, shard_count: int, shard_index: int) -> bool:
     return bucket == shard_index
 
 
+def _read_pdf_list(pdf_list: str, pdf_root: str) -> list[str]:
+    """Read an explicit newline-delimited PDF list.
+
+    Targeted re-extraction needs to touch a named subset (e.g. the ~10.9k
+    articles carrying repository furniture) without walking, and re-parsing,
+    all 204k PDFs. Relative paths resolve against pdf_root. Blank lines and
+    "#" comments are ignored. Missing paths raise rather than being skipped
+    silently -- a truncated target list must not look like a completed run.
+    """
+    resolved: list[str] = []
+    missing: list[str] = []
+    with open(pdf_list, encoding="utf-8") as fh:
+        for raw in fh:
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            path = line if os.path.isabs(line) else os.path.join(pdf_root, line)
+            path = os.path.abspath(path)
+            if os.path.exists(path):
+                resolved.append(path)
+            else:
+                missing.append(path)
+    if missing:
+        preview = ", ".join(missing[:5])
+        raise ValueError(
+            f"pdf_list {pdf_list}: {len(missing)} listed PDFs do not exist "
+            f"(first: {preview})"
+        )
+    return resolved
+
+
 def _discover_pdfs(
     pdf_root: str,
     limit: int = 0,
@@ -336,8 +368,22 @@ def _discover_pdfs(
     shard_index: int = 0,
     shuffle: bool = False,
     shuffle_seed: int | None = None,
+    pdf_list: str | None = None,
 ) -> list[str]:
     discovered: list[str] = []
+    if pdf_list:
+        # Sharding still applies, so a targeted run parallelizes exactly like a
+        # full one (process-level shards, --workers 1 each: the
+        # footnote_optimized path is thread-unsafe).
+        for pdf_path in _read_pdf_list(pdf_list, pdf_root):
+            if _path_in_shard(pdf_path, shard_count=shard_count, shard_index=shard_index):
+                discovered.append(pdf_path)
+        discovered.sort()
+        if shuffle:
+            import random as _rng
+
+            _rng.Random(shuffle_seed).shuffle(discovered)
+        return discovered[:limit] if limit and limit > 0 else discovered
     for root, _dirs, files in os.walk(pdf_root):
         for filename in sorted(files):
             if not filename.lower().endswith(".pdf"):
@@ -2305,6 +2351,7 @@ def run_batch(config: BatchConfig) -> dict[str, Any]:
         shard_index=int(config.shard_index),
         shuffle=bool(config.shuffle),
         shuffle_seed=config.shuffle_seed,
+        pdf_list=(config.pdf_list or None),
     )
     dependency_versions_payload = dependency_versions()
     report_detail = (config.report_detail or "summary").strip().lower()

@@ -140,6 +140,16 @@ def _parse_args() -> argparse.Namespace:
         help="Enable/disable text extraction caching (default: on)",
     )
     parser.add_argument(
+        "--pdf-list",
+        default="",
+        help=(
+            "Newline-delimited file of PDF paths to process instead of walking "
+            "--pdf-root. Relative paths resolve against --pdf-root. Use for "
+            "targeted re-extraction of a named subset; sharding, --limit and "
+            "--shuffle still apply. Missing paths are an error, not a skip."
+        ),
+    )
+    parser.add_argument(
         "--shard-count",
         type=int,
         default=1,
@@ -209,6 +219,7 @@ def main() -> None:
     _warn_legacy_paths(args)
     config = BatchConfig(
         pdf_root=args.pdf_root,
+        pdf_list=(args.pdf_list or None),
         features=args.features,
         workers=args.workers,
         classifier_workers=args.classifier_workers,
