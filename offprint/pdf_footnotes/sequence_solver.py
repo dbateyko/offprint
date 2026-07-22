@@ -1309,6 +1309,7 @@ def build_note_records(layouts: list, result: SolverResult):
     empty here — author-note (asterisk/dagger) handling stays in the segmenter
     path and runs as a supplementary pass.
     """
+    from .note_segment import _strip_ocr_repository_artifacts
     from .schema import NoteRecord
 
     if not result.selected_candidates:
@@ -1400,6 +1401,16 @@ def build_note_records(layouts: list, result: SolverResult):
                 if first.isascii() and first.isdigit() and int(first) == cand.digit_value:
                     text_parts[0] = " ".join(lead_tokens[1:])
         text = " ".join(part for part in text_parts if part).strip()
+        # Strip repository/OCR page furniture (bepress footers, SSRN/DOI
+        # banners, repository URLs). The heuristic segmenter has always done
+        # this (note_segment._segment_page) and so does the OCR path, but this
+        # solver path -- the canonical one -- bypassed the segmenter wholesale
+        # and silently lost the cleanup with it. Measured 2026-07-22: ~291k
+        # rows of the v2h corpus carry bottom-of-page repository furniture,
+        # which the labeler splits into citations that exist nowhere in the
+        # source. Label decisions still belong to the solver; only the text is
+        # cleaned here.
+        text = _strip_ocr_repository_artifacts(text)
         page_end = int(collected[-1].page_number) if collected else cand.page
         notes.append(
             NoteRecord(
