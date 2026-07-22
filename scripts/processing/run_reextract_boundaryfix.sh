@@ -29,6 +29,10 @@ PY="${PY:-$ROOT/offprint/.venv/bin/python}"
 EXTRACT="$ROOT/offprint/scripts/processing/extract_footnotes.py"
 MANIFEST="${QC_MANIFEST:-$ROOT/offprint/artifacts/runs/ocr_protection_exclusions_20260710.jsonl}"
 SHARDS="${SHARDS:-6}"
+# Optional targeted mode: newline-delimited PDF list. Empty = whole corpus.
+# Used for scoped re-extractions (e.g. the repository-furniture cohort) so a
+# fix does not require re-parsing all 204k PDFs.
+PDF_LIST="${PDF_LIST:-}"
 RUNDIR="$ROOT/offprint/artifacts/runs"
 TS="${TS:-$(date -u +%Y%m%dT%H%M%SZ)}"
 STARTFILE="$RUNDIR/reextract_boundaryfix.start"
@@ -40,6 +44,7 @@ date +%s >| "$STARTFILE"
 echo "[reextract] start ts=$TS shards=$SHARDS"
 echo "[reextract] pdf_root=$PDF_ROOT"
 echo "[reextract] manifest=$MANIFEST"
+echo "[reextract] pdf_list=${PDF_LIST:-<full corpus>}"
 echo "[reextract] run_start_epoch=$(cat "$STARTFILE")"
 
 if [ ! -f "$MANIFEST" ]; then
@@ -59,6 +64,7 @@ for i in $(seq 0 $((SHARDS - 1))); do
     --qc-exclusion-manifest "$MANIFEST" \
     --doc-policy article_only \
     --text-parser-mode footnote_optimized \
+    ${PDF_LIST:+--pdf-list "$PDF_LIST"} \
     --shard-count "$SHARDS" --shard-index "$i" \
     --heartbeat-every 200 \
     --report-out "$RUNDIR/reextract_boundaryfix_${TS}.shard${i}.report.json" \
