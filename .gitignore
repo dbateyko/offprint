@@ -279,3 +279,7 @@ docs/run_health/
 docs/testing/
 docs/status/
 docs/archive/
+
+# Local scratch: hill-climbs, OCR rescue outputs, viz. 757 MB and not source.
+# The workspace CLAUDE.md documents this directory as untracked by design.
+experiments/
