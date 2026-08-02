@@ -40,6 +40,7 @@ Use this page as the task-oriented index for maintained Offprint documentation.
 | [Journal reconnaissance roadmap](JOURNAL_RECONNAISSANCE_ROADMAP.md) | How priority coverage gaps become evidenced dossiers, scraper changes, and bounded collection runs |
 | [Journal reconnaissance Wave 1](JOURNAL_RECONNAISSANCE_WAVE_1.md) | Dated first-wave targets, evidence denominators, lanes, and completion gates |
 | [Digital Commons file-access diagnostics](DIGITAL_COMMONS_FILE_ACCESS.md) | Evidence, bounded diagnostic mode, and stop policy for shared Bepress PDF 403 responses |
+| [Respectful Digital Commons acquisition](DIGITAL_COMMONS_RESPECTFUL_ACQUISITION.md) | Implemented browser collector, queue semantics, pilot evidence, pacing, and rollout rules |
 | [Journal reconnaissance priorities](generated/JOURNAL_RECON_PRIORITIES.md) | Generated, explainable ranking of registry-defined journals using normalized coverage and worklist signals |
 | [Gazetteer snapshot](generated/GAZETTEER_SNAPSHOT.md) | Current generated status, platform, source, and completeness tables |
 | [Journal catalog](generated/JOURNAL_CATALOG.md) | Searchable list of all known journals and crawl configurations |

@@ -3,7 +3,7 @@ from __future__ import annotations
 import html
 import re
 import xml.etree.ElementTree as ET
-from collections import deque
+from collections import defaultdict, deque
 from typing import TYPE_CHECKING, Any, Dict, Iterable, Iterator, List, Optional, Set, Tuple
 from urllib.parse import parse_qs, urlencode, urljoin, urlparse, urlunparse
 
@@ -476,13 +476,82 @@ def _extract_article_page_metadata(soup: BeautifulSoup, page_url: str, page_titl
     if authors:
         metadata["authors"] = authors
 
+    # Digital Commons article pages normally expose Google Scholar / Dublin
+    # Core metadata. Prefer these typed values to presentation-layer text: the
+    # latter varies across Bepress templates and was the reason legacy
+    # viewcontent.cgi downloads lost volume/issue/page provenance.
+    structured: Dict[str, List[str]] = defaultdict(list)
+    for meta in soup.select("meta[name][content], meta[property][content]"):
+        key = ((meta.get("name") or meta.get("property") or "").strip()).lower()
+        value = (meta.get("content") or "").strip()
+        if key and value:
+            structured[key].append(value)
+
+    def first(*names: str) -> str:
+        for name in names:
+            values = structured.get(name.lower()) or []
+            if values:
+                return values[0]
+        return ""
+
+    structured_title = first("citation_title", "dc.title", "dc:title")
+    if structured_title:
+        metadata["title"] = structured_title
+    structured_authors = (
+        structured.get("citation_author")
+        or structured.get("dc.creator")
+        or structured.get("dc:creator")
+        or []
+    )
+    if structured_authors:
+        metadata["authors"] = list(dict.fromkeys(structured_authors))
+
+    scalar_fields = {
+        "date": ("citation_publication_date", "dc.date", "dc:date"),
+        "volume": ("citation_volume",),
+        "issue": ("citation_issue",),
+        "start_page": ("citation_firstpage",),
+        "end_page": ("citation_lastpage",),
+        "doi": ("citation_doi",),
+        "journal": ("citation_journal_title", "citation_conference_title"),
+        "pdf_url": ("citation_pdf_url",),
+    }
+    for field, names in scalar_fields.items():
+        value = first(*names)
+        if value:
+            metadata[field] = value
+
+    if "doi" not in metadata:
+        dc_identifiers = (structured.get("dc.identifier") or []) + (
+            structured.get("dc:identifier") or []
+        )
+        for identifier in dc_identifiers:
+            doi_match = re.search(r"\b10\.\d{4,9}/\S+", identifier, re.I)
+            if doi_match:
+                metadata["doi"] = doi_match.group(0).rstrip(".,;)")
+                break
+
+    date_value = str(metadata.get("date") or "")
+    year_match = re.search(r"\b(19|20)\d{2}\b", date_value)
+    if year_match:
+        metadata["year"] = year_match.group(0)
+
+    pdf_url = str(metadata.get("pdf_url") or "")
+    identifier_text = " ".join([page_url, pdf_url])
+    article_match = re.search(r"[?&]article=(\d+)", identifier_text, re.I)
+    context_match = re.search(r"[?&]context=([A-Za-z0-9_-]+)", identifier_text, re.I)
+    if article_match:
+        metadata["dc_article_id"] = article_match.group(1)
+    if context_match:
+        metadata["dc_context"] = context_match.group(1)
+
     citation_node = soup.select_one("#recommended_citation .citation")
     if citation_node:
         # Keep title from <em> where present; this is usually the clean article title.
         title_node = citation_node.select_one("em")
         if title_node:
             citation_title = " ".join(title_node.get_text(" ", strip=True).split()).strip()
-            if citation_title:
+            if citation_title and not structured_title:
                 metadata["title"] = citation_title
 
         citation_text = " ".join(citation_node.get_text(" ", strip=True).split()).strip()
