@@ -1182,6 +1182,21 @@ def _document_extract_empty(document: Any) -> bool:
     return True
 
 
+def _native_text_page_coverage(document: Any) -> tuple[int, int, float]:
+    """Return page count, text-bearing page count, and native coverage ratio."""
+    pages = list(getattr(document, "pages", []) or []) if document is not None else []
+    text_pages = 0
+    for page in pages:
+        raw_text = str(getattr(page, "raw_text", "") or "").strip()
+        body_lines = getattr(page, "body_lines", []) or []
+        note_lines = getattr(page, "note_lines", []) or []
+        if raw_text or body_lines or note_lines:
+            text_pages += 1
+    total_pages = len(pages)
+    coverage = (text_pages / total_pages) if total_pages else 0.0
+    return total_pages, text_pages, coverage
+
+
 def _derive_ocr_review_reasons(
     *,
     parser_used: str,
@@ -1190,6 +1205,8 @@ def _derive_ocr_review_reasons(
     note_count: int,
     ocr_used: bool,
     native_extract_empty: bool,
+    native_page_count: int = 0,
+    native_text_page_count: int = 0,
 ) -> list[str]:
     if ocr_used:
         return []
@@ -1198,6 +1215,14 @@ def _derive_ocr_review_reasons(
     reasons: list[str] = []
     if note_count <= 0 and native_extract_empty:
         reasons.append("native_text_extraction_empty")
+    # Digital Commons sometimes exposes a searchable publisher cover followed
+    # by image-only article pages.  A non-empty-document check misses this
+    # partial text layer and can make a real article look like front matter.
+    if (
+        native_page_count >= 4
+        and native_text_page_count / native_page_count < 0.35
+    ):
+        reasons.append("native_text_page_coverage_low")
     if parser_key == "pdftotext" and "selected_pdftotext_output" in warning_set:
         reasons.append("pdftotext_fallback_without_layout")
     if parser_key == "pdftotext" and native_extract_empty:
@@ -1521,14 +1546,12 @@ def _extract_for_pdf(
             "ocr_review_reasons": [],
         }
 
-    # When the caller used --skip-classification, the passed-in decision is a
-    # placeholder (`reason_codes=["skip_classification"]`). Run classification
-    # inline here so the sidecar still gets an honest doc_type — without a
-    # separate classifier pre-pass that stalls on slow pypdf first-page reads.
-    if (
-        doc_decision is None
-        or (doc_decision.reason_codes or []) == ["skip_classification"]
-    ):
+    # A missing decision is defensive-only: normal batch paths always supply
+    # one.  A --skip-classification placeholder is intentionally authoritative;
+    # callers use it after filtering against trusted external metadata, and
+    # silently reclassifying here contradicts the flag and can drop articles
+    # whose publisher cover page resembles front matter.
+    if doc_decision is None:
         try:
             rules = getattr(config, "_doc_rules_payload", {}) or {}
             pdf_root = getattr(config, "pdf_root", "") or ""
@@ -2223,6 +2246,9 @@ def _extract_for_pdf(
         if isinstance(payload_warnings, list)
         else [str(item) for item in payload.get("warnings", []) if str(item).strip()]
     )
+    native_page_count, native_text_page_count, native_text_page_coverage = (
+        _native_text_page_coverage(document)
+    )
     ocr_review_reasons = _derive_ocr_review_reasons(
         parser_used=parser_used,
         warnings=payload_warning_list,
@@ -2230,7 +2256,21 @@ def _extract_for_pdf(
         note_count=payload_note_count,
         ocr_used=ocr_used,
         native_extract_empty=native_extract_empty,
+        native_page_count=native_page_count,
+        native_text_page_count=native_text_page_count,
     )
+    metadata = payload.get("document_metadata")
+    if not isinstance(metadata, dict):
+        metadata = {}
+    metadata["native_page_count"] = native_page_count
+    metadata["native_text_page_count"] = native_text_page_count
+    metadata["native_text_page_coverage"] = round(native_text_page_coverage, 4)
+    metadata["text_quality"] = (
+        "native_text_coverage_low"
+        if "native_text_page_coverage_low" in ocr_review_reasons
+        else "native_text_coverage_ok"
+    )
+    payload["document_metadata"] = metadata
     needs_ocr_review = bool(ocr_review_reasons)
     if needs_ocr_review:
         if "needs_ocr_review" not in payload_warning_list:
