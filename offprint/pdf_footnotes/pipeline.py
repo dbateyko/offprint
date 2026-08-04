@@ -78,7 +78,7 @@ class BatchConfig:
     classifier_workers: int = 6
     ocr_workers: int = 2
     ocr_mode: str = "fallback"
-    ocr_backend: str = "glmocr"
+    ocr_backend: str = "olmocr"
     text_parser_mode: str = "footnote_optimized"
     include_pdf_sha256: bool = False
     report_detail: str = "summary"
@@ -2265,6 +2265,8 @@ def _extract_for_pdf(
     metadata["native_page_count"] = native_page_count
     metadata["native_text_page_count"] = native_text_page_count
     metadata["native_text_page_coverage"] = round(native_text_page_coverage, 4)
+    metadata["parser_used"] = parser_used
+    metadata["ocr_used"] = bool(ocr_used)
     metadata["text_quality"] = (
         "native_text_coverage_low"
         if "native_text_page_coverage_low" in ocr_review_reasons

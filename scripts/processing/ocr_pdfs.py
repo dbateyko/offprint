@@ -152,9 +152,9 @@ def main() -> None:
     )
     parser.add_argument(
         "--backend",
-        choices=["glmocr", "olmocr"],
-        default="glmocr",
-        help="OCR backend (default: glmocr)",
+        choices=["olmocr"],
+        default="olmocr",
+        help="OCR backend (default: olmocr)",
     )
     args = parser.parse_args()
 
