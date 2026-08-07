@@ -103,13 +103,13 @@
       "boundary_pages_look_correct": true
     },
     "law.howard.edu": {
-      "kind": "pattern_rejected",
+      "kind": "pattern",
       "head_lines": "first",
       "boundary_backoff_pages": 2,
       "article_key_patterns": [
         "^(?!Howard Law Journal)(?P<key>[A-Z][A-Za-z’'\\\"“”,:;\\-–— ]{9,52}[A-Za-z’'\\\"”])$"
       ],
-      "notes": "Howard Law Journal. Recto head is the bare Title-Case article title, verso is the bare words `Howard Law Journal`, excluded by the lookahead. The 52-character ceiling matters: at 80 characters a sentence out of the Editor-in-Chief's letter (`Last but certainly not least, this issue concludes with special guest ...`) matched the title shape and produced a phantom key; tightening removed it without losing any real title. Recto-only style with a bare folio on the opening page, so backoff 2, under which the single compilation on the domain (`how-68-3-1.pdf`, 148pp) yields 4 articles at 1.00 with boundaries reading `349 // 2025 Vol. 68 No. 3 // Monuments, Law and Cultural`. Under backoff 1 it scores 0.40-0.50 and is discarded. The other large files on the domain are a byte-duplicate of this issue and a two-deck event programme. | REJECTED 2026-08-07. Re-checked at back_off 0/1/2/3 against how-68-3-1.pdf (the file named in validated_on) and the two largest files on the domain: every boundary lands on \"<folio> | 2025 Vol. 68 No. 3\", a running head, not a display title. Not reproducible; do not enable without new evidence.",
+      "notes": "Howard Law Journal. Recto head is the bare Title-Case article title, verso is the bare words `Howard Law Journal`, excluded by the lookahead. The 52-character ceiling matters: at 80 characters a sentence out of the Editor-in-Chief's letter (`Last but certainly not least, this issue concludes with special guest ...`) matched the title shape and produced a phantom key; tightening removed it without losing any real title. Recto-only style with a bare folio on the opening page, so backoff 2, under which the single compilation on the domain (`how-68-3-1.pdf`, 148pp) yields 4 articles at 1.00 with boundaries reading `349 // 2025 Vol. 68 No. 3 // Monuments, Law and Cultural`. Under backoff 1 it scores 0.40-0.50 and is discarded. The other large files on the domain are a byte-duplicate of this issue and a two-deck event programme. | Rejected in error 2026-08-07 and reinstated the same day. The reviewer read only the first two lines of each boundary page, saw '349 | 2025 Vol. 68 No. 3' and called it a running head. It is the opening-page banner: lines 3-6 carry the display title, a starred byline and 'Introduction'. Continuation pages look different -- 'Howard Law Journal' over '350 [vol. 68:3'.",
       "validated_on": [
         "law.howard.edu/how-68-3-1.pdf"
       ],
