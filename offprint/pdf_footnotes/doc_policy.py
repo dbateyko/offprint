@@ -109,6 +109,52 @@ _PANEL_SPEAKER_RE = re.compile(
     r"[A-Z][A-Z]+:\s",
 )
 
+# Self-TOC markers: a long law-review article routinely opens with its OWN
+# table of contents, which the `toc_marker` rule below used to read as an issue
+# compilation. Measured 2026-08-06: `toc_marker` produced 99% of the
+# issue_compilation classifications in the 16-119pp bands, and a hand-read
+# sample of those was 0% real compilations.
+#
+# The two TOC kinds are structurally different. An article outlines its own
+# SECTIONS -- roman numerals, lettered subsections, INTRODUCTION/CONCLUSION.
+# An issue lists article TITLES each followed by a different author. Section
+# structure is the signal; it cannot occur in an issue-level TOC.
+# Deliberately NOT anchored to line starts. pypdf frequently returns a whole
+# TOC as one unbroken line, and `(?m)^` then matches nothing. The `/G\d+`
+# alternation absorbs the glyph-code artifacts some producers emit between the
+# numeral and its heading (`I./G3/G3INTRODUCTION`).
+_ARTICLE_SECTION_RE = re.compile(
+    r"(?:^|\s)(?:[IVXL]{1,6}|[A-Z]|\d{1,2})\.(?:/G\d+|\s)*[A-Z]",
+)
+_ARTICLE_TOC_BOOKEND_RE = re.compile(
+    r"(?:^|\s)(?:[IVXL]{1,6}\.(?:/G\d+|\s)*)?(INTRODUCTION|CONCLUSION)\b",
+    re.IGNORECASE,
+)
+# A standalone ABSTRACT heading is an article opening. Issue-level front pages
+# are covers and contents listings and never carry one.
+_ABSTRACT_HEADING_RE = re.compile(r"(?:^|\n)\s*ABSTRACT\s*(?:\n|$)")
+
+
+def looks_like_article_self_toc(first_page_text: str) -> bool:
+    """True when a "TABLE OF CONTENTS" is the article's own section outline.
+
+    Fires on any of: three-plus numbered/lettered section headings, both an
+    INTRODUCTION and a CONCLUSION entry, or a standalone ABSTRACT heading.
+    Each is a property of a single article's internal structure; an issue-level
+    TOC lists article titles with a different author under each and has none of
+    them.
+    """
+    text = first_page_text or ""
+    if len(_ARTICLE_SECTION_RE.findall(text)) >= 3:
+        return True
+    if _ABSTRACT_HEADING_RE.search(text[:3000]):
+        return True
+    bookends = {
+        match.group(1).upper() for match in _ARTICLE_TOC_BOOKEND_RE.finditer(text)
+    }
+    return {"INTRODUCTION", "CONCLUSION"} <= bookends
+
+
 # Path-based skip patterns. Matches the absolute or relative PDF path; used
 # to exclude legacy / manually-imported corpora that violate the
 # `corpus/scraped/<domain>/<file>.pdf` flat-by-domain convention. Routed to
@@ -501,11 +547,22 @@ def classify_pdf(
         elif "table of contents" in text_l or re.search(r"\b(toc|contents)\b", filename_l):
             # Only treat as frontmatter/compilation if it doesn't look like an article.
             # Real articles often start with a TOC.
+            #
+            # `footnote_marker_count < 3` cannot carry this guard on its own: a
+            # page that IS a table of contents has no footnote markers by
+            # construction, so the guard opens exactly when it is needed. The
+            # section-outline test below is what distinguishes the two cases.
             if not signals.metadata_article_fields and signals.footnote_marker_count < 3:
-                doc_type = "issue_compilation" if signals.page_count > 10 else "frontmatter"
-                reason_codes.append("toc_marker")
-                confidence = 0.95
-                strong_frontmatter = True
+                if looks_like_article_self_toc(signals.first_page_text):
+                    reason_codes.append("article_self_toc")
+                    confidence = 0.9
+                else:
+                    doc_type = (
+                        "issue_compilation" if signals.page_count > 10 else "frontmatter"
+                    )
+                    reason_codes.append("toc_marker")
+                    confidence = 0.95
+                    strong_frontmatter = True
         elif "yearbook" in text_l or "yearbook" in filename_l:
             doc_type = "other"
             reason_codes.append("yearbook_marker")

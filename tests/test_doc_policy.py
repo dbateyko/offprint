@@ -433,3 +433,136 @@ def test_doc_policy_does_not_skip_normal_stetson_path():
         rules={},
     )
     assert decision.doc_type == "article"
+
+
+# ---- Article self-TOC vs issue TOC (added 2026-08-06) ----
+#
+# `toc_marker` produced 99% of issue_compilation classifications in the
+# 16-119pp bands and a hand-read sample of those was 0% real compilations:
+# long articles open with their own contents outline. `footnote_marker_count`
+# cannot guard this, because a page that IS a TOC has no footnote markers.
+
+_ARTICLE_SELF_TOC = """
+EMINENT DOMAIN LAW AND "JUST" COMPENSATION
+Ashley Mas
+TABLE OF CONTENTS
+INTRODUCTION .................................................... 370
+I. BACKGROUND ................................................. 372
+A. The Just Compensation Mandate ....................... 372
+II. THE SUBSTANTIAL IMPAIRMENT DOCTRINE .................... 380
+III. ANALYSIS ................................................... 390
+CONCLUSION ...................................................... 399
+"""
+
+_ISSUE_TOC = """
+University of Hawai'i Law Review
+Volume 33 / Number 1 / Winter 2010
+TABLE OF CONTENTS
+Remedies for the Wrongly Deported
+Rachel E. Rosenbloom 139
+Regression by Progression
+Helia Garrido Hull 193
+The Jones Act Fish Farmer
+Timothy E. Steigelman 223
+"""
+
+
+def test_doc_policy_keeps_article_that_opens_with_its_own_contents() -> None:
+    decision = classify_pdf(
+        pdf_path="/tmp/domain.example/mas-36-1-3.pdf",
+        domain="domain.example",
+        platform_family="custom_unknown",
+        signals=_signals(page_count=32, first_page_text=_ARTICLE_SELF_TOC),
+        doc_policy="article_only",
+        rules={},
+    )
+
+    assert decision.doc_type == "article"
+    assert decision.include is True
+    assert "article_self_toc" in decision.reason_codes
+
+
+def test_doc_policy_still_flags_a_real_issue_contents_page() -> None:
+    decision = classify_pdf(
+        pdf_path="/tmp/domain.example/33-u-haw-l-rev-issue-1.pdf",
+        domain="domain.example",
+        platform_family="custom_unknown",
+        signals=_signals(page_count=88, first_page_text=_ISSUE_TOC),
+        doc_policy="article_only",
+        rules={},
+    )
+
+    assert decision.doc_type == "issue_compilation"
+    assert "toc_marker" in decision.reason_codes
+
+
+def test_article_self_toc_survives_pypdf_collapsing_the_toc_to_one_line() -> None:
+    """pypdf often returns a whole contents block as a single unbroken line."""
+    collapsed = (
+        "THE SEC AND CRYPTOASSETS Carol Goforth* TABLE OF CONTENTS "
+        "I.  Introduction ......... 56 II.  When do the Securities Laws Apply? "
+        "..... 58 III.  How Has the SEC Said These Rules Apply? ..... 62"
+    )
+    decision = classify_pdf(
+        pdf_path="/tmp/domain.example/116172-sec-and-cryptoassets.pdf",
+        domain="domain.example",
+        platform_family="custom_unknown",
+        signals=_signals(page_count=52, first_page_text=collapsed),
+        doc_policy="article_only",
+        rules={},
+    )
+
+    assert decision.doc_type == "article"
+
+
+def test_article_self_toc_tolerates_glyph_code_artifacts() -> None:
+    """Some producers emit `I./G3/G3INTRODUCTION` between numeral and heading."""
+    glyphy = (
+        "LOOKING AT THE LANHAM ACT\nRebecca Tushnet\nTABLE OF CONTENTS\n"
+        "I./G3/G3INTRODUCTION ......... 862/G3\n"
+        "II./G3/G3TRADEMARK ........... 865/G3\n"
+        "III./G3/G3CONCLUSION ......... 899/G3\n"
+    )
+    decision = classify_pdf(
+        pdf_path="/tmp/domain.example/4143-looking-at-the-lanham-act.pdf",
+        domain="domain.example",
+        platform_family="custom_unknown",
+        signals=_signals(page_count=57, first_page_text=glyphy),
+        doc_policy="article_only",
+        rules={},
+    )
+
+    assert decision.doc_type == "article"
+
+
+def test_abstract_heading_marks_an_article_opening() -> None:
+    text = (
+        "TRADEMARK CONFUSION SIMPLIFIED\nDaryl Lim\n\nABSTRACT\n"
+        "Multifactor tests are challenging for judges to apply consistently.\n"
+        "... table of contents follows later in the document ...\n"
+    )
+    decision = classify_pdf(
+        pdf_path="/tmp/domain.example/0005-37-2-lim-web.pdf",
+        domain="domain.example",
+        platform_family="custom_unknown",
+        signals=_signals(page_count=72, first_page_text=text),
+        doc_policy="article_only",
+        rules={},
+    )
+
+    assert decision.doc_type == "article"
+
+
+def test_long_compilations_are_unaffected_by_the_self_toc_escape() -> None:
+    """>200pp still short-circuits before the TOC branch is ever reached."""
+    decision = classify_pdf(
+        pdf_path="/tmp/domain.example/volume-33-complete.pdf",
+        domain="domain.example",
+        platform_family="custom_unknown",
+        signals=_signals(page_count=442, first_page_text=_ARTICLE_SELF_TOC),
+        doc_policy="article_only",
+        rules={},
+    )
+
+    assert decision.doc_type == "issue_compilation"
+    assert "long_doc_page_count" in decision.reason_codes
