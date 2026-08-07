@@ -1001,22 +1001,39 @@ def article_keys_for_pages(
 def boundaries_from_domain_rule(
     page_texts: list[str], rule: dict[str, Any]
 ) -> list[int]:
-    """Start pages where the per-article key changes.
+    """Start pages where the per-article key changes, backed off per domain.
 
-    Each boundary is backed off by one page. Where the head carries the article
-    title, the article's OWN first page shows the display title instead of a
-    running head, so the key does not change until page two. Without the
-    back-off every child would lose its title page -- which is the page the
-    downstream metadata pass reads title and author from.
+    How far the key change lags the real opening depends on the journal's
+    layout, so `back_off` is a property of the domain rule, not a constant:
+
+      0  the head appears on the opening page too, so the key changes exactly
+         there and backing off at all would land a page early (loynolawreview,
+         whose typesetting slug is on every page)
+      1  the opening page carries a display title instead of the running head
+      2  the head is recto-only and articles open on rectos, so the new key
+         first appears two pages later (the common US law-review layout --
+         cschs, texenrls)
+
+    Getting this wrong is not a near miss. A boundary one page late loses the
+    article's title page, which is the page the downstream metadata pass reads
+    title and author from, and `looks_like_article_opening` then rejects it and
+    can discard the whole document. Five domains with otherwise perfect keys
+    were being thrown away for exactly this before back_off was configurable.
     """
     keys = article_keys_for_pages(page_texts, rule)
+    try:
+        back_off = int(rule.get("back_off", 1))
+    except (TypeError, ValueError):
+        back_off = 1
+    back_off = max(0, min(back_off, 3))
+
     starts: list[int] = []
     previous: str | None = None
     for index, key in enumerate(keys, start=1):
         if key is None:
             continue
         if previous is not None and key != previous:
-            starts.append(max(1, index - 1))
+            starts.append(max(1, index - back_off))
         previous = key
     if starts and starts[0] > 1:
         starts.insert(0, 1)

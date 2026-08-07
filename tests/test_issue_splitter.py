@@ -203,6 +203,7 @@ import pytest  # noqa: E402
 from offprint.pdf_footnotes.issue_splitter import (  # noqa: E402
     article_keys_for_pages,
     boundaries_from_domain_rule,
+    boundaries_from_domain_rule,
     load_head_rules,
 )
 
@@ -547,3 +548,72 @@ def test_hawaii_issue_with_mid_article_boundaries_is_discarded():
 
     assert not inference.ok
     assert inference.skip_reason.startswith("boundaries_not_article_openings")
+
+
+# ---- Per-domain back_off (added 2026-08-07) ----
+#
+# How far the key change lags the real opening is a property of the journal's
+# layout. US law reviews mostly use a recto-only head and open articles on
+# rectos, so the new key first appears TWO pages after the opening; a fixed
+# one-page back-off put the boundary on the article's second page, where
+# `looks_like_article_opening` rejected it and discarded the document. Five
+# domains with correct keys were being thrown away for this.
+
+
+def _recto_only_issue() -> list[str]:
+    """Head on rectos only; articles open on a recto with a display title."""
+    pages = []
+    for page in range(1, 41):
+        title = "FIRST ARTICLE" if page < 21 else "SECOND ARTICLE"
+        if page in (1, 21):
+            pages.append(f"{title} TITLE PAGE\nBy Some Author\nopening body text")
+        elif page % 2:
+            pages.append(f"2022] {title} {page}\nbody text")
+        else:
+            pages.append(f"{page} EXAMPLE LAW REVIEW\nbody text")
+    return pages
+
+
+def test_back_off_two_lands_on_the_opening_for_a_recto_only_head():
+    rule = {**_TITLE_HEAD_RULE, "back_off": 2}
+
+    starts = boundaries_from_domain_rule(_recto_only_issue(), rule)
+
+    assert 21 in starts, starts
+
+
+def test_back_off_defaults_to_one_when_unspecified():
+    starts = boundaries_from_domain_rule(_title_head_issue(), _TITLE_HEAD_RULE)
+
+    assert 20 in starts and 21 not in starts
+
+
+def test_back_off_zero_keeps_the_change_page_itself():
+    """Some producers stamp the slug on the opening page too, so the key
+    changes exactly there and any back-off lands a page early."""
+    pages = [f"SLUG-A {page}\nbody" for page in range(1, 21)] + [
+        f"SLUG-B {page}\nbody" for page in range(21, 41)
+    ]
+    rule = {
+        "kind": "pattern",
+        "head_lines": "first",
+        "article_key_patterns": [r"^(?P<key>SLUG-[AB])\b"],
+        "back_off": 0,
+    }
+
+    assert 21 in boundaries_from_domain_rule(pages, rule)
+
+
+def test_back_off_is_clamped_and_survives_junk():
+    rule = {**_TITLE_HEAD_RULE, "back_off": 99}
+    assert boundaries_from_domain_rule(_title_head_issue(), rule)
+
+    rule = {**_TITLE_HEAD_RULE, "back_off": "not a number"}
+    assert boundaries_from_domain_rule(_title_head_issue(), rule)
+
+
+def test_shipped_rules_declare_a_sane_back_off():
+    for domain, rule in load_head_rules()["domains"].items():
+        if "back_off" in rule:
+            assert isinstance(rule["back_off"], int), domain
+            assert 0 <= rule["back_off"] <= 3, domain

@@ -1,0 +1,149 @@
+{
+  "version": "1",
+  "generated": "2026-08-07",
+  "batch": "batch2",
+  "domains": {
+    "www.aallnet.org": {
+      "kind": "pattern",
+      "head_lines": "first",
+      "article_key_patterns": [
+        "\\[(?P<key>\\d{4}-\\d{1,3})\\]"
+      ],
+      "notes": "Law Library Journal (AALL). The running head carries an explicit per-article production id in brackets -- `528 LAW LIBRARY JOURNAL Vol. 103:4 [2011-34]` on verso, `529BUILDING A COLLABORATIVE DIGITAL COLLECTIONVol. 103:4 [2011-34]` on recto -- so the key is the id itself: constant within an article, incremented between articles, and free of title/folio/OCR noise. Crucially the article's OWN first page carries only the bare folio (`527`) and no id, so the key first changes on the article's second page and the consumer's one-page back-off lands exactly on the display-title page. Every boundary inspected showed folio + head + display title. Only the id-bearing era splits: from roughly vol 107 onward LLJ dropped the running head entirely (first line is a bare folio, no head anywhere on the page), and those issues correctly return `no_running_head_signal` rather than a wrong split. On the AALL Spectrum question: this domain does host Spectrum material, but the >=20pp PDFs in the corpus are LLJ full issues plus a handful of AALL committee reports (`authenfinalreport.pdf`, `complete-fnb-021811.pdf`, `2009aallauthenticationreportupdates-2.pdf`); the Spectrum files present are one-page editor/calendar administrivia, not magazine issues. The reports match nothing and are left unsplit, which is the right outcome. 9 of 35 deduped candidate issues clear the validator; the other 26 are the headless later volumes or non-journal reports.",
+      "validated_on": [
+        "www.aallnet.org/103n4-full-issue-2.pdf",
+        "www.aallnet.org/105n3-full-2.pdf",
+        "www.aallnet.org/llj-113n4-full-issue-web-2.pdf",
+        "www.aallnet.org/105n4-full-2.pdf",
+        "www.aallnet.org/104n2-fullllj-2.pdf",
+        "www.aallnet.org/103n2-final-2.pdf",
+        "www.aallnet.org/106n1-full-issue-optimized-2.pdf",
+        "www.aallnet.org/llj-105n2-full-2.pdf",
+        "www.aallnet.org/llj-105n1-full-2.pdf"
+      ],
+      "observed_articles": {
+        "www.aallnet.org/103n4-full-issue-2.pdf": 12,
+        "www.aallnet.org/105n4-full-2.pdf": 13,
+        "www.aallnet.org/104n2-fullllj-2.pdf": 9,
+        "www.aallnet.org/103n2-final-2.pdf": 9,
+        "www.aallnet.org/105n3-full-2.pdf": 9,
+        "www.aallnet.org/106n1-full-issue-optimized-2.pdf": 8,
+        "www.aallnet.org/llj-105n2-full-2.pdf": 7,
+        "www.aallnet.org/llj-113n4-full-issue-web-2.pdf": 6,
+        "www.aallnet.org/llj-105n1-full-2.pdf": 5
+      },
+      "boundary_pages_look_correct": true
+    },
+    "nulawreview.org": {
+      "kind": "pattern",
+      "head_lines": "first",
+      "article_key_patterns": [
+        "^\\d{1,4}\\s+(?!VOL\\b|NOR\\b|Vol\\b)(?P<key>[A-Z][A-Za-z’'\\-\\. ]{2,40})\\s*$"
+      ],
+      "notes": "Northeastern University Law Review. The per-article token lives on the VERSO head, which is `<folio>  <AuthorSurname>` (`2  Bessler`, `388 Meyer`, `384 Pack, Baker & Heere`); the recto head is `<folio>Vol. 13, Iss. 2 Northeastern University Law Review` with no space after the folio, so the mandatory `\\s+` after the digits already excludes it and the `VOL|NOR|Vol` lookahead is belt-and-braces against the letter-spaced OCR variants (`NOR THEASTERN`). Roman-numeral front matter (`ii`, `iv`) does not match. Because the article's display-title page is a recto (journal-name head) and the author head first appears on the following verso, the key changes at page 2 of the article and the one-page back-off lands on the title page -- verified by eye on six issues, where every boundary page reads folio / journal name / display title. KNOWN LIMITS. (1) The first article of an issue never gets its own boundary: its author key is the first key seen, so no change is recorded and the consumer's synthetic start at page 1 absorbs front matter plus article one. (2) Parity is not uniform. When an article instead opens on a verso, or opens with a near-blank filler page that already carries the head (`388 Meyer`, with the real title page at 389), the key changes ON the opening page and the boundary lands one page early, on the previous article's last page. That is what sinks `volume-13-issue-2-book.pdf` (0.25) and `volume-12-issue-1.pdf` (0.43); `volume-13-issue-1-full-pdf.pdf` passes overall but two of its five boundaries land on a `ConClusion` page one page short. Measured across the 19 deduped candidates: 11 clear the validator, 6 fail it (and are correctly discarded), 2 never reach the rule. Of ~30 boundaries hand-checked, 3 were one page early. (3) Two articles by the same author in one issue would merge.",
+      "validated_on": [
+        "nulawreview.org/16-ne-u-l-rev-2024-yjnj.pdf",
+        "nulawreview.org/nulr-vol-xiv-iss-2-final.pdf",
+        "nulawreview.org/nulr152final-ts-image-enhance.pdf",
+        "nulawreview.org/nulr161fullprint1.pdf",
+        "nulawreview.org/volume-11-issue-1.pdf",
+        "nulawreview.org/volume-13-issue-1-full-pdf.pdf",
+        "nulawreview.org/volume-9-issue-1.pdf"
+      ],
+      "observed_articles": {
+        "nulawreview.org/nulr152final-ts-image-enhance.pdf": 7,
+        "nulawreview.org/nulr-vol-xiv-iss-2-final.pdf": 7,
+        "nulawreview.org/16-ne-u-l-rev-2024-yjnj.pdf": 7,
+        "nulawreview.org/volume-13-issue-1-full-pdf.pdf": 6,
+        "nulawreview.org/volume-11-issue-1.pdf": 5,
+        "nulawreview.org/volume-10-issue-2.pdf": 5,
+        "nulawreview.org/nulr161fullprint1.pdf": 5,
+        "nulawreview.org/nulr-171-full-print-updated-on-112425.pdf": 4,
+        "nulawreview.org/volume-9-issue-1.pdf": 3,
+        "nulawreview.org/volume-7-issue-1.pdf": 3
+      },
+      "boundary_pages_look_correct": true
+    },
+    "yalelawjournal.org": {
+      "kind": "single_article_domain",
+      "notes": "NOT an issue-compilation domain. YLJ publishes per-article PDFs (`133-4-crumfinaldraft-jg6vf9cw-2.pdf`, `134-1-fletcher-...`, `zhangyljforumessay-...`), and the overwhelming majority of the 4,010 files scraped from this host are third-party documents the journal LINKS to from its footnotes: public laws (`plaw-111publ148.pdf`), congressional reports (`crpt-116hrpt346.pdf`), agency and NGO reports (`worldenergyoutlook2024.pdf`, `ipcc-ar6-syr-fullvolume.pdf`, `norc-2020-cocoa-report-english.pdf`), court filings, and city plans. Every one of the 63 deduped skip-manifest candidates for this domain is one of those third-party documents; none is a Yale Law Journal issue. There is no per-journal running head to find, and splitting a UN or GAO report on a law-review head pattern would be actively harmful, so the domain is marked single_article_domain to keep the splitter away from it. Any future pattern work here should first filter to `1NN-N-<author>-*.pdf` filenames, which are single articles anyway.",
+      "validated_on": [
+        "yalelawjournal.org/compendium.pdf",
+        "yalelawjournal.org/plaw-111publ148.pdf",
+        "yalelawjournal.org/133-4-crumfinaldraft-jg6vf9cw-2.pdf"
+      ]
+    },
+    "www.jlep.net": {
+      "kind": "no_reliable_pattern",
+      "candidate_head_lines": "first",
+      "candidate_article_key_patterns": [
+        "^\\d{4}\\]\\s+(?P<key>[^\\d\\s].{0,58}?)(?:\\s+\\d+)?\\s*$"
+      ],
+      "notes": "Journal of Law, Economics & Policy -- same journal and same head form as the existing `jlep.net` entry, so the existing rule DOES apply in the sense that it extracts correct, stable, one-per-article keys here (`I NTRODUCTION ERIE RAILROAD AT SEVENTY FIVE`, `A GENERAL DEFENSE OF ERIE RAILROAD CO V TOMPKINS`, ...). It still must not be shipped, because the boundaries land one page too late. The head cycle is two pages: verso is `<folio> J OURNAL OF LAW, ECONOMICS & POLICY [V OL. 10:1` (no article token), recto is `<year>] <TITLE> <folio>`, and the article's own opening recto degrades to a title-less `2013]  125`. So the title key first appears on the article's THIRD page, the consumer's single-page back-off lands on the second page (a verso continuation of running prose), and `looks_like_article_opening` rejects it. Measured over all 20 deduped candidates with the existing jlep.net rule: 0 pass; shares run 0.04-0.56. The same measurement on the control file the existing rule was validated against, `jlep.net/v8-3.pdf`, gives 0.10 -- i.e. this is a property of the whole `<year>] TITLE <folio>` recto-only family (btlj.org 0.11/0.33, feslr.com 0.12, administrativelawreview.org 0.11/0.25, cdr.creighton.edu 0.29 all fail the same way), not of this domain. Nothing expressible in a key pattern fixes it: to land on the opening page the key must change on page 2, and page 2 carries no article-specific text. Fixing this family needs a two-page back-off (or a parity-aware back-off) in `boundaries_from_domain_rule`, which is out of scope here.",
+      "validated_on": [
+        "www.jlep.net/v10-1.pdf",
+        "www.jlep.net/volume-12.pdf",
+        "www.jlep.net/jlep-202-final.pdf"
+      ],
+      "boundary_pages_look_correct": false
+    },
+    "lawandinequality.org": {
+      "kind": "no_reliable_pattern",
+      "candidate_head_lines": "first",
+      "candidate_article_key_patterns": [
+        "^\\d{4}\\]\\s+(?P<key>[^\\d\\s].{0,58}?)(?:\\s+\\d+)?\\s*$"
+      ],
+      "notes": "Minnesota Journal of Law & Inequality. Identical failure mode to www.jlep.net. Verso head is `2 Law & Inequality [Vol. 41: 2` (folio + journal name only), recto head is `2023] STORIED PASTS 3`, and the article's opening recto shows only its bare folio (`1`). The candidate pattern extracts clean, correct per-article keys, but the first titled recto is the article's third page, so every boundary lands on the article's second page -- a verso mid-sentence continuation -- and the validator rejects it. 0 of 20 deduped candidates pass; shares 0.17-0.50 across volumes 39-43, plus older scanned volumes (`09-2law-ineq1211984.pdf`, `20-13law-ineq4431994-1995.pdf`) that produce no rule signal at all. Not shippable without a two-page back-off in the consumer.",
+      "validated_on": [
+        "lawandinequality.org/vol-41-full-issue-2-6-14.pdf",
+        "lawandinequality.org/vol-43-issue-1-full-2.pdf",
+        "lawandinequality.org/volume-42-issue-2-full-issue-2.pdf"
+      ],
+      "boundary_pages_look_correct": false
+    },
+    "www.fclj.org": {
+      "kind": "no_reliable_pattern",
+      "candidate_head_lines": "first",
+      "candidate_article_key_patterns": [
+        "^Issue\\s+\\d+\\s+(?P<key>[A-Z][^\\d]{3,70}?)(?:\\s+\\d+)?\\s*$"
+      ],
+      "notes": "Federal Communications Law Journal. The head is `Issue 2   NO DIALTONE   205` on recto and `FEDERAL COMMUNICATIONS LAW JOURNAL   Vol. 66` on verso, and the candidate pattern above extracts a clean short-title key. It is NOT shipped because every article here opens with a two-page front block -- a display-title page and then the article's own table of contents, both headed with a dash-folio (`- 203 -`, `- 204 -`) instead of the running head -- so the title key first appears on page three and the boundary lands on the article's internal contents page, losing the display-title page that the downstream metadata pass needs. Worse, that contents page passes `looks_like_article_opening` (its lines are Title Case), so the 9 of 31 deduped candidates that DO clear the validator clear it while being systematically one page late; I confirmed this by eye on `66-2-full-issue.pdf`, `volume-74-3.pdf`, `68-3-full-issue.pdf` and `70-1-full-issue.pdf`, where boundary pages read `- 264 -` / `- 330 -` / `- 470 -` followed by TOC leader dots. It also finds only 4-6 of the 5-8 pieces per issue. Shipping it would put a silently-wrong split into the corpus, which is exactly the failure the validator exists to prevent. Volume 73+ drops the folio from the recto head (`Issue 1 MUNICIPAL BROADBAND`) but is otherwise the same; `fcl-66-3.pdf`, `74-2-final-1.pdf` and the per-article files (`66-1-lyons.pdf` etc.) produce no signal. Revisit if the consumer gains a per-domain back-off offset.",
+      "validated_on": [
+        "www.fclj.org/66-2-full-issue.pdf",
+        "www.fclj.org/full-version-of-vol-73-1-1.pdf",
+        "www.fclj.org/68-3-full-issue.pdf",
+        "www.fclj.org/70-1-full-issue.pdf"
+      ],
+      "boundary_pages_look_correct": false
+    },
+    "www.journaloflaw.us": {
+      "kind": "no_reliable_pattern",
+      "candidate_head_lines": "first",
+      "candidate_article_key_patterns": [
+        "^(?!.*\\b(?:THE|OF|AND|IN|ON|FOR|TO|IS|IT|AT|AS|BY|FROM|WITH|ABOUT|WHY|HOW|WHAT|WHEN|WHO|ARE|WAS|BE|THIS|THAT|NOT|OR|BUT|LAW|LAWS|LEGAL|COURT|COURTS|REVIEW|CASE|CASES|YEAR|SUPREME|A|AN)\\b)(?P<key>[A-Z][A-Z’'.\\-]*(?:[  ]+(?:&|VS\\.|ET|AL\\.|[A-Z][A-Z’'.\\-]*)){1,5})[  ]*$"
+      ],
+      "notes": "The Journal of Law (Green Bag). Structurally the most promising of the batch and still a rejection. Verso head is the ALL-CAPS AUTHOR (`ROSS  E.  DAVIES`, `STEPHEN  M.  BAINBRIDGE`), recto head is the ALL-CAPS TITLE (`HABEAS LIBRIS`, `IS  IT  TIME  FOR  THE  END  OF  TYPICALITY?`), and the article's opening page is headed `5  JOURNAL  OF  LAW  (4  THE  POST)  105`. Keying on the author stream therefore changes the key on the article's second page and the back-off lands exactly on the opening page -- I hand-checked all 21 boundaries of `jol5-1.pdf` and every one is a genuine article opening. TWO problems, either fatal. (1) Author heads and title heads are both ALL-CAPS multi-word lines and cannot be told apart by shape; the stopword lookahead above catches most titles but not short ones (`HABEAS LIBRIS`, `CODE WORDS`, `DELAWARE'S DECISION`, `HOYLE'S GAMES IMPROVED`, `THE WHIST SCORE BOOK` after its `THE` is dropped by OCR spacing), and inside those pieces the key flips every page, producing a spurious boundary every 4 pages. In `jol8-1.pdf` this manufactured 25 fake articles inside a single `HOYLE'S GAMES IMPROVED` reprint -- and because a shouted head passes `looks_like_article_opening`, that document PASSED the validator at 27 'articles'. The three issues that pass are the three that are wrong. (2) On the issues whose boundaries are right, the validator rejects them anyway (0.14-0.55): this journal's PDF extraction glues display title, byline and first sentence into one >140-character line (`LEARNING  FROM  AND  ABOUT  THE  NUMBERS  Carole Silver & Louis Rocconi  O...`), which `looks_like_article_opening` scores as not-a-title. Net: 3 of 27 pass and all three are garbage. Splitting this journal reliably needs an author-name gazetteer or page-parity awareness, neither of which is expressible in this rule schema.",
+      "validated_on": [
+        "www.journaloflaw.us/jol5-1.pdf",
+        "www.journaloflaw.us/jol8-1.pdf",
+        "www.journaloflaw.us/jol11-1.pdf"
+      ],
+      "boundary_pages_look_correct": false
+    },
+    "supremecourthistory.org": {
+      "kind": "no_reliable_pattern",
+      "candidate_head_lines": "first",
+      "candidate_article_key_patterns": [
+        "^(?!JOURNAL)(?P<key>[A-Z][A-Z]{2,20})\\b"
+      ],
+      "notes": "Journal of Supreme Court History. Recto head is the ALL-CAPS article title plus folio, verso is `<folio> JOURNAL  OF  SUPREME  COURT  HISTORY` (older volumes: `26 JOURNAL  1997,  VOL.  II`). The scans are 1990s-2000s deskewed OCR and carry a per-page alphabet-soup artifact appended to almost every line (`...FEDCBA`, `nmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA`), titles are letter-spaced inconsistently (`SOME  MEMORIES` / `S O M E  M E M O R I E S`), punctuation drifts (`1854-1911` vs `1854^1911`), and several files contain the same page two or three times in a row. A Creighton-style first-word-only key survives all of that and 29 of 44 deduped candidates clear the validator -- but the passes are not trustworthy. Eyeballing `volume-33-number-3-2008.pdf`, `volume-43-number-3-2018.pdf`, `volume-22-number-2-1997.pdf` and `volume-15-number-1-1990.pdf`, roughly half the boundary pages are genuine display-title pages (good) and the other half are verso continuation pages headed `26 JOURNAL  1997,  VOL.  II` followed by mid-sentence prose -- the same recto-only parity problem as jlep/L&I, except that here the OCR-mangled body text sneaks past `looks_like_article_opening` instead of being caught by it. A rule that is right about half the time and whose errors the validator cannot see is worse than no rule, so this is a rejection. Also note `index-1-48-final.pdf` is a cumulative 48-volume index, not an issue.",
+      "validated_on": [
+        "supremecourthistory.org/volume-33-number-3-2008.pdf",
+        "supremecourthistory.org/volume-43-number-3-2018.pdf",
+        "supremecourthistory.org/volume-22-number-2-1997.pdf",
+        "supremecourthistory.org/volume-15-number-1-1990.pdf"
+      ],
+      "boundary_pages_look_correct": false
+    }
+  }
+}

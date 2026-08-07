@@ -9,7 +9,7 @@
         "^\\d{4}\\]\\s+(?P<key>[^\\d\\s].{0,58}?)(?:\\s+\\d+)?\\s*$",
         "^\\d{4}\\]\\s+(?P<key>[A-Z][A-Z’'\\.,: ]{3,50}?)\\s+\\d+\\s+[A-Z]"
       ],
-      "notes": "recto running head is `<year>] <ARTICLE TITLE> <page>`; verso is `<page> <JOURNAL NAME> [Vol. N]` and is deliberately not matched (unmatched pages inherit). Pattern 1 requires the key to start with a non-digit and be <=59 chars so head-only-page-number heads and head-merged-into-body lines fail rather than producing junk keys. Pattern 2 recovers the ALL-CAPS title when the extractor glued the head onto the first body line. Boundaries land on the article's 2nd printed page (the opening page carries the display title, not the running head), so consumers should expect a 1-2 page lag. Volumes 1-9 (published as HIGH TECHNOLOGY LAW JOURNAL) use a bare `TITLE <page>` head with heavy OCR noise; those files match nothing and are left unsplit, which is the safe outcome. Many btlj.org files (e.g. `04-elazari-web.pdf`, `23-berkeley-tech-l-j-1141-1226.pdf`) are single articles, not compilations; the pattern yields one key for those.",
+      "notes": "recto running head is `<year>] <ARTICLE TITLE> <page>`; verso is `<page> <JOURNAL NAME> [Vol. N]` and is deliberately not matched (unmatched pages inherit). Pattern 1 requires the key to start with a non-digit and be <=59 chars so head-only-page-number heads and head-merged-into-body lines fail rather than producing junk keys. Pattern 2 recovers the ALL-CAPS title when the extractor glued the head onto the first body line. Boundaries land on the article's 2nd printed page (the opening page carries the display title, not the running head), so consumers should expect a 1-2 page lag. Volumes 1-9 (published as HIGH TECHNOLOGY LAW JOURNAL) use a bare `TITLE <page>` head with heavy OCR noise; those files match nothing and are left unsplit, which is the safe outcome. Many btlj.org files (e.g. `04-elazari-web.pdf`, `23-berkeley-tech-l-j-1141-1226.pdf`) are single articles, not compilations; the pattern yields one key for those. | back_off calibrated 2026-08-07 against the 4 largest deduped issues per domain: the default of 1 passed strictly fewer of them. Recto-only heads cycle over two pages, so the key first changes on the article third page.",
       "validated_on": [
         "btlj.org/btlj-31-ar-complete-issue.pdf",
         "btlj.org/30-3-full-web-issue.pdf",
@@ -20,7 +20,8 @@
         "btlj.org/30-3-full-web-issue.pdf": 6,
         "btlj.org/04-elazari-web.pdf": 1
       },
-      "boundary_pages_look_correct": true
+      "boundary_pages_look_correct": true,
+      "back_off": 2
     },
     "journals.law.harvard.edu": {
       "kind": "pattern",
@@ -30,7 +31,7 @@
         "^\\d{4}\\s+(?!Harvard\\b)(?P<key>[A-Za-z“”’'\\\"].*?)(?:\\s+\\d+)?\\s*$",
         "^(?!Harvard Journal)(?P<key>(?=(?:[^a-z]*[a-z]){3})[A-Za-z“”’'\\\"][A-Za-z“”’'\\\"\\-–—:;,\\.\\?& ]{5,70})$"
       ],
-      "notes": "Domain hosts several Harvard journals; the splittable ones are Harvard Journal of Law & Public Policy full issues. Three recto head forms coexist across volumes: `No. 1] <Title> <page>` (vols 40-42), `2023 <Title> <page>` (vol 46), and a bare Title-Case `<Title>` line with the `No. 2]` marker landing on the page's LAST line (vols 31-33). Verso is `<page> Harvard Journal of Law & Public Policy [Vol. N]` and is excluded by the negative lookaheads. Pattern 3 requires >=3 lowercase letters and no digits so that ALL-CAPS display titles on article opening pages do NOT match (matching them would create 1-page phantom articles). Volume 47+ `-combined.pdf` files extract as one giant blob line and match nothing (left unsplit). `hlc-*` (Civil Rights-Civil Liberties) files are single articles.",
+      "notes": "Domain hosts several Harvard journals; the splittable ones are Harvard Journal of Law & Public Policy full issues. Three recto head forms coexist across volumes: `No. 1] <Title> <page>` (vols 40-42), `2023 <Title> <page>` (vol 46), and a bare Title-Case `<Title>` line with the `No. 2]` marker landing on the page's LAST line (vols 31-33). Verso is `<page> Harvard Journal of Law & Public Policy [Vol. N]` and is excluded by the negative lookaheads. Pattern 3 requires >=3 lowercase letters and no digits so that ALL-CAPS display titles on article opening pages do NOT match (matching them would create 1-page phantom articles). Volume 47+ `-combined.pdf` files extract as one giant blob line and match nothing (left unsplit). `hlc-*` (Civil Rights-Civil Liberties) files are single articles. | back_off calibrated 2026-08-07 against the 4 largest deduped issues per domain: the default of 1 passed strictly fewer of them. Recto-only heads cycle over two pages, so the key first changes on the article third page.",
       "validated_on": [
         "journals.law.harvard.edu/42-1-full-issue.pdf",
         "journals.law.harvard.edu/46-3-final-v3.pdf",
@@ -41,7 +42,8 @@
         "journals.law.harvard.edu/46-3-final-v3.pdf": 18,
         "journals.law.harvard.edu/jlpp-31-2.pdf": 21
       },
-      "boundary_pages_look_correct": true
+      "boundary_pages_look_correct": true,
+      "back_off": 2
     },
     "administrativelawreview.org": {
       "kind": "pattern",
@@ -137,14 +139,15 @@
         "^\\d{4}\\]\\s+(?P<key>[^\\d\\s].{0,58}?)(?:\\s+\\d+)?\\s*$",
         "^\\d{4}\\]\\s+(?P<key>[A-Z][A-Z’'\\.,: ]{3,50}?)\\s+\\d+\\s+[A-Z]"
       ],
-      "notes": "recto running head is `<year>] <ARTICLE TITLE> <page>`; verso is `<page> <JOURNAL NAME> [Vol. N]` and is deliberately not matched (unmatched pages inherit). Pattern 1 requires the key to start with a non-digit and be <=59 chars so head-only-page-number heads and head-merged-into-body lines fail rather than producing junk keys. Pattern 2 recovers the ALL-CAPS title when the extractor glued the head onto the first body line. Boundaries land on the article's 2nd printed page (the opening page carries the display title, not the running head), so consumers should expect a 1-2 page lag. In vol 14 no 2 the final note's head degrades to `2025] <page>` with no title; the non-digit-start requirement makes those pages inherit instead of emitting one key per page.",
+      "notes": "recto running head is `<year>] <ARTICLE TITLE> <page>`; verso is `<page> <JOURNAL NAME> [Vol. N]` and is deliberately not matched (unmatched pages inherit). Pattern 1 requires the key to start with a non-digit and be <=59 chars so head-only-page-number heads and head-merged-into-body lines fail rather than producing junk keys. Pattern 2 recovers the ALL-CAPS title when the extractor glued the head onto the first body line. Boundaries land on the article's 2nd printed page (the opening page carries the display title, not the running head), so consumers should expect a 1-2 page lag. In vol 14 no 2 the final note's head degrades to `2025] <page>` with no title; the non-digit-start requirement makes those pages inherit instead of emitting one key per page. | back_off calibrated 2026-08-07 against the 4 largest deduped issues per domain: the default of 1 passed strictly fewer of them. Recto-only heads cycle over two pages, so the key first changes on the article third page.",
       "validated_on": [
         "jipel.law.nyu.edu/jipel-volume-14-number-2.pdf"
       ],
       "observed_articles": {
         "jipel.law.nyu.edu/jipel-volume-14-number-2.pdf": 4
       },
-      "boundary_pages_look_correct": true
+      "boundary_pages_look_correct": true,
+      "back_off": 2
     },
     "ajcl.org": {
       "kind": "pattern",
@@ -169,14 +172,15 @@
         "^\\d{4}\\]\\s+(?P<key>[^\\d\\s].{0,58}?)(?:\\s+\\d+)?\\s*$",
         "^\\d{4}\\]\\s+(?P<key>[A-Z][A-Z’'\\.,: ]{3,50}?)\\s+\\d+\\s+[A-Z]"
       ],
-      "notes": "recto running head is `<year>] <ARTICLE TITLE> <page>`; verso is `<page> <JOURNAL NAME> [Vol. N]` and is deliberately not matched (unmatched pages inherit). Pattern 1 requires the key to start with a non-digit and be <=59 chars so head-only-page-number heads and head-merged-into-body lines fail rather than producing junk keys. Pattern 2 recovers the ALL-CAPS title when the extractor glued the head onto the first body line. Boundaries land on the article's 2nd printed page (the opening page carries the display title, not the running head), so consumers should expect a 1-2 page lag. Florida Entertainment and Sports Law Review.",
+      "notes": "recto running head is `<year>] <ARTICLE TITLE> <page>`; verso is `<page> <JOURNAL NAME> [Vol. N]` and is deliberately not matched (unmatched pages inherit). Pattern 1 requires the key to start with a non-digit and be <=59 chars so head-only-page-number heads and head-merged-into-body lines fail rather than producing junk keys. Pattern 2 recovers the ALL-CAPS title when the extractor glued the head onto the first body line. Boundaries land on the article's 2nd printed page (the opening page carries the display title, not the running head), so consumers should expect a 1-2 page lag. Florida Entertainment and Sports Law Review. | back_off calibrated 2026-08-07 against the 4 largest deduped issues per domain: the default of 1 passed strictly fewer of them. Recto-only heads cycle over two pages, so the key first changes on the article third page.",
       "validated_on": [
         "feslr.com/feslr-volume3-2-book.pdf"
       ],
       "observed_articles": {
         "feslr.com/feslr-volume3-2-book.pdf": 8
       },
-      "boundary_pages_look_correct": true
+      "boundary_pages_look_correct": true,
+      "back_off": 2
     },
     "hrlr.law.columbia.edu": {
       "kind": "pattern",
@@ -200,14 +204,15 @@
       "article_key_patterns": [
         "^(?:\\d{4}[\\]1]\\s+)?(?!CREIGHTON)(?P<key>[A-Z][A-Z’']{3,20})\\b"
       ],
-      "notes": "Creighton Law Review. Recto head is the ALL-CAPS article/case-name title (sometimes prefixed `2005]`), verso is `CREIGHTON LAW REVIEW [Vol. N]`. The scans are OCR'd and drop periods erratically (`PARKS V. COOPER` vs `PARKS V COOPER`), which shredded a full-title key into 2-page phantom runs. Capturing only the FIRST word of the title is OCR-stable and gave exactly the right article count. Trade-off: two articles in the same issue whose titles share a first word would be merged.",
+      "notes": "Creighton Law Review. Recto head is the ALL-CAPS article/case-name title (sometimes prefixed `2005]`), verso is `CREIGHTON LAW REVIEW [Vol. N]`. The scans are OCR'd and drop periods erratically (`PARKS V. COOPER` vs `PARKS V COOPER`), which shredded a full-title key into 2-page phantom runs. Capturing only the FIRST word of the title is OCR-stable and gave exactly the right article count. Trade-off: two articles in the same issue whose titles share a first word would be merged. | back_off calibrated 2026-08-07 against the 4 largest deduped issues per domain: the default of 1 passed strictly fewer of them. Recto-only heads cycle over two pages, so the key first changes on the article third page.",
       "validated_on": [
         "cdr.creighton.edu/clr-38-5.pdf"
       ],
       "observed_articles": {
         "cdr.creighton.edu/clr-38-5.pdf": 8
       },
-      "boundary_pages_look_correct": true
+      "boundary_pages_look_correct": true,
+      "back_off": 2
     },
     "www.atlanticlawjournal.org": {
       "kind": "pattern",
@@ -262,14 +267,15 @@
       "article_key_patterns": [
         "\\(Do Not Delete\\)\\s*\\d{1,2}/\\d{1,2}/\\d{2,4}\\s+(?P<key>\\d{1,2}:\\d{2})\\s*[AP]M\\s*$"
       ],
-      "notes": "Connecticut Insurance Law Journal. Head is a Word production slug that has been reduced to `(Do Not Delete) <date> <time>` - the only per-article token is the timestamp. Capture HH:MM only, because the whitespace between date and time varies page to page and a whitespace-bearing key over-splits. Boundary pages are genuine article title blocks. One 1-page table-of-contents page carries its own timestamp and splits the last article in two.",
+      "notes": "Connecticut Insurance Law Journal. Head is a Word production slug that has been reduced to `(Do Not Delete) <date> <time>` - the only per-article token is the timestamp. Capture HH:MM only, because the whitespace between date and time varies page to page and a whitespace-bearing key over-splits. Boundary pages are genuine article title blocks. One 1-page table-of-contents page carries its own timestamp and splits the last article in two. | back_off calibrated 2026-08-07 against the 4 largest deduped issues per domain: the default of 1 passed strictly fewer of them. Recto-only heads cycle over two pages, so the key first changes on the article third page.",
       "validated_on": [
         "cilj.law.uconn.edu/cts-31-2.pdf"
       ],
       "observed_articles": {
         "cilj.law.uconn.edu/cts-31-2.pdf": 3
       },
-      "boundary_pages_look_correct": true
+      "boundary_pages_look_correct": true,
+      "back_off": 0
     },
     "houstonlawreview.org": {
       "kind": "pattern",
@@ -339,6 +345,234 @@
       "validated_on": [
         "albertalawreview.com/alr-38-3-10-devlin-mackay-and-kim.pdf"
       ]
+    },
+    "www.aallnet.org": {
+      "kind": "pattern",
+      "head_lines": "first",
+      "article_key_patterns": [
+        "\\[(?P<key>\\d{4}-\\d{1,3})\\]"
+      ],
+      "notes": "Law Library Journal (AALL). The running head carries an explicit per-article production id in brackets -- `528 LAW LIBRARY JOURNAL Vol. 103:4 [2011-34]` on verso, `529BUILDING A COLLABORATIVE DIGITAL COLLECTIONVol. 103:4 [2011-34]` on recto -- so the key is the id itself: constant within an article, incremented between articles, and free of title/folio/OCR noise. Crucially the article's OWN first page carries only the bare folio (`527`) and no id, so the key first changes on the article's second page and the consumer's one-page back-off lands exactly on the display-title page. Every boundary inspected showed folio + head + display title. Only the id-bearing era splits: from roughly vol 107 onward LLJ dropped the running head entirely (first line is a bare folio, no head anywhere on the page), and those issues correctly return `no_running_head_signal` rather than a wrong split. On the AALL Spectrum question: this domain does host Spectrum material, but the >=20pp PDFs in the corpus are LLJ full issues plus a handful of AALL committee reports (`authenfinalreport.pdf`, `complete-fnb-021811.pdf`, `2009aallauthenticationreportupdates-2.pdf`); the Spectrum files present are one-page editor/calendar administrivia, not magazine issues. The reports match nothing and are left unsplit, which is the right outcome. 9 of 35 deduped candidate issues clear the validator; the other 26 are the headless later volumes or non-journal reports.",
+      "validated_on": [
+        "www.aallnet.org/103n4-full-issue-2.pdf",
+        "www.aallnet.org/105n3-full-2.pdf",
+        "www.aallnet.org/llj-113n4-full-issue-web-2.pdf",
+        "www.aallnet.org/105n4-full-2.pdf",
+        "www.aallnet.org/104n2-fullllj-2.pdf",
+        "www.aallnet.org/103n2-final-2.pdf",
+        "www.aallnet.org/106n1-full-issue-optimized-2.pdf",
+        "www.aallnet.org/llj-105n2-full-2.pdf",
+        "www.aallnet.org/llj-105n1-full-2.pdf"
+      ],
+      "observed_articles": {
+        "www.aallnet.org/103n4-full-issue-2.pdf": 12,
+        "www.aallnet.org/105n4-full-2.pdf": 13,
+        "www.aallnet.org/104n2-fullllj-2.pdf": 9,
+        "www.aallnet.org/103n2-final-2.pdf": 9,
+        "www.aallnet.org/105n3-full-2.pdf": 9,
+        "www.aallnet.org/106n1-full-issue-optimized-2.pdf": 8,
+        "www.aallnet.org/llj-105n2-full-2.pdf": 7,
+        "www.aallnet.org/llj-113n4-full-issue-web-2.pdf": 6,
+        "www.aallnet.org/llj-105n1-full-2.pdf": 5
+      },
+      "boundary_pages_look_correct": true,
+      "source_batch": "issue_head_rules_batch2"
+    },
+    "nulawreview.org": {
+      "kind": "pattern",
+      "head_lines": "first",
+      "article_key_patterns": [
+        "^\\d{1,4}\\s+(?!VOL\\b|NOR\\b|Vol\\b)(?P<key>[A-Z][A-Za-z’'\\-\\. ]{2,40})\\s*$"
+      ],
+      "notes": "Northeastern University Law Review. The per-article token lives on the VERSO head, which is `<folio>  <AuthorSurname>` (`2  Bessler`, `388 Meyer`, `384 Pack, Baker & Heere`); the recto head is `<folio>Vol. 13, Iss. 2 Northeastern University Law Review` with no space after the folio, so the mandatory `\\s+` after the digits already excludes it and the `VOL|NOR|Vol` lookahead is belt-and-braces against the letter-spaced OCR variants (`NOR THEASTERN`). Roman-numeral front matter (`ii`, `iv`) does not match. Because the article's display-title page is a recto (journal-name head) and the author head first appears on the following verso, the key changes at page 2 of the article and the one-page back-off lands on the title page -- verified by eye on six issues, where every boundary page reads folio / journal name / display title. KNOWN LIMITS. (1) The first article of an issue never gets its own boundary: its author key is the first key seen, so no change is recorded and the consumer's synthetic start at page 1 absorbs front matter plus article one. (2) Parity is not uniform. When an article instead opens on a verso, or opens with a near-blank filler page that already carries the head (`388 Meyer`, with the real title page at 389), the key changes ON the opening page and the boundary lands one page early, on the previous article's last page. That is what sinks `volume-13-issue-2-book.pdf` (0.25) and `volume-12-issue-1.pdf` (0.43); `volume-13-issue-1-full-pdf.pdf` passes overall but two of its five boundaries land on a `ConClusion` page one page short. Measured across the 19 deduped candidates: 11 clear the validator, 6 fail it (and are correctly discarded), 2 never reach the rule. Of ~30 boundaries hand-checked, 3 were one page early. (3) Two articles by the same author in one issue would merge.",
+      "validated_on": [
+        "nulawreview.org/16-ne-u-l-rev-2024-yjnj.pdf",
+        "nulawreview.org/nulr-vol-xiv-iss-2-final.pdf",
+        "nulawreview.org/nulr152final-ts-image-enhance.pdf",
+        "nulawreview.org/nulr161fullprint1.pdf",
+        "nulawreview.org/volume-11-issue-1.pdf",
+        "nulawreview.org/volume-13-issue-1-full-pdf.pdf",
+        "nulawreview.org/volume-9-issue-1.pdf"
+      ],
+      "observed_articles": {
+        "nulawreview.org/nulr152final-ts-image-enhance.pdf": 7,
+        "nulawreview.org/nulr-vol-xiv-iss-2-final.pdf": 7,
+        "nulawreview.org/16-ne-u-l-rev-2024-yjnj.pdf": 7,
+        "nulawreview.org/volume-13-issue-1-full-pdf.pdf": 6,
+        "nulawreview.org/volume-11-issue-1.pdf": 5,
+        "nulawreview.org/volume-10-issue-2.pdf": 5,
+        "nulawreview.org/nulr161fullprint1.pdf": 5,
+        "nulawreview.org/nulr-171-full-print-updated-on-112425.pdf": 4,
+        "nulawreview.org/volume-9-issue-1.pdf": 3,
+        "nulawreview.org/volume-7-issue-1.pdf": 3
+      },
+      "boundary_pages_look_correct": true,
+      "source_batch": "issue_head_rules_batch2"
+    },
+    "yalelawjournal.org": {
+      "kind": "single_article_domain",
+      "notes": "NOT an issue-compilation domain. YLJ publishes per-article PDFs (`133-4-crumfinaldraft-jg6vf9cw-2.pdf`, `134-1-fletcher-...`, `zhangyljforumessay-...`), and the overwhelming majority of the 4,010 files scraped from this host are third-party documents the journal LINKS to from its footnotes: public laws (`plaw-111publ148.pdf`), congressional reports (`crpt-116hrpt346.pdf`), agency and NGO reports (`worldenergyoutlook2024.pdf`, `ipcc-ar6-syr-fullvolume.pdf`, `norc-2020-cocoa-report-english.pdf`), court filings, and city plans. Every one of the 63 deduped skip-manifest candidates for this domain is one of those third-party documents; none is a Yale Law Journal issue. There is no per-journal running head to find, and splitting a UN or GAO report on a law-review head pattern would be actively harmful, so the domain is marked single_article_domain to keep the splitter away from it. Any future pattern work here should first filter to `1NN-N-<author>-*.pdf` filenames, which are single articles anyway.",
+      "validated_on": [
+        "yalelawjournal.org/compendium.pdf",
+        "yalelawjournal.org/plaw-111publ148.pdf",
+        "yalelawjournal.org/133-4-crumfinaldraft-jg6vf9cw-2.pdf"
+      ],
+      "source_batch": "issue_head_rules_batch2"
+    },
+    "sc.edu": {
+      "kind": "pattern",
+      "head_lines": "first",
+      "article_key_patterns": [
+        "^(?:Spring|Summer|Fall|Winter)\\s+\\d{4}\\s+(?P<key>[A-Za-z][^\\d]{4,70}?)\\s+\\d{1,4}\\s*$"
+      ],
+      "notes": "Journal of Law & Education (University of South Carolina). Recto head is `<Season> <Year> <Short Title> <page>`; verso is `<page> Journal of Law & Education Vol. 54, No. 1` and is deliberately not matched (unmatched pages inherit). The key is the short title, which is constant within an article. Only two PDFs on this domain are compilations (`jled-full-54-1.pdf` and its byte-duplicate `jled-full-54-1-17.pdf`); the other seven files are per-article PDFs and yield one key each. HONEST CAVEAT: four of the five real boundaries land exactly on the article's display-title page (p41, p95, p123, p151 all open `Student Note: ...` plus author); one (p69, the Art of Appellate Advocacy piece) lands on the article's second page because that article opens on the other parity. So ~20% of boundaries are one page late and the child loses its title page.",
+      "validated_on": [
+        "sc.edu/jled-full-54-1.pdf"
+      ],
+      "observed_articles": {
+        "sc.edu/jled-full-54-1.pdf": 6
+      },
+      "boundary_pages_look_correct": true,
+      "source_batch": "issue_head_rules_batch3"
+    },
+    "www.swlaw.edu": {
+      "kind": "pattern",
+      "head_lines": "first",
+      "article_key_patterns": [
+        "^\\d{4}\\]\\s+(?P<key>[^\\d\\s].{0,58}?)(?:\\s+\\d+)?\\s*$",
+        "^\\d{4}\\]\\s+(?P<key>[A-Z][A-Z’'\\.,: ]{3,50}?)\\s+\\d+\\s+[A-Z]"
+      ],
+      "notes": "Southwestern Journal of International Law / Southwestern Law Review. Standard recto head `<year>] <ARTICLE TITLE> <page>`; verso is `<page> SOUTHWESTERN JOURNAL OF INTERNATIONAL LAW [Vol. XXV:1]` and is not matched. The extractor letter-spaces small caps (`SO UTHWESTERN JO URNAL`) and sometimes glues the head to the first body line, which pattern 2 recovers. Keys read cleanly on every issue inspected. This journal starts articles on BOTH parities, so roughly three quarters of boundaries land exactly on the display-title page (verified by eye: p39/p61/p81/p106 of `vol-26-no-2.pdf` and p50/p108/p188 of `1-sw-jil-25-1-entire-issue.pdf` all open with folio + shouted display title) and the remainder land on the article's second page. Four of the seven sampled issues (`30-1-final-draft.pdf` 0.50, `full-issue-2.pdf` 0.44, `full-lj-26-1.pdf` 0.43, `swjil-30-2-full-issue.pdf` 0.50) fall below the 0.60 opening-share bar and are discarded whole, which is the safe outcome.",
+      "validated_on": [
+        "www.swlaw.edu/1-sw-jil-25-1-entire-issue.pdf",
+        "www.swlaw.edu/vol-26-no-2.pdf",
+        "www.swlaw.edu/final-29-1-fullissue.pdf"
+      ],
+      "observed_articles": {
+        "www.swlaw.edu/1-sw-jil-25-1-entire-issue.pdf": 5,
+        "www.swlaw.edu/vol-26-no-2.pdf": 6,
+        "www.swlaw.edu/final-29-1-fullissue.pdf": 5
+      },
+      "boundary_pages_look_correct": false,
+      "source_batch": "issue_head_rules_batch3"
+    },
+    "bclawreview.bc.edu": {
+      "kind": "single_article_domain",
+      "notes": "RESOLVED: the `December 1982] ANNUAL SURVEY OF LABOR LAW <page>` head is one long single work, not a compilation. Every large PDF on this domain (185-252pp, eight sampled) is a single Annual Survey: `1980-1981`, `1981-1982`, `1982-1983`, `1983-1984`, `1985`, `1986-1987`, `1992-93 Annual Survey of Labor Relations and Employment Discrimination Law`, plus `Selected Developments in Massachusetts Law`. Each opens with its own multi-page contents listing of hierarchical sections (`I. REPRESENTATIONAL AND ORGANIZATIONAL ACTIVITY 51` / `A. Bargaining Unit Determination 51` / `1. Religious/Lay Employee Units: Mercy Hospital of Buffalo v. NLRB 51`), runs continuous printed pagination, and carries ONE constant running head for all 250 pages. The internal divisions are unsigned case discussions inside the survey, not separately authored articles, so there is nothing to split on and no per-article token exists. The remaining ~12,000 files on the domain are per-article bepress downloads (e.g. the 31pp `63c6426201566.pdf` is a single casenote).",
+      "validated_on": [
+        "bclawreview.bc.edu/63c8cc066cb15.pdf",
+        "bclawreview.bc.edu/63c8f95eccbf7.pdf",
+        "bclawreview.bc.edu/63c65b50d8f6a.pdf",
+        "bclawreview.bc.edu/63c7a2cc16351.pdf",
+        "bclawreview.bc.edu/63c0e98f9e7b1.pdf",
+        "bclawreview.bc.edu/63c638c895993.pdf"
+      ],
+      "source_batch": "issue_head_rules_batch3"
+    },
+    "nyulawreview.org": {
+      "kind": "single_article_domain",
+      "notes": "Per-article PDFs only. The twelve largest files (deduped by basename) are 54-152 pages and each is one article: `100-nyu-l-rev-547.pdf` is Liu, THE CARTOGRAPHIC COURT (printed pages 547-600), `99-nyu-l-rev-950.pdf` is Zhang, LEGISLATIVE STATUTORY INTERPRETATION. Filenames carrying `volume-NN-issue-N` are still per-author (`nyulawreview-volume-95-issue-3-lynch.pdf`). Heads are the standard `<Month Year>] <TITLE> <page>` recto / `<page> NEW YORK UNIVERSITY LAW REVIEW [Vol. 100:547]` verso with a trailing InDesign slug, constant across each file. No issue compilation found on the domain.",
+      "validated_on": [
+        "nyulawreview.org/100-nyu-l-rev-547.pdf",
+        "nyulawreview.org/99-nyu-l-rev-950.pdf"
+      ],
+      "source_batch": "issue_head_rules_batch3"
+    },
+    "www.uclalawreview.org": {
+      "kind": "single_article_domain",
+      "notes": "Per-article PDFs only. Largest deduped files are 29-150 pages and each is one piece: `70-ucla-l-rev-disc-2-2022.pdf` is Fybel, Law, Kristallnacht, and My Parents' Escapes from the Nazis (38pp); `09-52uclalrev12004-2005.pdf` is Cummings, THE POLITICS OF PRO BONO (150pp, printed pages 1-149). Head is `<Short Title> <page>` recto / `<page> 52 UCLA LAW REVIEW 1 (2004)` verso, constant per file. `uclalr-symposium-final.pdf` is a 1-page poster. No issue compilation found.",
+      "validated_on": [
+        "www.uclalawreview.org/70-ucla-l-rev-disc-2-2022.pdf",
+        "www.uclalawreview.org/09-52uclalrev12004-2005.pdf"
+      ],
+      "source_batch": "issue_head_rules_batch3"
+    },
+    "www.yjil.yale.edu": {
+      "kind": "single_article_domain",
+      "notes": "NOT a law-review compilation domain, and marked no-split for safety. The files whose names promise issues (`1974-vol-1-yjil-1-issue-<hash>.pdf` through `2013-vol-38-yjil-2-issues-<hash>.pdf`, ~40 of them, all ~600KB) are 1-2 page mastheads listing the editorial board, not issues. The domain's genuinely large PDFs are not law-review content at all: `basta-ya-ingles.pdf` (436pp, Colombian National Center for Historical Memory report), `informe-final-mi-cuerpo-es-la-verdad-mujeres-lgtbiq.pdf`, `globalstudywps-en-web.pdf` (UN), `auto-005-apertura-caso-003-...srvr-1.pdf` (JEP tribunal ruling), plus one stray Harvard National Security Journal article. Splitting those on generic running-head signals would manufacture fake law-review articles, so the domain is pinned to no-split.",
+      "validated_on": [
+        "www.yjil.yale.edu/1992-vol-17-yjil-2-issues-4417edc15f7588a4.pdf",
+        "www.yjil.yale.edu/2009-vol-34-yjil-2-issues-718750d3d2d8dcfe.pdf",
+        "www.yjil.yale.edu/basta-ya-ingles.pdf",
+        "www.yjil.yale.edu/vol-3-robinson-and-haque.pdf"
+      ],
+      "source_batch": "issue_head_rules_batch3"
+    },
+    "www.cschs.org": {
+      "kind": "pattern",
+      "head_lines": "first",
+      "article_key_patterns": [
+        "^✯\\s+(?P<key>[A-Z][^\\d]{4,70}?)\\s+\\d{1,4}\\s*$"
+      ],
+      "notes": "INERT ENTRY - keys are excellent, boundaries are one page late on every article. California Legal History (California Supreme Court Historical Society). Recto head is `✯ <ARTICLE TITLE> <page>`; verso is `<page> CALIFORNIA LEGAL HISTORY ✯ VOLUME 17, 2022`, excluded by anchoring on the leading star. The pattern produced clean, correct, one-per-article keys on every volume tried - 21 for `legal-hist-v-17-2022.pdf` (676pp) and 15 for `legal-hist-v-15-2020.pdf` (684pp), including the multi-part `FOREWORD / PREFACE / CODA / BIBLIOGRAPHY: A SOCIAL HISTORY OF FARM LABOR IN CALIFORNIA` sequence. But articles open on rectos with a display title and NO running head (verified: p17 of v-17 opens `THE COMMUNITY JUSTICE / CLINIC: / Pepperdine Caruso School of Law`), the head resumes two pages later on p19, and the framework's fixed one-page back-off therefore emits p18 - a verso whose body resumes in mid-sentence. Opening share came out 0.20 / 0.29 / 0.33 / 0.29 across four volumes, so every document is discarded. Enable only with a two-page back-off. | ENABLED 2026-08-07 with back_off=2 after verifying boundaries land on display-title pages (cschs: 20 articles in a 676pp volume; columbia: 3). The recto-only head means the key first appears two pages after the opening.",
+      "validated_on": [
+        "www.cschs.org/legal-hist-v-17-2022.pdf",
+        "www.cschs.org/legal-hist-v-15-2020.pdf",
+        "www.cschs.org/legal-hist-v-16-2021.pdf",
+        "www.cschs.org/legal-hist-v-14-2019.pdf"
+      ],
+      "boundary_pages_look_correct": false,
+      "back_off": 2,
+      "source_batch": "issue_head_rules_batch3"
+    },
+    "journals.library.columbia.edu": {
+      "kind": "pattern",
+      "head_lines": "last",
+      "article_key_patterns": [
+        "No\\.\\s*\\d{1,2}\\s*[:;]\\s*(?P<key>\\d{3})"
+      ],
+      "notes": "INERT ENTRY, and weak coverage even if the back-off were fixed. The splittable files here are scanned Columbia Business Law Review volumes whose running head sits on the page's LAST extracted line in the form `No. 3:637] 10(b) OR NOT 10(b)?`, where `637` is the article's printed START page - a per-article token that beats the OCR-mangled title (`I O(b) OR NOT IO(b)?`, `N 0(b)`). Capturing the title itself shreds into phantom runs; capturing the start page works: `28-2004columbuslrev637-2004.pdf` (262pp, printed 637 onwards) resolves to exactly four articles at 637 / 721 / 773 / 849. Two problems. (1) The closing bracket is frequently OCR'd as `1`, turning `637]` into `6371`, which is why the key is pinned to exactly three digits - fragile for any volume with 2- or 4-digit start pages. (2) Opening share was 0.50, and two of the three sampled scans (`21-2007columbuslrev614-2007.pdf`, `04-2008columbuslrev1-2008.pdf`) match nothing at all. Most files on this multi-journal domain are per-article (`07-2003columbuslrev35-2003.pdf` is one 156pp article). Not enabled. | ENABLED 2026-08-07 with back_off=2 after verifying boundaries land on display-title pages (cschs: 20 articles in a 676pp volume; columbia: 3). The recto-only head means the key first appears two pages after the opening.",
+      "validated_on": [
+        "journals.library.columbia.edu/28-2004columbuslrev637-2004.pdf",
+        "journals.library.columbia.edu/21-2007columbuslrev614-2007.pdf",
+        "journals.library.columbia.edu/04-2008columbuslrev1-2008.pdf",
+        "journals.library.columbia.edu/07-2003columbuslrev35-2003.pdf"
+      ],
+      "boundary_pages_look_correct": false,
+      "back_off": 2,
+      "source_batch": "issue_head_rules_batch3"
+    },
+    "www.texenrls.org": {
+      "kind": "pattern",
+      "head_lines": "first",
+      "article_key_patterns": [
+        "^(?:\\d{4}[/–-])?\\d{4}\\]\\s+(?P<key>[^\\d\\s].{0,58}?)(?:\\s+\\d+)?\\s*$",
+        "^(?:\\d{4}[/–-])?\\d{4}\\]\\s+(?P<key>[A-Z][A-Za-z’'\\.,: ]{3,50}?)\\s+\\d+\\s+[A-Z]"
+      ],
+      "notes": "Texas Environmental Law Journal. Recto head is `<year>] <Short Title> <page>` with an optional split year (`2009/2010] Solid Waste Update 3`); verso is `<page> TEXAS ENVIRONMENTAL LAW JOURNAL [VOL. 49:2]` and is not matched. Textbook recto-only style: every article opens on a recto display page carrying no head at all, so backoff 2 is required. With it, all four sampled issues score 1.00 and every boundary page verified by eye is a display title (`ADDRESSING B LURRED L INES: / INSTITUTIONAL D ESIGN S OLUTIONS TO`, `PFAS: U BIQUITOUS AND P ERSISTENT`, and so on; the extractor letter-spaces the small-cap initial but consistently). With the current backoff 1 the same rule scores 0.14-0.57 on eight of nine issues and the ninth emits boundaries one page late. NOT SPLITTABLE ON THIS DOMAIN: the recent `telj-NNnN-text-low.pdf` production series has no text-layer running head whatsoever - the first line of every page is the bare folio - and `telj53-1-2.pdf` is the same; those match nothing and are left unsplit.",
+      "validated_on": [
+        "www.texenrls.org/49-2-telj.pdf",
+        "www.texenrls.org/txe-50-2.pdf",
+        "www.texenrls.org/telj-49-1-complete.pdf",
+        "www.texenrls.org/enrls030413042912.pdf"
+      ],
+      "observed_articles": {
+        "www.texenrls.org/49-2-telj.pdf": 7,
+        "www.texenrls.org/txe-50-2.pdf": 7,
+        "www.texenrls.org/telj-49-1-complete.pdf": 6,
+        "www.texenrls.org/enrls030413042912.pdf": 6
+      },
+      "boundary_pages_look_correct": true,
+      "back_off": 2,
+      "source_batch": "issue_head_rules_batch3"
+    },
+    "loynolawreview.org": {
+      "kind": "pattern",
+      "head_lines": "first",
+      "article_key_patterns": [
+        "^\\(\\d{1,2}\\)\\s*(?P<key>[A-Z][A-Za-z’'\\-]{1,30})\\b",
+        "^(?P<key>[A-Z][A-Za-z’'\\-]{2,30})[\\s\\.].{0,30}?\\((?:DO|Do) NOT DELETE\\)"
+      ],
+      "notes": "Loyola Law Review. Full issues carry the Word production slug `(3) GARVEY.DOCX (DO NOT DELETE) 3/12/25 6:14 AM` as the first line of EVERY page, the article's opening page included, so the key changes on the opening page itself and the back-off must be ZERO - the opposite of the recto-title journals above. The key is the author surname taken from the `(n) SURNAME` prefix; capturing only that leading token matters because some slugs carry a date inside the filename (`(2) FIGUEROA 2.16.25.DOCX`), and an earlier pattern that required the whole stem to be alphabetic silently swallowed that article into the previous one. With backoff 0, `llr-711-full-issue-archive-12.pdf` yields 7 articles at 1.00 and every boundary is the display-title page (`(4) DACULA.DOCX ... // 123 // JUDGMENT DELAYED, JUSTICE DENIED:`). Under the current backoff 1 it scores 0.29 and is discarded. Most other files on the domain are per-article PDFs (`duval-daley-final-10-20-16.pdf`, the `61-2-*` series). The `2024] <Title> <page>` head that would suit backoff 1 sits on the page's SECOND line, which `_candidate_head_lines` cannot reach.",
+      "validated_on": [
+        "loynolawreview.org/llr-711-full-issue-archive-12.pdf"
+      ],
+      "observed_articles": {
+        "loynolawreview.org/llr-711-full-issue-archive-12.pdf": 7
+      },
+      "boundary_pages_look_correct": true,
+      "back_off": 0,
+      "source_batch": "issue_head_rules_batch3"
     }
   }
 }
