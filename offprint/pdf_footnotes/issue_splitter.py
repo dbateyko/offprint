@@ -641,3 +641,555 @@ def _skip_row(parent_path: Path, parent_sha256: str, domain: str, reason: str) -
         "domain": domain,
         "skip_reason": reason,
     }
+
+
+# ---------------------------------------------------------------------------
+# US law-review boundary inference (added 2026-08-06)
+#
+# `infer_article_boundaries` above was built against Aberdeen Student Law
+# Review house style: it needs a line reading exactly "TABLE OF CONTENTS" and
+# page references spelled "Page 139". Measured over 80 randomly sampled
+# >=50pp issue PDFs from corpus/scraped, it produced boundaries for 3 of them
+# (4%), and each of those 3 came from the low-confidence heading fallback --
+# one 674-page volume was split into two articles.
+#
+# US law reviews do not write TOCs that way. What they do have is a running
+# head that changes at every article boundary. The forms vary by journal but
+# all carry a per-article token:
+#
+#   University of Hawai'i Law Review / Vol. 32:359   <- article start page
+#   2022] Don't Be Afraid of Trial                   <- article title
+#   50 Klein                                         <- author surname
+#   KAMINSKI_FINALPROOF_07-20-22 (DO NOT DELETE)     <- production slug
+#   2mohan (Do Not Delete)3/30/2014 8:26 AM          <- production slug
+#
+# So boundaries are found by detecting where that signature changes, and are
+# cross-checked against a TOC parser that reads the trailing-page-number form
+# US journals actually use ("Title / Author .... 139").
+# ---------------------------------------------------------------------------
+
+# Verso and recto carry DIFFERENT running heads, so a naive page-to-page
+# comparison reports a change on every single page. Signatures are always
+# compared within a parity stream.
+_HEAD_DIGIT_RE = re.compile(r"\d+")
+_HEAD_NOISE_RE = re.compile(r"[^A-Z ]+")
+_VOL_START_RE = re.compile(r"\bVol(?:ume)?\.?\s*\d{1,3}\s*[:.;]\s*(\d{1,4})\b", re.I)
+_TOC_ENTRY_RE = re.compile(r"^(?P<label>.*?\S)\s*[.…\s]{2,}\s*(?P<page>\d{1,4})$")
+_TRAILING_PAGE_RE = re.compile(r"^(?P<label>.*?\S)\s+(?P<page>\d{1,4})$")
+_CAPITALISED_TOKEN_RE = re.compile(r"\b[A-Z][A-Za-z'`.-]*")
+
+
+def head_signature(page_text: str) -> str:
+    """Normalise a page's running head into a comparable signature.
+
+    Digits go first: folios change on every page and would otherwise make each
+    page look like a new article. What survives is the alphabetic core --
+    journal name, article title, author, or production slug.
+    """
+    lines = _clean_lines(page_text)
+    if not lines:
+        return ""
+    head = lines[0].upper()
+    head = _HEAD_DIGIT_RE.sub(" ", head)
+    head = _HEAD_NOISE_RE.sub(" ", head)
+    return _SPACE_RE.sub(" ", head).strip()
+
+
+def _signature_similarity(left: str, right: str) -> float:
+    """Token-set Jaccard. Tolerates the character noise scanned text carries."""
+    left_tokens = {token for token in left.split() if len(token) > 2}
+    right_tokens = {token for token in right.split() if len(token) > 2}
+    if not left_tokens and not right_tokens:
+        return 1.0
+    if not left_tokens or not right_tokens:
+        return 0.0
+    intersection = len(left_tokens & right_tokens)
+    union = len(left_tokens | right_tokens)
+    return intersection / union if union else 0.0
+
+
+def article_start_pages_from_heads(page_texts: list[str]) -> list[int]:
+    """Boundaries from the `Vol. 33:139` form, which names the article's start.
+
+    This is the most reliable variant available: the header does not merely
+    change at a boundary, it states which page the current article began on,
+    so the boundary needs no inference at all.
+    """
+    observed: list[tuple[int, int]] = []
+    for index, text in enumerate(page_texts, start=1):
+        lines = _clean_lines(text)
+        if not lines:
+            continue
+        window = " ".join(lines[:2]) + " " + " ".join(lines[-2:])
+        match = _VOL_START_RE.search(window)
+        if match:
+            observed.append((index, int(match.group(1))))
+    if len({start for _, start in observed}) < 2:
+        return []
+
+    # First physical page on which each printed start-page value appears.
+    first_physical: dict[int, int] = {}
+    for physical, start in observed:
+        first_physical.setdefault(start, physical)
+
+    # The header naming article N appears on its SECOND page at the earliest:
+    # an article's opening page carries a drop title, not a running head.
+    starts = sorted(max(1, physical - 1) for physical in first_physical.values())
+    return _prune_starts(starts)
+
+
+def change_points_from_heads(page_texts: list[str], threshold: float = 0.4) -> list[int]:
+    """Boundaries from any running head that changes between articles.
+
+    Compares each page against the previous page of the SAME parity, then
+    keeps only changes corroborated by the other parity nearby -- a single
+    stream flips on section breaks and full-page tables too.
+    """
+    signatures = [head_signature(text) for text in page_texts]
+    raw: list[int] = []
+    for index in range(2, len(signatures)):
+        current, previous = signatures[index], signatures[index - 2]
+        if not current or not previous:
+            continue
+        if _signature_similarity(current, previous) < threshold:
+            raw.append(index + 1)
+    if not raw:
+        return []
+
+    corroborated = [
+        page
+        for page in raw
+        if any(other != page and abs(other - page) <= 2 for other in raw)
+    ]
+    # Report the earlier page of each corroborated verso/recto pair.
+    return _prune_starts(sorted({min(page, page - 1) for page in corroborated}))
+
+
+def _prune_starts(starts: Iterable[int], min_gap: int = 4) -> list[int]:
+    """Drop boundaries closer together than a real article can be."""
+    pruned: list[int] = []
+    for start in sorted(set(starts)):
+        if start < 1:
+            continue
+        if not pruned or start - pruned[-1] >= min_gap:
+            pruned.append(start)
+    return pruned
+
+
+def parse_toc_printed_starts(page_texts: list[str], scan_pages: int = 12) -> list[int]:
+    """Read printed start pages from a US-style contents listing.
+
+    Entries look like `Remedies for the Wrongly Deported ... 139` or
+    `Rachel E. Rosenbloom      139` -- a label then a trailing page number,
+    with or without dot leaders. The sequence must be increasing; that is what
+    separates a contents listing from a page of prose ending in a numeral.
+    """
+    best: list[int] = []
+    for text in page_texts[:scan_pages]:
+        found: list[int] = []
+        for line in _clean_lines(text):
+            leader_match = _TOC_ENTRY_RE.match(line)
+            match = leader_match or _TRAILING_PAGE_RE.match(line)
+            if not match:
+                continue
+            label = match.group("label").strip()
+            if len(label) < 4 or not re.search(r"[A-Za-z]{3}", label):
+                continue
+            # Without dot leaders a trailing number is weak evidence: a line of
+            # prose ending "...amended in 2019" parses identically. Contents
+            # entries are titles and author names, so require the label to
+            # carry at least two capitalised words.
+            if leader_match is None and len(_CAPITALISED_TOKEN_RE.findall(label)) < 2:
+                continue
+            page = int(match.group("page"))
+            if page <= 0 or (found and page <= found[-1]):
+                continue
+            found.append(page)
+        if len(found) > len(best):
+            best = found
+    return best if len(best) >= 2 else []
+
+
+def infer_law_review_boundaries(
+    page_texts: list[str],
+    domain: str = "",
+    head_rules: dict[str, Any] | None = None,
+) -> BoundaryInference:
+    """Boundary inference for US law-review issue compilations.
+
+    Runs the header and contents signals independently and requires them to
+    agree before emitting a high-confidence split. Precision is the priority:
+    a wrong boundary silently truncates one article and prepends its tail to
+    the next, and both then enter the citation graph as real documents.
+    """
+    total_pages = len(page_texts)
+    if total_pages < 20:
+        return BoundaryInference([], "law_review", 0.0, "too_few_pages")
+
+    rule = ((head_rules or {}).get("domains") or {}).get(domain.lower()) or {}
+    if rule.get("kind") == "single_article_domain":
+        # Validated as per-article PDFs misclassified upstream, not compilations.
+        return BoundaryInference([], "domain_rule", 0.0, "single_article_domain")
+
+    explicit = article_start_pages_from_heads(page_texts)
+    changed = change_points_from_heads(page_texts)
+    toc_printed = parse_toc_printed_starts(page_texts)
+    by_rule = (
+        boundaries_from_domain_rule(page_texts, rule)
+        if rule.get("kind") == "pattern"
+        else []
+    )
+
+    if explicit and len(explicit) >= 2:
+        starts, method, confidence = explicit, "running_head_vol_start", 0.92
+    elif by_rule and len(by_rule) >= 2:
+        starts, method, confidence = by_rule, "domain_head_rule", 0.85
+    elif changed and len(changed) >= 2:
+        # Change detection alone is NOT safe to split on. Measured against
+        # hand-read output: it fired on 29 of 80 sampled issues and put the
+        # boundaries mid-article, at a near-constant 4-page period -- a full
+        # page of footnote continuation or a landscape table displaces the
+        # running head, which reads as a change. One Law & Inequality volume
+        # came back cut every four pages inside a single article.
+        #
+        # A wrong boundary is worse than no boundary: it truncates one article
+        # and prepends its tail to the next, and both then enter the citation
+        # graph as genuine documents. So this signal is reported for triage and
+        # never emitted. Lifting these journals needs a per-domain pattern, not
+        # a better global threshold.
+        return BoundaryInference(
+            [], "running_head_change", 0.0, "change_signal_only_unverified"
+        )
+    else:
+        return BoundaryInference([], "law_review", 0.0, "no_running_head_signal")
+
+    # A contents listing that counts the same number of articles corroborates
+    # the header signal; the counts rarely match exactly because tributes and
+    # book reviews are listed but not always separately headed.
+    if toc_printed:
+        ratio = len(toc_printed) / max(len(starts), 1)
+        if 0.6 <= ratio <= 1.7:
+            confidence = min(0.97, confidence + 0.1)
+            method = f"{method}+toc_agreement"
+
+    if len(starts) > 80:
+        return BoundaryInference([], method, 0.0, "implausible_article_count")
+
+    # Every boundary must land on a page that actually opens an article. A
+    # per-domain pattern validated against one issue can latch onto body text
+    # in another issue of the same journal and cut it every eight pages; the
+    # signal that produced the boundary cannot detect that, but the target page
+    # can. When most boundaries fail, the signal is not tracking articles here.
+    starts, opening_share = validate_boundary_starts(page_texts, starts)
+    if opening_share < 0.6:
+        return BoundaryInference(
+            [], method, 0.0, f"boundaries_not_article_openings:{opening_share:.2f}"
+        )
+    confidence = min(confidence, 0.6 + 0.35 * opening_share)
+
+    if len(starts) < 2:
+        return BoundaryInference([], method, 0.0, "too_few_article_spans")
+
+    boundaries: list[ArticleBoundary] = []
+    for index, start_page in enumerate(starts):
+        end_page = starts[index + 1] - 1 if index + 1 < len(starts) else total_pages
+        if end_page < start_page:
+            continue
+        boundaries.append(
+            ArticleBoundary(
+                start_page=start_page,
+                end_page=end_page,
+                method=method,
+                confidence=confidence,
+                title_guess=guess_title_from_article_page(page_texts[start_page - 1]),
+            )
+        )
+    if len(boundaries) < 2:
+        return BoundaryInference([], method, 0.0, "too_few_article_spans")
+    return BoundaryInference(boundaries, method, confidence)
+
+
+# ---------------------------------------------------------------------------
+# Per-domain running-head rules
+#
+# Most journals' heads carry a per-article token that no global pattern can
+# find: an article title, an author surname, or a typesetting slug. Those are
+# journal-level conventions, stable across every issue a journal published, so
+# they are described once per domain in `issue_head_rules.json` rather than
+# inferred per issue.
+# ---------------------------------------------------------------------------
+
+HEAD_RULES_PATH = Path(__file__).with_name("issue_head_rules.json")
+
+# Minimum pages an article can occupy. Heads degrade in ways that flip the key
+# for a page or two -- a `The`/`the` case flip, a front-matter region
+# alternating between two export timestamps -- and each flip would otherwise
+# emit a 1-2 page phantom article.
+_MIN_ARTICLE_PAGES = 4
+
+
+def load_head_rules(path: str | Path | None = None) -> dict[str, Any]:
+    rule_path = Path(path or HEAD_RULES_PATH)
+    if not rule_path.exists():
+        return {"version": "0", "domains": {}}
+    try:
+        data = json.loads(rule_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {"version": "0", "domains": {}}
+    if not isinstance(data, dict) or not isinstance(data.get("domains"), dict):
+        return {"version": "0", "domains": {}}
+    return data
+
+
+def _candidate_head_lines(page_text: str, which: str) -> list[str]:
+    lines = _clean_lines(page_text)
+    if not lines:
+        return []
+    if which == "last":
+        return [lines[-1]]
+    if which == "both":
+        return [lines[0], lines[-1]] if len(lines) > 1 else [lines[0]]
+    return [lines[0]]
+
+
+def _normalise_key(raw: str) -> str:
+    """Case- and punctuation-insensitive, so a `The`/`the` flip is not a boundary."""
+    return _SPACE_RE.sub(" ", re.sub(r"[^A-Za-z0-9 ]+", " ", raw)).strip().upper()
+
+
+def article_keys_for_pages(
+    page_texts: list[str], rule: dict[str, Any]
+) -> list[str | None]:
+    """Per-page article key, with unmatched pages inheriting the previous one.
+
+    Inheritance is the whole point. A full-page footnote run or a landscape
+    table displaces the running head, and treating that as a new article was
+    the bug that cut volumes every four pages.
+    """
+    patterns = []
+    for raw in rule.get("article_key_patterns") or []:
+        try:
+            patterns.append(re.compile(raw))
+        except re.error:
+            continue
+    which = str(rule.get("head_lines") or "first")
+
+    keys: list[str | None] = []
+    current: str | None = None
+    for text in page_texts:
+        matched: str | None = None
+        for line in _candidate_head_lines(text, which):
+            for pattern in patterns:
+                found = pattern.search(line)
+                if found:
+                    try:
+                        candidate = found.group("key")
+                    except IndexError:  # pattern authored without a `key` group
+                        candidate = ""
+                    candidate = _normalise_key(candidate or "")
+                    if candidate:
+                        matched = candidate
+                        break
+            if matched:
+                break
+        if matched:
+            current = matched
+        keys.append(current)
+    return keys
+
+
+def boundaries_from_domain_rule(
+    page_texts: list[str], rule: dict[str, Any]
+) -> list[int]:
+    """Start pages where the per-article key changes.
+
+    Each boundary is backed off by one page. Where the head carries the article
+    title, the article's OWN first page shows the display title instead of a
+    running head, so the key does not change until page two. Without the
+    back-off every child would lose its title page -- which is the page the
+    downstream metadata pass reads title and author from.
+    """
+    keys = article_keys_for_pages(page_texts, rule)
+    starts: list[int] = []
+    previous: str | None = None
+    for index, key in enumerate(keys, start=1):
+        if key is None:
+            continue
+        if previous is not None and key != previous:
+            starts.append(max(1, index - 1))
+        previous = key
+    if starts and starts[0] > 1:
+        starts.insert(0, 1)
+    return _prune_starts(starts, min_gap=_MIN_ARTICLE_PAGES)
+
+
+# A running head, which sits above the body on a continuation page. Dropped
+# before judging whether a page opens an article.
+_RUNNING_HEAD_RE = re.compile(
+    r"\[?\s*Vol(?:ume)?\.?\s*\d|"
+    r"(?:LAW\s+REVIEW|LAW\s+JOURNAL|JOURNAL\s+OF|L\.\s*REV\.|"
+    r"do\s+not\s+delete)",
+    re.IGNORECASE,
+)
+# The same shapes after every space is removed. Extractors letter-space small
+# caps -- `550 J OURNAL OF LAW, ECONOMICS & POLICY [V OL. 8:3` -- and the
+# spaced form matches none of the patterns above, so the head survived into the
+# body and its own shouted text read as a display title.
+_RUNNING_HEAD_DESPACED_RE = re.compile(
+    r"LAWREVIEW|LAWJOURNAL|JOURNALOF|L\.REV\.|DONOTDELETE|VOL(?:UME)?\.\d",
+    re.IGNORECASE,
+)
+# The Word production slug some journals leave in the head: it always ends in a
+# clock time. `4RATHREV1.DOCX 5/26/2011 5:18 PM` shouts like a title, and left
+# in place it kept the real head below it from ever being examined.
+_PRODUCTION_SLUG_RE = re.compile(r"\d{1,2}:\d{2}(:\d{2})?\s*[AP]\.?M\.?$", re.IGNORECASE)
+# `2013 / STABILIZING DEMOCRACY`, `2012] THE FULL FEDERAL REGULATORY PURPOSE`.
+# A year followed by a separator is a running head in every US law review seen
+# here, and no display title opens that way.
+_YEAR_HEAD_RE = re.compile(r"^\[?\s*\d{4}\s*[/\]|]")
+_BARE_FOLIO_RE = re.compile(r"^\W*\d{1,4}\W*$")
+# The other running-head shape: the article's shouted short title followed by
+# its folio, sometimes letter-spaced by the extractor ("CENTERED 1 0 3",
+# "BY THE NUMBERS 2 9"). Without this it reads as a display title and every
+# continuation page looks like an article opening.
+_TITLE_FOLIO_HEAD_RE = re.compile(r"^[A-Z][A-Z\s’'&,:.-]{2,60}?[\s\d]{1,14}$")
+
+# A line of body prose resumed from the previous page: it starts lower case and
+# runs the full measure. The width test is what separates it from a lower-case
+# author line ("e. christi cunningham †"), which does open an article.
+_RESUMED_PROSE_MIN_CHARS = 40
+
+
+def _is_resumed_prose(line: str) -> bool:
+    return bool(line) and line[:1].islower() and len(line) >= _RESUMED_PROSE_MIN_CHARS
+
+
+def _upper_share(line: str) -> float:
+    letters = [character for character in line if character.isalpha()]
+    if not letters:
+        return 0.0
+    return sum(1 for character in letters if character.isupper()) / len(letters)
+
+
+def _is_shouted(line: str) -> bool:
+    """A short, mostly-capitalised line: either a display title or a head."""
+    return len(line) <= 90 and _upper_share(line) >= 0.7
+
+
+def _is_running_head_line(line: str) -> bool:
+    if _BARE_FOLIO_RE.match(line) or _RUNNING_HEAD_RE.search(line):
+        return True
+    if _TITLE_FOLIO_HEAD_RE.match(line) or _PRODUCTION_SLUG_RE.search(line):
+        return True
+    if _YEAR_HEAD_RE.match(line):
+        return True
+    return bool(_RUNNING_HEAD_DESPACED_RE.search(re.sub(r"\s+", "", line)))
+
+
+def _looks_like_sentence_prose(line: str) -> bool:
+    """A full measure of running text, whatever case its first word is in.
+
+    Resumed prose does not always start lower case -- a new sentence, or a
+    proper noun carried over, begins with a capital. What still separates it
+    from a display title is that a title capitalises most of its words and
+    prose capitalises almost none.
+    """
+    if len(line) < 55:
+        return False
+    words = [word for word in re.findall(r"[A-Za-z][A-Za-z’'\-]*", line) if len(word) > 2]
+    if len(words) < 6:
+        return False
+    capitalised = sum(1 for word in words if word[:1].isupper())
+    return capitalised / len(words) <= 0.34
+
+
+def _has_wordlike_content(line: str) -> bool:
+    """Reject OCR debris such as `I-'- ' 'S`, which shouts but says nothing."""
+    dense = re.sub(r"\s+", "", line)
+    letters = [character for character in dense if character.isalpha()]
+    return len(letters) >= 6 and len(letters) / max(len(dense), 1) >= 0.5
+
+
+def looks_like_article_opening(page_text: str) -> bool:
+    """True when a page starts an article rather than continuing one.
+
+    This is the check that separates a real boundary from a pattern that has
+    latched onto body text. A continuation page, once its running head is
+    dropped, resumes mid-sentence in lower case:
+
+        10  Harvard Journal of Law & Public Policy  [Vol. 40
+        relocating and taking on a new allegiance...
+
+    while an opening page leads with a display title. Without this gate, a
+    per-domain pattern validated on one issue silently cuts a different issue
+    of the same journal every eight pages.
+    """
+    lines = _clean_lines(page_text)
+    body: list[str] = []
+    for line in lines:
+        if not body and _is_running_head_line(line):
+            continue  # still in the running head
+        body.append(line)
+    if not body:
+        return False
+
+    # A shouted line sitting directly on top of resumed prose is a running
+    # head, whatever it looks like on its own. This is the check the two
+    # confirmed failures needed: `SACRIFICING MOTHERHOOD` over "more
+    # particularly, whether the child can have two mothers" is the short-title
+    # head of a continuation page, and so is `2021 / IMPLEMENTING PASH AND ITS
+    # PROGENY WITHIN DLNR 421`. Neither is caught by the head patterns above --
+    # one carries no folio, the other opens with the year -- and both are
+    # capitalised enough to pass as display titles. An article's real display
+    # title is never followed by a full measure of lower-case prose; what
+    # follows it is a subtitle, an author, a date, or an epigraph.
+    # The head can wrap onto a second line (`2019 / APPLYING INDIGENOUS
+    # ECOLOGICAL KNOWLEDGE FOR` / `THE PROTECTION OF ENVIRONMENTAL COMMONS
+    # 301`), so walk the whole run of shouted lines before looking at what sits
+    # under it.
+    shouted_run = 0
+    while shouted_run < min(4, len(body)) and _is_shouted(body[shouted_run]):
+        shouted_run += 1
+    if shouted_run and shouted_run < len(body) and _is_resumed_prose(body[shouted_run]):
+        return False
+
+    # Judge the FIRST body line only. Scanning further down finds a title-like
+    # line on almost any page -- a case name, a shouted heading mid-argument --
+    # which let continuation pages through. An article's display title is at
+    # the top of its own page or it is not there at all.
+    first = body[0]
+    # A section divider (`NOTES`, `ARTICLES`, `BOOK REVIEWS`) sits between
+    # articles, never inside one, so it is a safe place to cut even though it
+    # is too short to be a title.
+    if _SECTION_LINE_RE.match(first):
+        return True
+    if len(first) < 8 or len(first) > 140:
+        return False
+    if not _has_wordlike_content(first):
+        return False
+    # With the head gone, a first line that is running text is the body of an
+    # article already under way.
+    if _looks_like_sentence_prose(first):
+        return False
+    upper_share = _upper_share(first)
+    title_case = first[:1].isupper() and not first.endswith((",", "-", ";"))
+    return upper_share >= 0.6 or title_case
+
+
+def validate_boundary_starts(
+    page_texts: list[str], starts: list[int], min_share: float = 0.6
+) -> tuple[list[int], float]:
+    """Drop starts that do not open an article; report the share that passed.
+
+    A boundary that fails is merged into the article before it by simply being
+    removed. If most boundaries fail the signal is not tracking articles at all
+    and the caller should discard the whole document.
+    """
+    if not starts:
+        return [], 0.0
+    kept = [
+        start
+        for start in starts
+        if start == 1 or looks_like_article_opening(page_texts[start - 1])
+    ]
+    return kept, len(kept) / len(starts)
