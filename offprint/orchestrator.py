@@ -84,6 +84,7 @@ from .pipeline.waf_utils import (
     _count_waf_stats,
     _count_curl_cffi_downloads,
     _collect_waf_blocked_urls,
+    _domains_with_waf_errors,
     _process_waf_browser_fallback,
 )
 
