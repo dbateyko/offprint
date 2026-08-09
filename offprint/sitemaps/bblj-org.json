@@ -9,45 +9,58 @@
     "platform": "WordPress",
     "url": "https://www.bblj.org/",
     "created_date": "2026-04-01",
-    "status": "active",
+    "status": "paused_404",
     "navigation": {
       "archive_root": "https://www.bblj.org/archive/",
       "volume_url_pattern": "none-list",
       "archive_path": "homepage -> /archive/ -> volume/issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
       "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
-    }
+    },
+    "status_reason": "www.bblj.org resolves to a domain-parking IP (91.195.241.232) and fails TLS with 'tlsv1 unrecognized name' (2026-08-09). Domain no longer serves the journal.",
+    "status_updated_at": "2026-08-09T02:55:00Z",
+    "status_evidence_ref": "curl https://www.bblj.org/ -> curl(35) SSL routines::tlsv1 unrecognized name"
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
       "selector": ".archive-issue a, a[href*='/volume-']",
-      "parentSelectors": ["_root"]
+      "parentSelectors": [
+        "_root"
+      ]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
       "selector": "article.post",
-      "parentSelectors": ["issue_link"]
+      "parentSelectors": [
+        "issue_link"
+      ]
     },
     {
       "id": "title",
       "type": "SelectorText",
       "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
       "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
       "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
+      "parentSelectors": [
+        "_root"
+      ],
       "notes": "PDF on article detail page"
     }
   ]

@@ -9,45 +9,58 @@
     "platform": "WordPress",
     "url": "https://www.elq.org/",
     "created_date": "2026-04-01",
-    "status": "active",
+    "status": "paused_other",
     "navigation": {
       "archive_root": "https://www.elq.org/archives/",
       "volume_url_pattern": "none-list",
       "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
       "pdf_location": "article-detail-page",
       "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
-    }
+    },
+    "status_reason": "elq.org / www.elq.org (163.172.36.180) do not accept TCP connections on 443 or 80 from this network (2026-08-09); repeated 45-60s connect timeouts. Unreachable - could be site down or network-level block.",
+    "status_updated_at": "2026-08-09T02:55:00Z",
+    "status_evidence_ref": "socket.connect(('www.elq.org',443)) and (\u2026,80) both time out after 8s; curl --max-time 60 -> curl(28)"
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
       "selector": ".archive-issue a, a[href*='/volume-']",
-      "parentSelectors": ["_root"]
+      "parentSelectors": [
+        "_root"
+      ]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
       "selector": "article.post",
-      "parentSelectors": ["issue_link"]
+      "parentSelectors": [
+        "issue_link"
+      ]
     },
     {
       "id": "title",
       "type": "SelectorText",
       "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
       "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
       "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
+      "parentSelectors": [
+        "_root"
+      ],
       "notes": "PDF on article detail page"
     }
   ]

@@ -1,54 +1,17 @@
 {
   "id": "washingtoninternational-lawjournal-org",
   "start_urls": [
-    "https://washingtoninternational-lawjournal.org/archives/"
+    "https://digitalcommons.law.uw.edu/wilj/"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Washington International Law Journal",
-    "platform": "WordPress",
-    "url": "https://washingtoninternational-lawjournal.org/",
+    "platform": "digitalcommons",
+    "url": "https://digitalcommons.law.uw.edu/wilj/",
     "created_date": "2026-04-01",
     "status": "active",
-    "navigation": {
-      "archive_root": "https://washingtoninternational-lawjournal.org/archives/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archives/ -> volume/issue links -> article detail -> PDF link",
-      "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive contains issue links. PDFs are direct on article detail pages."
-    }
-  },
-  "selectors": [
-    {
-      "id": "issue_link",
-      "type": "SelectorLink",
-      "selector": ".archive-issue a, a[href*='/volume-']",
-      "parentSelectors": ["_root"]
-    },
-    {
-      "id": "article_container",
-      "type": "SelectorElement",
-      "selector": "article.post",
-      "parentSelectors": ["issue_link"]
-    },
-    {
-      "id": "title",
-      "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "article_url",
-      "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
-      "parentSelectors": ["article_container"]
-    },
-    {
-      "id": "pdf_link",
-      "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
-      "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
-    }
-  ]
+    "status_reason": "washingtoninternational-lawjournal.org is DNS NXDOMAIN (2026-08-09); the canonical archive is bepress at digitalcommons.law.uw.edu/wilj/. Retargeted to the backend, same pattern as ncjolt-org.json / nmlr-unm-edu.json. No prior seed covered the wilj series.",
+    "status_updated_at": "2026-08-09T02:55:00Z",
+    "status_evidence_ref": "socket.gethostbyname('washingtoninternational-lawjournal.org') -> [Errno -2]; smoke_one_pdf_per_site.py PASS adapter=DigitalCommonsIssueArticleHopAdapter pdf=https://digitalcommons.law.uw.edu/context/wilj/article/1000/viewcontent/0toc.pdf; OAI discovery yielded 300/300 unique PDF URLs with title/authors/year/volume/issue"
+  }
 }
