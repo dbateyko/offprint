@@ -69,6 +69,14 @@ class SplitConfig:
     candidate_file: str | Path = ""
     candidate_issue_only: bool = False
     candidate_min_priority: float = 0.0
+    # Boundary source. "toc_solver" runs the TOC solver and falls back to the
+    # per-domain running-head rules; "legacy_toc" is the original Aberdeen-style
+    # `infer_article_boundaries` path, kept only for reproducing old runs.
+    boundary_source: str = "toc_solver"
+    # Lowest solver tier that may be emitted unattended. See
+    # `issue_split_plan` for why this is `auto` and not `review`.
+    tier: str = "auto"
+    fallback: str = "none"
 
 
 _TOC_RE = re.compile(r"\b(?:TABLE\s+OF\s+CONTENTS|CONTENTS)\b", re.I)
@@ -389,46 +397,125 @@ def split_pdf(
     parent_sha256: str,
     domain: str,
     output_root: str | Path,
+    *,
+    boundary_source: str = "toc_solver",
+    tier: str = "auto",
+    fallback: str = "none",
 ) -> tuple[list[dict[str, Any]], str]:
-    """Split one parent PDF and return manifest rows plus a skip reason if skipped."""
+    """Split one parent PDF and return manifest rows plus a skip reason if skipped.
+
+    ``boundary_source="toc_solver"`` (the default) asks
+    :mod:`offprint.pdf_footnotes.issue_split_plan` for boundaries, which runs the
+    TOC solver and only falls back to the running-head rules when it declines.
+    Every child written that way gets a ``<child>.split.json`` provenance
+    sidecar. ``boundary_source="legacy_toc"`` reproduces the original
+    Aberdeen-style path and writes no sidecars.
+    """
 
     from pypdf import PdfReader, PdfWriter
+
+    # Imported here: issue_split_plan imports this module.
+    from . import issue_split_plan as plan_module
 
     parent_path = Path(parent_pdf)
     try:
         reader = PdfReader(str(parent_path))
-        page_texts = [(page.extract_text() or "") for page in reader.pages]
     except Exception as exc:  # pragma: no cover - depends on parser failure details
         return ([_skip_row(parent_path, parent_sha256, domain, f"pdf_read_failed:{exc}")], f"pdf_read_failed:{exc}")
 
-    inference = infer_article_boundaries(page_texts)
-    if not inference.ok:
-        return ([_skip_row(parent_path, parent_sha256, domain, inference.skip_reason)], inference.skip_reason)
+    plan = None
+    if boundary_source == "legacy_toc":
+        try:
+            page_texts = [(page.extract_text() or "") for page in reader.pages]
+        except Exception as exc:  # pragma: no cover
+            return (
+                [_skip_row(parent_path, parent_sha256, domain, f"pdf_read_failed:{exc}")],
+                f"pdf_read_failed:{exc}",
+            )
+        inference = infer_article_boundaries(page_texts)
+        if not inference.ok:
+            return (
+                [_skip_row(parent_path, parent_sha256, domain, inference.skip_reason)],
+                inference.skip_reason,
+            )
+        spans = [
+            (
+                boundary.start_page,
+                boundary.end_page,
+                boundary.method,
+                boundary.confidence,
+                boundary.title_guess,
+            )
+            for boundary in inference.boundaries
+        ]
+    else:
+        try:
+            plan = plan_module.plan_pdf(
+                str(parent_path), domain, tier=tier, fallback=fallback
+            )
+        except Exception as exc:  # pragma: no cover
+            reason = f"plan_failed:{type(exc).__name__}"
+            return ([_skip_row(parent_path, parent_sha256, domain, reason)], reason)
+        if not plan.ok:
+            return ([_skip_row(parent_path, parent_sha256, domain, plan.reason)], plan.reason)
+        spans = [
+            (
+                span.start_page,
+                span.end_page,
+                f"{plan.source}:{plan.tier}" if plan.tier else plan.source,
+                float(span.evidence.get("confidence", 1.0) or 1.0),
+                span.title,
+            )
+            for span in plan.spans
+        ]
 
     parent_dir = Path(output_root) / _safe_path_part(domain) / _safe_path_part(parent_path.stem)
     parent_dir.mkdir(parents=True, exist_ok=True)
-    for stale_child in parent_dir.glob("article_*.pdf"):
+    for stale_child in list(parent_dir.glob("article_*.pdf")) + list(
+        parent_dir.glob("article_*.split.json")
+    ):
         stale_child.unlink()
 
+    created = utc_stamp()
     rows: list[dict[str, Any]] = []
-    for idx, boundary in enumerate(inference.boundaries, start=1):
-        child_path = parent_dir / f"article_{idx:03d}_p{boundary.start_page}-{boundary.end_page}.pdf"
+    for idx, (start_page, end_page, method, confidence, title_guess) in enumerate(spans, start=1):
+        child_path = parent_dir / f"article_{idx:03d}_p{start_page}-{end_page}.pdf"
         writer = PdfWriter()
-        for page_idx in range(boundary.start_page - 1, boundary.end_page):
+        for page_idx in range(start_page - 1, end_page):
             writer.add_page(reader.pages[page_idx])
         with child_path.open("wb") as handle:
             writer.write(handle)
+
+        if plan is not None:
+            provenance = plan_module.child_provenance(
+                plan,
+                plan.spans[idx - 1],
+                parent={
+                    "relpath": parent_path.name,
+                    "path": str(parent_path),
+                    "sha256": parent_sha256,
+                    "domain": domain,
+                    "n_pages": plan.n_pages,
+                },
+                child={"path": str(child_path), "relpath": child_path.name},
+                created_utc=created,
+                run_id="",
+                tool={"script": "issue_splitter.run_issue_split"},
+            )
+            child_path.with_suffix(".split.json").write_text(
+                json.dumps(provenance, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+            )
 
         rows.append(
             {
                 "parent_pdf_path": str(parent_path),
                 "parent_sha256": parent_sha256,
                 "child_pdf_path": str(child_path),
-                "start_page": boundary.start_page,
-                "end_page": boundary.end_page,
-                "method": boundary.method,
-                "confidence": boundary.confidence,
-                "title_guess": boundary.title_guess,
+                "start_page": start_page,
+                "end_page": end_page,
+                "method": method,
+                "confidence": confidence,
+                "title_guess": title_guess,
                 "domain": domain,
             }
         )
@@ -467,6 +554,9 @@ def run_issue_split(config: SplitConfig) -> dict[str, Any]:
         "candidate_file": candidate_file,
         "candidate_issue_only": bool(config.candidate_issue_only),
         "candidate_min_priority": float(config.candidate_min_priority or 0.0),
+        "boundary_source": config.boundary_source,
+        "tier": config.tier,
+        "fallback": config.fallback,
         "output_root": str(output_root),
         "manifest_path": str(manifest_path),
         "candidates": len(candidates),
@@ -481,7 +571,15 @@ def run_issue_split(config: SplitConfig) -> dict[str, Any]:
     with manifest_path.open("w", encoding="utf-8") as manifest:
         for item in unique:
             domain = domain_by_path.get(item.path) or infer_domain(item.path, pdf_root)
-            rows, skip_reason = split_pdf(item.path, item.sha256, domain, output_root)
+            rows, skip_reason = split_pdf(
+                item.path,
+                item.sha256,
+                domain,
+                output_root,
+                boundary_source=config.boundary_source,
+                tier=config.tier,
+                fallback=config.fallback,
+            )
             stats["processed"] += 1
             if skip_reason:
                 stats["parents_skipped"] += 1

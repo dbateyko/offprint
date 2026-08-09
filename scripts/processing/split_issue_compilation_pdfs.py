@@ -60,6 +60,24 @@ def _parse_args() -> argparse.Namespace:
         default=0.0,
         help="When using --candidate-file, skip rows with priority lower than this value.",
     )
+    parser.add_argument(
+        "--boundary-source",
+        choices=["toc_solver", "legacy_toc"],
+        default="toc_solver",
+        help="toc_solver (default) or the original Aberdeen-style TOC heuristic.",
+    )
+    parser.add_argument(
+        "--tier",
+        choices=["auto", "review"],
+        default="auto",
+        help="Lowest solver tier that may be emitted unattended. review is opt-in.",
+    )
+    parser.add_argument(
+        "--fallback",
+        choices=["running_head", "none"],
+        default="none",
+        help="Boundary source when the solver ABSTAINS. See issue_split_plan for why this is off.",
+    )
     return parser.parse_args()
 
 
@@ -75,6 +93,9 @@ def main() -> None:
             candidate_file=args.candidate_file,
             candidate_issue_only=args.candidate_issue_only,
             candidate_min_priority=args.candidate_min_priority,
+            boundary_source=args.boundary_source,
+            tier=args.tier,
+            fallback=args.fallback,
         )
     )
     print(json.dumps(result, indent=2, sort_keys=True))
