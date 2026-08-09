@@ -1,0 +1,24 @@
+{
+  "id": "opencommons-uconn-edu-cilj",
+  "start_urls": [
+    "https://opencommons.uconn.edu/cilj/"
+  ],
+  "source": "claude_code_triage",
+  "metadata": {
+    "journal_name": "Connecticut Insurance Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://opencommons.uconn.edu/cilj/",
+    "created_date": "2026-08-09",
+    "status": "todo_adapter",
+    "status_reason": "opencommons.uconn.edu has 0 PDFs in corpus; only 5 articles of this journal are present from other hosts. Series index is a flat browse list (no all_issues.html); PDFs are served from digitalcommons.lib.uconn.edu/cgi/viewcontent.cgi.",
+    "status_updated_at": "2026-08-09T11:05:00Z",
+    "status_evidence_ref": "GET series index 200, 100 viewcontent.cgi hrefs on first page (2026-08-09)",
+    "navigation": {
+      "archive_root": "https://opencommons.uconn.edu/cilj/",
+      "pagination": "flat index / bepress browse",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "all_issues.html returns 404 on this repo; use default DC enumeration, not all_issues_only. PDF host differs from index host."
+    }
+  }
+}

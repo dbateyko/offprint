@@ -1,0 +1,24 @@
+{
+  "id": "elibrary-law-psu-edu-dlra",
+  "start_urls": [
+    "https://elibrary.law.psu.edu/dlra/"
+  ],
+  "source": "claude_code_triage",
+  "metadata": {
+    "journal_name": "Dickinson Law Review (1908-2003)",
+    "platform": "digitalcommons",
+    "url": "https://elibrary.law.psu.edu/dlra/",
+    "created_date": "2026-08-09",
+    "status": "todo_adapter",
+    "status_reason": "Entire elibrary.law.psu.edu repo has 0 PDFs in corpus; dlra is a 95-year back-run.",
+    "status_updated_at": "2026-08-09T11:05:00Z",
+    "status_evidence_ref": "GET all_issues.html 200, 369 distinct vol/iss links (2026-08-09)",
+    "navigation": {
+      "archive_root": "https://elibrary.law.psu.edu/dlra/all_issues.html",
+      "pagination": "all_issues.html",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "Enumerate with --dc-enum-mode all_issues_only --no-use-playwright."
+    }
+  }
+}

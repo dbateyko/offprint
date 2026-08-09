@@ -1,0 +1,24 @@
+{
+  "id": "repository-uclawsf-edu-race-econ-justice",
+  "start_urls": [
+    "https://repository.uclawsf.edu/hastings_race_poverty_law_journal/"
+  ],
+  "source": "claude_code_triage",
+  "metadata": {
+    "journal_name": "UC Law Journal of Race and Economic Justice",
+    "platform": "digitalcommons",
+    "url": "https://repository.uclawsf.edu/hastings_race_poverty_law_journal/",
+    "created_date": "2026-08-09",
+    "status": "active",
+    "status_reason": "Verified bepress backend for a registry row that had no seed (status=no_sitemap).",
+    "status_updated_at": "2026-08-09T11:05:00Z",
+    "status_evidence_ref": "smoke PASS 2026-08-09: 878KB PDF /context/hastings_race_poverty_law_journal/article/1000/viewcontent/",
+    "navigation": {
+      "archive_root": "https://repository.uclawsf.edu/hastings_race_poverty_law_journal/all_issues.html",
+      "pagination": "all_issues.html",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "Enumerate with --dc-enum-mode all_issues_only --no-use-playwright."
+    }
+  }
+}

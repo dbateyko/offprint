@@ -1,0 +1,24 @@
+{
+  "id": "scholarlycommons-law-hofstra-edu-hlelj",
+  "start_urls": [
+    "https://scholarlycommons.law.hofstra.edu/hlelj/"
+  ],
+  "source": "claude_code_triage",
+  "metadata": {
+    "journal_name": "Hofstra Labor & Employment Law Journal",
+    "platform": "digitalcommons",
+    "url": "https://scholarlycommons.law.hofstra.edu/hlelj/",
+    "created_date": "2026-08-09",
+    "status": "active",
+    "status_reason": "Verified bepress backend for a registry row that had no seed (status=no_sitemap).",
+    "status_updated_at": "2026-08-09T11:05:00Z",
+    "status_evidence_ref": "smoke PASS 2026-08-09: PDF /context/hlelj/article/1004/viewcontent/",
+    "navigation": {
+      "archive_root": "https://scholarlycommons.law.hofstra.edu/hlelj/all_issues.html",
+      "pagination": "all_issues.html",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "Enumerate with --dc-enum-mode all_issues_only --no-use-playwright."
+    }
+  }
+}

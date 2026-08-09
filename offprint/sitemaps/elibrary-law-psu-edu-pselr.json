@@ -1,0 +1,24 @@
+{
+  "id": "elibrary-law-psu-edu-pselr",
+  "start_urls": [
+    "https://elibrary.law.psu.edu/pselr/"
+  ],
+  "source": "claude_code_triage",
+  "metadata": {
+    "journal_name": "Penn State Environmental Law Review (1991-2011)",
+    "platform": "digitalcommons",
+    "url": "https://elibrary.law.psu.edu/pselr/",
+    "created_date": "2026-08-09",
+    "status": "todo_adapter",
+    "status_reason": "Entire elibrary.law.psu.edu repo has 0 PDFs in corpus.",
+    "status_updated_at": "2026-08-09T11:05:00Z",
+    "status_evidence_ref": "GET all_issues.html 200, 46 distinct vol/iss links (2026-08-09)",
+    "navigation": {
+      "archive_root": "https://elibrary.law.psu.edu/pselr/all_issues.html",
+      "pagination": "all_issues.html",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "Enumerate with --dc-enum-mode all_issues_only --no-use-playwright."
+    }
+  }
+}

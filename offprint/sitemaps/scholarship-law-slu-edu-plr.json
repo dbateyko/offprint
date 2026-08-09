@@ -1,0 +1,24 @@
+{
+  "id": "scholarship-law-slu-edu-plr",
+  "start_urls": [
+    "https://scholarship.law.slu.edu/plr/"
+  ],
+  "source": "claude_code_triage",
+  "metadata": {
+    "journal_name": "Saint Louis University Public Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.slu.edu/plr/",
+    "created_date": "2026-08-09",
+    "status": "active",
+    "status_reason": "Verified bepress backend for a registry row that had no seed (status=no_sitemap).",
+    "status_updated_at": "2026-08-09T11:05:00Z",
+    "status_evidence_ref": "smoke PASS 2026-08-09 after registering scholarship.law.slu.edu -> DigitalCommonsIssueArticleHopAdapter (parent-domain match on www.slu.edu was routing it to SelectorDrivenAdapter and WAF-blocking)",
+    "navigation": {
+      "archive_root": "https://scholarship.law.slu.edu/plr/all_issues.html",
+      "pagination": "all_issues.html",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "Enumerate with --dc-enum-mode all_issues_only --no-use-playwright."
+    }
+  }
+}

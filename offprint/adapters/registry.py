@@ -479,6 +479,12 @@ register("digitalcommons.schulichlaw.dal.ca", DigitalCommonsIssueArticleHopAdapt
 # bepress/Digital Commons repos whose host prefix (docs./scholars.) is too
 # generic for the substring heuristic above — register explicitly.
 register("docs.rwu.edu", DigitalCommonsIssueArticleHopAdapter)
+# Penn State Law bepress repo ("elibrary." prefix is not in the substring
+# heuristic above). Hosts psilr/pselr/dlra/pslr/jlia series.
+register("elibrary.law.psu.edu", DigitalCommonsIssueArticleHopAdapter)
+# SLU's bepress repo would otherwise be captured by the parent-domain match on
+# "www.slu.edu" (SelectorDrivenAdapter), which WAF-blocks on viewcontent.cgi.
+register("scholarship.law.slu.edu", DigitalCommonsIssueArticleHopAdapter)
 register("scholars.unh.edu", DigitalCommonsIssueArticleHopAdapter)
 register("scholarlycommons.law.northwestern.edu", DigitalCommonsIssueArticleHopAdapter)
 register("law.emory.edu", DigitalCommonsIssueArticleHopAdapter)
