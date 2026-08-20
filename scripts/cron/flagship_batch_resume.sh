@@ -56,7 +56,7 @@ export LRS_MAX_BROWSERS=1
 exec python3 scripts/pipeline/run_pipeline.py \\
   --mode full \\
   --sitemaps-dir $SPLIT_BASE/$letter \\
-  --out-dir artifacts/flagship27_pdfs \\
+  --out-dir ../staging/_spent_batches/20260501-flagship27 \\
   --manifest-dir artifacts/runs \\
   --run-id $RUN_ID \\
   --max-workers 4 \\

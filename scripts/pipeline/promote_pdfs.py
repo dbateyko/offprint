@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(os.environ.get("OFFPRINT_ROOT", "/mnt/shared_storage/law-review-corpus"))
-SCRAPED_V2 = ROOT / "offprint" / "artifacts" / "scraped_v2"
+SCRAPED_V2 = ROOT / "staging" / "scrape_inbox"
 CORPUS = ROOT / "corpus" / "scraped"
 LOG = CORPUS / "PROMOTION_LOG.csv"
 
@@ -172,7 +172,7 @@ def main() -> None:
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
     ROOT = args.root.expanduser().resolve()
-    SCRAPED_V2 = ROOT / "offprint" / "artifacts" / "scraped_v2"
+    SCRAPED_V2 = ROOT / "staging" / "scrape_inbox"
     CORPUS = ROOT / "corpus" / "scraped"
     LOG = CORPUS / "PROMOTION_LOG.csv"
 

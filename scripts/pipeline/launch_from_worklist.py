@@ -96,7 +96,7 @@ def main() -> None:
     ap.add_argument("--wall-clock", default="4h")
     ap.add_argument(
         "--out-dir",
-        default="artifacts/scraped_v2",
+        default="../staging/scrape_inbox",
         help="Where the pipeline writes downloaded PDFs (host-level subdirs)",
     )
     ap.add_argument(

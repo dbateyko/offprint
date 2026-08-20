@@ -300,7 +300,7 @@ def main() -> None:
     ap.add_argument("--seeds-per-screen", type=int, default=7)
     ap.add_argument("--well-covered", type=int, default=200)
     ap.add_argument("--wall-clock", default="4h")
-    ap.add_argument("--out-dir", default="artifacts/scraped_v2")
+    ap.add_argument("--out-dir", default="../staging/scrape_inbox")
     ap.add_argument("--screen-prefix", default="sd")
     ap.add_argument(
         "--sleep-seconds",
