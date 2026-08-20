@@ -446,3 +446,81 @@ def test_toc_arbitration_leaves_a_single_stream_alone():
     fit = T.estimate_folio_offset(evidence, start_index=5)
     entries = T.parse_toc_entries(build_issue())
     assert T._offset_agreeing_with_toc(fit, entries, evidence).offset == fit.offset
+
+
+# ---------------------------------------------------------------------------
+# Adjudication queue
+# ---------------------------------------------------------------------------
+
+
+def _queue_module():
+    import importlib.util
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "scripts" / "processing" / "build_adjudication_queue.py"
+    spec = importlib.util.spec_from_file_location("build_adjudication_queue", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_only_weak_boundaries_are_queued():
+    Q = _queue_module()
+    two_strong = {
+        "signals": {"strong": ["folio", "title"], "opening": True},
+        "margin": 5.0,
+    }
+    one_strong = {"signals": {"strong": ["folio"], "opening": True}, "margin": 5.0}
+    thin_margin = {
+        "signals": {"strong": ["folio", "title", "author"], "opening": True},
+        "margin": 0.4,
+    }
+    assert not Q.is_weak(two_strong)
+    assert Q.is_weak(one_strong)
+    assert Q.is_weak(thin_margin)
+
+
+def test_queue_window_spans_both_the_pick_and_the_runner_up():
+    Q = _queue_module()
+    pages = Q.candidate_pages({"physical_page": 20, "runner_up_page": 26}, n_pages=100, window=2)
+    assert pages == [18, 19, 20, 21, 22, 24, 25, 26, 27, 28]
+    assert Q.candidate_pages({"physical_page": 2, "runner_up_page": 0}, n_pages=100, window=3)[0] == 1
+
+
+def test_the_prompt_never_reveals_the_solver_choice():
+    """Blindness is the property that makes the answers evidence."""
+    Q = _queue_module()
+    item = {
+        "entry": {"title": "Remedies for the Wrongly Deported", "author": "Rachel E. Rosenbloom",
+                  "section": "ARTICLES", "printed_page": 139},
+        "candidates": [
+            {"physical_page": 4, "text": "2025] SOMETHING ELSE 138\nresumed prose here"},
+            {"physical_page": 5, "text": "Remedies for the Wrongly Deported\nRachel E. Rosenbloom*"},
+            {"physical_page": 6, "text": "140 HOWARD LAW JOURNAL\nresumed prose here"},
+        ],
+        "_solver": {"physical_page": 5, "runner_up_page": 6, "margin": 1.2, "signals": {}},
+    }
+    prompt = Q.render_prompt(item)
+    assert "Remedies for the Wrongly Deported" in prompt
+    assert "physical page 5" in prompt
+    # nothing in the prompt marks 5 as the proposal
+    assert "_solver" not in prompt
+    assert "runner_up" not in prompt
+    assert "margin" not in prompt
+    for page in (4, 5, 6):
+        assert f"--- physical page {page} ---" in prompt
+
+
+def test_a_volume_page_citation_in_a_running_head_is_not_a_folio():
+    """`[Vol. 18:909` names the article's first page, not this page.
+
+    Every continuation page of that article carries it, so read as a folio it
+    matches the contents entry everywhere -- and because the opening page often
+    prints no folio, the boundary lands one page late. The blind adjudicator
+    found this by disagreeing with the solver on btlj.org.
+    """
+    opening = T.pages_from_texts(["CYBERCRIMES & MISDEMEANORS\nBy Reid Skibell\nIntroduction"])
+    continuation = T.pages_from_texts(["910 BERKELEY TECHNOLOGY LAW JOURNAL [Vol. 18:909\nresumed prose"])
+    assert 909 not in T.build_page_evidence(continuation)[0].folios
+    assert 910 in T.build_page_evidence(continuation)[0].folios
+    assert not T.build_page_evidence(opening)[0].continues_prose

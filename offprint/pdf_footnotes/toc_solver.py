@@ -798,6 +798,13 @@ def _clean_entries(entries: list[TocEntry]) -> list[TocEntry]:
 
 _NUMBER_RE = re.compile(r"(?<!\d)(\d{1,4})(?!\d)")
 _ROMAN_RE = re.compile(r"^[ivxlcdm]{1,8}$", re.I)
+# `[Vol. 18:909` in a running head carries the ARTICLE's first printed page,
+# not the page you are looking at. Read as a folio it matches the contents
+# entry on every continuation page of that article, and since a law-review
+# opening page often prints no folio at all, the boundary lands one page
+# late -- the exact off-by-one this whole design exists to prevent. Found by
+# the blind adjudicator disagreeing with the solver on btlj.org.
+_VOL_PAGE_RE = re.compile(r"(?i)\bvol(?:ume)?\.?\s*\d+\s*[:.]\s*\d+")
 _BYLINE_RE = re.compile(
     r"^(?:BY\s+)?[A-Z][A-Za-zÀ-ÿ.'’\-]+"
     r"(?:\s+[A-Z][A-Za-zÀ-ÿ.'’\-]+){1,4}\s*[\*†‡§]?\s*$"
@@ -908,7 +915,8 @@ def _folio_candidates(page: Page) -> tuple[set[int], set[int]]:
         for line in lines:
             if _ROMAN_RE.match(line.text.strip()):
                 continue
-            for match in _NUMBER_RE.finditer(line.text):
+            text = _VOL_PAGE_RE.sub(" ", line.text)
+            for match in _NUMBER_RE.finditer(text):
                 value = int(match.group(1))
                 if 0 < value < 10000:
                     bucket.add(value)
@@ -1238,6 +1246,7 @@ class Assignment:
     score: float
     signals: Signals
     margin: float = 0.0
+    runner_up_page: int = 0
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -1248,6 +1257,7 @@ class Assignment:
             "physical_page": self.page,
             "score": round(self.score, 3),
             "margin": round(self.margin, 3) if math.isfinite(self.margin) else None,
+            "runner_up_page": self.runner_up_page or None,
             "signals": {
                 "folio": self.signals.folio,
                 "offset_implied": self.signals.offset_implied,
@@ -1507,7 +1517,14 @@ def solve(
     # actually determine has a margin near zero, whatever its own score is.
     for index, assignment in enumerate(assignments):
         alternative = _assign(entries, evidence, folio.offset, window, forbidden=(index, assignment.page))
-        assignment.margin = float("inf") if alternative is None else total - alternative[0]
+        if alternative is None:
+            assignment.margin = float("inf")
+        else:
+            assignment.margin = total - alternative[0]
+            # Where this entry goes when its chosen page is taken away. This is
+            # the boundary an adjudicator actually has to choose between, so it
+            # is recorded rather than recomputed downstream.
+            assignment.runner_up_page = alternative[1][index]
 
     status, reason = _emission_policy(assignments, folio, min_margin)
     return SolveResult(

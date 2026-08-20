@@ -352,3 +352,155 @@ open-weight run on the 2×3090; GPU-gated against the census/labeling queue.
 Still true: nothing is wired into `run_issue_split`, and the gold remains too
 small (13 issues, 4 uncontaminated, all single-pass LLM labels) to certify any
 precision bar.
+
+---
+
+# Follow-up 3: the real denominator, and the adjudicator harness
+
+## Coverage against `containers_to_split.parquet`
+
+The `doc_type` sidecar census was never the right population. Re-run over the
+curated container list — 548 scraped PDF containers, 491 resolvable on disk, 205
+after size-dedupe:
+
+| status | documents | share | children | domains |
+|---|---|---|---|---|
+| `auto` | 21 | 10% | 145 (median 6/doc) | 8 |
+| `review` | 108 | 53% | 713 (median 5/doc) | 10 |
+| `abstain` | 76 | 37% | — | — |
+
+**`auto`+`review` covers 63% of curated containers**, against 34% measured on the
+noisy `doc_type` set. Same solver, same day — the difference is entirely the
+denominator. Abstentions here are `insufficient_evidence` 39, `no_usable_toc` 32,
+`no_feasible_assignment` 3, `toc_outside_folio_range` 2; the `too_few_pages`
+bucket that dominated the sidecar census is absent, as it should be.
+
+Caveat: this set is concentrated in ~10 journals, so it is a better denominator
+but a narrower one. Coverage on journals outside it is unmeasured.
+
+## Adjudicator harness
+
+| Path | What |
+|---|---|
+| `scripts/processing/build_adjudication_queue.py` | `review` boundaries → blind queue |
+| `scripts/processing/adjudicate_boundaries.py` | run against local vLLM, then score |
+
+`Assignment` now records `runner_up_page` — where an entry goes when its chosen
+page is forbidden, which the margin DP already computes. That is the boundary an
+adjudicator actually has to choose between, so it is stored rather than
+recomputed.
+
+**The queue is blind.** Each item names the piece from the contents listing and
+shows a window of candidate pages in document order with the top of each page's
+text. It does not say which page the solver chose, mark the runner-up, or quote
+the margin — `test_the_prompt_never_reveals_the_solver_choice` pins this.
+Agreement measured under anchoring is not evidence, which is the lesson §7 of the
+handoff paid for.
+
+Built from the container run: **351 items across 108 documents** — exactly the
+weak-boundary count predicted (49% of 713 `review` boundaries). Median 7
+candidate pages per item, ~1,000 tokens per prompt, ~0.3M tokens for the whole
+queue. Minutes on one 3090, not hours.
+
+The runner follows `offprint-data-ops/labeling/annotate_gold_27b.py`: `OpenAI`
+client against `localhost:8000/v1`, `response_format` json_schema (vLLM ignores
+legacy `guided_json`), temperature 0, thinking disabled, resumable. Scoring
+reports agreement, disagreement, `none_of_these`, and which documents have every
+weak boundary confirmed.
+
+**Not yet run — needs vLLM up, which contends for the same two GPUs as the census
+and labeling queues.** Both GPUs were idle at the time of writing (15 MiB used,
+0% utilisation, no vLLM/labeling/census process).
+
+One defect the first rendered prompt exposed: on `www.law.nyu.edu` NYU Annual
+Survey, the layout-mode detection folded the author into the title
+(`...A RETURN TO FIRST PRINCIPLES Mark A. Perry and Rachel S. Brass`, author
+field empty). The adjudicator still sees the author text, so the item is usable,
+but the entry parse is wrong and `author` as a scoring signal is lost for that
+listing.
+
+---
+
+# Follow-up 4: the adjudicator ran, and found a solver bug
+
+Served `Qwen3.5-9B` (bf16, ~17.7 GiB) on one 3090 via vLLM. First attempt OOMed
+during CUDA-graph capture at `--gpu-memory-utilization 0.85`; `--enforce-eager`
+with 0.93 fits and leaves GPU 1 free. Total GPU time for everything below was
+well under an hour.
+
+## The control is what makes the numbers readable
+
+Running the blind queue on `review`-tier weak boundaries gave **74.0% agreement
+with the solver** (253/342). On its own that number says nothing: it is
+consistent with a good adjudicator catching a bad solver, a bad adjudicator
+disagreeing with a good solver, or both being noisy.
+
+So the same blind task was run over a **control set**: all 145 boundaries from
+the 21 `auto` documents. Those carry two independent strong signals and a fat
+margin, so they are near-certainly right, and agreement on them measures the
+*adjudicator*.
+
+| set | boundaries | agreement |
+|---|---|---|
+| control (`auto`, near-certainly correct) | 145 | **98.6%** (143/145) |
+| `review` weak boundaries | 342 | **74.0%** (253/342) |
+
+The adjudicator is accurate. The 26-point gap is mostly the solver.
+
+## Reading the disagreements: two classes, and only one favours the model
+
+**Class A — the solver was wrong, one page late.** `btlj.org` repeatedly: p147
+carries `CYBERCRIMES & MISDEMEANORS / A REEVALUATION... / By Reid Skibell†` and
+p148 opens `910 / BERKELEY TECHNOLOGY LAW JOURNAL / [Vol. 18:909`. The solver
+chose p148 because `[Vol. 18:909` **matched the contents entry's printed start
+page 909** — the volume:page citation in the running head was being read as a
+folio. It appears on every continuation page of the article, and because a
+law-review opening page often prints no folio at all, the boundary landed one
+page late. That is exactly the off-by-one this whole design exists to prevent,
+reintroduced through the folio channel.
+
+**Class B — the model was wrong, it picked the contents page.**
+`annualsurveyofamericanlaw.org`: the model chose the `SUMMARY OF CONTENTS` page
+because it "shows the display title". It does — the contents listing repeats
+every title.
+
+So neither party is uniformly right, and **the adjudicator must be used as a gate
+(confirm-only), never as a relocator.** Class B means it will also wrongly reject
+some correct boundaries.
+
+## Fixing class A
+
+`_VOL_PAGE_RE` now strips `Vol. 18:909` / `[Vol. 24:975` constructions before
+folio candidates are read off a line. Effect on the 205 curated containers:
+
+| | `auto` | `review` | `abstain` | children | weak boundaries |
+|---|---|---|---|---|---|
+| before | 21 | 108 | 76 | 858 | 351 of 713 |
+| after | 21 | 85 | 99 | 698 | 227 of 553 |
+
+Boundaries moved in **49 documents**. Coverage fell — 23 documents dropped from
+`review` to `abstain` — because their folio "evidence" was this artefact and they
+never had real folio support. Both gold sets are unchanged (precision 1.000, zero
+corrupt children); 281 tests pass.
+
+Re-adjudicating the corrected queue:
+
+| | items | agreement | documents fully confirmed |
+|---|---|---|---|
+| before fix | 342 answered | 74.0% | 57 of 108 |
+| after fix | 222 answered | **87.4%** | 60 of 85 |
+
+Fewer boundaries need a decision, and the ones that remain agree far more often.
+
+## What this leaves
+
+- The `review` tier is **not** safe to emit unattended even now: 12.6% of its
+  weak boundaries still disagree with an adjudicator that is 98.6% accurate on
+  easy cases.
+- Confirm-only gating currently promotes **60 of 85** `review` documents.
+- ~5 items per run fail JSON parsing when the model's `evidence` string runs past
+  `max_tokens`; raising it to 400 fixed most but not all. Constrain the field
+  length rather than the token budget.
+- The control-set method is the reusable part. Any future adjudicator, model, or
+  prompt should be scored against known-good boundaries before its disagreements
+  are believed.
