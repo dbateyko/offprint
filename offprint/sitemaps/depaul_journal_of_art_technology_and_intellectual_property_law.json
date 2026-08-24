@@ -1,14 +1,60 @@
 {
-  "url": "https://via.library.depaul.edu/jatip/all_issues.html",
-  "sitemap_url": null,
-  "metadata": {
-    "journal": "DePaul Journal of Art, Technology and Intellectual Property Law",
-    "platform": "digitalcommons",
-    "original_url": "https://via.library.depaul.edu/jatip/",
-    "domain": "via.library.depaul.edu",
-    "notes": "[Updated to XML sitemap on 2026-03-03]"
-  },
+  "id": "depaul-journal-art-technology-intellectual-property-law",
   "start_urls": [
-    "https://via.library.depaul.edu/jatip/sitemap.xml"
+    "https://via.library.depaul.edu/jatip/all_issues.html"
+  ],
+  "source": "onboard_journal",
+  "metadata": {
+    "journal_name": "DePaul Journal of Art, Technology & Intellectual Property Law",
+    "registry_aliases": [
+      "DePaul Journal of Art, Technology & Intellectual Property Law",
+      "DePaul Journal of Art, Technology and Intellectual Property Law"
+    ],
+    "platform": "digital_commons_origin_fetch",
+    "url": "https://via.library.depaul.edu/jatip/",
+    "status": "active",
+    "status_reason": "substantive real-PDF smoke passed with title, author, volume, and year",
+    "status_updated_at": "2026-08-24T13:19:54Z",
+    "status_evidence_ref": "/tmp/onboard_report_depaul_jatip/smoke_one_pdf_20260824.json",
+    "navigation": {
+      "archive_root": "https://via.library.depaul.edu/jatip/all_issues.html",
+      "pagination": "63 issue links across 36 volumes; no archive pagination",
+      "pdf_location": "article viewcontent.cgi fetched from publication browser origin",
+      "needs_headless": true,
+      "sitemap_scoped_article_urls": 610,
+      "notes": "The repository host contains many unrelated publications. DePaulJATIPAdapter accepts only /jatip pages and context=jatip PDF URLs, rejects journal furniture, and must use one-worker shared Digital Commons pacing. Stop production on 403, 429, or challenge responses. The two registry spellings using '&' and 'and' are aliases for this one publication."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.doc",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a.doctitle",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "a.doctitle",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": ".pdf a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": ".auth",
+      "parentSelectors": ["article_container"]
+    }
   ]
 }

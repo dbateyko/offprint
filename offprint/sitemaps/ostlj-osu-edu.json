@@ -1,7 +1,7 @@
 {
   "id": "ostlj-osu-edu",
   "start_urls": [
-    "https://kb.osu.edu/handle/1811/72602"
+    "https://kb.osu.edu/communities/a3767fe3-6fcd-5776-bbe7-44d144fb641a"
   ],
   "source": "claude_code_skill",
   "metadata": {
@@ -10,8 +10,17 @@
     "url": "https://ostlj.osu.edu/",
     "created_date": "2026-04-01",
     "status": "active",
-    "status_reason": "ostlj.osu.edu offline (connection refused). Canonical archive is OSU Knowledge Bank DSpace collection at kb.osu.edu/handle/1811/72602.",
-    "status_updated_at": "2026-05-05T02:21:20Z",
-    "status_evidence_ref": "curl ostlj.osu.edu -> 000; kb.osu.edu/handle/1811/72602 -> 200"
+    "status_reason": "The canonical DSpace community remains primary. When it is unreachable, a publisher-owned Moritz article archive and a bounded legacy OSTLJ Wayback PDF scope provide publication-specific fallbacks; a real PDF passed the activation smoke.",
+    "status_updated_at": "2026-08-24T03:25:05Z",
+    "status_evidence_ref": "/tmp/onboard_report_ostlj_pipeline_fallback_20260824/smoke_one_pdf_20260824T032505Z.json",
+    "navigation": {
+      "archive_root": "https://kb.osu.edu/communities/a3767fe3-6fcd-5776-bbe7-44d144fb641a",
+      "pagination": "DSpace REST API: community -> 50 issue collections -> scoped objects",
+      "pdf_location": "DSpace ORIGINAL bundle content endpoint; Moritz live article PDFs; exact Wayback replay for the bounded legacy /students/groups/is/files/ scope",
+      "needs_headless": false,
+      "dspace_community_uuid": "a3767fe3-6fcd-5776-bbe7-44d144fb641a",
+      "dspace_community_handle": "1811/72602",
+      "notes": "Volumes 1-15 were published as I/S: A Journal of Law and Policy for the Information Society. The legacy handle resolves to a community, so host-wide fallback discovery was unscoped and capped before reaching most OSTLJ objects. Live fallback: https://moritzlaw.osu.edu/student-life/law-journals/ohio-state-technology-law-journal/ostlj-articles. Legacy fallback: Wayback CDX scope moritzlaw.osu.edu/students/groups/is/files/* with exact replay."
+    }
   }
 }

@@ -1,57 +1,33 @@
 {
   "id": "law-loyno-edu-loyola-law-review",
   "start_urls": [
-    "https://law.loyno.edu/loyola-law-review/"
+    "https://loynolawreview.org/print"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Loyola Law Review",
-    "platform": "Custom/Drupal",
-    "url": "https://law.loyno.edu/loyola-law-review/",
+    "platform": "squarespace",
+    "url": "https://loynolawreview.org/print",
     "created_date": "2026-04-01",
-    "status": "paused_404",
+    "status": "active",
     "navigation": {
-      "archive_root": "https://law.loyno.edu/loyola-law-review/",
+      "archive_root": "https://loynolawreview.org/print",
       "volume_url_pattern": "none-list",
       "archive_path": "homepage -> issue links -> article detail -> PDF link",
-      "pdf_location": "article-detail-page",
-      "notes": "University-hosted site. Issues are listed as separate pages or nodes. PDFs are direct on article detail pages."
+      "pdf_location": "direct-on-issue-page",
+      "notes": "Journal moved off law.loyno.edu (404) to standalone Squarespace site loynolawreview.org. /print lists 25+ issue pages; each issue page carries direct .pdf links under /s/ (verified 2026-08-20: volume-71-no-1-fall-2024 = 8 PDFs)."
     },
-    "status_reason": "zero-PDF triage 2026-06-09T23:04:51Z: seed unreachable (status=404 )",
-    "status_updated_at": "2026-06-09T23:04:51Z",
-    "status_evidence_ref": "inventory/triage_zero_pdf_seeds.py"
+    "status_reason": "repaired_2026-08-20: old law.loyno.edu seed 404; relocated to loynolawreview.org/print, 25+ issue pages, 8 direct PDFs verified on sampled issue",
+    "status_updated_at": "2026-08-20T00:00:00Z",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/README.md"
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
-      "selector": "a[href*='/volume-'], a[href*='/issue-']",
+      "selector": "a[href*='/volume-']",
       "parentSelectors": [
         "_root"
-      ]
-    },
-    {
-      "id": "article_container",
-      "type": "SelectorElement",
-      "selector": ".node-article, .field-items",
-      "parentSelectors": [
-        "issue_link"
-      ]
-    },
-    {
-      "id": "title",
-      "type": "SelectorText",
-      "selector": "h1.title, h2.title a",
-      "parentSelectors": [
-        "article_container"
-      ]
-    },
-    {
-      "id": "article_url",
-      "type": "SelectorLink",
-      "selector": "h2.title a, h1.title a",
-      "parentSelectors": [
-        "article_container"
       ]
     },
     {
@@ -59,9 +35,9 @@
       "type": "SelectorLink",
       "selector": "a[href$='.pdf']",
       "parentSelectors": [
-        "_root"
-      ],
-      "notes": "PDF link on article page."
+        "_root",
+        "issue_link"
+      ]
     }
   ]
 }

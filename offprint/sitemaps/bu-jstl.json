@@ -1,54 +1,61 @@
 {
   "id": "bu-jstl",
   "start_urls": [
-    "https://www.bu.edu/jstl/archive/"
+    "https://www.bu.edu/jostl/archives/"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Boston University Journal of Science & Technology Law",
     "platform": "WordPress",
-    "url": "https://www.bu.edu/jstl/",
+    "url": "https://www.bu.edu/jostl/",
     "created_date": "2026-04-01",
     "status": "active",
+    "status_reason": "smoke_passed_184_pdf_archive_traversal",
+    "status_updated_at": "2026-08-24T03:00:00Z",
+    "status_evidence_ref": "/tmp/onboard_report_bu_jostl_smoke",
     "navigation": {
-      "archive_root": "https://www.bu.edu/jstl/archive/",
-      "volume_url_pattern": "none-list",
-      "archive_path": "homepage -> /archive/ -> volume/issue links -> article detail -> PDF link",
-      "pdf_location": "article-detail-page",
-      "notes": "WordPress site. Archive lists past volumes. PDFs are direct on article detail pages."
+      "archive_root": "https://www.bu.edu/jostl/archives/",
+      "volume_url_pattern": "/jostl/archives/{issue-slug}/ plus legacy dated issue pages",
+      "archive_path": "archive -> 35 issue pages -> direct article PDFs or embedded issue PDF",
+      "pagination": "none",
+      "pdf_location": "issue-page anchor or iframe",
+      "needs_headless": false,
+      "expected_candidates": 184,
+      "estimated_net_new": 116,
+      "notes": "BU-specific adapter required. Correct journal slug is /jostl/ (not /jstl/); /jostl/archive/ redirects to canonical /jostl/archives/. The public archive covers volumes 13.2 through 30.2. Seven recent issue pages embed whole-issue PDFs, including four public Google Drive previews normalized to direct downloads."
     }
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".entry-content a[href*='/volume-'], .entry-content a[href*='/issue-']",
+      "selector": "article a[href], .bu_collapsible_section a[href]",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.post, .entry-content",
+      "selector": "article, .bu_collapsible_section",
       "parentSelectors": ["issue_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "h1.entry-title, h2.entry-title a",
+      "selector": "article h1, article a[href$='.pdf']",
       "parentSelectors": ["article_container"]
     },
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "h2.entry-title a, h1.entry-title a",
+      "selector": "article a[href*='/archives/'], .bu_collapsible_section a[href]",
       "parentSelectors": ["article_container"]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
+      "selector": "a[href*='.pdf'], iframe[src*='.pdf'], iframe[src*='drive.google.com/file/d/']",
       "parentSelectors": ["_root"],
-      "notes": "PDF on article detail page"
+      "notes": "Direct article PDFs and whole-issue PDF embeds on issue pages"
     }
   ]
 }

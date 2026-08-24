@@ -6,7 +6,7 @@
     "journal_name": "Rocky Mountain Law Journal",
     "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
     "original_url": "https://www.rockymountainlawjournal.org/",
-    "platform": "unknown",
+    "platform": "weebly",
     "registry_confirmed_working_exact": false,
     "registry_fingerprint_confidence": "0",
     "registry_mainids": "1792",
@@ -16,13 +16,23 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "GenericAdapter",
     "registry_working_host_only": false,
-    "status": "paused_waf",
-    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.rockymountainlawjournal.org/url_343a8fcb761b",
-    "status_reason": "probe_waf_marker_detected",
-    "status_updated_at": "2026-03-15T13:55:54Z"
+    "status": "active",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/hijacked_domain_resolution.md",
+    "status_reason": "repaired_2026-08-20: rockymountainlawjournal.org expired/resold (hijacked since at least 2023); same journal (Rocky Mountain Academy of Legal Studies in Business) lives at the .com. Probe: HTTP 200, 8 volume pages (volume-1..8.html), each carrying one full-volume PDF; sample https://www.rockymountainlawjournal.com/uploads/1/1/2/9/112908513/rmlj_volume_8__2021_.pdf",
+    "status_updated_at": "2026-08-20T00:00:00Z",
+    "hijacked_domain_previous_url": "https://www.rockymountainlawjournal.org/",
+    "hijacked_domain_note": "probe 2026-08-20: seed domain no longer belongs to the journal; it now redirects to hongkongpoolszone.com (lottery-results SEO page). DO NOT SCRAPE — following this seed would ingest unrelated non-journal documents into the corpus.",
+    "url": "https://www.rockymountainlawjournal.com/",
+    "navigation": {
+      "archive_root": "https://www.rockymountainlawjournal.com/",
+      "pagination": "none",
+      "pdf_location": "direct-on-issue-page",
+      "needs_headless": false,
+      "notes": "Weebly site. Volume pages /volume-N.html for N=1..8 (2012-2021). Each volume is a SINGLE whole-volume compilation PDF, not per-article PDFs - these are issue_compilation documents and will need splitting. Identity confirmed against wayback snapshot 20180410 of rockymountainlawjournal.org, which is the same Weebly site."
+    }
   },
   "source": "registry_import",
   "start_urls": [
-    "https://www.rockymountainlawjournal.org/"
+    "https://www.rockymountainlawjournal.com/"
   ]
 }

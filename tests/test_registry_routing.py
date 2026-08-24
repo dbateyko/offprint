@@ -23,6 +23,50 @@ from offprint.adapters.registry import _find_sitemap_for_url
             "https://repository.law.upenn.edu/journal-of-business-law/jbl",
             "QuartexAdapter",
         ),
+        (
+            "https://scholar.smu.edu/scitech/all_issues.html",
+            "SMUScienceTechnologyLawReviewAdapter",
+        ),
+        (
+            "https://scholarship.law.umn.edu/mjlst/all_issues.html",
+            "MinnesotaJLSTAdapter",
+        ),
+        (
+            "https://repository.law.umich.edu/mttlr/all_issues.html",
+            "MichiganTechnologyLawReviewAdapter",
+        ),
+        (
+            "https://scholarship.law.umn.edu/cgi/viewcontent.cgi?article=1583&context=mjlst",
+            "MinnesotaJLSTAdapter",
+        ),
+        (
+            "https://kb.osu.edu/communities/a3767fe3-6fcd-5776-bbe7-44d144fb641a",
+            "OhioStateTechnologyLawJournalAdapter",
+        ),
+        (
+            "https://www.bu.edu/jostl/archives/",
+            "BostonUniversityJOSTLAdapter",
+        ),
+        (
+            "https://sites.bc.edu/iptf/",
+            "BostonCollegeIPTFAdapter",
+        ),
+        (
+            "https://via.library.depaul.edu/jatip/all_issues.html",
+            "DePaulJATIPAdapter",
+        ),
+        (
+            "https://via.library.depaul.edu/cgi/viewcontent.cgi?article=1688&context=jatip",
+            "DePaulJATIPAdapter",
+        ),
+        (
+            "https://www.vjolt.org/archives",
+            "VirginiaJOLTAdapter",
+        ),
+        (
+            "https://www.americanbar.org/groups/science_technology/resources/jurimetrics/issue-archive/",
+            "JurimetricsAdapter",
+        ),
     ],
 )
 def test_blocked_hosts_now_route_without_generic(url: str, expected_cls: str) -> None:

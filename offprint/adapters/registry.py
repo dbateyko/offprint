@@ -11,8 +11,15 @@ from .ave_maria_law_review import AveMariaLawReviewAdapter
 from .base import Adapter
 from .berkeley_btlj import BerkeleyBTLJAdapter
 from .blogger import BloggerAdapter
+from .boston_college_iptf import BostonCollegeIPTFAdapter
+from .bu_jostl import BostonUniversityJOSTLAdapter
 from .cambridge_core import CambridgeCoreAdapter
 from .digital_commons_issue_article_hop import DigitalCommonsIssueArticleHopAdapter
+from .digital_commons_origin_fetch import (
+    MichiganTechnologyLawReviewAdapter,
+    MinnesotaJLSTAdapter,
+)
+from .depaul_jatip import DePaulJATIPAdapter
 from .degruyter import DeGruyterAdapter
 from .drexel_law_review import DrexelLawReviewAdapter
 from .drupal import DrupalAdapter
@@ -27,10 +34,12 @@ from .harvard_jolt import HarvardJOLTAdapter
 from .illinois_jltp import IllinoisJLTPAdapter
 from .issue_archive_enumerator import IssueArchiveEnumeratorAdapter
 from .jurimetrics import JurimetricsAdapter
+from .smu_scitech import SMUScienceTechnologyLawReviewAdapter
 from .janeway import JanewayAdapter
 from .nc_jolt import NorthCarolinaJOLTAdapter
 from .nebraska_law_review import NebraskaLawReviewAdapter
 from .ojs import OJSAdapter
+from .ohio_state_technology import OhioStateTechnologyLawJournalAdapter
 from .plone import PloneAdapter
 from .pubpub import PubPubAdapter
 from .quartex import QuartexAdapter
@@ -146,6 +155,30 @@ def pick_adapter_for(
     path = (parsed.path or "").lower()
     if host.endswith("americanbar.org") and "/groups/science_technology/resources/jurimetrics" in path:
         return JurimetricsAdapter(session=session)
+    if host == "scholar.smu.edu" and path.startswith("/scitech"):
+        return SMUScienceTechnologyLawReviewAdapter(session=session)
+    if host == "sites.bc.edu" and path.startswith("/iptf"):
+        return BostonCollegeIPTFAdapter(session=session)
+    query = (parsed.query or "").lower()
+    if host == "via.library.depaul.edu" and (
+        path.startswith("/jatip") or "context=jatip" in query
+    ):
+        return DePaulJATIPAdapter(session=session)
+    if host == "scholarship.law.umn.edu" and (
+        path.startswith("/mjlst") or "context=mjlst" in query
+    ):
+        return MinnesotaJLSTAdapter(session=session)
+    if host == "repository.law.umich.edu" and (
+        path.startswith("/mttlr") or "context=mttlr" in query
+    ):
+        return MichiganTechnologyLawReviewAdapter(session=session)
+    if host == "kb.osu.edu" and (
+        "/handle/1811/72602" in path
+        or "a3767fe3-6fcd-5776-bbe7-44d144fb641a" in path
+    ):
+        return OhioStateTechnologyLawJournalAdapter(session=session)
+    if host in {"bu.edu", "www.bu.edu"} and path.startswith("/jostl"):
+        return BostonUniversityJOSTLAdapter(session=session)
     exact = ADAPTERS.get(host)
     if exact is not None:
         if isinstance(exact, type):
@@ -189,7 +222,7 @@ register("www.stanfordlawreview.org", SelectorDrivenAdapter)
 register("www.uclalawreview.org", SelectorDrivenAdapter)
 register("www.pennlawreview.com", SelectorDrivenAdapter)
 register("jolt.law.harvard.edu", SelectorDrivenAdapter)
-register("www.vjolt.org", SelectorDrivenAdapter)
+register("www.vjolt.org", VirginiaJOLTAdapter)
 register("law.adelaide.edu.au", SelectorDrivenAdapter)
 register("ilj.law.indiana.edu", SelectorDrivenAdapter)
 register("ablj.org", SelectorDrivenAdapter)

@@ -1,10 +1,25 @@
 {
-  "url": "https://mjlst.lib.umn.edu/",
-  "sitemap_url": null,
+  "id": "minnesota-journal-law-science-technology",
+  "start_urls": [
+    "https://scholarship.law.umn.edu/mjlst/all_issues.html"
+  ],
+  "source": "onboard_journal",
   "metadata": {
-    "journal": "Minnesota Journal of Law, Science & Technology",
-    "platform": "WordPress",
+    "journal_name": "Minnesota Journal of Law, Science & Technology",
+    "platform": "digital_commons_origin_fetch",
+    "url": "https://scholarship.law.umn.edu/mjlst/",
     "original_url": "https://mjlst.lib.umn.edu/",
-    "domain": "mjlst.lib.umn.edu"
+    "status": "active",
+    "status_reason": "smoke_passed_substantive_article_via_page_origin_fetch",
+    "status_updated_at": "2026-08-24T02:56:00Z",
+    "status_evidence_ref": "/tmp/onboard_report_minnesota_dc_final/smoke_one_pdf_20260824T025600Z.json",
+    "navigation": {
+      "archive_root": "https://scholarship.law.umn.edu/mjlst/all_issues.html",
+      "pagination": "52 issue links; no archive pagination",
+      "pdf_location": "article viewcontent.cgi fetched from publication browser origin",
+      "needs_headless": true,
+      "expected_substantive_candidates": 502,
+      "notes": "Direct PDF HTTP returns 403. MinnesotaJLSTAdapter loads /mjlst/ in a headed browser, fetches the PDF in-page, filters journal furniture, and adds volume/issue from article URLs. Targeted production must disable deferred DC round-robin so the adapter delivery method is used."
+    }
   }
 }

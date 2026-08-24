@@ -16,10 +16,10 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "GenericAdapter",
     "registry_working_host_only": false,
-    "status": "paused_waf",
-    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.loyno-lawreview.com/url_96aa911dabb2",
-    "status_reason": "probe_waf_marker_detected",
-    "status_updated_at": "2026-03-15T13:55:54Z"
+    "status": "superseded_duplicate",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/README.md",
+    "status_reason": "duplicate of law-loyno-edu-loyola-law-review.json (Loyola Law Review). loyno-lawreview.com 301s to loynolawreview.org; canonical seed repaired 2026-08-20. Do not scrape separately.",
+    "status_updated_at": "2026-08-20T00:00:00Z"
   },
   "source": "registry_import",
   "start_urls": [

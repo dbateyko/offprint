@@ -2,10 +2,20 @@
   "id": "Jurimetrics",
   "metadata": {
     "original_url": "https://www.americanbar.org/groups/science_technology/resources/jurimetrics/issue-archive/",
-    "status": "paused_waf",
-    "status_evidence_ref": "artifacts/site_fingerprints/www.americanbar.org",
-    "status_reason": "waf_blocked_403_playwright_probe",
-    "status_updated_at": "2026-03-04T04:36:02Z"
+    "journal_name": "Jurimetrics",
+    "platform": "aba_jurimetrics",
+    "url": "https://www.americanbar.org/groups/science_technology/resources/jurimetrics/",
+    "status": "active_partial_metadata",
+    "status_evidence_ref": "/tmp/onboard_report_jurimetrics_bulk_cdx/smoke_one_pdf_20260824T023122Z.json",
+    "status_reason": "smoke_passed_wayback_cdx_inventory_and_replay",
+    "status_updated_at": "2026-08-24T02:31:22Z",
+    "navigation": {
+      "archive_root": "https://www.americanbar.org/groups/science_technology/resources/jurimetrics/issue-archive/",
+      "pagination": "none",
+      "pdf_location": "Wayback CDX inventory with live issue-page fallback",
+      "needs_headless": false,
+      "notes": "Bulk CDX discovery and exact replay are the stable primary lane; live ABA issue pages and in-page browser fetch remain the newest-issue fallback."
+    }
   },
   "raw_sitemap": {
     "_id": "Jurimetrics",

@@ -74,6 +74,7 @@ _CITATION_CANDIDATE_RE = re.compile(
 
 
 FIELD_NAMES = ("title", "authors", "date", "citation")
+_REPLACEABLE_TITLE_PREFIXES = ("OSTLJ archived article:",)
 
 
 def _utc_stamp() -> str:
@@ -354,6 +355,13 @@ def _should_set_field(
     has_current = bool(current_value)
     if not has_current:
         return True
+    # Site adapters sometimes have enough evidence to identify a publication
+    # but not the article title.  These explicit placeholders should not block
+    # a front-matter title recovered after download.  Keep this allowlist
+    # deliberately narrow so real publisher metadata remains authoritative.
+    if field == "title" and isinstance(current_value, str):
+        if current_value.startswith(_REPLACEABLE_TITLE_PREFIXES):
+            return True
     if overwrite_policy == "always":
         return True
     if overwrite_policy == "higher_confidence":

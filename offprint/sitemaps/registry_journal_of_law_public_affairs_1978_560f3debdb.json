@@ -6,23 +6,33 @@
     "journal_name": "Journal of Law & Public Affairs",
     "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
     "original_url": "http://www.lawandpublicaffairs.org/issues",
-    "platform": "unknown",
+    "platform": "quartex",
     "registry_confirmed_working_exact": false,
     "registry_fingerprint_confidence": "0",
     "registry_mainids": "1978",
     "registry_names": "Journal of Law & Public Affairs",
-    "registry_needs_adapter": true,
+    "registry_needs_adapter": false,
     "registry_predicted_platform": "unknown",
     "registry_run_status": "untested",
-    "registry_suggested_adapter": "GenericAdapter",
+    "registry_suggested_adapter": "QuartexAdapter",
     "registry_working_host_only": false,
-    "status": "paused_waf",
-    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.lawandpublicaffairs.org/url_560f3debdb3f",
-    "status_reason": "probe_waf_marker_detected",
-    "status_updated_at": "2026-03-15T13:55:54Z"
+    "status": "active",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/hijacked_domain_resolution.md",
+    "status_reason": "repaired_2026-08-20: lawandpublicaffairs.org expired/resold; journal archive is on Penn Carey Law's repository (Quartex / AM Digital) at repository.law.upenn.edu. Probe: HTTP 200, 121 JLPA documents through Vol 11 (2026), 32 document-detail links on page 1. No static .pdf hrefs (downloads are JS-driven), but offprint already ships QuartexAdapter and registers repository.law.upenn.edu to it (adapters/registry.py:499), and that adapter resolves the frontend-api.quartexcollections.com download token. NOT bepress: scholarship.law.upenn.edu/jlpa 301s here.",
+    "status_updated_at": "2026-08-20T00:00:00Z",
+    "hijacked_domain_previous_url": "http://www.lawandpublicaffairs.org/issues",
+    "hijacked_domain_note": "probe 2026-08-20: seed domain no longer belongs to the journal; it now redirects to sdblenders.co (slots-demo SEO page). DO NOT SCRAPE — following this seed would ingest unrelated non-journal documents into the corpus.",
+    "url": "https://repository.law.upenn.edu/journal-of-law-public-affairs/jlpa",
+    "navigation": {
+      "archive_root": "https://repository.law.upenn.edu/journal-of-law-public-affairs/jlpa",
+      "pagination": "?view/sort params, 12/30 per page",
+      "pdf_location": "quartex-download-api",
+      "needs_headless": true,
+      "notes": "AM Quartex platform. Article pages are /Documents/Detail/<slug>/<id>; no .pdf anchors — QuartexAdapter extracts websiteKey/assetId/downloadToken and calls the Quartex download-init API. Same platform now serves every Penn Carey Law journal, so this seed shares an adapter with 8 sibling journals."
+    }
   },
   "source": "registry_import",
   "start_urls": [
-    "http://www.lawandpublicaffairs.org/issues"
+    "https://repository.law.upenn.edu/journal-of-law-public-affairs/jlpa"
   ]
 }

@@ -234,9 +234,9 @@ CUNY Law Review,http://www.cunylawreview.org/,cunylawreview.org,wordpress,active
 CUNY Law Review,https://www.cunylawreview.org/,cunylawreview.org,WordPress,,cuny_law_review.json,590,114,yes,sitemap,https://www.cunylawreview.org/
 DePaul Law Review,https://via.library.depaul.edu/law-review/sitemap.xml,via.library.depaul.edu,digitalcommons,,depaul_law_review.json,1870,115,yes,sitemap,
 DePaul Law Review,http://via.library.depaul.edu/law-review,via.library.depaul.edu,digital_commons,active,registry_depaul_law_review_1870_fe62fcbcb8.json,1870,115,yes,sitemap,
-Michigan Technology Law Review,https://repository.law.umich.edu/mttlr/sitemap.xml,repository.law.umich.edu,digitalcommons,,michigan_technology_law_review.json,492,116,yes,sitemap,https://repository.law.umich.edu/mlr/
-Michigan Technology Law Review,https://mttlr.org/,mttlr.org,digitalcommons,active,mttlr-org.json,492,116,yes,sitemap,
-Michigan Technology Law Review,https://repository.law.umich.edu/mttlr/all_issues.html,repository.law.umich.edu,digital_commons,active,registry_michigan_technology_law_review_492_2c5593d340.json,492,116,yes,sitemap,https://repository.law.umich.edu/mlr/
+Michigan Technology Law Review,https://repository.law.umich.edu/mttlr/,repository.law.umich.edu,digital_commons_origin_fetch,active,michigan_technology_law_review.json,492,116,yes,sitemap,
+Michigan Technology Law Review,https://repository.law.umich.edu/mttlr/,repository.law.umich.edu,digital_commons_origin_fetch,active,michigan_technology_law_review.json,492,116,yes,sitemap,
+Michigan Technology Law Review,https://repository.law.umich.edu/mttlr/,repository.law.umich.edu,digital_commons_origin_fetch,active,michigan_technology_law_review.json,492,116,yes,sitemap,
 Yale Journal of International Law,https://www.yjil.yale.edu/,yjil.yale.edu,drupal,active,registry_yale_journal_of_international_law_357_a7e91505ec.json,357,117,yes,sitemap,
 Yale Journal of International Law,https://openyls.law.yale.edu/collections/,openyls.law.yale.edu,OpenYLS,active,yale_journal_of_international_law.json,357,117,yes,sitemap,
 Yale Law & Policy Review,https://ylpr.yale.edu/,ylpr.yale.edu,drupal,paused_paywall,registry_yale_law_policy_review_361_a2cdc0e506.json,361,118,yes,sitemap,
@@ -268,7 +268,7 @@ Columbia Journal of Law & the Arts,https://lawandarts.org/,lawandarts.org,ojs,pa
 lawandarts.org,https://lawandarts.org/,lawandarts.org,ojs,active,lawandarts-org.json,213,132,,sitemap,
 American Bankruptcy Law Journal,https://ablj.org/,ablj.org,wordpress,active,ablj-org.json,362,133,,sitemap,
 American Bankruptcy Law Journal,https://ablj.org/,ablj.org,wordpress,paused_paywall,registry_american_bankruptcy_law_journal_362_6500359afd.json,362,133,,sitemap,
-Jurimetrics,https://www.americanbar.org/groups/science_technology/publications/jurimetrics,americanbar.org,unknown,paused_waf,registry_jurimetrics_163_868199b04b.json,163,134,yes,sitemap,
+Jurimetrics,https://www.americanbar.org/groups/science_technology/resources/jurimetrics/,americanbar.org,aba_jurimetrics,active_partial_metadata,jurimetrics.json,163,134,yes,sitemap,
 Texas A&M Law Review,https://law.tamu.edu/current-students/academics/law-journals/law-review,law.tamu.edu,unknown,paused_404,registry_texas_a_m_law_review_1981_acb97d11d2.json,1981,135,yes,sitemap,
 Texas A&M Law Review,https://scholarship.law.tamu.edu/lawreview/sitemap.xml,scholarship.law.tamu.edu,digitalcommons,,texas_a_m_law_review.json,1981,135,yes,sitemap,https://scholarship.law.tamu.edu/lawreview/
 Berkeley Journal of Employment and Labor Law,https://www.law.berkeley.edu/library/ir/bjell,law.berkeley.edu,unknown,active,registry_berkeley_journal_of_employment_and_labor_law_199_01bd9e4d2f.json,199,136,yes,sitemap,
@@ -323,8 +323,8 @@ St. John's Law Review,https://scholarship.law.stjohns.edu/lawreview/,scholarship
 Immigration and Human Rights Law Review,https://scholarship.law.uc.edu/ihrlr/,scholarship.law.uc.edu,digitalcommons,,scholarship-law-uc-edu-ihrlr.json,1867,161,,sitemap,
 University of Cincinnati Law Review,https://scholarship.law.uc.edu/uclr,scholarship.law.uc.edu,digital_commons,active,registry_university_of_cincinnati_law_review_1867_e791151d9d.json,1867,161,yes,sitemap,
 University of Cincinnati Law Review,https://uclawreview.org/,uclawreview.org,WordPress,,university_of_cincinnati_law_review.json,1867,161,yes,sitemap,
-Boston University Journal of Science & Technology Law,https://www.bu.edu/jostl/,bu.edu,WordPress,,boston_university_journal_of_science_technology_law.json,428,162,yes,sitemap,https://www.bu.edu/ilj/
-Boston University Journal of Science & Technology Law,https://www.bu.edu/jstl/,bu.edu,WordPress,active,bu-jstl.json,428,162,yes,sitemap,https://www.bu.edu/ilj/
+Boston University Journal of Science & Technology Law,https://www.bu.edu/jostl/,bu.edu,wordpress,active,bu-jstl.json,428,162,yes,sitemap,
+Boston University Journal of Science & Technology Law,https://www.bu.edu/jostl/,bu.edu,wordpress,active,bu-jstl.json,428,162,yes,sitemap,
 Berkeley Business Law Journal,https://www.bblj.org/,bblj.org,WordPress,active,bblj-org.json,972,163,yes,sitemap,
 Berkeley Business Law Journal,http://businesslawjournal.org/,businesslawjournal.org,wordpress,paused_login,registry_berkeley_business_law_journal_972_04de2f8aca.json,972,163,yes,sitemap,
 businesslawjournal.org,http://businesslawjournal.org/,businesslawjournal.org,wordpress,active,businesslawjournal-org.json,972,163,,sitemap,
@@ -392,8 +392,8 @@ UMKC Law Review,https://umkclawreview.org/,umkclawreview.org,wordpress,paused_lo
 umkclawreview.org,https://umkclawreview.org/,umkclawreview.org,wordpress,active,umkclawreview-org.json,186,199,,sitemap,
 University of Kansas Law Review,https://law.ku.edu/law-review/,law.ku.edu,unknown,,law-ku-edu.json,1893,200,yes,sitemap,
 University of Kansas Law Review,https://law.ku.edu/lawreview,law.ku.edu,drupal,paused_login,registry_university_of_kansas_law_review_1893_ea548c0d70.json,1893,200,yes,sitemap,
-Ohio State Technology Law Journal,https://ostlj.osu.edu/,ostlj.osu.edu,dspace,active,ostlj-osu-edu.json,1023,201,yes,sitemap,
-Ohio State Technology Law Journal,https://moritzlaw.osu.edu/ostlj-volume21-2,moritzlaw.osu.edu,drupal,active,registry_ohio_state_technology_law_journal_1023_498e39939a.json,1023,201,yes,sitemap,
+Ohio State Technology Law Journal,https://kb.osu.edu/communities/a3767fe3-6fcd-5776-bbe7-44d144fb641a,kb.osu.edu,dspace_moritz_wayback_fallback,active,ostlj-osu-edu.json,1023,201,yes,sitemap,
+Ohio State Technology Law Journal,https://kb.osu.edu/communities/a3767fe3-6fcd-5776-bbe7-44d144fb641a,kb.osu.edu,dspace_moritz_wayback_fallback,active,ostlj-osu-edu.json,1023,201,yes,sitemap,
 UC Law Constitutional Quarterly,https://repository.uclawsf.edu/hastings_constitutional_law_quaterly,repository.uclawsf.edu,digital_commons,todo_adapter,registry_uc_law_constitutional_quarterly_248_d88f0c6f1e.json,248,202,,sitemap,
 Cornell International Law Journal,https://scholarship.law.cornell.edu/cilj/sitemap.xml,scholarship.law.cornell.edu,digitalcommons,,cornell_international_law_journal.json,218,203,yes,sitemap,
 Cornell International Law Journal,https://scholarship.law.cornell.edu/cilj/,scholarship.law.cornell.edu,digitalcommons,active,cornellilj-org.json,218,203,yes,sitemap,
@@ -597,8 +597,8 @@ Journal of Law and Policy,https://brooklynworks.brooklaw.edu/jlp,brooklynworks.b
 Law and Human Behavior,https://www.apa.org/pubs/journals/lhb,apa.org,unknown,paused_waf,registry_law_and_human_behavior_1951_0279fa2551.json,1951,331,yes,sitemap,
 Tulsa Law Review,https://digitalcommons.law.utulsa.edu/tlr,digitalcommons.law.utulsa.edu,digital_commons,active,registry_tulsa_law_review_180_2f36d0512d.json,180,332,yes,sitemap,https://digitalcommons.law.utulsa.edu/tlr/
 Tulsa Law Review,https://digitalcommons.law.utulsa.edu/tlr/sitemap.xml,digitalcommons.law.utulsa.edu,digitalcommons,,tulsa_law_review.json,180,332,yes,sitemap,https://digitalcommons.law.utulsa.edu/tlr/
-"Minnesota Journal of Law, Science & Technology",https://mjlst.lib.umn.edu/,mjlst.lib.umn.edu,WordPress,,minnesota_journal_of_law_science_technology.json,626,334,yes,sitemap,
-"Minnesota Journal of Law, Science & Technology",https://scholarship.law.umn.edu/mjlst,scholarship.law.umn.edu,digital_commons,todo_adapter,registry_minnesota_journal_of_law_science_technology_626_cf783b88dd.json,626,334,yes,sitemap,
+"Minnesota Journal of Law, Science & Technology",https://scholarship.law.umn.edu/mjlst/,scholarship.law.umn.edu,digital_commons_origin_fetch,active,minnesota_journal_of_law_science_technology.json,626,334,yes,sitemap,
+"Minnesota Journal of Law, Science & Technology",https://scholarship.law.umn.edu/mjlst/,scholarship.law.umn.edu,digital_commons_origin_fetch,active,minnesota_journal_of_law_science_technology.json,626,334,yes,sitemap,
 University of San Francisco Law Review,https://www.usfca.edu/law/professional-skills/student-run-academic-journals/law-review,usfca.edu,drupal,paused_waf,registry_university_of_san_francisco_law_review_1904_0e8c019c0a.json,1904,335,yes,sitemap,
 University of San Francisco Law Review,https://repository.usfca.edu/usflawreview/sitemap.xml,repository.usfca.edu,digitalcommons,,university_of_san_francisco_law_review.json,1904,335,yes,sitemap,https://repository.usfca.edu/usflrev/
 Georgetown Journal of International Law,https://www.law.georgetown.edu/international-law-journal/in-print/,law.georgetown.edu,WordPress,,georgetown_journal_of_international_law.json,461,336,yes,sitemap,https://www.law.georgetown.edu/american-criminal-law-review/in-print/
@@ -883,7 +883,7 @@ Bocconi School of Law Student-Edited Papers,https://www.unibocconi.eu/wps/wcm/co
 Bond Law Review,https://blr.scholasticahq.com/,blr.scholasticahq.com,,no_sitemap,,723,,,wlu,
 Bond University Student Law Review,https://bondlsa.com/publications/buslr/,bondlsa.com,,no_sitemap,,1439,,,wlu,
 Boston College Environmental Affairs Law Review,https://lawdigitalcommons.bc.edu/ealr,lawdigitalcommons.bc.edu,unknown,active,registry_boston_college_environmental_affairs_law_review_201_5e5793581c.json,201,,,sitemap,
-Boston College Intellectual Property and Technology Forum,https://sites.bc.edu/iptf,sites.bc.edu,wordpress,active,registry_boston_college_intellectual_property_and_technology_foru_619_40bb905930.json,619,,,sitemap,
+Boston College Intellectual Property and Technology Forum,https://sites.bc.edu/iptf/,sites.bc.edu,wordpress_lira,active,boston_college_iptf.json,619,,,sitemap,
 Boston College International and Comparative Law Review,https://lawdigitalcommons.bc.edu/iclr,lawdigitalcommons.bc.edu,unknown,active,registry_boston_college_international_and_comparative_law_review_426_aa40dd1ce3.json,426,,,sitemap,
 Boston College Journal of Law and Social Justice,https://lawdigitalcommons.bc.edu/jlsj,lawdigitalcommons.bc.edu,unknown,active,registry_boston_college_journal_of_law_and_social_justice_375_7b323ad926.json,375,,,sitemap,
 Boston College Law Review E. Supp.,https://www.bc.edu/content/bc-web/schools/law/academics-faculty/law-reviews/bclr/e-supp-online.html,bc.edu,unknown,paused_404,registry_boston_college_law_review_e_supp_2026_59beab1cd1.json,2026,,,sitemap,
@@ -1103,8 +1103,8 @@ DePaul Business & Commercial Law Journal,https://via.library.depaul.edu/bclj/sit
 DePaul Business & Commercial Law Journal,https://via.library.depaul.edu/bclj/,via.library.depaul.edu,unknown,,via-library-depaul-edu.json,438,,yes,sitemap,
 DePaul Journal for Social Justice,https://via.library.depaul.edu/jsj/sitemap.xml,via.library.depaul.edu,digitalcommons,,depaul_journal_for_social_justice.json,1465,,yes,sitemap,
 DePaul Journal for Social Justice,https://via.library.depaul.edu/jsj,via.library.depaul.edu,digital_commons,active,registry_depaul_journal_for_social_justice_1465_c4871dd748.json,1465,,yes,sitemap,
-"DePaul Journal of Art, Technology & Intellectual Property Law",https://via.library.depaul.edu/jatip,via.library.depaul.edu,digital_commons,active,registry_depaul_journal_of_art_technology_intellectual_property_l_431_44699877c1.json,431,,,sitemap,
-"DePaul Journal of Art, Technology and Intellectual Property Law",https://via.library.depaul.edu/jatip/sitemap.xml,via.library.depaul.edu,digitalcommons,,depaul_journal_of_art_technology_and_intellectual_property_law.json,,,yes,sitemap,
+"DePaul Journal of Art, Technology & Intellectual Property Law",https://via.library.depaul.edu/jatip/,via.library.depaul.edu,digital_commons_origin_fetch,active,depaul_journal_of_art_technology_and_intellectual_property_law.json,431,,,sitemap,
+"DePaul Journal of Art, Technology and Intellectual Property Law",https://via.library.depaul.edu/jatip/,via.library.depaul.edu,digital_commons_origin_fetch,active,depaul_journal_of_art_technology_and_intellectual_property_law.json,,,yes,sitemap,
 DePaul Journal of Health Care Law,https://via.library.depaul.edu/jhcl/sitemap.xml,via.library.depaul.edu,digitalcommons,,depaul_journal_of_health_care_law.json,664,,yes,sitemap,
 DePaul Journal of Health Care Law,https://via.library.depaul.edu/jhcl,via.library.depaul.edu,digital_commons,active,registry_depaul_journal_of_health_care_law_664_be3d1b20c5.json,664,,yes,sitemap,
 DePaul Journal of Sports Law & Contemporary Problems,https://via.library.depaul.edu/jslcp,via.library.depaul.edu,digital_commons,active,registry_depaul_journal_of_sports_law_contemporary_problems_661_e027a676b3.json,661,,,sitemap,
@@ -2497,7 +2497,7 @@ Villanova Law (multiple collections),https://digitalcommons.law.villanova.edu/,d
 Villanova Women's Law Forum,http://vls.law.vill.edu/publications/womenslawforum/articles.htm,vls.law.vill.edu,unknown,active,registry_villanova_women_s_law_forum_363_7f85313780.json,363,,,sitemap,
 Virginia Environmental Law Journal,http://www.velj.org/,velj.org,unknown,active,registry_virginia_environmental_law_journal_345_a0ec4b58e1.json,345,,yes,sitemap,
 Virginia Journal of Criminal Law,http://virginiajournalofcriminallaw.com/,virginiajournalofcriminallaw.com,wordpress,paused_paywall,registry_virginia_journal_of_criminal_law_1719_5f3ddc3d0b.json,1719,,yes,sitemap,
-Virginia Journal of Law & Technology,http://www.vjolt.org/,vjolt.org,unknown,active,registry_virginia_journal_of_law_technology_593_00b82a3bba.json,593,,,sitemap,
+Virginia Journal of Law & Technology,https://www.vjolt.org/,vjolt.org,squarespace,active,virginia_journal_of_law_technology.json,593,,,sitemap,
 Virginia Journal of Social Policy & the Law,https://vjspl.org/,vjspl.org,unknown,active,registry_virginia_journal_of_social_policy_the_law_347_243a62f290.json,347,,yes,sitemap,
 Virginia Law and Business Review,,,,no_sitemap,,,,yes,cilp,
 Virginia Law Review Online,https://virginialawreview.org/online/,virginialawreview.org,wordpress,active,registry_virginia_law_review_online_1414_47d70993a2.json,1414,,,sitemap,

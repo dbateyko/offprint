@@ -1,0 +1,51 @@
+{
+  "id": "virginia-journal-of-law-technology",
+  "start_urls": [
+    "https://www.vjolt.org/archives"
+  ],
+  "source": "onboard_journal",
+  "metadata": {
+    "journal_name": "Virginia Journal of Law & Technology",
+    "platform": "squarespace",
+    "url": "https://www.vjolt.org/",
+    "created_date": "2026-08-24",
+    "status": "active",
+    "status_reason": "smoke_passed_232_pdf_archive_traversal",
+    "status_updated_at": "2026-08-24T03:00:00Z",
+    "status_evidence_ref": "/tmp/onboard_report_vjolt_direct_20260824.json",
+    "navigation": {
+      "archive_root": "https://www.vjolt.org/archives",
+      "pagination": "none",
+      "pdf_location": "direct-on-volume-page",
+      "needs_headless": false,
+      "expected_substantive_candidates": 232,
+      "notes": "The archive directly enumerates volume pages. Volumes 1-24 link article PDFs on Virginia Box; volumes 25 onward use Squarespace /s/ downloads and several layout generations. VirginiaJOLTAdapter traverses archive volume links and normalizes all layouts."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.menu-item, div.image-card, div.list-item-content, div.fluid-engine",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h2, h3, h4, div.menu-item-title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='virginia.box.com'], a[href^='/s/']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

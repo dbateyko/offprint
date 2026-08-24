@@ -4,7 +4,7 @@
     "created_date": "2026-03-04",
     "domain": "scholar.smu.edu",
     "journal_name": "SMU Science and Technology Law Review",
-    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "notes": "Publication-scoped Digital Commons seed. The SMU SciTech adapter filters front matter and other journal furniture before download.",
     "original_url": "https://scholar.smu.edu/scitech",
     "platform": "digital_commons",
     "registry_confirmed_working_exact": false,
@@ -13,16 +13,22 @@
     "registry_names": "SMU Science and Technology Law Review",
     "registry_needs_adapter": false,
     "registry_predicted_platform": "digital_commons",
-    "registry_run_status": "untested",
-    "registry_suggested_adapter": "DigitalCommonsBaseAdapter",
+    "registry_run_status": "smoke_passed",
+    "registry_suggested_adapter": "SMUScienceTechnologyLawReviewAdapter",
     "registry_working_host_only": false,
     "status": "active",
-    "status_evidence_ref": "docs/registry/us_urls_canonical.csv",
-    "status_reason": "registry_pending_validation",
-    "status_updated_at": "2026-03-04T05:10:53Z"
+    "status_evidence_ref": "/tmp/onboard_report_top25_postpatch2/smoke_one_pdf_20260824T021353Z.json",
+    "status_reason": "smoke_passed_substantive_article_pdf",
+    "status_updated_at": "2026-08-24T02:13:53Z",
+    "navigation": {
+      "archive_root": "https://scholar.smu.edu/scitech/all_issues.html",
+      "pagination": "publication-scoped all-issues traversal",
+      "pdf_location": "article-detail-page",
+      "notes": "Traverse /scitech/all_issues.html and filter journal furniture; do not infer coverage from other scholar.smu.edu publications."
+    }
   },
   "source": "registry_import",
   "start_urls": [
-    "https://scholar.smu.edu/scitech"
+    "https://scholar.smu.edu/scitech/all_issues.html"
   ]
 }

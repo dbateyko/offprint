@@ -1,0 +1,51 @@
+{
+  "id": "boston-college-iptf",
+  "start_urls": [
+    "https://sites.bc.edu/iptf/"
+  ],
+  "source": "manual_publication_scope",
+  "metadata": {
+    "journal_name": "Boston College Intellectual Property and Technology Forum",
+    "platform": "wordpress_lira",
+    "url": "https://sites.bc.edu/iptf/",
+    "created_date": "2026-08-24",
+    "status": "active",
+    "status_reason": "publication-specific adapter follows substantive IPTF posts to their LIRA work and PDF",
+    "status_updated_at": "2026-08-24T03:34:00Z",
+    "status_evidence_ref": "/tmp/onboard_report_bc_iptf_direct_20260824T0334/smoke_one_pdf_20260824T033400Z.json",
+    "navigation": {
+      "archive_root": "https://sites.bc.edu/iptf/",
+      "pagination": "?paged=N; current page advertises 22 pages",
+      "pdf_location": "IPTF post -> lira.bc.edu publication work -> direct /downloads/ PDF",
+      "needs_headless": false,
+      "scope_guard": "sites.bc.edu/iptf only; excludes blog posts, mastheads, and journal staff pages",
+      "notes": "The WordPress REST API requires login (401). HTML pagination is public. Discovery stops without retry on 403, 429, challenge pages, repeated empty article paths, or an empty listing page."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.post",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h2.entry-title",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h2.entry-title a[href]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

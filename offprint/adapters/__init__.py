@@ -1,11 +1,18 @@
 from .base import Adapter
 from .berkeley_btlj import BerkeleyBTLJAdapter
 from .blogger import BloggerAdapter
+from .boston_college_iptf import BostonCollegeIPTFAdapter
+from .bu_jostl import BostonUniversityJOSTLAdapter
 from .colorado_law import ColoradoCTLJAdapter, ColoradoJTHTLAdapter
 from .cambridge_core import CambridgeCoreAdapter
 from .columbia_stlr import ColumbiaSTLRAdapter
 from .digitalcommons import DigitalCommonsAdapter
 from .digital_commons_issue_article_hop import DigitalCommonsIssueArticleHopAdapter
+from .digital_commons_origin_fetch import (
+    MichiganTechnologyLawReviewAdapter,
+    MinnesotaJLSTAdapter,
+)
+from .depaul_jatip import DePaulJATIPAdapter
 from .drexel_law_review import DrexelLawReviewAdapter
 from .dspace import DSpaceAdapter
 from .escholarship import EScholarshipAdapter
@@ -18,9 +25,11 @@ from .harvard_jolt import HarvardJOLTAdapter
 from .jolt_base import JOLTBaseAdapter
 from .illinois_jltp import IllinoisJLTPAdapter
 from .jurimetrics import JurimetricsAdapter
+from .smu_scitech import SMUScienceTechnologyLawReviewAdapter
 from .nc_jolt import NorthCarolinaJOLTAdapter
 from .nebraska_law_review import NebraskaLawReviewAdapter
 from .ojs import OJSAdapter
+from .ohio_state_technology import OhioStateTechnologyLawJournalAdapter
 from .plone import PloneAdapter
 from .pubpub import PubPubAdapter
 from .registry import UnmappedAdapterError, pick_adapter_for, register
@@ -93,11 +102,17 @@ __all__ = [
     "GenericAdapter",
     "ExampleSiteAdapter",
     "BloggerAdapter",
+    "BostonCollegeIPTFAdapter",
+    "BostonUniversityJOSTLAdapter",
     "StanfordSTLRAdapter",
     "GeorgetownGLTRAdapter",
     "GeorgetownJNSLPAdapter",
     "GreenBagAdapter",
     "DigitalCommonsAdapter",
+    "DePaulJATIPAdapter",
+    "MichiganTechnologyLawReviewAdapter",
+    "MinnesotaJLSTAdapter",
+    "OhioStateTechnologyLawJournalAdapter",
     "DSpaceAdapter",
     "EScholarshipAdapter",
     "CambridgeCoreAdapter",
@@ -107,6 +122,7 @@ __all__ = [
     "BerkeleyBTLJAdapter",
     "IllinoisJLTPAdapter",
     "JurimetricsAdapter",
+    "SMUScienceTechnologyLawReviewAdapter",
     "NorthCarolinaJOLTAdapter",
     "NebraskaLawReviewAdapter",
     "YaleJOLTAdapter",

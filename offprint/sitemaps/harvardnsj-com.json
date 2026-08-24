@@ -5,10 +5,17 @@
   ],
   "source": "auto_onboard",
   "metadata": {
-    "journal_name": "harvardnsj.com",
+    "journal_name": "Harvard National Security Journal",
     "platform": "unknown",
     "url": "http://harvardnsj.com/",
     "created_date": "2026-03-26",
-    "status": "active"
+    "status": "dead_domain_expired",
+    "status_reason": "DO NOT SCRAPE — harvardnsj.com expired and now redirects to laudatosi.org (gambling/slots SEO page). This seed is also a duplicate of registry_harvard_national_security_journal_1667_25e9bc82c5.json, which was repaired 2026-08-20 to the journal's real home https://journals.law.harvard.edu/nsj/volumes-2/. Scrape that seed instead; this file stays dead so the hijacked domain can never be re-enabled.",
+    "status_updated_at": "2026-08-20T00:00:00Z",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/hijacked_domain_resolution.md",
+    "hijacked_domain_previous_url": "http://harvardnsj.com/",
+    "hijacked_domain_note": "probe 2026-08-20: seed domain no longer belongs to the journal; it now redirects to laudatosi.org (gambling/slots SEO page). DO NOT SCRAPE — following this seed would ingest unrelated non-journal documents into the corpus.",
+    "superseded_by": "registry_harvard_national_security_journal_1667_25e9bc82c5.json",
+    "relocation_verdict": "RELOCATED_PLAYWRIGHT (handled by canonical seed)"
   }
 }

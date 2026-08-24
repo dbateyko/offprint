@@ -16,13 +16,23 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
     "registry_working_host_only": false,
-    "status": "paused_waf",
-    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/harvardjsel.com/url_c7e064ad342a",
-    "status_reason": "probe_waf_marker_detected",
-    "status_updated_at": "2026-03-04T05:34:00Z"
+    "status": "active",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/hijacked_domain_resolution.md",
+    "status_reason": "repaired_2026-08-20: harvardjsel.com expired/resold; journal relocated to Harvard Law School journals platform. Probe: HTTP 200, 34 distinct issue pages (Vol 1 - Vol 17), print-edition page carries direct PDFs; sample https://journals.law.harvard.edu/jsel/wp-content/uploads/sites/78/2026/08/HLS_17-2.pdf",
+    "status_updated_at": "2026-08-20T00:00:00Z",
+    "hijacked_domain_previous_url": "http://harvardjsel.com/",
+    "hijacked_domain_note": "probe 2026-08-20: seed domain no longer belongs to the journal; it now redirects to xoilacvvi.tv (sports-streaming site). DO NOT SCRAPE — following this seed would ingest unrelated non-journal documents into the corpus.",
+    "url": "https://journals.law.harvard.edu/jsel/previous-editions/",
+    "navigation": {
+      "archive_root": "https://journals.law.harvard.edu/jsel/previous-editions/",
+      "pagination": "none",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "previous-editions lists 34 issue pages under /jsel/current-issue/<volume-slug>/. Current issue PDFs also linked directly from /jsel/print-edition/. Depth>=2 required."
+    }
   },
   "source": "registry_import",
   "start_urls": [
-    "http://harvardjsel.com/"
+    "https://journals.law.harvard.edu/jsel/previous-editions/"
   ]
 }

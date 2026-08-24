@@ -9,6 +9,9 @@
     "platform": "squarespace",
     "url": "http://www.loyno-lawreview.com/",
     "created_date": "2026-03-26",
-    "status": "active"
+    "status": "superseded_duplicate",
+    "status_reason": "duplicate of law-loyno-edu-loyola-law-review.json (Loyola Law Review). loyno-lawreview.com 301s to loynolawreview.org; canonical seed repaired 2026-08-20. Do not scrape separately.",
+    "status_updated_at": "2026-08-20T00:00:00Z",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/README.md"
   }
 }

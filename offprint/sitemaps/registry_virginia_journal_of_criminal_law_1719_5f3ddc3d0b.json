@@ -16,10 +16,13 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "WordPressAcademicBaseAdapter",
     "registry_working_host_only": false,
-    "status": "paused_paywall",
-    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/virginiajournalofcriminallaw.com/url_5f3ddc3d0bb3",
-    "status_reason": "probe_paywall_detected",
-    "status_updated_at": "2026-03-14T04:05:31Z"
+    "status": "dead_domain_expired",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/hijacked_domain_resolution.md",
+    "status_reason": "probe 2026-08-20: seed domain no longer belongs to the journal; it now redirects to hunnerslaw.com (law-firm marketing site). DO NOT SCRAPE — following this seed would ingest unrelated non-journal documents into the corpus.",
+    "status_updated_at": "2026-08-20T00:00:00Z",
+    "relocation_verdict": "UNRESOLVED",
+    "relocation_note": "2026-08-20: journal is ALIVE (listed on law.virginia.edu academic-journals page, one of ten UVA student publications), but the only URL UVA links for it is https://vjcl.scholasticahq.com/ - a Scholastica submissions portal with 7 links, no issues, no articles, no PDFs. No .edu-hosted archive, no bepress/DC repository, no OJS instance found. Full text appears to be HeinOnline/Westlaw-only. Leave dead; re-check if VJCL stands up a content site.",
+    "relocation_checked_at": "2026-08-20T00:00:00Z"
   },
   "source": "registry_import",
   "start_urls": [

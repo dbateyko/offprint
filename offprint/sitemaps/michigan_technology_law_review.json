@@ -1,14 +1,25 @@
 {
-  "url": "https://repository.law.umich.edu/mttlr/all_issues.html",
-  "sitemap_url": null,
-  "metadata": {
-    "journal": "Michigan Technology Law Review",
-    "platform": "digitalcommons",
-    "original_url": "https://repository.law.umich.edu/mttlr/",
-    "domain": "repository.law.umich.edu",
-    "notes": "[Updated to XML sitemap on 2026-03-03]"
-  },
+  "id": "michigan-technology-law-review",
   "start_urls": [
-    "https://repository.law.umich.edu/mttlr/sitemap.xml"
-  ]
+    "https://repository.law.umich.edu/mttlr/all_issues.html"
+  ],
+  "source": "onboard_journal",
+  "metadata": {
+    "journal_name": "Michigan Technology Law Review",
+    "platform": "digital_commons_origin_fetch",
+    "url": "https://repository.law.umich.edu/mttlr/",
+    "original_url": "https://mttlr.org/",
+    "status": "active",
+    "status_reason": "smoke_passed_substantive_article_via_page_origin_fetch",
+    "status_updated_at": "2026-08-24T02:55:30Z",
+    "status_evidence_ref": "/tmp/onboard_report_underfilled_dc/smoke_one_pdf_20260824T025530Z.json",
+    "navigation": {
+      "archive_root": "https://repository.law.umich.edu/mttlr/all_issues.html",
+      "pagination": "40 issue links; no archive pagination",
+      "pdf_location": "article viewcontent.cgi fetched from publication browser origin",
+      "needs_headless": true,
+      "expected_substantive_candidates": 240,
+      "notes": "Direct PDF HTTP returns 403. MichiganTechnologyLawReviewAdapter loads /mttlr/ in a headed browser, fetches the PDF in-page, filters journal furniture, and adds volume/issue from article URLs. Targeted production must disable deferred DC round-robin so the adapter delivery method is used."
+    }
+  }
 }

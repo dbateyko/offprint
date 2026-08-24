@@ -1,13 +1,26 @@
 {
   "id": "esteyjournal-com",
   "start_urls": [
-    "https://esteyjournal.com/"
+    "https://law.usask.ca/research/publications/estey-journal-of-international-law-and-trade-policy.php"
   ],
   "source": "manual",
   "metadata": {
     "journal_name": "Estey Journal of International Law and Trade Policy",
-    "platform": "wordpress",
-    "url": "https://esteyjournal.com/",
-    "created_date": "2026-03-01"
+    "platform": "custom",
+    "url": "https://law.usask.ca/research/publications/estey-journal-of-international-law-and-trade-policy.php",
+    "created_date": "2026-03-01",
+    "status": "active",
+    "status_reason": "repaired_2026-08-20: esteyjournal.com expired/resold; journal is hosted by University of Saskatchewan College of Law. Probe: HTTP 200, 240 same-host .pdf links, current issue Vol 27 No 2 (2026); sample https://law.usask.ca/documents/research/estey-journal/kerr27-2abst.pdf",
+    "status_updated_at": "2026-08-20T00:00:00Z",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/hijacked_domain_resolution.md",
+    "hijacked_domain_previous_url": "https://esteyjournal.com/",
+    "hijacked_domain_note": "probe 2026-08-20: seed domain no longer belongs to the journal; it now redirects to love-fruit.com (unrelated JP content site). DO NOT SCRAPE — following this seed would ingest unrelated non-journal documents into the corpus.",
+    "navigation": {
+      "archive_root": "https://law.usask.ca/research/publications/estey-journal-of-international-law-and-trade-policy.php",
+      "pagination": "none",
+      "pdf_location": "direct-on-archive-page",
+      "needs_headless": false,
+      "notes": "Single long page with Current/Past/Archived issue sections; all article PDFs under /documents/research/estey-journal/. WARNING: ~175 of 240 PDFs are *abst.pdf / *lay.pdf abstract and lay-summary stubs, not full articles - filter those out or they will pollute the corpus. Full texts are the un-suffixed / *-publicationversion.pdf files."
+    }
   }
 }

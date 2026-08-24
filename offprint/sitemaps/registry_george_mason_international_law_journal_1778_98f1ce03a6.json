@@ -16,10 +16,13 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "GenericAdapter",
     "registry_working_host_only": false,
-    "status": "paused_waf",
-    "status_evidence_ref": "/Users/dbateyko/Projects/Data_Science/law-review-scrapers/artifacts/site_fingerprints/www.gmuilj.org/url_98f1ce03a664",
-    "status_reason": "probe_waf_marker_detected",
-    "status_updated_at": "2026-03-14T04:05:31Z"
+    "status": "dead_domain_expired",
+    "status_evidence_ref": "catalog/coverage/seed_probe_20260820/hijacked_domain_resolution.md",
+    "status_reason": "probe 2026-08-20: seed domain no longer belongs to the journal; it now redirects to kcrelief.org (lottery-results SEO page). DO NOT SCRAPE — following this seed would ingest unrelated non-journal documents into the corpus.",
+    "status_updated_at": "2026-08-20T00:00:00Z",
+    "relocation_verdict": "CEASED",
+    "relocation_note": "2026-08-20: gmuilj.org held the real journal as late as 2024-08 (wayback 20240811234803: 'Congratulations to the 2024-2025 Board... board for Volume 16'), then the domain lapsed. Antonin Scalia Law School's Publications & Journals page (law.gmu.edu/pubs) lists only GMLR, CRLJ, JLEP and NSLJ, and its HTML carries the comment '<!--Removed due to merging of ILJ with JLEP, according to C. Victory with SBA <li>International Law Journal</li>-->'. Only surviving presence is the submissions-only portal gmujicl.scholasticahq.com (no published content). No public archive found; back issues appear to be HeinOnline-only. Leave dead.",
+    "relocation_checked_at": "2026-08-20T00:00:00Z"
   },
   "source": "registry_import",
   "start_urls": [
