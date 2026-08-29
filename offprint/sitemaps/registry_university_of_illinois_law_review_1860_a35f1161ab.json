@@ -4,7 +4,7 @@
     "created_date": "2026-03-04",
     "domain": "www.illinoislawreview.org",
     "journal_name": "University of Illinois Law Review",
-    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory.",
+    "notes": "Imported from docs/registry/us_urls_canonical.csv as non-active inventory. Superseded 2026-08-28 by university_of_illinois_law_review.json (canonical seed, /print/ + /online/ archives, IllinoisLawReviewAdapter). start_urls narrowed to the print archive so this stub cannot re-crawl the whole site.",
     "original_url": "https://www.illinoislawreview.org/",
     "platform": "wordpress",
     "registry_confirmed_working_exact": false,
@@ -23,6 +23,6 @@
   },
   "source": "registry_import",
   "start_urls": [
-    "https://illinoislawreview.org/"
+    "https://illinoislawreview.org/print/"
   ]
 }

@@ -125,7 +125,8 @@ class MichiganStateLawReviewAdapter(SiteArchiveAdapterBase):
                     return []
                 text = " ".join(sibling.get_text(" ", strip=True).split())
                 if text and len(text) < 200:
-                    return [part.strip() for part in re.split(r"\s*&\s*|\s+and\s+", text) if part.strip()]
+                    parts = re.split(r"\s*&\s*|\s+and\s+", text)
+                    return [part.strip() for part in parts if part.strip()]
                 return []
             sibling = sibling.find_next_sibling()
         return []

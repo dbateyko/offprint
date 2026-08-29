@@ -1,17 +1,32 @@
 {
   "id": "tulanelawreview-org",
-  "metadata": {
-    "created_date": "2025-12-14",
-    "journal_name": "Tulane Law Review",
-    "platform": "wordpress",
-    "status": "active",
-    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
-    "status_reason": "adapter_registered",
-    "status_updated_at": "2026-03-04T03:40:25Z",
-    "url": "https://www.tulanelawreview.org/"
-  },
-  "source": "manual",
   "start_urls": [
-    "https://www.tulanelawreview.org/"
+    "https://www.tulanelawreview.org/tlr-online"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Tulane Law Review Online",
+    "parent_journal_name": "Tulane Law Review",
+    "platform": "squarespace",
+    "domain": "www.tulanelawreview.org",
+    "url": "https://www.tulanelawreview.org/",
+    "adapter": "TulaneLawReviewOnlineAdapter",
+    "created_date": "2025-12-14",
+    "status": "active_partial_metadata",
+    "status_reason": "smoke_passed_online_companion_only; print archive has no open-access PDFs",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "status_evidence_ref": "agent_ilmsutul smoke run 2026-08-28",
+    "navigation": {
+      "archive_root": "https://www.tulanelawreview.org/tlr-online",
+      "pagination": "none (all 39 online pieces render on one index page)",
+      "pdf_location": "article-detail-page (same-origin Squarespace /s/<name>.pdf)",
+      "needs_headless": false,
+      "notes": "Platform is Squarespace, NOT wordpress (the registry carried both values; wordpress was wrong). This seed covers Tulane Law Review ONLINE only, ~39 pieces, roughly volumes 91-100. The PRINT journal is not scrapable: /pub/volumeNN/issueM/<slug> holds ~2,300 abstract stubs for volumes 52-100 (1977-2026) whose only full-text link is Westlaw. A 30-page random sample across that range found zero PDFs. See tulane_law_review.json for the print-side status stub."
+    }
+  },
+  "selectors": [
+    {"id": "post_link", "type": "SelectorLink", "selector": "a[href^=\"/tlr-online/\"]", "parentSelectors": ["_root"]},
+    {"id": "title", "type": "SelectorText", "selector": "h1", "parentSelectors": ["post_link"]},
+    {"id": "pdf_link", "type": "SelectorLink", "selector": "a[href$=\".pdf\"]", "parentSelectors": ["post_link"]}
   ]
 }

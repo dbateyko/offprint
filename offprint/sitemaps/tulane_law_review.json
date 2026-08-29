@@ -1,14 +1,23 @@
 {
+  "id": "tulane-law-review-print",
+  "start_urls": [],
+  "source": "manual",
   "metadata": {
+    "journal_name": "Tulane Law Review",
+    "platform": "squarespace",
     "domain": "www.tulanelawreview.org",
-    "journal": "Tulane Law Review",
+    "url": "https://www.tulanelawreview.org/",
     "original_url": "https://www.tulanelawreview.org/",
-    "platform": "Squarespace",
-    "status": "active",
-    "status_evidence_ref": "scripts/mark_todo_adapter_seeds.py:auto-promote-active",
-    "status_reason": "adapter_registered",
-    "status_updated_at": "2026-03-04T03:40:25Z"
-  },
-  "sitemap_url": null,
-  "url": "https://www.tulanelawreview.org/"
+    "status": "paused_paywall",
+    "status_reason": "no_open_access_pdfs: /pub/ article pages are abstract stubs whose only full-text link is Westlaw",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "status_evidence_ref": "agent_ilmsutul reconnaissance 2026-08-28: 30-page random sample across volumes 52-100 found 0 PDFs",
+    "navigation": {
+      "archive_root": "https://www.tulanelawreview.org/pub",
+      "pagination": "sitemap.xml enumerates every article URL (4,825 locs; 1,941 /pub/volumeNN/issueM/ + ~396 legacy /pub/<slug>)",
+      "pdf_location": "none",
+      "needs_headless": false,
+      "notes": "Volumes 52 (1977-78) through 100 (2025-26) are all indexed with title/author/abstract metadata but no article file. start_urls deliberately empty so the pipeline does not crawl 2,300 PDF-less pages. Backends checked and ruled out 2026-08-28: journals.tulane.edu returns HTTP 403 with cf-mitigated: challenge on every path (Cloudflare managed challenge) and, per search indexing, hosts Tulane's OTHER law journals (e.g. tjls), not the flagship; tulane-law-review.scholasticahq.com is submissions-only; digitallibrary/scholar/repository.tulane.edu do not resolve. This site remains valuable as a METADATA source (title/author/volume/issue for ~2,300 print articles) even though it yields no PDFs."
+    }
+  }
 }

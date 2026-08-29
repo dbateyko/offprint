@@ -24,8 +24,12 @@ from .greenbag import GreenBagAdapter
 from .harvard_jolt import HarvardJOLTAdapter
 from .jolt_base import JOLTBaseAdapter
 from .illinois_jltp import IllinoisJLTPAdapter
+from .illinois_law_review import IllinoisLawReviewAdapter
+from .michigan_state_law_review import MichiganStateLawReviewAdapter
+from .tulane_law_review import TulaneLawReviewOnlineAdapter
 from .jurimetrics import JurimetricsAdapter
 from .smu_scitech import SMUScienceTechnologyLawReviewAdapter
+from .scoped_dc_tech import CaseJOLTIAdapter, SeattleJTEILAdapter
 from .nc_jolt import NorthCarolinaJOLTAdapter
 from .nebraska_law_review import NebraskaLawReviewAdapter
 from .ojs import OJSAdapter
@@ -121,8 +125,13 @@ __all__ = [
     "HarvardJOLTAdapter",
     "BerkeleyBTLJAdapter",
     "IllinoisJLTPAdapter",
+    "IllinoisLawReviewAdapter",
+    "MichiganStateLawReviewAdapter",
+    "TulaneLawReviewOnlineAdapter",
     "JurimetricsAdapter",
     "SMUScienceTechnologyLawReviewAdapter",
+    "SeattleJTEILAdapter",
+    "CaseJOLTIAdapter",
     "NorthCarolinaJOLTAdapter",
     "NebraskaLawReviewAdapter",
     "YaleJOLTAdapter",

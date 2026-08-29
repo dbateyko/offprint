@@ -1,11 +1,60 @@
 {
-  "url": "https://publish.illinois.edu/lawreview/archives/",
-  "sitemap_url": null,
+  "id": "university-of-illinois-law-review",
+  "start_urls": [
+    "https://illinoislawreview.org/print/"
+  ],
+  "source": "claude_code_skill",
   "metadata": {
-    "journal": "University of Illinois Law Review",
-    "platform": "Custom/Unknown",
-    "original_url": "https://illinoislawreview.org/",
-    "domain": "publish.illinois.edu",
-    "notes": "Manual override: official archives page on publish.illinois.edu."
-  }
+    "journal_name": "University of Illinois Law Review",
+    "platform": "wordpress",
+    "url": "https://illinoislawreview.org/",
+    "domain": "illinoislawreview.org",
+    "created_date": "2026-08-28",
+    "status": "active",
+    "status_reason": "smoke_passed_illinois_law_review_adapter",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "status_evidence_ref": "agent_ilmsutul smoke run 2026-08-28",
+    "adapter": "IllinoisLawReviewAdapter",
+    "navigation": {
+      "archive_root": "https://illinoislawreview.org/print/",
+      "pagination": "none",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "The /print/ hub lists all 134 issue pages on one page (1949, 2000-2026) with no pagination. Each issue page links per-article detail pages; the PDF href lives on the article page. Pre-2017 issues use /print/volume-YYYY-issue-N/ and host PDFs same-origin under /wp-content/uploads/. 2017+ issues use /print/vol-YYYY-no-N/ and host PDFs on the companion install illinoislawrev.web.illinois.edu/wp-content/uploads/ -- IllinoisLawReviewAdapter allowlists that one host (uploads path only) so the origin gate still rejects reference-list PDFs. Volume 2000-2002 article pages are HTML abstract stubs with no PDF. WP REST reports 947 PDF attachments on the vanity host; the companion host holds the 2017+ files. The /online/ companion (University of Illinois Law Review Online) is a separate sub-publication with its own seed, registry_university_of_illinois_law_review_online_2006_0915da72be.json; it is deliberately NOT included here (sub-publication suffix guard). Year coverage confirmed 2026-08-28: one 1949 issue plus continuous 2000-2026 (134 issue pages). There is NO pre-2000 backfile here. The legacy mirror publish.illinois.edu/lawreview/archives/ indexes volumes 1995-2015 but every 'Download PDF' points at https://www.law.illinois.edu/content/ilr/articles/ which returns HTTP 410 Gone, so it yields nothing; it is left in the adapter's companion-host allowlist only in case it is restored."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "a[href*=\"/print/\"]",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "article_link",
+      "type": "SelectorLink",
+      "selector": "a[href*=\"/print/\"]",
+      "parentSelectors": [
+        "issue_link"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1.entry-title, h1",
+      "parentSelectors": [
+        "article_link"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_link"
+      ]
+    }
+  ]
 }
