@@ -1,14 +1,95 @@
 {
   "id": "law-stanford-edu-crcl",
   "start_urls": [
-    "https://law.stanford.edu/stanford-journal-of-civil-rights-civil-liberties-sjcrcl/sjcrcl-archive/"
+    "https://law.stanford.edu/stanford-journal-of-civil-rights-civil-liberties-sjcrcl/sjcrcl-archive/?_paged=[1-18]"
   ],
   "source": "manual",
   "metadata": {
-    "journal_name": "Stanford Journal of Civil Rights and Civil Liberties",
+    "journal_name": "Stanford Journal of Civil Rights & Civil Liberties",
     "platform": "wordpress",
     "url": "https://law.stanford.edu/stanford-journal-of-civil-rights-civil-liberties-sjcrcl/",
     "created_date": "2026-03-01",
-    "notes": "Uses StanfordSTLRAdapter with WP fallback for non-STLR paths."
-  }
+    "status": "active",
+    "status_reason": "smoke_passed_schema_archive",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "navigation": {
+      "archive_root": "https://law.stanford.edu/stanford-journal-of-civil-rights-civil-liberties-sjcrcl/sjcrcl-archive/",
+      "pagination": "?_paged=N",
+      "pagination_url_template": "{archive_root}?_paged={N}",
+      "pages_observed": 14,
+      "per_page": 10,
+      "articles_observed": 131,
+      "volume_range": "Volume 9 (2013) - Volume 21 (2025)",
+      "pdf_location": "direct-on-archive-page",
+      "needs_headless": false,
+      "notes": "Same law.stanford.edu WordPress theme as STLR: article[itemtype='https://schema.org/ScholarlyArticle'] rows carry title, authors, volume, issue, pages, date, publisher name and a direct PDF link at a[itemprop='url workExample'] pointing into /wp-content/uploads/. FacetWP pager renders server-side for ?_paged=N; page 15+ returns 0 articles. Publication scope: every row on this archive stamps li.ptp-publisher = 'Stanford Journal of Civil Rights & Civil Liberties' (verified on pages 1, 2, 8, 12, 13, 14). robots.txt allows the archive path but sets Crawl-delay: 600 and disallows /page/* (the ?_paged= query form is not disallowed) - run this seed with a large MIN_DELAY. Requires a browser-like User-Agent. Range carries headroom above the 14 pages observed 2026-08-28; pages past the end return HTTP 200 with zero articles and cost nothing. Alternatively drop the ?_paged=[..] range entirely and StanfordSTLRAdapter will walk ?_paged=N itself until an empty page.",
+      "seed_page_range": "[1-18]"
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article[itemtype='https://schema.org/ScholarlyArticle']",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[itemprop='url sameAs']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "authors",
+      "type": "SelectorText",
+      "selector": "li[itemprop='author'] span[itemprop='name']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "publisher",
+      "type": "SelectorText",
+      "selector": "li.ptp-publisher span[itemprop='name']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "volume",
+      "type": "SelectorText",
+      "selector": "span[itemprop='volumeNumber']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "issue",
+      "type": "SelectorText",
+      "selector": "span[itemprop='issueNumber']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "date",
+      "type": "SelectorText",
+      "selector": "time[itemprop='datePublished dateCreated']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[itemprop='url workExample']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
 }

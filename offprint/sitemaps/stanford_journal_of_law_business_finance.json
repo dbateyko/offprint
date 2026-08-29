@@ -1,26 +1,95 @@
 {
   "id": "stanford_journal_of_law_business_finance",
   "start_urls": [
-    "https://law.stanford.edu/stanford-journal-of-law-business-finance-sjlbf/sjlbf-archive/"
+    "https://law.stanford.edu/stanford-journal-of-law-business-finance-sjlbf/sjlbf-archive/?_paged=[1-13]"
   ],
   "source": "onboard-journal-skill",
   "metadata": {
     "journal_name": "Stanford Journal of Law, Business & Finance",
     "platform": "wordpress",
-    "status": "active"
+    "url": "https://law.stanford.edu/stanford-journal-of-law-business-finance-sjlbf/",
+    "created_date": "2026-07-14",
+    "status": "active",
+    "status_reason": "smoke_passed_schema_archive",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "navigation": {
+      "archive_root": "https://law.stanford.edu/stanford-journal-of-law-business-finance-sjlbf/sjlbf-archive/",
+      "pagination": "?_paged=N",
+      "pagination_url_template": "{archive_root}?_paged={N}",
+      "pages_observed": 9,
+      "per_page": 10,
+      "articles_observed": 81,
+      "volume_range": "Volume 18 (2012) - Volume 29 (2024)",
+      "pdf_location": "direct-on-archive-page",
+      "needs_headless": false,
+      "notes": "Identical law.stanford.edu WordPress theme to STLR and SJCRCL: article[itemtype='https://schema.org/ScholarlyArticle'] rows with a[itemprop='url workExample'] pointing at /wp-content/uploads/*.pdf. FacetWP pager renders server-side for ?_paged=N; page 10+ returns 0 articles. Publication scope: every row stamps li.ptp-publisher = 'Stanford Journal of Law, Business & Finance' (verified on pages 1, 2, 8, 9). Supersedes the earlier unvalidated article.loop-item.pt-publication + a[href$='.pdf'] selectors, which were never live-checked (see data/reference/journal_recon/stanford_journal_of_law_business_finance.json). robots.txt allows the archive path but sets Crawl-delay: 600 - run with a large MIN_DELAY. Requires a browser-like User-Agent. Range carries headroom above the 9 pages observed 2026-08-28; pages past the end return HTTP 200 with zero articles and cost nothing. Alternatively drop the ?_paged=[..] range entirely and StanfordSTLRAdapter will walk ?_paged=N itself until an empty page.",
+      "seed_page_range": "[1-13]"
+    }
   },
   "selectors": [
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "article.loop-item.pt-publication",
-      "parentSelectors": ["_root"]
+      "selector": "article[itemtype='https://schema.org/ScholarlyArticle']",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[itemprop='url sameAs']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "authors",
+      "type": "SelectorText",
+      "selector": "li[itemprop='author'] span[itemprop='name']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "publisher",
+      "type": "SelectorText",
+      "selector": "li.ptp-publisher span[itemprop='name']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "volume",
+      "type": "SelectorText",
+      "selector": "span[itemprop='volumeNumber']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "issue",
+      "type": "SelectorText",
+      "selector": "span[itemprop='issueNumber']",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "date",
+      "type": "SelectorText",
+      "selector": "time[itemprop='datePublished dateCreated']",
+      "parentSelectors": [
+        "article_container"
+      ]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
-      "parentSelectors": ["article_container"]
+      "selector": "a[itemprop='url workExample']",
+      "parentSelectors": [
+        "article_container"
+      ]
     }
   ]
 }

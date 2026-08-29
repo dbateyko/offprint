@@ -9,7 +9,9 @@
     "platform": "wordpress",
     "url": "https://www.law.georgetown.edu/georgetown-law-journal/",
     "created_date": "2026-03-31",
-    "status": "active",
-    "notes": "WordPress site hosted on law.georgetown.edu domain"
+    "status": "paused_other",
+    "status_reason": "superseded_by_law-georgetown-edu-glj.json",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "notes": "DUPLICATE seed. start_url is the journal landing page, not the archive, and its path scope (/georgetown-law-journal/) also swallows GLJ Online, a separate sub-publication. The canonical Georgetown Law Journal seed is law-georgetown-edu-glj.json, scoped to /georgetown-law-journal/in-print/. Kept only so registry rows pointing here still resolve; do not re-activate."
   }
 }

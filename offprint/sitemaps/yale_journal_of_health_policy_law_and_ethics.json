@@ -1,0 +1,31 @@
+{
+  "id": "yale-journal-of-health-policy-law-and-ethics",
+  "start_urls": [
+    "https://openyls.law.yale.edu/collections/03845a38-2c3f-4021-82cb-27d9c650eb7a"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Yale Journal of Health Policy, Law, and Ethics",
+    "domain": "openyls.law.yale.edu",
+    "platform": "dspace",
+    "url": "https://openyls.law.yale.edu/collections/03845a38-2c3f-4021-82cb-27d9c650eb7a",
+    "original_url": "https://yaleconnect.yale.edu/yjhple/home",
+    "created_date": "2026-08-28",
+    "status": "active",
+    "status_reason": "smoke_passed_dspace_rest",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "status_evidence_ref": "agent smoke run: /tmp/claude-1000/.../agent_yale",
+    "navigation": {
+      "archive_root": "https://openyls.law.yale.edu/collections/03845a38-2c3f-4021-82cb-27d9c650eb7a",
+      "pagination": "REST API (/server/api/discover/search/objects?scope=<uuid>&page=N)",
+      "pdf_location": "DSpace ORIGINAL bundle bitstream content endpoint",
+      "needs_headless": false,
+      "notes": "DSpace 7 (openYLS). Collection uuid 03845a38-2c3f-4021-82cb-27d9c650eb7a is publication-scoped: all 259 items carry dc.identifier yjhple/volN/issM/K. Content migrated from the now-dead digitalcommons.law.yale.edu/yjhple (legacy coverpage URLs preserved in dc.identifier.legacycoverpage). The registry host yaleconnect.yale.edu is a CampusGroups student-org shell with no archive and is NOT the article home. robots.txt allows /server/api with Crawl-delay: 10. WARNING: dc.date.issued on this collection is the DigitalCommons accession timestamp, not the publication date -- it is off by more than a year for 64/80 sampled items, so the adapter's `year` field is NOT trustworthy here. Derive year from volume (vol N = 2000+N) or from PDF text in the year-resolution stage. Volume/issue now come from the legacy bepress dc.identifier (yjhple/volN/issM/K) via _extract_dspace_metadata."
+    },
+    "coverage": {
+      "volumes": "1-19",
+      "years": "2001-2019",
+      "item_count": 259
+    }
+  }
+}

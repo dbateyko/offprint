@@ -529,6 +529,17 @@ class GenericAdapter(Adapter):
         if issue_value:
             metadata["issue"] = issue_value
 
+        # Bepress-migrated DSpace items keep their legacy "<slug>/volN/issM/K"
+        # identifier. Only fires when that exact shape is present, so DSpace
+        # repositories without a bepress lineage are unaffected.
+        if not metadata.get("volume") or not metadata.get("issue"):
+            for key in ("dc.identifier", "dc.identifier.legacycoverpage"):
+                legacy_match = re.search(r"/vol(?:ume)?(\d+)/iss(?:ue)?(\d+)\b", first(key) or "")
+                if legacy_match:
+                    metadata["volume"] = metadata.get("volume") or legacy_match.group(1)
+                    metadata["issue"] = metadata.get("issue") or legacy_match.group(2)
+                    break
+
         return metadata
 
     # ------------------------------------------------------------------

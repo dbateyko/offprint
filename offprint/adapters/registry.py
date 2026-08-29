@@ -13,6 +13,10 @@ from .berkeley_btlj import BerkeleyBTLJAdapter
 from .blogger import BloggerAdapter
 from .boston_college_iptf import BostonCollegeIPTFAdapter
 from .bu_jostl import BostonUniversityJOSTLAdapter
+from .harvard_journals_multisite import (
+    HarvardJournalsMultisiteAdapter,
+    slug_for_url as _harvard_multisite_slug,
+)
 from .cambridge_core import CambridgeCoreAdapter
 from .digital_commons_issue_article_hop import DigitalCommonsIssueArticleHopAdapter
 from .digital_commons_origin_fetch import (
@@ -28,13 +32,18 @@ from .ejil import EJILAdapter
 from .escholarship import EScholarshipAdapter
 from .generic import GenericAdapter
 from .georgetown_jnslp import GeorgetownJNSLPAdapter
+from .georgetown_law_wp import GeorgetownLawWPAdapter
 from .greenbag import GreenBagAdapter
 from .selector_driven import SelectorDrivenAdapter
 from .harvard_jolt import HarvardJOLTAdapter
 from .illinois_jltp import IllinoisJLTPAdapter
+from .illinois_law_review import IllinoisLawReviewAdapter
+from .michigan_state_law_review import MichiganStateLawReviewAdapter
+from .tulane_law_review import TulaneLawReviewOnlineAdapter
 from .issue_archive_enumerator import IssueArchiveEnumeratorAdapter
 from .jurimetrics import JurimetricsAdapter
 from .smu_scitech import SMUScienceTechnologyLawReviewAdapter
+from .scoped_dc_tech import CaseJOLTIAdapter, SeattleJTEILAdapter
 from .janeway import JanewayAdapter
 from .nc_jolt import NorthCarolinaJOLTAdapter
 from .nebraska_law_review import NebraskaLawReviewAdapter
@@ -160,6 +169,14 @@ def pick_adapter_for(
     if host == "sites.bc.edu" and path.startswith("/iptf"):
         return BostonCollegeIPTFAdapter(session=session)
     query = (parsed.query or "").lower()
+    if host == "digitalcommons.law.seattleu.edu" and (
+        path.startswith("/sjteil") or "context=sjteil" in query
+    ):
+        return SeattleJTEILAdapter(session=session)
+    if host == "scholarlycommons.law.case.edu" and (
+        path.startswith("/jolti") or "context=jolti" in query
+    ):
+        return CaseJOLTIAdapter(session=session)
     if host == "via.library.depaul.edu" and (
         path.startswith("/jatip") or "context=jatip" in query
     ):
@@ -179,6 +196,12 @@ def pick_adapter_for(
         return OhioStateTechnologyLawJournalAdapter(session=session)
     if host in {"bu.edu", "www.bu.edu"} and path.startswith("/jostl"):
         return BostonUniversityJOSTLAdapter(session=session)
+    # journals.law.harvard.edu is a WordPress Multisite host: route the slugs we
+    # have publication-scoped seeds for to the multisite adapter so REST/sitemap
+    # endpoints resolve per journal and scope gates stay per journal.
+    _harvard_slug = _harvard_multisite_slug(url)
+    if _harvard_slug:
+        return HarvardJournalsMultisiteAdapter(slug=_harvard_slug, session=session)
     exact = ADAPTERS.get(host)
     if exact is not None:
         if isinstance(exact, type):
@@ -232,7 +255,8 @@ register("www.drexel.edu", DrexelLawReviewAdapter)
 register("texaslawreview.org", WordPressAcademicBaseAdapter)
 register("www.bu.edu", WordPressAcademicBaseAdapter)
 register("www.cambridge.org", CambridgeCoreAdapter)
-register("www.law.georgetown.edu", WordPressAcademicBaseAdapter)
+register("www.law.georgetown.edu", GeorgetownLawWPAdapter)
+register("law.georgetown.edu", GeorgetownLawWPAdapter)
 register("publications.lawschool.cornell.edu", WordPressAcademicBaseAdapter)
 register("virginialawreview.org", WordPressAcademicBaseAdapter)
 register("www.californialawreview.org", SquarespaceAdapter)
@@ -356,7 +380,6 @@ register_many(
         "cardozoaelj.com",
         "cardozolawreview.com",
         "georgialawreview.org",
-        "illinoislawreview.org",
         "jhr.law.northwestern.edu",
         "journals.law.harvard.edu",
         "northcarolinalawreview.org",
@@ -370,6 +393,28 @@ register_many(
         "waynelawreview.org",
     ],
     WordPressAcademicBaseAdapter,
+)
+register_many(
+    [
+        "illinoislawreview.org",
+        "www.illinoislawreview.org",
+        "illinoislawrev.web.illinois.edu",
+    ],
+    IllinoisLawReviewAdapter,
+)
+register_many(
+    [
+        "michiganstatelawreview.org",
+        "www.michiganstatelawreview.org",
+    ],
+    MichiganStateLawReviewAdapter,
+)
+register_many(
+    [
+        "tulanelawreview.org",
+        "www.tulanelawreview.org",
+    ],
+    TulaneLawReviewOnlineAdapter,
 )
 register("ojs.lib.umassd.edu", UMassDOJSAdapter)
 register("www.aipla.org", AIPLAQuarterlyJournalAdapter)
@@ -479,6 +524,7 @@ register_many(
     OJSAdapter,
 )
 register("kb.osu.edu", DSpaceAdapter)
+register("openyls.law.yale.edu", DSpaceAdapter)
 register("aria.law.columbia.edu", WordPressAcademicBaseAdapter)
 register("univagora.ro", OJSAdapter)
 register("www.ejil.org", EJILAdapter)
@@ -486,6 +532,25 @@ register("www.thomsonreuters.ca", GenericAdapter)
 register("www.uvic.ca", OJSAdapter)
 register("hrlr.oxfordjournals.org", GenericAdapter)
 register("arcticreview.no", OJSAdapter)
+# European Journal of Law and Technology - dedicated OJS 3.3 host (ejlt.org/
+# redirects to /index.php/ejlt). Onboarded 2026-08-24.
+register("ejlt.org", OJSAdapter)
+register("www.ejlt.org", OJSAdapter)
+# Edinburgh Diamond multi-journal OJS 3.4 host. SCRIPTed lives at /script-ed/;
+# seeds for this host MUST be publication-path-scoped. Onboarded 2026-08-24.
+register("journals.ed.ac.uk", OJSAdapter)
+register("www.journals.ed.ac.uk", OJSAdapter)
+# Institute of Advanced Legal Studies (University of London) multi-journal OJS
+# 3.3 host. Digital Evidence and Electronic Signature Law Review lives at
+# /deeslr/; seeds for this host MUST be publication-path-scoped. Onboarded
+# 2026-08-24.
+register("journals.sas.ac.uk", OJSAdapter)
+register("www.journals.sas.ac.uk", OJSAdapter)
+# Masaryk University (Brno) multi-journal OJS 3.2 host. Masaryk University
+# Journal of Law and Technology lives at /mujlt/; seeds for this host MUST be
+# publication-path-scoped. Onboarded 2026-08-24.
+register("journals.muni.cz", OJSAdapter)
+register("www.journals.muni.cz", OJSAdapter)
 register("www.law.unsw.edu.au", GenericAdapter)
 register("www-cambridge-org.ezproxy.wlu.edu", GenericAdapter)
 

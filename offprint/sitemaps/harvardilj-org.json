@@ -1,17 +1,61 @@
 {
   "id": "harvardilj-org",
   "start_urls": [
-    "https://journals.law.harvard.edu/ilj/category/archives/"
+    "https://journals.law.harvard.edu/ilj/category/archives/",
+    "https://journals.law.harvard.edu/ilj/category/archives/page/2/",
+    "https://journals.law.harvard.edu/ilj/category/archives/page/3/",
+    "https://journals.law.harvard.edu/ilj/category/archives/page/4/",
+    "https://journals.law.harvard.edu/ilj/category/archives/page/5/",
+    "https://journals.law.harvard.edu/ilj/category/archives/page/6/"
   ],
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Harvard International Law Journal",
     "platform": "wordpress",
-    "url": "https://harvardilj.org/",
+    "url": "https://journals.law.harvard.edu/ilj/",
     "created_date": "2026-04-01",
-    "status": "active",
-    "status_reason": "harvardilj.org connection-refused/DNS issue; canonical site moved to journals.law.harvard.edu/ilj/.",
-    "status_updated_at": "2026-05-05T02:21:20Z",
-    "status_evidence_ref": "curl harvardilj.org -> 000; journals.law.harvard.edu/ilj/category/archives/ -> 200"
-  }
+    "status": "active_partial_metadata",
+    "status_reason": "harvardilj.org no longer resolves (NXDOMAIN); canonical site is journals.law.harvard.edu/ilj/, a WordPress Multisite subsite. Re-onboarded 2026-08-28 onto HarvardJournalsMultisiteAdapter: the shared WordPressAcademicBaseAdapter rooted REST/sitemap at the bare origin, where the network root site has zero posts, so this seed produced no PDFs. Titles on issue-hub-derived PDFs fall back to the issue page title (known WP adapter limitation).",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "status_evidence_ref": "smoke 2026-08-28: 6 archive pages -> 105 direct issue PDFs + 238 issue/article post links, all under /ilj/; PDF GET 200 application/pdf",
+    "adapter": "HarvardJournalsMultisiteAdapter",
+    "publication_scope": {
+      "host": "journals.law.harvard.edu",
+      "path_prefix": "/ilj/",
+      "notes": "Multisite host carries many Harvard journals. Discovery, page traversal and PDF acceptance are all gated on the /ilj/ path prefix, including PDFs under /ilj/wp-content/uploads/sites/84/."
+    },
+    "navigation": {
+      "archive_root": "https://journals.law.harvard.edu/ilj/category/archives/",
+      "pagination": "/category/archives/page/N/ (6 pages as of 2026-08-28; enumerated explicitly in start_urls)",
+      "pdf_location": "direct-on-issue-page (vols ~53+) and article-detail-page (legacy /YYYY/MM/issue_NN-N_author/ permalinks, vols 45-52)",
+      "needs_headless": false,
+      "notes": "HTML-first discovery is deliberate: the journal's own Jetpack sitemap (/ilj/sitemap.xml) and REST API (/ilj/wp-json/wp/v2/posts, 1304 posts) enumerate the whole subsite, which mixes in HILJ Online (separately seeded as registry_harvard_international_law_journal_online_1422_*.json) and blog posts whose bodies link third-party citation PDFs (archive.org etc.). robots.txt allows these paths, Crawl-delay: 10."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "article a[href*='volume-'], article a[href*='issue_'], article a[href*='issue-']",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "article.category-archives, .entry-content",
+      "parentSelectors": ["_root", "issue_link"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h1.entry-title, h2.entry-title",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href^='https://journals.law.harvard.edu/ilj/'][href$='.pdf']",
+      "parentSelectors": ["article_container"]
+    }
+  ]
 }

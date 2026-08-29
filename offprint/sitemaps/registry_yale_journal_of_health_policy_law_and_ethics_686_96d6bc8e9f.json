@@ -16,10 +16,11 @@
     "registry_run_status": "untested",
     "registry_suggested_adapter": "GenericAdapter",
     "registry_working_host_only": false,
-    "status": "active",
-    "status_evidence_ref": "docs/registry/input/failed_smoke_link_seed_summary.csv",
-    "status_reason": "seed_repoint_failed_smoke_inventory",
-    "status_updated_at": "2026-03-15T22:55:00Z"
+    "status": "paused_other",
+    "status_evidence_ref": "smoke run smoke_yjhple (20/20 valid PDFs, openyls.law.yale.edu)",
+    "status_reason": "superseded_by_yale_journal_of_health_policy_law_and_ethics.json; yaleconnect.yale.edu is a CampusGroups student-org shell with no article archive. Articles live on openYLS (DSpace 7) collection 03845a38-2c3f-4021-82cb-27d9c650eb7a.",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "superseded_by": "yale_journal_of_health_policy_law_and_ethics.json"
   },
   "source": "registry_import",
   "start_urls": [

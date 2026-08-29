@@ -6,23 +6,31 @@
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Georgetown Law Journal",
-    "platform": "WordPress",
+    "platform": "wordpress",
     "url": "https://www.law.georgetown.edu/georgetown-law-journal/",
     "created_date": "2026-04-01",
     "status": "active",
+    "status_reason": "smoke_passed_multisite_rest_enumeration",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "adapter": "GeorgetownLawWPAdapter",
     "navigation": {
       "archive_root": "https://www.law.georgetown.edu/georgetown-law-journal/in-print/",
-      "volume_url_pattern": "/volume-{N}/",
-      "archive_path": "homepage -> /in-print/ -> volume links -> article pages -> pdf-embedder",
+      "volume_url_pattern": "/georgetown-law-journal/in-print/volume-{N}/",
+      "issue_url_pattern": "/georgetown-law-journal/in-print/volume-{N}/volume-{N}-issue-{M}-{month}-{year}/",
+      "article_url_pattern": "/georgetown-law-journal/in-print/volume-{N}/{issue-slug}/{article-slug}/",
+      "pdf_url_pattern": "/georgetown-law-journal/wp-content/uploads/sites/26/{YYYY}/{MM}/{file}.pdf",
+      "pagination": "REST API (subsite wp-json/wp/v2/pages, per_page=100) with wp-sitemap.xml fallback",
       "pdf_location": "article-detail-page",
-      "notes": "WordPressAcademic site. Articles are listed on Volume pages as paragraphs. PDFs are embedded via pdf-embedder plugin on article detail pages."
+      "needs_headless": false,
+      "coverage": "Volumes 106 (2017-18) through 114 (2025-26); 302 article pages in the subsite page sitemap as of 2026-08-28. Nothing before volume 106 is online — /in-print/volume-105/ is a masthead page, volume-100 is 404. Pre-2018 backfile is not available here.",
+      "notes": "law.georgetown.edu is a WordPress MULTISITE hosting the whole law school plus every student journal. Each journal is a subsite mounted on the first path segment, with its OWN wp-json and wp-sitemap.xml (the origin-level ones return law-school pages only, no journal articles). GeorgetownLawWPAdapter re-roots the REST/sitemap lanes at https://www.law.georgetown.edu/georgetown-law-journal and restricts same-origin PDFs to that subsite's /wp-content/uploads/. GLJ Online (/georgetown-law-journal/submit/glj-online/) is a SEPARATE sub-publication and is deliberately out of scope for this seed -- give it its own seed. Seed is scoped to /in-print/, not to the host."
     }
   },
   "selectors": [
     {
       "id": "volume_link",
       "type": "SelectorLink",
-      "selector": "a.sub_nav_link[href*='volume-']",
+      "selector": "a[href*='/georgetown-law-journal/in-print/volume-']",
       "parentSelectors": ["_root"]
     },
     {
@@ -42,6 +50,12 @@
       "type": "SelectorLink",
       "selector": "a",
       "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/georgetown-law-journal/wp-content/uploads/'][href$='.pdf']",
+      "parentSelectors": ["article_url"]
     }
   ]
 }

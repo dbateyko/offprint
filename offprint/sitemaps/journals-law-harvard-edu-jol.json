@@ -9,45 +9,48 @@
     "platform": "wordpress",
     "url": "https://journals.law.harvard.edu/jol/",
     "created_date": "2026-05-02",
-    "status": "active",
+    "status": "active_partial_metadata",
+    "status_reason": "Re-onboarded 2026-08-28 onto HarvardJournalsMultisiteAdapter. journals.law.harvard.edu is a WordPress Multisite install; the shared WordPressAcademicBaseAdapter rooted REST/sitemap at the bare origin (network root has zero posts), so this seed produced no PDFs. Titles for PDFs linked straight off the archive hub fall back to the hub page title ('Past Issues') - known WP adapter limitation, fixable downstream by first-page PDF metadata extraction.",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "status_evidence_ref": "smoke 2026-08-28: /jol/archive/ -> 116 direct PDFs + 153 labeled issue links, all under /jol/; PDF GET 200 application/pdf",
+    "adapter": "HarvardJournalsMultisiteAdapter",
+    "publication_scope": {
+      "host": "journals.law.harvard.edu",
+      "path_prefix": "/jol/",
+      "notes": "Discovery, traversal and PDF acceptance are gated on the /jol/ path prefix, including PDFs under /jol/wp-content/uploads/sites/86/. Other Harvard journals on this host are out of scope."
+    },
     "navigation": {
       "archive_root": "https://journals.law.harvard.edu/jol/archive/",
-      "pagination": "none",
-      "pdf_location": "article-detail-page",
+      "pagination": "none - one unpaginated page lists every issue, Volume 1 (1964) through Volume 63 (2026)",
+      "pdf_location": "direct-on-issue-page for older volumes (whole-issue PDFs linked from the archive hub) and article-detail-page for recent volumes",
       "needs_headless": false,
-      "notes": "WordPress academic site. Issues found in /archive/ list. Recent articles have detail pages, older ones link directly to PDF."
+      "notes": "HTML-first discovery. The journal's own REST API is /jol/wp-json/wp/v2/posts (138 posts) and its Jetpack sitemap is /jol/sitemap.xml (247 URLs); both are thinner than the archive hub and mix in JOL Online / Markup blog posts whose bodies link third-party citation PDFs, so they stay fallback-only. robots.txt allows these paths, Crawl-delay: 10."
     }
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".entry-content li a",
+      "selector": ".entry-content a[href*='volume-']",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": ".wp-block-columns, .entry-content p",
-      "parentSelectors": ["issue_link"]
-    },
-    {
-      "id": "article_link",
-      "type": "SelectorLink",
-      "selector": "a[href*='/202']",
-      "parentSelectors": ["article_container"]
+      "selector": ".wp-block-columns, .entry-content",
+      "parentSelectors": ["_root", "issue_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
       "selector": "h1.entry-title",
-      "parentSelectors": ["article_link"]
+      "parentSelectors": ["article_container"]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
-      "parentSelectors": ["article_link", "article_container"]
+      "selector": "a[href^='https://journals.law.harvard.edu/jol/'][href$='.pdf']",
+      "parentSelectors": ["article_container"]
     }
   ]
 }

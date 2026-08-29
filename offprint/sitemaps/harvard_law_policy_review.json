@@ -9,38 +9,47 @@
     "platform": "wordpress",
     "url": "https://journals.law.harvard.edu/lpr/",
     "created_date": "2026-05-02",
-    "status": "active",
+    "status": "active_partial_metadata",
+    "status_reason": "Re-onboarded 2026-08-28 onto HarvardJournalsMultisiteAdapter. journals.law.harvard.edu is a WordPress Multisite install; the shared WordPressAcademicBaseAdapter rooted REST/sitemap at the bare origin (network root has zero posts) and, with a /lpr/hlprvolumes/ seed prefix, could not reach the issue pages, which live at /lpr/volume-N-M/ and /lpr/print-archive/volume-N-M/. No PDFs were produced. Issue pages have no per-article HTML pages, so titles fall back to the issue page title - fix downstream with first-page PDF metadata extraction.",
+    "status_updated_at": "2026-08-28T00:00:00Z",
+    "status_evidence_ref": "smoke 2026-08-28: /lpr/hlprvolumes/ -> 39 issue links (Vol 1 No 1 2007 .. Vol 20 No 1 2026), issue pages carry 8-12 PDFs each, all under /lpr/; PDF GET 200 application/pdf",
+    "adapter": "HarvardJournalsMultisiteAdapter",
+    "publication_scope": {
+      "host": "journals.law.harvard.edu",
+      "path_prefix": "/lpr/",
+      "notes": "Discovery, traversal and PDF acceptance are gated on the /lpr/ path prefix, including PDFs under /lpr/wp-content/uploads/sites/89/. Other Harvard journals on this host are out of scope."
+    },
     "navigation": {
       "archive_root": "https://journals.law.harvard.edu/lpr/hlprvolumes/",
-      "pagination": "none",
+      "pagination": "none - one page lists all 39 issues",
       "pdf_location": "direct-on-issue-page",
       "needs_headless": false,
-      "notes": "WordPress site. Volumes listed on /hlprvolumes/. Issue pages contain direct PDF links."
+      "notes": "Issue-page URLs are inconsistent across eras: /lpr/volume-20-1/, /lpr/hlprvolumes/volume-19-1/, /lpr/print-archive/volume-9-2/, /lpr/print-archive-volume-12-1/. Volume 16 Number 2 is linked as a bare whole-issue PDF with no issue page. Issue pages mix article PDFs with front matter, mastheads and whole-volume files - split/classify downstream. HTML-first discovery: the journal's Jetpack sitemap (/lpr/sitemap.xml, 692 URLs) and REST API (589 posts) enumerate the whole subsite including /lpr/online-articles/ (HLPR Online) and blog posts whose bodies link third-party citation PDFs (supremecourt.gov, govinfo.gov), so they stay fallback-only. robots.txt allows these paths, Crawl-delay: 10."
     }
   },
   "selectors": [
     {
       "id": "issue_link",
       "type": "SelectorLink",
-      "selector": ".entry-content li a, .sub-menu a[href*='volume']",
+      "selector": ".entry-content a[href*='volume-']",
       "parentSelectors": ["_root"]
     },
     {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": ".wp-block-file, .entry-content p:has(a[href$='.pdf'])",
-      "parentSelectors": ["issue_link"]
+      "selector": ".wp-block-file, .entry-content",
+      "parentSelectors": ["_root", "issue_link"]
     },
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "a",
+      "selector": "h1.entry-title",
       "parentSelectors": ["article_container"]
     },
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "a[href$='.pdf']",
+      "selector": "a[href^='https://journals.law.harvard.edu/lpr/'][href$='.pdf']",
       "parentSelectors": ["article_container"]
     }
   ]
