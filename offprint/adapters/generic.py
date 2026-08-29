@@ -121,6 +121,42 @@ class GenericAdapter(Adapter):
             anchor_text = a.get_text(" ", strip=True)
             yield urljoin(base_url, a["href"]), anchor_text  # absolute
 
+    # --- PDF host scoping -------------------------------------------------
+    # A reference-list link is not an article. Every PDF-discovery path must
+    # answer "is this file plausibly published BY the seeded site?" before
+    # yielding it, or a footnote citation to a third-party PDF is recorded as
+    # an article of whatever journal happened to cite it. This is the
+    # 2026-08-24 OJS scope-leak shape; it was live here on two paths.
+    _TRUSTED_REPOSITORY_HINTS = (
+        "digitalcommons.",
+        "scholarlycommons.",
+        "scholarship.",
+        "repository.",
+        "commons.",
+        "escholarship.org",
+        "researchonline.",
+    )
+
+    def _is_trusted_repository_host(self, host: str) -> bool:
+        host = (host or "").lower()
+        return any(hint in host for hint in self._TRUSTED_REPOSITORY_HINTS)
+
+    def _pdf_host_in_scope(self, url: str, seed_origin: str) -> bool:
+        """True when a PDF URL may be attributed to the seed that found it."""
+
+        parsed = urlparse(url or "")
+        host = (parsed.netloc or "").lower()
+        seed_host = (seed_origin or "").lower()
+        if not host:
+            return False
+        if host == seed_host:
+            return True
+        # Tolerate a bare www. difference on the seed's own host.
+        if host.removeprefix("www.") == seed_host.removeprefix("www."):
+            return True
+        # Institutional repositories legitimately host a journal's own files.
+        return self._is_trusted_repository_host(host)
+
     def _iter_embedded_pdf_urls(self, html: str, base_url: str) -> Iterable[str]:
         """Extract PDF URLs embedded in script/JSON/markdown blobs."""
 
@@ -874,7 +910,9 @@ class GenericAdapter(Adapter):
                 parsed_link = urlparse(link)
                 same_origin = parsed_link.netloc == seed_origin
                 anchor_pdf_hint = "pdf" in anchor_lower
-                direct_pdf_url = is_pdf_url(link)
+                direct_pdf_url = is_pdf_url(link) and self._pdf_host_in_scope(
+                    link, seed_origin
+                )
                 same_origin_pdf_endpoint = same_origin and self._is_probable_pdf_endpoint(link)
                 hinted_same_origin_endpoint = (
                     anchor_pdf_hint
@@ -894,6 +932,8 @@ class GenericAdapter(Adapter):
 
             for embedded_pdf in self._iter_embedded_pdf_urls(resp.text, page_url):
                 if embedded_pdf in seen_pdf_urls:
+                    continue
+                if not self._pdf_host_in_scope(embedded_pdf, seed_origin):
                     continue
                 seen_pdf_urls.add(embedded_pdf)
                 url_meta = self._extract_vol_issue_from_url(embedded_pdf)
