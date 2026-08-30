@@ -356,6 +356,60 @@ def backfill_single_journal_hosts(index: Dict[str, dict], corpus: str, registry:
     return added
 
 
+def backfill_from_cover_names(index: Dict[str, dict], corpus: str, registry: str) -> int:
+    """Disambiguate multi-journal hosts by the journal name printed on page one.
+
+    What is left lives on hosts serving a main journal plus a companion -
+    Harvard Law Review and its Forum, Minnesota Law Review and Headnotes,
+    Berkeley Technology Law Journal and BTLJ Commentaries - so attributing by
+    host would be a coin flip. The article itself names its journal, and the
+    extracted text is already on disk in the .text.json sidecar.
+
+    Matching is by word presence rather than substring: extracted cover text
+    routinely repeats words ("Journal Journal of of Criminal Criminal"), which
+    defeats a literal match. The longest candidate whose words all appear wins,
+    so a Forum article prefers "Harvard Law Review Forum" over "Harvard Law
+    Review"; ties and no-matches are left alone rather than guessed.
+    """
+    import csv
+    by_host: Dict[str, set] = collections.defaultdict(set)
+    try:
+        for row in csv.DictReader(open(registry, encoding="utf-8")):
+            host = (row.get("host") or "").lower().removeprefix("www.")
+            name = (row.get("journal_name") or "").strip()
+            if host and name:
+                by_host[host].add(name)
+    except OSError:
+        return 0
+    added = 0
+    for host in sorted(os.listdir(corpus)):
+        hdir = os.path.join(corpus, host)
+        if not os.path.isdir(hdir):
+            continue
+        cands = sorted(by_host.get(host.lower().removeprefix("www."), ()),
+                       key=len, reverse=True)
+        if len(cands) < 2:
+            continue
+        word_sets = [(c, {w for w in re.findall(r"[a-z]+", c.lower())
+                          if w not in _ABBR_STOP}) for c in cands]
+        for fname in os.listdir(hdir):
+            low = fname.lower()
+            if not low.endswith(".pdf") or index.get(low, {}).get("journal"):
+                continue
+            try:
+                with open(os.path.join(hdir, fname + ".text.json"), "rb") as fh:
+                    head = fh.read(20000)
+            except OSError:
+                continue
+            words = set(re.findall(r"[a-z]+", head.decode("utf-8", "ignore").lower()))
+            for cand, needed in word_sets:      # longest first
+                if needed and needed <= words:
+                    index[low] = {"journal": cand, "host": host, "run": "cover-name"}
+                    added += 1
+                    break
+    return added
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -383,6 +437,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f"text-sidecar backfill attributed {n3} further files", file=sys.stderr)
         n4 = backfill_single_journal_hosts(index, args.corpus, args.registry)
         print(f"single-journal-host backfill attributed {n4} further files", file=sys.stderr)
+        n5 = backfill_from_cover_names(index, args.corpus, args.registry)
+        print(f"cover-name backfill attributed {n5} further files", file=sys.stderr)
 
     if args.out:
         os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
