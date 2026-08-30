@@ -10,7 +10,8 @@
       ]
     },
     "status": "active",
-    "status_reason": "enumerated 866 documents via Quartex API on 2026-08-30; totalRecords=866 | QUEUED: do not run while gather_penn_20260830 is active - same host"
+    "status_reason": "enumerated 866 documents via Quartex API on 2026-08-30; totalRecords=866 | QUEUED: do not run while gather_penn_20260830 is active - same host",
+    "journal_name": "Journal of Constitutional Law"
   },
   "start_urls": [
     "https://repository.law.upenn.edu/Documents/Detail/no-one-branch-to-rule-them-all/541170",

@@ -132,6 +132,10 @@ def main(argv: Optional[List[str]] = None) -> int:
                          "listing is Knockout.js and exposes no links in server HTML")
     nav["enumerated_via"] = "document/getdocumentlist (browser-captured template)"
     nav["quartex_collections"] = result["collections"]
+    # Name the journal in the seed: the coverage check looks it up by name in the
+    # attribution index, and a nameless seed silently reports zero holdings.
+    if not meta.get("journal_name") and result["collections"]:
+        meta["journal_name"] = result["collections"][0]
     meta["status"] = "active"
     meta["status_reason"] = (f"enumerated {len(urls)} documents via Quartex API "
                              f"on {time.strftime('%Y-%m-%d')}; totalRecords={total}")

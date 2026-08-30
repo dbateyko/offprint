@@ -23,6 +23,27 @@ from typing import Iterable, List, Optional, Set
 from urllib.parse import urlparse
 
 CORPUS = "/mnt/shared_storage/law-review-corpus/corpus/scraped"
+INDEX = "artifacts/attribution_index.json"
+
+
+def journal_holdings(journal: str, index_path: str = INDEX) -> int:
+    """How many PDFs the corpus already holds for this journal, by name.
+
+    Filename comparison only catches re-crawling the SAME source. It said "0
+    duplicates" for Columbia Business Law Review while 1,121 of its PDFs sat on
+    disk under citation-style names, and "worth crawling" for Fordham Law Review
+    with 3,241 already held. The attribution index answers by journal instead,
+    which is the question onboarding actually asks.
+    """
+    if not journal:
+        return 0
+    try:
+        index = json.loads(open(index_path, encoding="utf-8").read())
+    except (OSError, ValueError):
+        return 0
+    want = journal.strip().lower()
+    return sum(1 for v in index.values()
+               if (v.get("journal") or "").strip().lower() == want)
 
 
 def corpus_pdfs(host: str) -> Set[str]:
@@ -50,8 +71,25 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--seed", help="seed file whose start_urls are PDF URLs")
     ap.add_argument("--host", help="override the host to compare against")
     ap.add_argument("--staging", default="", help="also treat this staging dir as already held")
+    ap.add_argument("--journal", default="", help="journal name to look up in the attribution index")
+    ap.add_argument("--index", default=INDEX)
     ap.add_argument("--write-missing", default="", help="write the not-yet-held URLs here")
     args = ap.parse_args(argv)
+
+    journal = ""
+    if args.seed:
+        try:
+            journal = ((json.loads(open(args.seed, encoding="utf-8").read()).get("metadata")
+                        or {}).get("journal_name") or "")
+        except (OSError, ValueError):
+            journal = ""
+    journal = args.journal or journal
+    if journal:
+        held_by_name = journal_holdings(journal, args.index)
+        print(f"attribution index  : {held_by_name} pdfs already held for {journal!r}")
+        if held_by_name:
+            print("  NOTE: this journal is already represented in the corpus. A filename")
+            print("  comparison cannot see holdings that came from a different source.")
 
     urls: List[str] = []
     if args.urls_json:
