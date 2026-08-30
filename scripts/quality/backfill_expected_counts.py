@@ -19,7 +19,7 @@ Usage:
 """
 from __future__ import annotations
 
-import argparse, glob, json, os, re, sys, time
+import argparse, glob, json, os, re, signal, sys, time
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urljoin, urlparse
 import requests
@@ -38,10 +38,40 @@ session = requests.Session(); session.headers.update({"User-Agent": UA})
 _robots_lock = None
 
 
+class SeedTimeout(Exception):
+    pass
+
+
+class seed_deadline:
+    """Hard upper bound on one seed's probing.
+
+    requests' timeout is per socket operation, so a server that accepts a
+    connection and then never speaks can hold a worker indefinitely - the same
+    unbounded-wait shape that stalled a crawl for 45 minutes earlier today. One
+    pathological host must not be able to stall a 1,342-seed job.
+    """
+
+    def __init__(self, seconds: int) -> None:
+        self.seconds = seconds
+
+    def __enter__(self):
+        def _fire(signum, frame):
+            raise SeedTimeout()
+        self._old = signal.signal(signal.SIGALRM, _fire)
+        signal.alarm(self.seconds)
+        return self
+
+    def __exit__(self, *exc):
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, self._old)
+        return False
+
+
 def log(msg: str) -> None:
     print(f"[{time.strftime('%H:%M:%S')}] {msg}", flush=True)
 
 _robots: Dict[str, Tuple[List[Tuple[bool, str]], float]] = {}
+_last_hit: Dict[str, float] = {}
 
 
 def _parse_robots(text: str, floor: float) -> Tuple[List[Tuple[bool, str]], float]:
@@ -102,7 +132,7 @@ def robots_for(origin: str, floor: float) -> Tuple[Optional[List[Tuple[bool, str
     rules: Optional[List[Tuple[bool, str]]] = None
     delay = floor
     try:
-        r = session.get(urljoin(origin, "/robots.txt"), timeout=30)
+        r = session.get(urljoin(origin, "/robots.txt"), timeout=(15, 30))
         if r.status_code == 200:
             rules, delay = _parse_robots(r.text, floor)
     except requests.RequestException:
@@ -125,9 +155,16 @@ def get(url: str, floor: float, **kw) -> Optional[requests.Response]:
     ok, delay = allowed(url, floor)
     if not ok:
         return None
-    time.sleep(delay)
+    # Pace per host, not globally: back-to-back seeds are different journals on
+    # different servers, and a global sleep would spend the budget waiting on a
+    # host we are not about to contact.
+    host = urlparse(url).netloc
+    wait = delay - (time.time() - _last_hit.get(host, 0.0))
+    if wait > 0:
+        time.sleep(wait)
+    _last_hit[host] = time.time()
     try:
-        return session.get(url, timeout=45, **kw)
+        return session.get(url, timeout=(15, 45), **kw)
     except requests.RequestException:
         return None
 
@@ -234,7 +271,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--out", default="artifacts/expected_counts.jsonl")
     ap.add_argument("--min-delay", type=float, default=6.0)
     ap.add_argument("--limit", type=int, default=0)
-    ap.add_argument("--no-render", action="store_true", help="skip the playwright fallback")
+    ap.add_argument("--seed-timeout", type=int, default=120,
+                    help="hard cap on one seed's probing (default: 120s)")
+    ap.add_argument("--render", action="store_true",
+                    help="also render JS listings (slow; yields only observed_partial, "
+                         "never an expected count)")
+    ap.add_argument("--no-render", action="store_true", help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
 
     done = set()
@@ -265,7 +307,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     log(f"{len(done)} already probed; {len(todo)} to probe")
 
     browser = pw = None
-    if not args.no_render:
+    if args.render and not args.no_render:
         try:
             from playwright.sync_api import sync_playwright
             pw = sync_playwright().start()
@@ -283,17 +325,22 @@ def main(argv: Optional[List[str]] = None) -> int:
                          "dspace": probe_dspace,
                          "wordpress": probe_wordpress}.get(plat)
                 count = method = None
-                if probe:
-                    count, method = probe(seed, args.min_delay)
-                if count is None:
-                    for fb in (probe_digital_commons, probe_wordpress, probe_dspace):
-                        if fb is probe:
-                            continue
-                        count, method = fb(seed, args.min_delay)
-                        if count:
-                            break
-                if count is None and browser is not None:
-                    count, method = probe_rendered(seed, args.min_delay, browser)
+                try:
+                    with seed_deadline(args.seed_timeout):
+                        if probe:
+                            count, method = probe(seed, args.min_delay)
+                        if count is None:
+                            for fb in (probe_digital_commons, probe_wordpress, probe_dspace):
+                                if fb is probe:
+                                    continue
+                                count, method = fb(seed, args.min_delay)
+                                if count:
+                                    break
+                        if count is None and browser is not None:
+                            count, method = probe_rendered(seed, args.min_delay, browser)
+                except SeedTimeout:
+                    count, method = None, f"timeout_{args.seed_timeout}s"
+                    log(f"  timeout on {name[:44]} - moving on")
                 conf = ("high" if method and method.startswith(HIGH_CONFIDENCE)
                         else ("low" if count else "none"))
                 if conf == "low":
