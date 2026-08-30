@@ -1092,7 +1092,7 @@ class WordPressAcademicBaseAdapter(Adapter):
         # GWLR issue pages expose article metadata inline in paragraph blocks:
         # <p><strong>Title</strong><br/>Author<br/><span>85 Geo. Wash. L. Rev. 1</span><br/>Abstract | PDF</p>
         if "gwlr.org" not in (self.domain or "").lower():
-            return {}
+            return self._extract_listing_pdf_metadata(soup, article_url)
 
         by_pdf: Dict[str, Dict[str, Any]] = {}
         for p in soup.find_all("p"):
@@ -1145,6 +1145,55 @@ class WordPressAcademicBaseAdapter(Adapter):
             except Exception:
                 continue
 
+        return by_pdf
+
+    #: Anchor text that labels a link rather than naming the article.
+    _PDF_LINK_LABELS = {
+        "pdf", "download", "download pdf", "full text", "full article",
+        "read more", "article", "here", "link", "view", "view pdf", "print",
+    }
+
+    def _extract_listing_pdf_metadata(
+        self, soup: BeautifulSoup, article_url: str
+    ) -> Dict[str, Dict[str, Any]]:
+        """Per-PDF metadata for archives that list every article on one page.
+
+        Some journals publish the whole run as a flat list of links -- Harvard
+        CR-CL's /archive/ is 315 of them -- where the PDF anchor's own text is the
+        article title and the byline trails it as bare text ("... by Bijal Shah").
+        Without this, every PDF on such a page inherits the page's metadata, so all
+        315 records land with title "Archive" and one shared author.
+
+        Only fires when the anchor text actually reads like a title, which is
+        precisely the case where the page-level fallback is wrong.
+        """
+        by_pdf: Dict[str, Dict[str, Any]] = {}
+        for block in soup.find_all(["p", "li"]):
+            try:
+                anchors = [
+                    a for a in block.find_all("a", href=True)
+                    if (a.get("href") or "").lower().split("?")[0].endswith(".pdf")
+                ]
+                if len(anchors) != 1:
+                    continue          # ambiguous: cannot attribute a title
+                anchor = anchors[0]
+                title = " ".join(anchor.get_text(" ", strip=True).split())
+                if len(title) < 12 or title.lower() in self._PDF_LINK_LABELS:
+                    continue          # a label, not a title -- leave it alone
+                pdf_url = urljoin(article_url, (anchor.get("href") or "").strip())
+                if not pdf_url:
+                    continue
+                meta: Dict[str, Any] = {"title": title}
+                block_text = " ".join(block.get_text(" ", strip=True).split())
+                tail = block_text[len(title):] if block_text.startswith(title) else ""
+                byline = re.match(r"\s*by\s+(.+)", tail, re.I)
+                if byline:
+                    authors = self._split_author_string(byline.group(1).strip(" .;,"))
+                    if authors:
+                        meta["authors"] = authors
+                by_pdf[pdf_url] = meta
+            except Exception:
+                continue
         return by_pdf
 
     def _extract_metadata_from_article(

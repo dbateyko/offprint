@@ -1,14 +1,33 @@
 {
   "id": "journals-law-harvard-edu-crcl",
   "start_urls": [
-    "https://journals.law.harvard.edu/crcl/"
+    "https://journals.law.harvard.edu/crcl/archive/"
   ],
   "source": "manual",
   "metadata": {
     "journal_name": "Harvard Civil Rights-Civil Liberties Law Review",
     "platform": "wordpress",
     "url": "https://journals.law.harvard.edu/crcl/",
-    "created_date": "2026-03-01",
-    "notes": "Smoke test passed 2026-03-01 via WordPressAcademicBaseAdapter."
-  }
+    "status": "active",
+    "status_reason": "smoke_passed_archive_direct_pdfs 2026-08-30; 3/3 sampled PDFs valid",
+    "created_date": "2026-08-30",
+    "navigation": {
+      "archive_root": "https://journals.law.harvard.edu/crcl/archive/",
+      "pagination": "none - /archive/ lists the complete run on a single page; /archive/page/2/ returns identical content (verified: 0 new items), so a pager walk would loop rather than paginate",
+      "expected_pdfs": 315,
+      "pdf_location": "direct-on-archive-page",
+      "needs_headless": false,
+      "notes": "Journal moved off harvardcrcl.org, which now sits entirely behind HTTP Basic auth (WWW-Authenticate: Basic realm=\"Restricted Area\"; 401 on every path including robots.txt). The live home is the Harvard journals WordPress multisite at /crcl/ (site id 80). The 2026-08-29 Harvard gather covered ilj, jol and lpr only, so CR-CL had never been collected. robots.txt sets Crawl-delay: 10 - run with a large MIN_DELAY. Article PDFs are same-origin under /crcl/wp-content/uploads/sites/80/<YYYY>/<MM>/."
+    }
+  },
+  "selectors": [
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$='.pdf']",
+      "parentSelectors": [
+        "_root"
+      ]
+    }
+  ]
 }
