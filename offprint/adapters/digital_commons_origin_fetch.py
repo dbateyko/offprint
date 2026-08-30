@@ -23,7 +23,9 @@ class DigitalCommonsOriginFetchAdapter(DigitalCommonsIssueArticleHopAdapter):
     """
 
     NON_ARTICLE_TITLE_RE = re.compile(
-        r"(?:front matter|back matter|masthead|table of contents|editorial board)\s*$",
+        r"^(?:student\s+)?(?:front matter|back matter|masthead|table of contents|"
+        r"editorial board)\b|(?:front matter|back matter|masthead|table of contents|"
+        r"editorial board)\s*$",
         re.IGNORECASE,
     )
 

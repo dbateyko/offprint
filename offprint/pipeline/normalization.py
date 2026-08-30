@@ -4,6 +4,15 @@ from typing import Any, Dict, Optional
 
 def _normalize_metadata(raw: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     metadata = dict(raw or {})
+    # Every adapter's metadata passes through here, so this is the one place a
+    # byline can be normalized once. An adapter writing singular `author` used
+    # to lose it silently -- `ArticleMetadata.from_dict` whitelists only
+    # `authors` -- and adapters disagree on str vs list for a single author.
+    author = metadata.pop("author", None)
+    if author and not metadata.get("authors"):
+        metadata["authors"] = author
+    if isinstance(metadata.get("authors"), str):
+        metadata["authors"] = [metadata["authors"]]
     for key in [
         "title",
         "authors",

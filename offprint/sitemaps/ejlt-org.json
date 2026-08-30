@@ -1,0 +1,60 @@
+{
+  "id": "ejlt-org",
+  "start_urls": [
+    "https://ejlt.org/index.php/ejlt/issue/archive"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "European Journal of Law and Technology",
+    "platform": "ojs",
+    "url": "https://ejlt.org/index.php/ejlt",
+    "created_date": "2026-08-24",
+    "status": "active",
+    "issn": "2042-115X",
+    "access": "open_access",
+    "navigation": {
+      "archive_root": "https://ejlt.org/index.php/ejlt/issue/archive",
+      "volume_url_pattern": "https://ejlt.org/index.php/ejlt/issue/view/{issue_id}",
+      "archive_path": "issue/archive (single page, no pagination observed 2026-08-24) -> issue/view/{id} -> article/view/{aid}/{galley} -> article/download/{aid}/{galley} is the raw PDF",
+      "pagination": "none",
+      "total_volumes_estimated": 49,
+      "oai_endpoint": "https://ejlt.org/index.php/ejlt/oai",
+      "oai_record_count": 381,
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "Open Journal Systems 3.3.0.11 (meta generator confirmed 2026-08-24). Dedicated host behind Cloudflare; ejlt.org/ redirects to /index.php/ejlt so the host is single-publication and there is no cross-journal leakage risk. robots.txt disallows only /cache/ and OJS /*/search/. Open access, free to read; citation_pdf_url meta present on every article landing page. Discovery probe 2026-08-24: 49 issue links, OAI ListIdentifiers returned 381 records with no resumptionToken."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.obj_article_summary",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3.title, .title",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "div.authors, .meta .authors",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h3.title a, .title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.obj_galley_link.pdf, a[href*=\"/article/view/\"]",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

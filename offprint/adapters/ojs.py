@@ -447,7 +447,7 @@ class OJSAdapter(Adapter):
 
         # Prefer article-page extraction first so we can attach richer metadata.
         for article_url in sorted(article_urls):
-            yield from self._process_article(article_url, seen_pdfs, issue_metadata)
+            yield from self._process_article(article_url, seen_pdfs, issue_metadata, origin)
 
         for link in issue_pdf_links:
             if link not in seen_pdfs:
@@ -455,7 +455,11 @@ class OJSAdapter(Adapter):
                 yield DiscoveryResult(page_url=issue_url, pdf_url=link, metadata=issue_metadata)
 
     def _process_article(
-        self, article_url: str, seen_pdfs: Set[str], issue_metadata: Dict[str, Any]
+        self,
+        article_url: str,
+        seen_pdfs: Set[str],
+        issue_metadata: Dict[str, Any],
+        origin: str = "",
     ) -> Iterable[DiscoveryResult]:
         resp = self._get(article_url)
         if not resp or not resp.text:
@@ -473,9 +477,25 @@ class OJSAdapter(Adapter):
                     metadata=dict(article_metadata),
                 )
 
+        # Reference lists on OJS article pages hyperlink third-party PDFs (court
+        # judgments, other repositories). Without this gate the fallback link
+        # sweep below downloads them and records them as articles of THIS
+        # journal -- the host != journal failure mode, one step worse because
+        # the file is not even from the journal's host. _process_issue already
+        # enforces the same origin check; this restores the invariant here.
+        # The citation_pdf_url path above is deliberately left unrestricted so
+        # deployments that serve galleys from a separate file host still work.
+        article_origin = origin or (urlparse(article_url).netloc or "")
+
         for _text, link in self._iter_links(resp.text, article_url):
             link_lower = link.lower()
-            
+
+            parsed_link = urlparse(link)
+            if parsed_link.scheme not in {"http", "https"}:
+                continue
+            if article_origin and parsed_link.netloc != article_origin:
+                continue
+
             # Numeric ID patterns common in OJS: /article/view/123/456 or /article/download/123/456
             is_numeric_pdf = bool(re.search(r"/article/(?:view|download)/\d+/\d+", link_lower))
             

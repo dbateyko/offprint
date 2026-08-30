@@ -10,16 +10,21 @@
     "url": "https://sites.bc.edu/iptf/",
     "created_date": "2026-08-24",
     "status": "active",
-    "status_reason": "publication-specific adapter follows substantive IPTF posts to their LIRA work and PDF",
-    "status_updated_at": "2026-08-24T03:34:00Z",
-    "status_evidence_ref": "/tmp/onboard_report_bc_iptf_direct_20260824T0334/smoke_one_pdf_20260824T033400Z.json",
+    "status_reason": "publication-scoped adapter enumerates the LIRA IPTF community (197 articles, 1997-2026) and downloads each record's PDF; WordPress traversal is a capped fallback",
+    "status_updated_at": "2026-08-24T15:30:00Z",
+    "status_evidence_ref": "offprint/artifacts/runs/bc_iptf_lira_full_20260824T153000Z_a1/",
     "navigation": {
       "archive_root": "https://sites.bc.edu/iptf/",
-      "pagination": "?paged=N; current page advertises 22 pages",
-      "pdf_location": "IPTF post -> lira.bc.edu publication work -> direct /downloads/ PDF",
+      "publication_of_record": "https://lira.bc.edu/collections/intellectual-property-and-technology-forum",
+      "enumeration": "LIRA InvenioRDM community API: https://dashboard.lira.bc.edu/api/communities/intellectual-property-and-technology-forum then /records?size=100&page=N",
+      "exact_article_count": 197,
+      "count_evidence": "community records API hits.total=197 on 2026-08-24; every record is resource_type=publication-article with custom_fields['journal:journal'].title == 'Boston College Intellectual Property and Technology Forum' and at least one PDF file entry; publication_date spans 1997-2026",
+      "pdf_location": "https://lira.bc.edu/downloads/<record_id>/<filename>.pdf (public mirror of dashboard.lira.bc.edu/api/records/<id>/files/<name>/content)",
+      "pagination": "?paged=N on the WordPress archive; 22 pages, but it only advertises 2024+ posts and yields 7 articles",
+      "wordpress_fallback": "sites.bc.edu/iptf HTML traversal is a fallback used only when the repository API returns nothing; capped at MAX_WORDPRESS_ARTICLE_FETCHES so it cannot wedge a seed in 'discovering'",
       "needs_headless": false,
-      "scope_guard": "sites.bc.edu/iptf only; excludes blog posts, mastheads, and journal staff pages",
-      "notes": "The WordPress REST API requires login (401). HTML pagination is public. Discovery stops without retry on 403, 429, challenge pages, repeated empty article paths, or an empty listing page."
+      "scope_guard": "accept a record only when the repository itself labels it with the exact IPTF journal title; host != journal",
+      "notes": "Discovery stops without retry on 403, 429, challenge pages, or an empty listing."
     }
   },
   "selectors": [

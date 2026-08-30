@@ -3,9 +3,16 @@
 
 The drainer/launcher writes to ``offprint/artifacts/scraped_v2/<host>/`` as a
 staging bucket. This script SHA-256-dedups them against the canonical
-``corpus/scraped/<host>/`` and hardlinks net-new files into place. Hardlinks
-keep both paths pointing at the same inode — atomic, free disk space, and
-reversible (the scraped_v2 copy is retained as a rollback safety net).
+``corpus/scraped/<host>/`` and MOVES net-new files into place. Staged files whose
+bytes are already in the corpus are moved to ``archive/staging_retired/<ts>/`` so
+they can be reviewed and then deleted.
+
+Promotion used to hardlink and leave the staged copy in place as a "rollback
+safety net". That convention is what grew the 160 GB of staging duplicates
+removed on 2026-08-20, and this volume is NTFS via ntfs-3g (FUSE), where
+hardlinks are not reliable in the first place. Staging is ephemeral: after a
+promotion its files should be gone, not duplicated. Rollback now means moving a
+file back out of ``archive/staging_retired/``, which is explicit and auditable.
 
 Each promotion appends a row to ``corpus/scraped/PROMOTION_LOG.csv``:
     host, n_promoted, n_skipped_dup, n_corpus_before, n_corpus_after, ts
@@ -22,6 +29,7 @@ import argparse
 import csv
 import hashlib
 import os
+import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -30,6 +38,7 @@ ROOT = Path(os.environ.get("OFFPRINT_ROOT", "/mnt/shared_storage/law-review-corp
 SCRAPED_V2 = ROOT / "staging" / "scrape_inbox"
 CORPUS = ROOT / "corpus" / "scraped"
 LOG = CORPUS / "PROMOTION_LOG.csv"
+RETIRED = ROOT / "archive" / "staging_retired"
 
 
 def sha256(p: Path, buf_size: int = 1 << 20) -> str:
@@ -40,8 +49,8 @@ def sha256(p: Path, buf_size: int = 1 << 20) -> str:
     return h.hexdigest()
 
 
-def index_host(host_dir: Path) -> dict[str, Path]:
-    """Map sha256 -> first-seen path. Skips files matching '.partial'."""
+def index_host(host_dir: Path, *, sizes: set[int] | None = None) -> dict[str, Path]:
+    """Map SHA-256 to first path, optionally hashing only relevant byte sizes."""
     out: dict[str, Path] = {}
     if not host_dir.exists():
         return out
@@ -49,6 +58,8 @@ def index_host(host_dir: Path) -> dict[str, Path]:
         if p.suffix == ".partial" or ".partial" in p.name:
             continue
         try:
+            if sizes is not None and p.stat().st_size not in sizes:
+                continue
             digest = sha256(p)
         except OSError as e:
             print(f"  warn: cannot read {p}: {e}", file=sys.stderr)
@@ -86,8 +97,27 @@ def safe_dest(corpus_host: Path, src: Path) -> Path:
         n += 1
 
 
+def retire_dest(src: Path, run_id: str) -> Path:
+    """Where a redundant staged file goes so it can be deleted later.
+
+    The staging path is preserved under the run directory, so what was retired
+    and where it came from stays legible when someone decides to delete it.
+    """
+    try:
+        relative = src.relative_to(ROOT / "staging")
+    except ValueError:
+        relative = Path(src.name)
+    dest = RETIRED / run_id / relative
+    stem, suffix, n = dest.stem, dest.suffix, 1
+    while dest.exists():
+        dest = dest.parent / f"{stem}__v{n}{suffix}"
+        n += 1
+    return dest
+
+
 def promote_host(
-    host: str, *, dry_run: bool = False, selected_paths: list[Path] | None = None
+    host: str, *, dry_run: bool = False, selected_paths: list[Path] | None = None,
+    retire_duplicates: bool = True, retire_run: str = "",
 ) -> dict:
     v2_dir = SCRAPED_V2 / host
     corpus_host = CORPUS / host
@@ -104,13 +134,18 @@ def promote_host(
     print(f"  scraped_v2: {staged_count} PDFs")
     print(f"  corpus before: {n_corpus_before} PDFs")
 
-    print("  hashing corpus...", end=" ", flush=True)
-    corpus_idx = index_host(corpus_host)
-    print(f"{len(corpus_idx)} unique sha")
-
     print("  hashing scraped_v2...", end=" ", flush=True)
     v2_idx = index_paths(selected_paths) if selected_paths is not None else index_host(v2_dir)
     print(f"{len(v2_idx)} unique sha")
+
+    print("  hashing corpus...", end=" ", flush=True)
+    selected_sizes = (
+        {path.stat().st_size for path in selected_paths}
+        if selected_paths is not None
+        else None
+    )
+    corpus_idx = index_host(corpus_host, sizes=selected_sizes)
+    print(f"{len(corpus_idx)} relevant unique sha")
 
     new_shas = sorted(set(v2_idx) - set(corpus_idx))
     dup_shas = set(v2_idx) & set(corpus_idx)
@@ -140,21 +175,38 @@ def promote_host(
     n_skipped_link_collision = 0
     for sha in new_shas:
         src = v2_idx[sha]
+        # `safe_dest` already guarantees a path that does not exist, which is what
+        # keeps `shutil.move` -- which would otherwise overwrite silently -- from
+        # clobbering a corpus manifestation.
         dest = safe_dest(corpus_host, src)
         try:
-            os.link(src, dest)
+            shutil.move(str(src), str(dest))
             n_promoted += 1
         except OSError as e:
             n_skipped_link_collision += 1
-            print(f"  warn: link {src} -> {dest} failed: {e}", file=sys.stderr)
+            print(f"  warn: move {src} -> {dest} failed: {e}", file=sys.stderr)
+
+    n_retired = 0
+    if retire_duplicates:
+        for sha in sorted(dup_shas):
+            src = v2_idx[sha]
+            try:
+                dest = retire_dest(src, retire_run)
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(str(src), str(dest))
+                n_retired += 1
+            except OSError as e:
+                print(f"  warn: retire {src} failed: {e}", file=sys.stderr)
 
     n_corpus_after = sum(1 for _ in corpus_host.rglob("*.pdf"))
-    print(f"  promoted {n_promoted} hardlinks. corpus now {n_corpus_after}")
+    print(f"  promoted {n_promoted} moved. corpus now {n_corpus_after}"
+          + (f"; retired {n_retired} staged duplicate(s)" if n_retired else ""))
 
     return {
         "host": host,
         "n_promoted": n_promoted,
         "n_skipped_dup": len(dup_shas),
+        "n_retired_dup": n_retired,
         "n_corpus_before": n_corpus_before,
         "n_corpus_after": n_corpus_after,
         "n_link_collision": n_skipped_link_collision,
@@ -169,6 +221,7 @@ def append_log(row: dict) -> None:
         "host",
         "n_promoted",
         "n_skipped_dup",
+        "n_retired_dup",
         "n_corpus_before",
         "n_corpus_after",
         "n_link_collision",
@@ -184,12 +237,21 @@ def append_log(row: dict) -> None:
 
 
 def main() -> None:
-    global ROOT, SCRAPED_V2, CORPUS, LOG
+    global ROOT, SCRAPED_V2, CORPUS, LOG, RETIRED
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", type=Path, default=ROOT)
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--host", help="Promote only this host directory")
     g.add_argument("--all", action="store_true", help="Promote every host in scraped_v2/")
+    ap.add_argument(
+        "--keep-duplicates",
+        action="store_true",
+        help=(
+            "Leave staged files whose bytes are already in the corpus where they "
+            "are. Default is to MOVE them to archive/staging_retired/<ts>/ so the "
+            "staging tree empties out and the retired copies can be deleted later."
+        ),
+    )
     ap.add_argument(
         "--allowlist",
         type=Path,
@@ -206,6 +268,7 @@ def main() -> None:
     SCRAPED_V2 = ROOT / "staging" / "scrape_inbox"
     CORPUS = ROOT / "corpus" / "scraped"
     LOG = CORPUS / "PROMOTION_LOG.csv"
+    RETIRED = ROOT / "archive" / "staging_retired"
 
     if not SCRAPED_V2.exists():
         print(f"no scraped_v2 dir at {SCRAPED_V2}")
@@ -252,26 +315,33 @@ def main() -> None:
     else:
         hosts = sorted(d.name for d in SCRAPED_V2.iterdir() if d.is_dir())
 
-    totals = {"n_promoted": 0, "n_skipped_dup": 0, "hosts": 0}
+    retire_run = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    totals = {"n_promoted": 0, "n_skipped_dup": 0, "n_retired_dup": 0, "hosts": 0}
     for host in hosts:
         result = promote_host(
             host,
             dry_run=args.dry_run,
             selected_paths=selected_paths if host == args.host else None,
+            retire_duplicates=not args.keep_duplicates,
+            retire_run=retire_run,
         )
         if result.get("n_promoted") is not None:
             totals["n_promoted"] += result["n_promoted"]
             totals["n_skipped_dup"] += result["n_skipped_dup"]
+            totals["n_retired_dup"] += result.get("n_retired_dup", 0)
             totals["hosts"] += 1
-            if not args.dry_run and result["n_promoted"]:
+            if not args.dry_run and (result["n_promoted"] or result.get("n_retired_dup")):
                 append_log(result)
 
     print("\n--- SUMMARY ---")
     print(f"hosts processed: {totals['hosts']}")
     print(f"PDFs promoted:   {totals['n_promoted']}")
     print(f"dups skipped:    {totals['n_skipped_dup']}")
+    print(f"dups retired:    {totals['n_retired_dup']}")
+    if totals["n_retired_dup"]:
+        print(f"retired to:      {RETIRED / retire_run}")
     if args.dry_run:
-        print("(dry run — nothing was hardlinked)")
+        print("(dry run — nothing was moved)")
     elif totals["n_promoted"]:
         print(f"log: {LOG}")
 

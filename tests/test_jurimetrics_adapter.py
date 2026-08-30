@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pytest
 from bs4 import BeautifulSoup
 
 from offprint.adapters.jurimetrics import JurimetricsAdapter
@@ -79,3 +80,10 @@ def test_wayback_fallback_uses_latest_exact_pdf_capture(monkeypatch) -> None:
         "https://web.archive.org/web/20260101id_/https://example.test/new.pdf"
     )
     assert calls[-1][0] == replay_url
+
+
+def test_rejects_truncated_linearized_pdf() -> None:
+    payload = b"%PDF-1.7\n1 0 obj<</Linearized 1/L 3111355>>\n" + (b"x" * 1_048_000)
+
+    with pytest.raises(ValueError, match="received .* of 3111355 bytes"):
+        JurimetricsAdapter._validate_complete_pdf_payload(payload)

@@ -1,0 +1,31 @@
+{
+  "id": "case-journal-law-technology-internet",
+  "start_urls": [
+    "https://scholarlycommons.law.case.edu/jolti/all_issues.html"
+  ],
+  "source": "onboard_journal",
+  "metadata": {
+    "journal_name": "Journal of Law, Technology & the Internet",
+    "platform": "digital_commons_origin_fetch",
+    "url": "https://scholarlycommons.law.case.edu/jolti/",
+    "status": "active",
+    "status_reason": "real-PDF smoke passed after filtering the issue masthead; title, author, and volume present",
+    "status_updated_at": "2026-08-24T13:44:19Z",
+    "status_evidence_ref": "/tmp/onboard_report_case_jolti/smoke_one_pdf_20260824T134357Z.json",
+    "navigation": {
+      "archive_root": "https://scholarlycommons.law.case.edu/jolti/all_issues.html",
+      "pagination": "24 issue links across volumes 1-17; no archive pagination",
+      "pdf_location": "issue div.doc -> viewcontent.cgi with context=jolti",
+      "needs_headless": true,
+      "scope_guard": "accept /jolti pages and context=jolti PDFs only",
+      "notes": "Current issues place a masthead before substantive articles; furniture filtering and exact context enforcement are mandatory."
+    }
+  },
+  "selectors": [
+    {"id": "article_container", "type": "SelectorElement", "selector": "div.doc", "parentSelectors": ["_root"]},
+    {"id": "title", "type": "SelectorText", "selector": "a.doctitle", "parentSelectors": ["article_container"]},
+    {"id": "article_url", "type": "SelectorLink", "selector": "a.doctitle", "parentSelectors": ["article_container"]},
+    {"id": "pdf_link", "type": "SelectorLink", "selector": ".pdf a", "parentSelectors": ["article_container"]},
+    {"id": "author", "type": "SelectorText", "selector": ".auth", "parentSelectors": ["article_container"]}
+  ]
+}

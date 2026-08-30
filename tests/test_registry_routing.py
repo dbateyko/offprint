@@ -60,12 +60,41 @@ from offprint.adapters.registry import _find_sitemap_for_url
             "DePaulJATIPAdapter",
         ),
         (
+            "https://digitalcommons.law.seattleu.edu/sjteil/all_issues.html",
+            "SeattleJTEILAdapter",
+        ),
+        (
+            "https://scholarlycommons.law.case.edu/jolti/all_issues.html",
+            "CaseJOLTIAdapter",
+        ),
+        (
             "https://www.vjolt.org/archives",
             "VirginiaJOLTAdapter",
         ),
         (
             "https://www.americanbar.org/groups/science_technology/resources/jurimetrics/issue-archive/",
             "JurimetricsAdapter",
+        ),
+        # Multi-journal OJS hosts for the technology-law expansion. The host is
+        # registered, but seeds must stay publication-path-scoped (host != journal).
+        (
+            "https://journals.sas.ac.uk/deeslr/issue/archive",
+            "OJSAdapter",
+        ),
+        (
+            "https://journals.muni.cz/mujlt/issue/archive",
+            "OJSAdapter",
+        ),
+        # European Journal of Law and Technology: dedicated OJS 3.3 host.
+        (
+            "https://ejlt.org/index.php/ejlt/issue/archive",
+            "OJSAdapter",
+        ),
+        # SCRIPTed on Edinburgh Diamond, a multi-journal OJS 3.4 host. The
+        # vanity domain script-ed.org is dead; seeds must be /script-ed/-scoped.
+        (
+            "https://journals.ed.ac.uk/script-ed/issue/archive",
+            "OJSAdapter",
         ),
     ],
 )

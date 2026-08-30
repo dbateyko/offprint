@@ -1,0 +1,81 @@
+{
+  "id": "journals-muni-cz-mujlt",
+  "start_urls": [
+    "https://journals.muni.cz/mujlt/issue/archive"
+  ],
+  "source": "onboard_journal",
+  "metadata": {
+    "journal_name": "Masaryk University Journal of Law and Technology",
+    "platform": "ojs",
+    "url": "https://journals.muni.cz/mujlt",
+    "created_date": "2026-08-24",
+    "status": "active",
+    "status_reason": "real-PDF smoke passed 2026-08-24: %PDF-1.4, 270,991 bytes, 27 pages, substantive article \"Consequences of the Use of Personalization Algorithms in Shaping an Offer - A Private Law Perspective\" (Poludniak-Gierz, vol 13 no 2, 2019, pp 161-188, doi 10.5817/MUJLT2019-2-2); PDF running head confirms exact journal identity",
+    "status_updated_at": "2026-08-24T15:47:23Z",
+    "status_evidence_ref": "offprint/artifacts/run_inputs/mujlt-full-20260824/smoke_one_pdf_20260824T154723Z.json",
+    "issn": "1802-5951",
+    "publisher": "Masaryk University, Faculty of Law (Brno, Czech Republic)",
+    "access": "open_access",
+    "navigation": {
+      "archive_root": "https://journals.muni.cz/mujlt/issue/archive",
+      "pagination": "none — all 42 issues (Vol. 1 No. 1 through Vol. 20 No. 1, plus an 'Online First' issue) are listed on a single archive page",
+      "pdf_location": "article detail page; citation_pdf_url meta points at /mujlt/article/download/<id>/<galley>",
+      "advertised_articles": 358,
+      "count_evidence": "OAI-PMH ListIdentifiers at https://journals.muni.cz/mujlt/oai returned 358 identifiers with no resumptionToken (2026-08-24)",
+      "needs_headless": false,
+      "scope_guard": "journals.muni.cz is a multi-journal OJS host; accept only URLs under /mujlt/. Verified 2026-08-24: every issue/article link on the mujlt archive page is already /mujlt-prefixed, so no cross-journal leakage. host != journal.",
+      "notes": "OJS 3.2.1.4 with clean URLs (no /index.php/ segment). robots.txt disallows only /cache/ plus a list of SEO bots. OAI setSpecs distinguish mujlt:ART (articles) from mujlt:BR (book reviews); book reviews and 'Editorial' items are journal furniture for smoke-gate purposes. Discovery stops without retry on 403, 429, challenge pages, or an empty archive."
+    },
+    "license": "no CC tag in article HTML or PDF sampled; DC.Rights = \"Copyright (c) <year> Masaryk University Journal of Law and Technology\". Journal is free-to-read open access with no paywall or login on any galley observed."
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/mujlt/issue/view/']",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.obj_article_summary",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3.title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h3.title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "div.authors",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.obj_galley_link.pdf",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

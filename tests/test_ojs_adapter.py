@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from urllib.parse import urlparse
+
 from offprint.adapters.ojs import OJSAdapter, _normalize_galley_download_url
 
 
@@ -68,3 +70,49 @@ def test_download_pdf_failure_sets_specific_error_type(monkeypatch) -> None:
     # download_pdf normalized the viewer URL to the raw download route before GET.
     assert seen["url"].endswith("/article/download/1147/841")
     assert adapter.last_download_meta["error_type"] == "ojs_viewer_not_pdf"
+
+
+def test_article_link_sweep_rejects_offsite_pdfs() -> None:
+    """OJS reference lists hyperlink third-party PDFs; they are not this journal.
+
+    Regression for a scope leak seen live on journals.muni.cz (2026-08-24): the
+    fallback link sweep in _process_article had no origin check, so a court
+    judgment PDF and a KU Leuven repository PDF linked from an article's
+    references were queued for download and recorded as MUJLT articles.
+    """
+    from offprint.adapters.ojs import OJSAdapter
+
+    article_html = """
+    <html><head>
+      <meta name="citation_title" content="A Real Article"/>
+      <meta name="citation_pdf_url"
+            content="https://journals.muni.cz/mujlt/article/download/111/222"/>
+    </head><body>
+      <a href="https://journals.muni.cz/mujlt/article/view/111/222">PDF</a>
+      <a href="https://www.katowice.sa.gov.pl/container/orzeczenia/V_ACa_546-11.pdf">judgment</a>
+      <a href="https://lirias.kuleuven.be/bitstream/123/1/unfair_practices_en.pdf">study</a>
+    </body></html>
+    """
+
+    class _Resp:
+        status_code = 200
+        text = article_html
+        headers = {"Content-Type": "text/html"}
+        url = "https://journals.muni.cz/mujlt/article/view/111"
+
+    adapter = OJSAdapter()
+    adapter._get = lambda url: _Resp()  # type: ignore[assignment]
+    adapter._head_is_pdf = lambda url: True  # type: ignore[assignment]
+
+    results = list(
+        adapter._process_article(
+            "https://journals.muni.cz/mujlt/article/view/111",
+            set(),
+            {},
+            "journals.muni.cz",
+        )
+    )
+
+    hosts = {urlparse(r.pdf_url).netloc for r in results}
+    assert hosts == {"journals.muni.cz"}, f"off-host PDFs leaked in: {hosts}"
+    assert any("/article/download/111/222" in r.pdf_url for r in results)

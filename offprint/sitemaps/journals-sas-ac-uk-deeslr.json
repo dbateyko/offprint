@@ -1,0 +1,81 @@
+{
+  "id": "journals-sas-ac-uk-deeslr",
+  "start_urls": [
+    "https://journals.sas.ac.uk/deeslr/issue/archive"
+  ],
+  "source": "onboard_journal",
+  "metadata": {
+    "journal_name": "Digital Evidence and Electronic Signature Law Review",
+    "platform": "ojs",
+    "url": "https://journals.sas.ac.uk/deeslr",
+    "created_date": "2026-08-24",
+    "status": "active",
+    "status_reason": "real-PDF smoke passed 2026-08-24: %PDF-1.7, 276,977 bytes, 13 pages, substantive article \"Misunderstanding Digital Computer Technology in Court: A Commentary on a Case Involving the Post Office Horizon System\" (Ladkin/Mason/Thimbleby, vol 21, 2024, pp 1-13, doi 10.14296/deeslr.v21i.5776); page 1 running foot confirms exact journal identity",
+    "status_updated_at": "2026-08-24T15:46:08Z",
+    "status_evidence_ref": "offprint/artifacts/run_inputs/deeslr-full-20260824/smoke_one_pdf_20260824T154608Z.json",
+    "issn": "2054-8508",
+    "publisher": "Institute of Advanced Legal Studies, School of Advanced Study, University of London",
+    "access": "open_access",
+    "navigation": {
+      "archive_root": "https://journals.sas.ac.uk/deeslr/issue/archive",
+      "pagination": "none — all 21 issues (Volume 1 : 2004 through Volume 21 : 2024, one issue per volume) are listed on a single archive page",
+      "pdf_location": "article detail page; citation_pdf_url meta points at /deeslr/article/download/<id>/<galley>",
+      "advertised_articles": 579,
+      "count_evidence": "OAI-PMH ListIdentifiers resumptionToken completeListSize=579 at https://journals.sas.ac.uk/deeslr/oai (2026-08-24)",
+      "needs_headless": false,
+      "scope_guard": "journals.sas.ac.uk is a multi-journal OJS host; accept only URLs under /deeslr/. Verified 2026-08-24: every issue/article link on the deeslr archive page is already /deeslr-prefixed, so no cross-journal leakage. host != journal.",
+      "notes": "OJS 3.3.0.13 with clean URLs (no /index.php/ segment). robots.txt disallows only /cache/. Journal furniture present in most issues: 'Editorial', 'Cumulative Index', OAI setSpec deeslr:CREDITS. Filter furniture before download. Discovery stops without retry on 403, 429, challenge pages, or an empty archive."
+    },
+    "license": "CC BY-NC-ND 4.0 (stated on the article PDF first page); about page states \"freely available Open Access version\""
+  },
+  "selectors": [
+    {
+      "id": "issue_link",
+      "type": "SelectorLink",
+      "selector": "a[href*='/deeslr/issue/view/']",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.obj_article_summary",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3.title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h3.title a",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "div.authors",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.obj_galley_link.pdf",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

@@ -2353,26 +2353,42 @@ def _extract_for_pdf(
     }
 
 
+#: `<repo>/artifacts/runs`, resolved from this file rather than from cwd.
+#: These defaults used to be the bare relative string "artifacts/runs", so the
+#: manifests landed wherever the process happened to be started. That produced a
+#: second, orphaned `artifacts/runs/` at the workspace root, which no reader ever
+#: looks at: both `build_article_inventory.py` and
+#: `audit_scraped_release_coverage.py` read `offprint/artifacts/runs` explicitly.
+#: A doc-type exclusions manifest written to the wrong tree is not a lost file --
+#: it silently leaves excluded PDFs in `articles_validated`.
+_RUNS_DIR = Path(__file__).resolve().parents[2] / "artifacts" / "runs"
+
+
+def _runs_dir() -> str:
+    _RUNS_DIR.mkdir(parents=True, exist_ok=True)
+    return str(_RUNS_DIR)
+
+
 def _default_report_path() -> str:
-    os.makedirs("artifacts/runs", exist_ok=True)
-    return os.path.join("artifacts/runs", f"footnote_extract_{_utc_stamp()}.json")
+    return os.path.join(_runs_dir(), f"footnote_extract_{_utc_stamp()}.json")
 
 
 def _default_doctype_manifest_path() -> str:
-    os.makedirs("artifacts/runs", exist_ok=True)
-    return os.path.join("artifacts/runs", f"pdf_doc_type_exclusions_{_utc_stamp()}.jsonl")
+    return os.path.join(_runs_dir(), f"pdf_doc_type_exclusions_{_utc_stamp()}.jsonl")
 
 
 def _default_ocr_review_manifest_path() -> str:
-    os.makedirs("artifacts/runs", exist_ok=True)
-    return os.path.join("artifacts/runs", f"pdf_ocr_review_queue_{_utc_stamp()}.jsonl")
+    return os.path.join(_runs_dir(), f"pdf_ocr_review_queue_{_utc_stamp()}.jsonl")
 
 
 def _default_qc_manifest_path() -> str | None:
-    manifest = latest_qc_manifest("artifacts/runs")
+    # `latest_qc_manifest` applies its own legacy `runs/` fallback only when it is
+    # handed the literal default string, which an absolute path is not. Keep the
+    # fallback explicit rather than dropping it by accident.
+    manifest = latest_qc_manifest(_runs_dir())
     if manifest:
         return manifest
-    return latest_qc_manifest("runs")
+    return latest_qc_manifest(str(_RUNS_DIR.parent.parent / "runs"))
 
 
 def run_batch(config: BatchConfig) -> dict[str, Any]:

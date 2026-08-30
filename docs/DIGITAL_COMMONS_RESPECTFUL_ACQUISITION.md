@@ -1,5 +1,23 @@
 # Respectful Digital Commons acquisition
 
+> **STALE DIAGNOSIS (2026-08-29).** The WAF analysis below describes AWS WAF
+> (`x-amzn-waf-action: challenge`) as observed on 2026-08-02. The platform has
+> since moved behind **Cloudflare**, and `/cgi/viewcontent.cgi` now returns a
+> hard **403 "Sorry, you have been blocked … unable to access bepress.com"** —
+> a firewall block, not a JS challenge a browser resolves by executing script.
+> Confirmed on three unrelated institutions. Every HTML surface (landing pages,
+> `all_issues.html`, article pages) still returns 200, so enumeration works
+> normally; only file retrieval is walled. Last successful bepress PDF anywhere
+> in the corpus: **2026-08-06**.
+>
+> The browser-mediated click-the-Download-link design below is still the right
+> architecture and is implemented correctly — it is simply blocked. Because this
+> is an access control rather than a challenge, escalating browser realism
+> (camoufox, headed Chromium, real-Chrome channel) would be evasion and is out of
+> scope by this document's own rules. See `ACQUISITION_BACKLOG_2026-08-29.md` at
+> the workspace root.
+
+
 Status: collector implemented; 100-file browser pilot passed on 2026-08-02.
 Permission or a platform export remains a useful optimization, but is not a
 prerequisite for collecting public academic repository material.

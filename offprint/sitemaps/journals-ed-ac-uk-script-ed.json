@@ -1,0 +1,61 @@
+{
+  "id": "journals-ed-ac-uk-script-ed",
+  "start_urls": [
+    "https://journals.ed.ac.uk/script-ed/issue/archive"
+  ],
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "SCRIPTed: A Journal of Law, Technology & Society",
+    "platform": "ojs",
+    "url": "https://journals.ed.ac.uk/script-ed",
+    "created_date": "2026-08-24",
+    "status": "active",
+    "issn": "1744-2567",
+    "access": "open_access",
+    "license": "CC BY-NC-ND 4.0",
+    "navigation": {
+      "archive_root": "https://journals.ed.ac.uk/script-ed/issue/archive",
+      "volume_url_pattern": "https://journals.ed.ac.uk/script-ed/issue/view/{issue_id}",
+      "archive_path": "issue/archive (single page) -> issue/view/{id} -> article/view/{aid}/{galley} -> article/download/{aid}/{galley} is the raw PDF",
+      "pagination": "none",
+      "total_volumes_estimated": 58,
+      "oai_endpoint": "https://journals.ed.ac.uk/script-ed/oai",
+      "oai_record_count": 500,
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "notes": "PUBLICATION-SCOPED SEED. journals.ed.ac.uk (Edinburgh Diamond) is a multi-journal OJS 3.4.0.7 host; this seed is scoped to the /script-ed/ publication path only. Verified 2026-08-24: every issue/view link on the archive page is under /script-ed/ (116/116), so no cross-journal leakage. The historical vanity domain script-ed.org is DEAD as of 2026-08-24 (OVH 'Site not installed' 404 over HTTP; HTTPS presents a cluster127.hosting.ovh.net certificate that does not match the hostname) - do NOT seed script-ed.org. The Edinburgh OJS instance carries the complete back run: Vol. 1 No. 1 (2004) through Vol. 23 No. 01 (2026), 58 issues. Open access, CC BY-NC-ND 4.0 declared on article pages. robots.txt disallows only /cache/."
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "div.obj_article_summary",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3.title, .title",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "div.authors, .meta .authors",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "article_url",
+      "type": "SelectorLink",
+      "selector": "h3.title a, .title a",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.obj_galley_link.pdf, a[href*=\"/article/view/\"]",
+      "parentSelectors": ["article_container"]
+    }
+  ]
+}

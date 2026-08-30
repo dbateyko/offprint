@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 
 from bs4 import BeautifulSoup
@@ -25,6 +26,131 @@ class FakeSession:
 
 
 ARCHIVE_URL = "https://sites.bc.edu/iptf/"
+COMMUNITY_URL = (
+    "https://dashboard.lira.bc.edu/api/communities/"
+    "intellectual-property-and-technology-forum"
+)
+COMMUNITY_ID = "443588c8-3460-434f-8175-b302b38a85b6"
+RECORDS_URL = (
+    f"https://dashboard.lira.bc.edu/api/communities/{COMMUNITY_ID}/records"
+    "?size=100&page=1"
+)
+
+
+def _wordpress_calls(session: "FakeSession") -> list[str]:
+    return [url for url in session.calls if "sites.bc.edu" in url]
+
+
+def _lira_record(
+    record_id: str,
+    title: str,
+    filename: str,
+    *,
+    journal_title: str = "Boston College Intellectual Property and Technology Forum",
+) -> dict:
+    return {
+        "id": record_id,
+        "metadata": {
+            "title": title,
+            "publication_date": "2026-06-24",
+            "creators": [{"person_or_org": {"name": "Pulkowski, Emma"}}],
+        },
+        "custom_fields": {
+            "journal:journal": {"title": journal_title, "volume": "2026", "pages": "1-20"}
+        },
+        "files": {
+            "enabled": True,
+            "entries": {
+                filename: {
+                    "key": filename,
+                    "ext": "pdf",
+                    "mimetype": "application/pdf",
+                    "access": {"hidden": False},
+                }
+            }
+        },
+    }
+
+
+def _community_session(records: list[dict]) -> "FakeSession":
+    return FakeSession(
+        {
+            COMMUNITY_URL: FakeResponse(json.dumps({"id": COMMUNITY_ID}), COMMUNITY_URL),
+            RECORDS_URL: FakeResponse(
+                json.dumps({"hits": {"total": len(records), "hits": records}}),
+                RECORDS_URL,
+            ),
+        }
+    )
+
+
+def test_lira_community_route_is_primary_and_yields_every_record() -> None:
+    records = [
+        _lira_record("0jw28-de474", "Reclaiming Identity", "Pulkowski_Reclaiming Identity.pdf"),
+        _lira_record("5vhce-p5y15", "Intelligent Agents and Copyright", "INTELLIGENT_AGENTS.pdf"),
+    ]
+    session = _community_session(records)
+
+    results = list(BostonCollegeIPTFAdapter(session=session).discover_pdfs(ARCHIVE_URL))
+
+    assert [r.pdf_url for r in results] == [
+        "https://lira.bc.edu/downloads/0jw28-de474/Pulkowski_Reclaiming%20Identity.pdf",
+        "https://lira.bc.edu/downloads/5vhce-p5y15/INTELLIGENT_AGENTS.pdf",
+    ]
+    assert results[0].extraction_path == "lira_iptf_community_record"
+    assert results[0].metadata["authors"] == ["Pulkowski, Emma"]
+    assert results[0].metadata["year"] == "2026"
+    assert results[0].metadata["volume"] == "2026"
+    # The WordPress archive must not be touched when the repository route works.
+    assert _wordpress_calls(session) == []
+
+
+def test_lira_route_rejects_records_belonging_to_another_journal() -> None:
+    records = [
+        _lira_record(
+            "aaaaa-bbbbb",
+            "Some Other Journal Article",
+            "OTHER.pdf",
+            journal_title="Boston College Law Review",
+        ),
+        _lira_record("ccccc-ddddd", "Masthead", "MASTHEAD.pdf"),
+    ]
+    session = _community_session(records)
+
+    results = list(BostonCollegeIPTFAdapter(session=session).discover_pdfs(ARCHIVE_URL))
+
+    assert results == []
+
+
+def test_lira_403_stops_discovery_without_wordpress_fallback() -> None:
+    session = FakeSession(
+        {COMMUNITY_URL: FakeResponse("blocked", COMMUNITY_URL, 403)}
+    )
+    adapter = BostonCollegeIPTFAdapter(session=session)
+
+    assert list(adapter.discover_pdfs(ARCHIVE_URL)) == []
+    assert adapter._stop_discovery is True
+    assert _wordpress_calls(session) == []
+
+
+def test_wordpress_fallback_caps_article_fetches() -> None:
+    cards = "".join(
+        f'<article class="post"><h2 class="entry-title">'
+        f'<a href="/iptf/2020/01/{n:02d}/post-{n}/">Article {n}</a></h2></article>'
+        for n in range(1, 81)
+    )
+    pages = {ARCHIVE_URL: FakeResponse(f'<nav data-pagination-max-pages="1"></nav>{cards}', ARCHIVE_URL)}
+    for n in range(1, 81):
+        url = f"https://sites.bc.edu/iptf/2020/01/{n:02d}/post-{n}/"
+        pages[url] = FakeResponse("<article><p>no repository link</p></article>", url)
+    session = FakeSession(pages)
+
+    results = list(BostonCollegeIPTFAdapter(session=session).discover_pdfs(ARCHIVE_URL))
+
+    assert results == []
+    post_fetches = [url for url in session.calls if "/post-" in url]
+    assert len(post_fetches) == BostonCollegeIPTFAdapter.MAX_WORDPRESS_ARTICLE_FETCHES
+
 ARTICLE_URL = "https://sites.bc.edu/iptf/2026/06/26/reclaiming-identity/"
 WORK_URL = "https://lira.bc.edu/works/publication-article/0jw28-de474"
 
@@ -101,7 +227,7 @@ def test_excludes_blog_staff_and_masthead_cards_without_following_them() -> None
     results = list(BostonCollegeIPTFAdapter(session=session).discover_pdfs(ARCHIVE_URL))
 
     assert results == []
-    assert session.calls == [ARCHIVE_URL]
+    assert _wordpress_calls(session) == [ARCHIVE_URL]
 
 
 def test_stops_immediately_on_403_or_429_listing() -> None:
@@ -110,7 +236,7 @@ def test_stops_immediately_on_403_or_429_listing() -> None:
         adapter = BostonCollegeIPTFAdapter(session=session)
 
         assert list(adapter.discover_pdfs(ARCHIVE_URL)) == []
-        assert session.calls == [ARCHIVE_URL]
+        assert _wordpress_calls(session) == [ARCHIVE_URL]
 
 
 def test_rejects_seed_outside_iptf_publication_scope() -> None:

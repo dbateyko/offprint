@@ -1,0 +1,31 @@
+{
+  "id": "seattle-journal-technology-environmental-innovation-law",
+  "start_urls": [
+    "https://digitalcommons.law.seattleu.edu/sjteil/all_issues.html"
+  ],
+  "source": "onboard_journal",
+  "metadata": {
+    "journal_name": "Seattle Journal of Technology, Environmental & Innovation Law",
+    "platform": "digital_commons_origin_fetch",
+    "url": "https://digitalcommons.law.seattleu.edu/sjteil/",
+    "status": "active",
+    "status_reason": "real-PDF smoke passed with substantive title, author, and volume",
+    "status_updated_at": "2026-08-24T13:43:29Z",
+    "status_evidence_ref": "/tmp/onboard_report_seattle_sjteil/smoke_one_pdf_20260824T134308Z.json",
+    "navigation": {
+      "archive_root": "https://digitalcommons.law.seattleu.edu/sjteil/all_issues.html",
+      "pagination": "14 issue links across volumes 10-16; no archive pagination",
+      "pdf_location": "issue div.doc -> viewcontent.cgi with context=sjteil",
+      "needs_headless": true,
+      "scope_guard": "accept /sjteil pages and context=sjteil PDFs only",
+      "notes": "Publication-scoped browser-origin delivery at the shared six-second Digital Commons cadence; journal furniture is rejected before download."
+    }
+  },
+  "selectors": [
+    {"id": "article_container", "type": "SelectorElement", "selector": "div.doc", "parentSelectors": ["_root"]},
+    {"id": "title", "type": "SelectorText", "selector": "a.doctitle", "parentSelectors": ["article_container"]},
+    {"id": "article_url", "type": "SelectorLink", "selector": "a.doctitle", "parentSelectors": ["article_container"]},
+    {"id": "pdf_link", "type": "SelectorLink", "selector": ".pdf a", "parentSelectors": ["article_container"]},
+    {"id": "author", "type": "SelectorText", "selector": ".auth", "parentSelectors": ["article_container"]}
+  ]
+}

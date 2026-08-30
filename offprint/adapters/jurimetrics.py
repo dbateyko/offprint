@@ -242,6 +242,7 @@ class JurimetricsAdapter(Adapter):
                         ).result()
                         download_method = "playwright_js_fetch"
                         final_url = pdf_url
+            self._validate_complete_pdf_payload(payload)
             output_dir = Path(out_dir)
             output_dir.mkdir(parents=True, exist_ok=True)
             filename = Path(urlparse(pdf_url).path).name or "jurimetrics-issue.pdf"
@@ -266,6 +267,22 @@ class JurimetricsAdapter(Adapter):
                 download_method="wayback_or_playwright",
             )
             return None
+
+    @staticmethod
+    def _validate_complete_pdf_payload(payload: bytes) -> None:
+        """Reject truncated linearized PDFs that still begin with valid PDF bytes."""
+        if not payload.startswith(b"%PDF"):
+            raise ValueError("response returned non-PDF content")
+        header = payload[:1024]
+        linearized = re.search(rb"/Linearized\s+1\s*/L\s+(\d+)", header)
+        if linearized:
+            expected = int(linearized.group(1))
+            if len(payload) < expected:
+                raise ValueError(
+                    f"truncated linearized PDF: received {len(payload)} of {expected} bytes"
+                )
+        elif b"%%EOF" not in payload[-4096:]:
+            raise ValueError("PDF is missing its final EOF marker")
 
     @staticmethod
     def _fetch_pdf_in_browser(issue_url: str, pdf_url: str) -> bytes:

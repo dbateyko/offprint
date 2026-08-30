@@ -46,9 +46,17 @@ class ArticleMetadata:
             "source_url",
         }
         filtered = {k: v for k, v in payload.items() if k in allowed_keys}
+        # Some adapters write singular `author`; without this it lands in
+        # `extra` and never reaches the typed field.
+        if not filtered.get("authors") and payload.get("author"):
+            filtered["authors"] = payload["author"]
         if isinstance(filtered.get("authors"), str):
             filtered["authors"] = [filtered["authors"]]
-        extra = {k: v for k, v in payload.items() if k not in allowed_keys}
+        extra = {
+            k: v
+            for k, v in payload.items()
+            if k not in allowed_keys and k != "author"
+        }
         metadata = cls(**filtered)
         if extra:
             metadata.extra = extra
