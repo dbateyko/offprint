@@ -92,9 +92,27 @@ DC_HOST_HINTS = ("digitalcommons", "scholarlycommons", "scholarship", "ir.", "re
                  "opencommons", "scholarcommons", "digitalrepository", "epublications")
 
 
-def dc_series_map(seeds_dir: str) -> Dict[str, str]:
-    """(host, series) -> journal, read off bepress seed URLs like /flr/sitemap.xml."""
+def dc_series_map(seeds_dir: str, registry: str = "") -> Dict[str, str]:
+    """(host, series) -> journal, read off bepress URLs like /flr/sitemap.xml.
+
+    Reads the registry as well as the seeds, because many seeds carry no
+    journal_name at all: both Fordham Law Review DC seeds are nameless, so the
+    journal stayed unattributed with 3,241 dc-flr files sitting on disk. The
+    registry row for that host does name it.
+    """
     out: Dict[str, str] = {}
+    if registry:
+        import csv
+        try:
+            for row in csv.DictReader(open(registry, encoding="utf-8")):
+                name = row.get("journal_name")
+                for field in ("fixed_domain_url", "url"):
+                    m = re.match(r"https?://([^/]+)/([A-Za-z0-9_\-]+)(?:/|$)",
+                                 str(row.get(field) or "").strip())
+                    if name and m and m.group(2).lower() not in {"index.php", "cgi", "do"}:
+                        out.setdefault((m.group(1).lower(), m.group(2).lower()), name)
+        except OSError:
+            pass
     for path in glob.glob(os.path.join(seeds_dir, "*.json")):
         try:
             seed = json.loads(open(path, encoding="utf-8").read())
@@ -114,7 +132,8 @@ def dc_series_map(seeds_dir: str) -> Dict[str, str]:
     return {f"{h}|{s}": n for (h, s), n in out.items()}
 
 
-def backfill_from_filenames(index: Dict[str, dict], corpus: str, seeds_dir: str) -> int:
+def backfill_from_filenames(index: Dict[str, dict], corpus: str, seeds_dir: str,
+                            registry: str = "") -> int:
     """Attribute pre-manifest files using the dc-<series>- naming convention.
 
     Most of the corpus predates the run manifests, so the seed_url join cannot
@@ -122,7 +141,7 @@ def backfill_from_filenames(index: Dict[str, dict], corpus: str, seeds_dir: str)
     series segment is exactly what bepress seed URLs carry, so the two can be
     joined without any network access.
     """
-    series = dc_series_map(seeds_dir)
+    series = dc_series_map(seeds_dir, registry)
     added = 0
     if not os.path.isdir(corpus):
         return 0
@@ -133,7 +152,11 @@ def backfill_from_filenames(index: Dict[str, dict], corpus: str, seeds_dir: str)
         hl = host.lower()
         for fname in os.listdir(hdir):
             low = fname.lower()
-            if not low.endswith(".pdf") or low in index:
+            # Presence is not attribution: a record can be indexed from a manifest
+            # with an empty journal, and skipping on presence alone left those
+            # unattributed forever. Fordham Law Review was invisible this way,
+            # with 3,241 dc-flr files on disk and none of them named.
+            if not low.endswith(".pdf") or index.get(low, {}).get("journal"):
                 continue
             m = re.match(r"dc-([a-z0-9]+)-", low)
             if not m:
@@ -266,7 +289,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f"{args.out} exists; rebuilding")
     index = build(args.runs_dir, args.seeds_dir)
     if args.backfill:
-        n = backfill_from_filenames(index, args.corpus, args.seeds_dir)
+        n = backfill_from_filenames(index, args.corpus, args.seeds_dir, args.registry)
         print(f"dc-series backfill attributed {n} further files", file=sys.stderr)
         n2 = backfill_from_abbreviations(index, args.corpus, args.registry)
         print(f"abbreviation backfill attributed {n2} further files", file=sys.stderr)
