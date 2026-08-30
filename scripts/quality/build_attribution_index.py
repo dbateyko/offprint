@@ -148,24 +148,56 @@ def backfill_from_filenames(index: Dict[str, dict], corpus: str, seeds_dir: str)
 
 
 _ABBR_STOP = {"the", "of", "and", "for", "a", "in", "on", "at"}
+_MULTI_TLD = ("ac.uk", "co.uk", "edu.au", "org.uk")
+
+
+def _institution(host: str) -> str:
+    """Registrable domain, so sibling hosts of one school group together."""
+    parts = host.lower().removeprefix("www.").split(".")
+    if len(parts) < 3:
+        return ".".join(parts)
+    tail = ".".join(parts[-2:])
+    return ".".join(parts[-3:]) if tail in _MULTI_TLD else tail
+
+
+_BLUEBOOK = {
+    "law": "l", "review": "rev", "journal": "j", "business": "bus",
+    "technology": "tech", "international": "int", "university": "u",
+    "quarterly": "q", "policy": "pol", "science": "sci", "environmental": "envtl",
+    "constitutional": "const", "criminal": "crim", "commercial": "com",
+    "comparative": "comp", "corporate": "corp", "entertainment": "ent",
+    "intellectual": "intell", "property": "prop", "college": "coll",
+    "national": "natl", "american": "am", "public": "pub", "legal": "legal",
+    "society": "socy", "rights": "rts", "liberties": "lib", "affairs": "aff",
+    "forum": "f", "annual": "ann", "bulletin": "bull", "digest": "dig",
+}
 
 
 def _abbrevs(name: str) -> set:
     """Citation-style tokens a filename might carry for this journal.
 
-    Columbia Business Law Review is saved as ...columbuslrev... , Berkeley
-    Technology Law Journal as ...berkeley-tech-l-j... : the Bluebook abbreviation
-    with the punctuation dropped. Generating prefix joins of the significant words
-    covers the common forms without needing a lookup table -- catalog/abbrev_map.csv
-    exists but is corrupted, its abbreviation column holding paragraphs of article
-    text rather than abbreviations.
+    Files are saved with the Bluebook abbreviation, punctuation stripped:
+    Columbia Business Law Review as ...columbuslrev... (colum + bus + l + rev),
+    Berkeley Technology Law Journal as ...berkeley-tech-l-j... Each word takes
+    its own standard abbreviation rather than a uniform prefix, so build the
+    leading word at several lengths and abbreviate the rest by table.
+
+    catalog/abbrev_map.csv would be the natural lookup but is corrupted - its
+    abbreviation column holds paragraphs of article text.
     """
     words = [w for w in re.findall(r"[A-Za-z]+", name.lower()) if w not in _ABBR_STOP]
     if not words:
         return set()
-    out = {"".join(w[:n] for w in words) for n in (3, 4, 5, 6)}
+    head, rest = words[0], words[1:]
+    tail_std = "".join(_BLUEBOOK.get(w, w[:4]) for w in rest)
+    tail_full = "".join(rest)
+    out = set()
+    for n in (3, 4, 5, 6, len(head)):
+        out.add(head[:n] + tail_std)
+        out.add(head[:n] + tail_full)
     out.add("".join(words))
-    return {o for o in out if len(o) >= 6}
+    out.add("".join(_BLUEBOOK.get(w, w[:4]) for w in words))
+    return {o for o in out if len(o) >= 8}
 
 
 def backfill_from_abbreviations(index: Dict[str, dict], corpus: str, registry: str) -> int:
@@ -180,7 +212,14 @@ def backfill_from_abbreviations(index: Dict[str, dict], corpus: str, registry: s
         for row in csv.DictReader(open(registry, encoding="utf-8")):
             host = (row.get("host") or "").lower().removeprefix("www.")
             if host and row.get("journal_name"):
+                # Index under the institution, not the exact host. A journal is
+                # routinely registered at one hostname and served from another:
+                # Columbia Business Law Review is registered at cblr.columbia.edu
+                # while its PDFs live under journals.library.columbia.edu. Keying
+                # on the exact host misses every such case - which is how a
+                # duplicate CBLR crawl got launched.
                 by_host[host].add(row["journal_name"])
+                by_host[_institution(host)].add(row["journal_name"])
     except OSError:
         return 0
     added = 0
@@ -189,7 +228,8 @@ def backfill_from_abbreviations(index: Dict[str, dict], corpus: str, registry: s
         if not os.path.isdir(hdir):
             continue
         cands: Dict[str, str] = {}
-        for jname in by_host.get(host.lower().removeprefix("www."), ()):
+        hl = host.lower().removeprefix("www.")
+        for jname in set(by_host.get(hl, ())) | set(by_host.get(_institution(hl), ())):
             for token in _abbrevs(jname):
                 cands.setdefault(token, jname)
         if not cands:
