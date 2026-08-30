@@ -1,0 +1,24 @@
+{
+  "id": "scholarship-law-vanderbilt-edu-vlr",
+  "start_urls": [
+    "https://scholarship.law.vanderbilt.edu/vlr/sitemap.xml"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Vanderbilt Law Review",
+    "platform": "digitalcommons",
+    "url": "https://scholarship.law.vanderbilt.edu/vlr/",
+    "status": "active_enumeration_only",
+    "status_reason": "mapped 2026-08-30: 4132 article pages enumerable from /vlr/sitemap.xml, but 0/3 sampled downloads succeeded - bepress /cgi/viewcontent.cgi returns HTTP 403 Cloudflare block pages, the same platform-wide block seen at Northwestern and Hofstra. Enumeration only until that lifts.",
+    "created_date": "2026-08-30",
+    "navigation": {
+      "archive_root": "https://scholarship.law.vanderbilt.edu/vlr/",
+      "pagination": "none - the whole run is listed in /vlr/sitemap.xml",
+      "articles_observed": 4132,
+      "expected_pdfs": 4132,
+      "pdf_location": "bepress_citation_pdf_url meta tag on the article page",
+      "needs_headless": false,
+      "notes": "W&L rank 13 and a genuine gap: the corpus holds 615 PDFs on this host but every one belongs to Vanderbilt Journal of Entertainment and Technology Law, a different journal on the same domain - which is why host-level coverage reported it as covered. robots.txt allows /vlr/ and /cgi/viewcontent.cgi and sets Crawl-delay: 3; /do/oai/ is disallowed, so OAI harvesting is not an option here."
+    }
+  }
+}
