@@ -32,7 +32,13 @@ def _normalize_galley_download_url(url: str) -> str:
     """
     if not url:
         return url
-    return _GALLEY_VIEW_RE.sub(r"\1download\2", url)
+    url = _GALLEY_VIEW_RE.sub(r"\1download\2", url)
+    # Drop the trailing file-id segment: OJS issue pages link the same galley as
+    # both /article/download/<article>/<galley> and
+    # /article/download/<article>/<galley>/<file>. Left distinct, the second form
+    # misses the seen_pdfs check, so every article is fetched twice and the extra
+    # copy carries only issue-level metadata -- half the records land title-less.
+    return re.sub(r"(/article/download/\d+/\d+)/\d+/?$", r"\1", url)
 
 
 class OJSAdapter(Adapter):

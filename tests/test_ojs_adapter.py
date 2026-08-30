@@ -116,3 +116,23 @@ def test_article_link_sweep_rejects_offsite_pdfs() -> None:
     hosts = {urlparse(r.pdf_url).netloc for r in results}
     assert hosts == {"journals.muni.cz"}, f"off-host PDFs leaked in: {hosts}"
     assert any("/article/download/111/222" in r.pdf_url for r in results)
+
+
+def test_galley_download_url_drops_trailing_file_id():
+    """OJS issue pages link one galley two ways; both must normalize alike.
+
+    /article/download/<article>/<galley> and .../<galley>/<file> are the same PDF.
+    Left distinct, the longer form misses the seen_pdfs check, so every article is
+    fetched twice and the duplicate carries only issue-level metadata (no title).
+    """
+    from offprint.adapters.ojs import _normalize_galley_download_url as norm
+
+    short = "https://x.org/index.php/CBLR/article/download/14950/8159"
+    assert norm(short + "/44632") == short
+    assert norm(short + "/44632/") == short
+    assert norm(short) == short                      # idempotent
+    # the viewer form still rewrites, and also loses the file id
+    assert norm("https://x.org/index.php/CBLR/article/view/14950/8159") == short
+    # unrelated URLs are untouched
+    assert norm("https://x.org/a/b.pdf") == "https://x.org/a/b.pdf"
+    assert norm("") == ""
