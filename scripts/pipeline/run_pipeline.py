@@ -47,6 +47,28 @@ def _parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--completeness-min-ratio",
+        type=float,
+        default=0.75,
+        help=(
+            "A seed whose declared expected article count is known must collect at least "
+            "this fraction of it, or the run is reported incomplete (default: 0.75)"
+        ),
+    )
+    parser.add_argument(
+        "--fail-on-incomplete",
+        dest="fail_on_incomplete",
+        action="store_true",
+        default=True,
+        help="Exit non-zero when a seed collects far less than its seed declares (default: enabled)",
+    )
+    parser.add_argument(
+        "--no-fail-on-incomplete",
+        dest="fail_on_incomplete",
+        action="store_false",
+        help="Report incompleteness but still exit 0",
+    )
+    parser.add_argument(
         "--max-consecutive-seed-failures-per-domain",
         type=int,
         default=3,
@@ -850,6 +872,86 @@ def _run_retry_mode(args: argparse.Namespace) -> Dict[str, Any]:
     }
 
 
+def _seed_expected_counts(sitemaps_dir: str) -> Dict[str, int]:
+    """Expected article count per seed URL, as declared in the seed's own metadata.
+
+    Only counts we did not measure ourselves are trusted here: a seed says how big
+    the journal is, and the run is checked against that. Seeds without a declared
+    count cannot be judged and are reported as unknown rather than assumed fine.
+    """
+    expected: Dict[str, int] = {}
+    try:
+        paths = sorted(Path(sitemaps_dir).glob("*.json"))
+    except OSError:
+        return expected
+    for path in paths:
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        nav = ((payload.get("metadata") or {}).get("navigation") or {})
+        for key in ("expected_pdfs", "articles_observed", "pdfs_found"):
+            value = nav.get(key)
+            if isinstance(value, int) and value > 0:
+                for url in payload.get("start_urls") or []:
+                    expected[str(url)] = value
+                break
+    return expected
+
+
+def _report_completeness(payload: Dict[str, Any], args: argparse.Namespace) -> bool:
+    """Print a completeness verdict. Returns True when the run looks short.
+
+    Every silent-undercollection bug we have hit exited 0 with a cheerful summary:
+    the DSpace pagination break, a missing Squarespace pager, and the per-domain
+    circuit breaker each stopped early and reported success. The signals already
+    existed (sequence_validator gaps, per-seed counts) but were buried in
+    errors.jsonl, so nothing ever failed loudly.
+    """
+    summary = (payload or {}).get("summary") or {}
+    seeds = summary.get("seeds") or {}
+    if not seeds:
+        return False
+    expected_by_seed = _seed_expected_counts(args.sitemaps_dir)
+    short: List[str] = []
+    unknown = 0
+    lines: List[str] = []
+    for seed_url, info in sorted(seeds.items()):
+        runtime = info.get("runtime") or {}
+        got = int(info.get("ok_total") or runtime.get("downloaded") or 0)
+        gaps = (info.get("completeness") or {}).get("volume_gaps") or []
+        expected = expected_by_seed.get(seed_url)
+        if not expected:
+            unknown += 1
+            note = "expected=unknown (seed declares no count)"
+            if gaps:
+                note += f", {len(gaps)} volume gap(s)"
+            lines.append(f"    {got:>6} collected  {note}  {seed_url[:72]}")
+            continue
+        ratio = (got / expected) if expected else 0.0
+        flag = "OK  " if ratio >= args.completeness_min_ratio else "SHORT"
+        if flag == "SHORT":
+            short.append(f"{seed_url} ({got}/{expected}, {ratio:.0%})")
+        lines.append(
+            f"    {flag} {got:>6}/{expected:<6} ({ratio:>4.0%})"
+            f"{f'  {len(gaps)} volume gap(s)' if gaps else ''}  {seed_url[:60]}"
+        )
+    print("[pipeline] Completeness:")
+    for line in lines:
+        print(line)
+    if unknown:
+        print(
+            f"    {unknown} seed(s) declare no expected count and cannot be checked; "
+            "add navigation.expected_pdfs to make them verifiable."
+        )
+    if short:
+        print(f"[pipeline] INCOMPLETE: {len(short)} seed(s) below "
+              f"{args.completeness_min_ratio:.0%} of the count their seed declares:")
+        for item in short:
+            print(f"    {item}")
+    return bool(short)
+
+
 def _install_stack_dump_handler() -> None:
     """Dump all thread stacks to stderr on SIGUSR1.
 
@@ -876,6 +978,10 @@ def main(argv: Optional[List[str]] = None) -> int:
             payload = _run_full_or_delta(args)
         print("[pipeline] Final summary:")
         print(json.dumps(payload, indent=2, sort_keys=True))
+        if args.mode != "retry":
+            incomplete = _report_completeness(payload, args)
+            if incomplete and args.fail_on_incomplete:
+                return 3
         return 0
     except KeyboardInterrupt:
         run_id = _ensure_run_id_for_interrupt_resume(args)
