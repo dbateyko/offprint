@@ -1,0 +1,24 @@
+{
+  "id": "journals-law-harvard-edu-jlg",
+  "start_urls": [
+    "https://journals.law.harvard.edu/jlg/past-volumes/",
+    "https://journals.law.harvard.edu/jlg/print-edition/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Harvard Journal of Law & Gender",
+    "platform": "wordpress",
+    "url": "https://journals.law.harvard.edu/jlg/",
+    "status": "active",
+    "status_reason": "mapped 2026-08-30; 100 unique PDFs across past-volumes and print-edition",
+    "created_date": "2026-08-30",
+    "navigation": {
+      "archive_root": "https://journals.law.harvard.edu/jlg/past-volumes/",
+      "pagination": "none - past-volumes lists the back run on a single page; print-edition carries the current volume",
+      "expected_pdfs": 100,
+      "pdf_location": "direct-on-archive-page",
+      "needs_headless": false,
+      "notes": "Same story as CR-CL: harvardjlg.com now returns 401 behind HTTP Basic auth on every path, so the journal looks unreachable by its registry host. The live home is the Harvard WordPress multisite at /jlg/. Two archive pages are needed - past-volumes (94 PDFs) and print-edition (6, current volume); neither alone is the whole run. robots.txt sets Crawl-delay: 10. Run one job at a time against journals.law.harvard.edu, which also hosts crcl, ilj, jol and lpr."
+    }
+  }
+}
