@@ -21,7 +21,7 @@ Usage:
 """
 from __future__ import annotations
 
-import argparse, collections, glob, json, os, sys
+import argparse, collections, glob, json, os, re, sys
 from typing import Dict, List, Optional
 
 DEFAULT_OUT = "artifacts/attribution_index.json"
@@ -87,6 +87,126 @@ def build(runs_dir: str, seeds_dir: str = "offprint/sitemaps") -> Dict[str, dict
     return index
 
 
+DC_HOST_HINTS = ("digitalcommons", "scholarlycommons", "scholarship", "ir.", "repository",
+                 "scholarworks", "commons", "ideaexchange", "brooklynworks", "lawnet",
+                 "opencommons", "scholarcommons", "digitalrepository", "epublications")
+
+
+def dc_series_map(seeds_dir: str) -> Dict[str, str]:
+    """(host, series) -> journal, read off bepress seed URLs like /flr/sitemap.xml."""
+    out: Dict[str, str] = {}
+    for path in glob.glob(os.path.join(seeds_dir, "*.json")):
+        try:
+            seed = json.loads(open(path, encoding="utf-8").read())
+        except (OSError, ValueError):
+            continue
+        name = (seed.get("metadata") or {}).get("journal_name")
+        if not name:
+            continue
+        for url in seed.get("start_urls") or []:
+            m = re.match(r"https?://([^/]+)/([A-Za-z0-9_\-]+)(?:/|$)", str(url).strip())
+            if not m:
+                continue
+            host, series = m.group(1).lower(), m.group(2).lower()
+            if series in {"index.php", "cgi", "do", "wp-content"}:
+                continue
+            out.setdefault((host, series), name)
+    return {f"{h}|{s}": n for (h, s), n in out.items()}
+
+
+def backfill_from_filenames(index: Dict[str, dict], corpus: str, seeds_dir: str) -> int:
+    """Attribute pre-manifest files using the dc-<series>- naming convention.
+
+    Most of the corpus predates the run manifests, so the seed_url join cannot
+    reach it. Digital Commons files were saved as dc-<series>-<id>.pdf, and the
+    series segment is exactly what bepress seed URLs carry, so the two can be
+    joined without any network access.
+    """
+    series = dc_series_map(seeds_dir)
+    added = 0
+    if not os.path.isdir(corpus):
+        return 0
+    for host in sorted(os.listdir(corpus)):
+        hdir = os.path.join(corpus, host)
+        if not os.path.isdir(hdir):
+            continue
+        hl = host.lower()
+        for fname in os.listdir(hdir):
+            low = fname.lower()
+            if not low.endswith(".pdf") or low in index:
+                continue
+            m = re.match(r"dc-([a-z0-9]+)-", low)
+            if not m:
+                continue
+            journal = series.get(f"{hl}|{m.group(1)}") or series.get(
+                f"{hl.removeprefix('www.')}|{m.group(1)}")
+            if not journal:
+                continue
+            index[low] = {"journal": journal, "host": host, "run": "filename-backfill"}
+            added += 1
+    return added
+
+
+_ABBR_STOP = {"the", "of", "and", "for", "a", "in", "on", "at"}
+
+
+def _abbrevs(name: str) -> set:
+    """Citation-style tokens a filename might carry for this journal.
+
+    Columbia Business Law Review is saved as ...columbuslrev... , Berkeley
+    Technology Law Journal as ...berkeley-tech-l-j... : the Bluebook abbreviation
+    with the punctuation dropped. Generating prefix joins of the significant words
+    covers the common forms without needing a lookup table -- catalog/abbrev_map.csv
+    exists but is corrupted, its abbreviation column holding paragraphs of article
+    text rather than abbreviations.
+    """
+    words = [w for w in re.findall(r"[A-Za-z]+", name.lower()) if w not in _ABBR_STOP]
+    if not words:
+        return set()
+    out = {"".join(w[:n] for w in words) for n in (3, 4, 5, 6)}
+    out.add("".join(words))
+    return {o for o in out if len(o) >= 6}
+
+
+def backfill_from_abbreviations(index: Dict[str, dict], corpus: str, registry: str) -> int:
+    """Attribute files named with the journal's citation abbreviation.
+
+    Only journals the registry lists for that host are considered, so a token can
+    only ever resolve to a journal actually published there.
+    """
+    import csv
+    by_host: Dict[str, set] = collections.defaultdict(set)
+    try:
+        for row in csv.DictReader(open(registry, encoding="utf-8")):
+            host = (row.get("host") or "").lower().removeprefix("www.")
+            if host and row.get("journal_name"):
+                by_host[host].add(row["journal_name"])
+    except OSError:
+        return 0
+    added = 0
+    for host in sorted(os.listdir(corpus)):
+        hdir = os.path.join(corpus, host)
+        if not os.path.isdir(hdir):
+            continue
+        cands: Dict[str, str] = {}
+        for jname in by_host.get(host.lower().removeprefix("www."), ()):
+            for token in _abbrevs(jname):
+                cands.setdefault(token, jname)
+        if not cands:
+            continue
+        for fname in os.listdir(hdir):
+            low = fname.lower()
+            if not low.endswith(".pdf") or (low in index and index[low].get("journal")):
+                continue
+            flat = re.sub(r"[^a-z]", "", low)
+            for token, jname in cands.items():
+                if token in flat:
+                    index[low] = {"journal": jname, "host": host, "run": "abbrev-backfill"}
+                    added += 1
+                    break
+    return added
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -95,11 +215,21 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--out", default=DEFAULT_OUT)
     ap.add_argument("--query", default="", help="report the file count for a journal name")
     ap.add_argument("--top", type=int, default=0, help="show the N best-covered journals")
+    ap.add_argument("--backfill", action="store_true",
+                    help="also attribute pre-manifest files via the dc-<series>- convention")
+    ap.add_argument("--corpus", default="/mnt/shared_storage/law-review-corpus/corpus/scraped")
+    ap.add_argument("--registry",
+                    default="/mnt/shared_storage/law-review-corpus/offprint/data/registry/lawjournals.csv")
     args = ap.parse_args(argv)
 
     if os.path.exists(args.out) and not args.query and not args.top:
         print(f"{args.out} exists; rebuilding")
     index = build(args.runs_dir, args.seeds_dir)
+    if args.backfill:
+        n = backfill_from_filenames(index, args.corpus, args.seeds_dir)
+        print(f"dc-series backfill attributed {n} further files", file=sys.stderr)
+        n2 = backfill_from_abbreviations(index, args.corpus, args.registry)
+        print(f"abbreviation backfill attributed {n2} further files", file=sys.stderr)
 
     if args.out:
         os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)

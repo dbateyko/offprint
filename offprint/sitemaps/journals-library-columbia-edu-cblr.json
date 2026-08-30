@@ -71,7 +71,7 @@
     "journal_name": "Columbia Business Law Review",
     "platform": "ojs",
     "url": "https://journals.library.columbia.edu/index.php/CBLR/",
-    "status": "active",
+    "status": "needs_coverage_check",
     "status_reason": "smoke_passed_ojs_citation_pdf_url 2026-08-30; 3/3 sampled PDFs valid",
     "created_date": "2026-08-30",
     "navigation": {
@@ -82,7 +82,7 @@
       "expected_pdfs": 459,
       "pdf_location": "citation_pdf_url meta tag on the article page",
       "needs_headless": false,
-      "notes": "cblr.columbia.edu 301s to this OJS instance. Article pages carry no .pdf href and no /article/download/ link in the body - the galley URL is published only in the <meta name=\"citation_pdf_url\"> tag, so an href-only PDF scan finds nothing. citation_title and citation_author are present and clean, so metadata does not depend on parsing the page body. All 64 issue URLs are enumerated as start_urls so the archive pager cannot silently truncate the run. robots.txt disallows only /cache/; no Crawl-delay declared."
+      "notes": "cblr.columbia.edu 301s to this OJS instance. Article pages carry no .pdf href and no /article/download/ link in the body - the galley URL is published only in the <meta name=\"citation_pdf_url\"> tag, so an href-only PDF scan finds nothing. citation_title and citation_author are present and clean, so metadata does not depend on parsing the page body. All 64 issue URLs are enumerated as start_urls so the archive pager cannot silently truncate the run. robots.txt disallows only /cache/; no Crawl-delay declared. COVERAGE WARNING: corpus/scraped/journals.library.columbia.edu already holds 1,121 PDFs named ...columbuslrev... (Colum. Bus. L. Rev.), i.e. this journal under citation-style filenames. The OJS galley names share nothing with them, so no filename check detects the overlap. Establish which volumes are missing before running this seed."
     }
   }
 }
