@@ -270,6 +270,92 @@ def backfill_from_abbreviations(index: Dict[str, dict], corpus: str, registry: s
     return added
 
 
+_BEPRESS_URL = re.compile(rb'additional works at:?\s*(https?://[^\s"\\]+)')
+
+
+def backfill_from_text_sidecars(index: Dict[str, dict], corpus: str, seeds_dir: str,
+                                registry: str) -> int:
+    """Attribute files whose name carries no journal signal at all.
+
+    Most of what is left is named viewcontent.cgi-<hash>.pdf - a bepress download
+    with nothing identifying in the filename. But every bepress PDF opens with a
+    cover page reading "Follow this and additional works at:
+    https://<host>/<series>", and that series is exactly what the (host, series)
+    map already resolves. The extracted text sits beside each PDF in a .text.json
+    sidecar, so this needs no network and no PDF parsing: scan the head of the
+    sidecar for that URL.
+    """
+    series = dc_series_map(seeds_dir, registry)
+    added = 0
+    for host in sorted(os.listdir(corpus)):
+        hdir = os.path.join(corpus, host)
+        if not os.path.isdir(hdir):
+            continue
+        for fname in os.listdir(hdir):
+            low = fname.lower()
+            if not low.endswith(".pdf") or index.get(low, {}).get("journal"):
+                continue
+            sidecar = os.path.join(hdir, fname + ".text.json")
+            try:
+                with open(sidecar, "rb") as fh:
+                    head = fh.read(20000)
+            except OSError:
+                continue
+            m = _BEPRESS_URL.search(head)
+            if not m:
+                continue
+            url = m.group(1).decode("utf-8", "ignore").replace("\\n", "")
+            mm = re.match(r"https?://([^/]+)/([A-Za-z0-9_\-]+)", url)
+            if not mm:
+                continue
+            key = f"{mm.group(1).lower()}|{mm.group(2).lower()}"
+            journal = series.get(key) or series.get(
+                f"{mm.group(1).lower().removeprefix('www.')}|{mm.group(2).lower()}")
+            if not journal:
+                continue
+            index[low] = {"journal": journal, "host": host, "run": "text-sidecar"}
+            added += 1
+    return added
+
+
+def backfill_single_journal_hosts(index: Dict[str, dict], corpus: str, registry: str) -> int:
+    """Attribute by host, but only where the host serves exactly one journal.
+
+    Most of the remaining files sit on a journal's own domain -
+    harvardlawreview.org, lawandinequality.org, lawreview.uchicago.edu - where
+    the filename carries no journal token because the host already is the
+    journal. Applied only when the registry lists a single distinct journal name
+    for that host, so the ambiguity that made host-level coverage checks wrong
+    cannot creep back in: a host serving several journals is skipped entirely.
+    """
+    import csv
+    names: Dict[str, set] = collections.defaultdict(set)
+    try:
+        for row in csv.DictReader(open(registry, encoding="utf-8")):
+            host = (row.get("host") or "").lower().removeprefix("www.")
+            name = (row.get("journal_name") or "").strip()
+            if host and name:
+                names[host].add(name)
+    except OSError:
+        return 0
+    solo = {h: next(iter(v)) for h, v in names.items() if len(v) == 1}
+    added = 0
+    for host in sorted(os.listdir(corpus)):
+        hdir = os.path.join(corpus, host)
+        if not os.path.isdir(hdir):
+            continue
+        journal = solo.get(host.lower().removeprefix("www."))
+        if not journal:
+            continue
+        for fname in os.listdir(hdir):
+            low = fname.lower()
+            if not low.endswith(".pdf") or index.get(low, {}).get("journal"):
+                continue
+            index[low] = {"journal": journal, "host": host, "run": "solo-host"}
+            added += 1
+    return added
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -293,6 +379,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f"dc-series backfill attributed {n} further files", file=sys.stderr)
         n2 = backfill_from_abbreviations(index, args.corpus, args.registry)
         print(f"abbreviation backfill attributed {n2} further files", file=sys.stderr)
+        n3 = backfill_from_text_sidecars(index, args.corpus, args.seeds_dir, args.registry)
+        print(f"text-sidecar backfill attributed {n3} further files", file=sys.stderr)
+        n4 = backfill_single_journal_hosts(index, args.corpus, args.registry)
+        print(f"single-journal-host backfill attributed {n4} further files", file=sys.stderr)
 
     if args.out:
         os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
