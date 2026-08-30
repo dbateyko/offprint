@@ -17,7 +17,8 @@
       "expected_pdfs": 315,
       "pdf_location": "direct-on-archive-page",
       "needs_headless": false,
-      "notes": "Journal moved off harvardcrcl.org, which now sits entirely behind HTTP Basic auth (WWW-Authenticate: Basic realm=\"Restricted Area\"; 401 on every path including robots.txt). The live home is the Harvard journals WordPress multisite at /crcl/ (site id 80). The 2026-08-29 Harvard gather covered ilj, jol and lpr only, so CR-CL had never been collected. robots.txt sets Crawl-delay: 10 - run with a large MIN_DELAY. Article PDFs are same-origin under /crcl/wp-content/uploads/sites/80/<YYYY>/<MM>/."
+      "notes": "Journal moved off harvardcrcl.org, which now sits entirely behind HTTP Basic auth (WWW-Authenticate: Basic realm=\"Restricted Area\"; 401 on every path including robots.txt). The live home is the Harvard journals WordPress multisite at /crcl/ (site id 80). The 2026-08-29 Harvard gather covered ilj, jol and lpr only, so CR-CL had never been collected. robots.txt sets Crawl-delay: 10 - run with a large MIN_DELAY. Article PDFs are same-origin under /crcl/wp-content/uploads/sites/80/<YYYY>/<MM>/. COVERAGE: corpus/scraped already held 195 of these 315 PDFs before this seed existed; only 120 were new. Check per-journal filename overlap against corpus/scraped/<host>/ before crawling - host-level presence is not a coverage signal (scripts/quality/check_seed_overlap.py).",
+      "already_in_corpus_20260830": 195
     }
   },
   "selectors": [
