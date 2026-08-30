@@ -1,34 +1,231 @@
 {
   "id": "fordhamlawreview-org",
   "start_urls": [
-    "https://ir.lawnet.fordham.edu/flr/all_issues.html"
+    "https://fordhamlawreview.org/law-review/current-issue/",
+    "https://fordhamlawreview.org/issuescategory/no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-1999-vol-68-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-1999-vol-68-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-1999-vol-68-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2000-vol-68-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2000-vol-68-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2000-vol-68-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2000-vol-69-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2000-vol-69-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2000-vol-69-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2001-vol-69-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2001-vol-69-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2001-vol-69-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2001-vol-70-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2001-vol-70-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2001-vol-70-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2002-vol-70-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2002-vol-70-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2002-vol-70-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2002-vol-71-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2002-vol-71-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2002-vol-71-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2003-vol-71-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2003-vol-71-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2003-vol-71-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2003-vol-72-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2003-vol-72-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2003-vol-72-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2004-vol-72-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2004-vol-72-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2004-vol-72-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2004-vol-73-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2004-vol-73-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2004-vol-73-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2005-vol-73-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2005-vol-73-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2005-vol-73-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2005-vol-74-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2005-vol-74-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2005-vol-74-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2006-vol-74-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2006-vol-74-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2006-vol-74-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2006-vol-75-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2006-vol-75-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2006-vol-75-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2007-vol-75-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2007-vol-75-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2007-vol-75-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2007-vol-76-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2007-vol-76-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2007-vol-76-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2008-vol-76-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2008-vol-76-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2008-vol-76-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2008-vol-77-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2008-vol-77-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2008-vol-77-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2009-vol-77-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2009-vol-77-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2009-vol-77-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2009-vol-78-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2009-vol-78-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2009-vol-78-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2010-vol-78-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2010-vol-78-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2010-vol-78-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2010-vol-79-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2010-vol-79-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2010-vol-79-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2011-vol-79-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2011-vol-79-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2011-vol-79-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2011-vol-80-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2011-vol-80-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2011-vol-80-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2012-vol-80-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2012-vol-80-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2012-vol-80-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2012-vol-81-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2012-vol-81-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2012-vol-81-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2013-vol-81-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2013-vol-81-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2013-vol-81-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2013-vol-82-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2013-vol-82-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2013-vol-82-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2014-vol-82-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2014-vol-82-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2014-vol-82-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2014-vol-83-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2014-vol-83-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2014-vol-83-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2015-vol-83-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2015-vol-83-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2015-vol-83-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2015-vol-84-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2015-vol-84-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2015-vol-84-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2016-vol-84-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2016-vol-84-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2016-vol-84-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2016-vol-85-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2016-vol-85-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2016-volume-85-issue-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2017-vol-85-no-4/",
+    "https://fordhamlawreview.org/issuescategory/may-2017-vol-85-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2017-vol-86-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2017-vol-86-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2017-vol-86-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2018-vol-86-no-4/",
+    "https://fordhamlawreview.org/issuescategory/march-2019-vol-86-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2018-vol-86-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2018-vol-86-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2018-vol-87-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2018-vol-87-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2018-vol-87-no-3/",
+    "https://fordhamlawreview.org/issuescategory/april-2019-vol-87-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2019-vol-87-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2019-vol-88-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2019-vol-88-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2019-vol-88-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2020-vol-88-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2017-vol-88-no-5/",
+    "https://fordhamlawreview.org/issuescategory/april-2020-vol-88-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2020-vol-88-no-6/",
+    "https://fordhamlawreview.org/issuescategory/november-2020-vol-89/",
+    "https://fordhamlawreview.org/issuescategory/october-2020-vol-89-no-1/",
+    "https://fordhamlawreview.org/issuescategory/december-2020-vol-89-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2021-vol-89-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2021-vol-89-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2021-vol-89-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2021-vol-90-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2021-vol-90-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2021-vol-90-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2022-vol-90-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2022-vol-90-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2022-vol-90-no-6/",
+    "https://fordhamlawreview.org/issuescategory/april-2023-vol-91/",
+    "https://fordhamlawreview.org/issuescategory/march-2023-vol-91/",
+    "https://fordhamlawreview.org/issuescategory/october-2022-vol-91-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2022-vol-91-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2022-vol-91-no-3/",
+    "https://fordhamlawreview.org/issuescategory/october-2023-vol-92-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2023-vol-92-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2023-vol-92-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2024-vol-92-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2024-vol-92-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2024-vol-92-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2024-vol-93-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2024-volume-93-issue-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2024-vol-93-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2025-vol-93-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2025-vol-93-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2025-vol-93-no-6/",
+    "https://fordhamlawreview.org/issuescategory/october-2025-vol-94-no-1/",
+    "https://fordhamlawreview.org/issuescategory/november-2025-vol-94-no-2/",
+    "https://fordhamlawreview.org/issuescategory/december-2025-vol-94-no-3/",
+    "https://fordhamlawreview.org/issuescategory/march-2026-vol-94-no-4/",
+    "https://fordhamlawreview.org/issuescategory/april-2026-vol-94-no-5/",
+    "https://fordhamlawreview.org/issuescategory/may-2026-vol-94-no-6/"
   ],
-  "source": "auto_onboard",
+  "start_urls_note": "start_urls[0] is the archive root (its 'Issues' dropdown enumerates every issue page). start_urls[1:] are all 162 issue pages, enumerated explicitly on 2026-08-29 so a pager bug cannot silently truncate collection to one listing page.",
+  "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Fordham Law Review",
-    "platform": "DigitalCommons",
+    "platform": "WordPress",
     "url": "https://fordhamlawreview.org/",
-    "created_date": "2026-03-26",
-    "status": "active",
+    "created_date": "2026-08-29",
+    "status": "active_partial_metadata",
     "navigation": {
-      "archive_path": "All Issues -> https://ir.lawnet.fordham.edu/flr/all_issues.html -> /flr/vol{N}/iss{M}/ issue pages",
-      "volume_url_pattern": "https://ir.lawnet.fordham.edu/flr/vol\\d+/iss\\d+/",
-      "notes": "The live fordhamlawreview.org front-end is intermittently 403/WAF-blocked from this environment. The reliable archive is the Fordham Digital Commons collection at ir.lawnet.fordham.edu, where issue pages expose article links and direct PDF links through /cgi/viewcontent.cgi?article=...&context=flr."
+      "archive_root": "https://fordhamlawreview.org/law-review/current-issue/",
+      "volume_url_pattern": "https://fordhamlawreview.org/issuescategory/{month}-{year}-vol-{N}-no-{M}/",
+      "archive_path": "homepage -> Issues (/law-review/current-issue/) -> issue dropdown lists all /issuescategory/ pages -> issue page lists /issues/{slug}/ article pages -> article page links the PDF under /wp-content/uploads/{YYYY}/{MM}/*.pdf",
+      "pagination": "none-at-archive-level (full issue list is in the archive root's dropdown); issue pages are server-rendered in full (largest issue, april-2002-vol-70-no-5, renders all 35 articles with no pager)",
+      "pagination_url_template": null,
+      "pagination_verified": "Archive root yields 162 distinct /issuescategory/ URLs covering volumes 68-94 with no gaps. WP REST /wp-json/wp/v2/issuescategory reports 164 terms but its ?page= paging is broken (repeats rows), so REST must NOT be used to enumerate; the HTML dropdown is authoritative. JetEngine load-more exists in markup but is not needed for issue pages.",
+      "total_volumes_estimated": 27,
+      "total_issues": 162,
+      "total_articles_estimated": 2366,
+      "article_count_source": "X-WP-Total on /wp-json/wp/v2/issues?per_page=1 = 2366",
+      "pdf_location": "article-detail-page",
+      "needs_headless": false,
+      "robots": "https://fordhamlawreview.org/robots.txt: Disallow /wp-admin/ (Allow admin-ajax.php) and Disallow /wp-content/uploads/vj-wp-import-export/. No Crawl-delay. Article PDFs under /wp-content/uploads/{YYYY}/{MM}/ are permitted. Sitemap line points at /sitemap_index.xml but that URL 404s.",
+      "notes": "Elementor + JetEngine WordPress. Requires a full browser User-Agent: short UAs get HTTP 406 from the origin WAF on /wp-json/ paths. PDF coverage is partial in older volumes -- confirmed PDFs back to 2014 (vol 82), but some pre-2019 entries are metadata stubs with no PDF and no body text (e.g. all of vol 68, 1999). Volumes 1-67 (1914-1998) are not on this site at all; the complete back-run lives on Digital Commons at ir.lawnet.fordham.edu/flr (seed fordham_law_review.json). Issue-page cards carry title + author only, so volume/issue/year must be parsed from the issue page URL slug (vol-{N}-no-{M}) or from the PDF; the article detail page also shows 'Vol. N'/'No. M' headings but only as unclassed Elementor headings. Fordham Law Review Online (/fordham-law-review-online/) is a separate JetEngine listing with a JS load-more and is NOT covered by this seed. Author cards link each byline separately, so the seed uses div.a-author a:nth-of-type(1..5) (SelectorDrivenAdapter returns only the first match per selector, and ids containing 'author' are accumulated); a whole-heading fallback was deliberately omitted because it would re-add a 'By ...' string as an author; this keeps co-authors instead of dropping them."
+    },
+    "status_reason": "Smoke test passed 3/3 (title + authors + PDF), but the issue-page cards carry no volume/issue/date, so article_volume/article_issue/article_year come back empty from discovery. Both are recoverable from the issue page URL slug (.../issuescategory/{month}-{year}-vol-{N}-no-{M}/) recorded as page_url, and from the PDF itself.",
+    "smoke_test": {
+      "date": "2026-08-29",
+      "seeds_tested": 3,
+      "pdf_candidates": 3,
+      "pdfs_downloaded_ok": 3,
+      "adapter": "SelectorDrivenAdapter",
+      "examples": [
+        {
+          "title": "Administrative Forum Shopping",
+          "authors": [
+            "Amy L. Stein"
+          ],
+          "bytes": 633173
+        },
+        {
+          "title": "Local Offenses",
+          "authors": [
+            "Brenner M. Fissell"
+          ],
+          "bytes": 468452
+        },
+        {
+          "title": "Cutting In on the Chevron Two-Step",
+          "authors": [
+            "Catherine M. Sharkey"
+          ],
+          "bytes": 447890
+        }
+      ]
     }
   },
   "selectors": [
     {
-      "id": "issue_link",
-      "type": "SelectorLink",
-      "selector": "h3.issue a",
-      "parentSelectors": [
-        "_root"
-      ]
-    },
-    {
       "id": "article_container",
       "type": "SelectorElement",
-      "selector": "div.doc",
+      "selector": "div.jet-listing-grid__item",
       "parentSelectors": [
         "_root"
       ]
@@ -36,7 +233,7 @@
     {
       "id": "title",
       "type": "SelectorText",
-      "selector": "div.doc > p:not(.pdf) > a",
+      "selector": "span.title",
       "parentSelectors": [
         "article_container"
       ]
@@ -44,7 +241,7 @@
     {
       "id": "article_url",
       "type": "SelectorLink",
-      "selector": "div.doc > p:not(.pdf) > a",
+      "selector": "a[href*=\"/issues/\"]",
       "parentSelectors": [
         "article_container"
       ]
@@ -52,7 +249,39 @@
     {
       "id": "author",
       "type": "SelectorText",
-      "selector": "span.auth",
+      "selector": "div.a-author a:nth-of-type(1)",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author_2",
+      "type": "SelectorText",
+      "selector": "div.a-author a:nth-of-type(2)",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author_3",
+      "type": "SelectorText",
+      "selector": "div.a-author a:nth-of-type(3)",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author_4",
+      "type": "SelectorText",
+      "selector": "div.a-author a:nth-of-type(4)",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author_5",
+      "type": "SelectorText",
+      "selector": "div.a-author a:nth-of-type(5)",
       "parentSelectors": [
         "article_container"
       ]
@@ -60,7 +289,7 @@
     {
       "id": "pdf_link",
       "type": "SelectorLink",
-      "selector": "p.pdf a",
+      "selector": "a[href$=\".pdf\"]",
       "parentSelectors": [
         "article_container"
       ]

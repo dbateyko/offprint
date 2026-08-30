@@ -1,0 +1,109 @@
+{
+  "id": "moritzlaw-osu-edu-oslj",
+  "start_urls": [
+    "https://moritzlaw.osu.edu/student-life/law-journals/ohio-state-law-journal/oslj-articles",
+    "https://moritzlaw.osu.edu/student-life/law-journals/ohio-state-law-journal/oslj-online"
+  ],
+  "start_urls_note": "Both OSLJ listing pages on the rebuilt Moritz Drupal site. These are the ONLY two OSLJ content pages in moritzlaw.osu.edu/sitemap.xml; there is no volume archive on this host.",
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Ohio State Law Journal",
+    "platform": "Drupal",
+    "url": "https://moritzlaw.osu.edu/student-life/law-journals/ohio-state-law-journal",
+    "created_date": "2026-08-29",
+    "status": "paused_waf",
+    "status_reason": "The canonical OSLJ back-run lives in the OSU Knowledge Bank (kb.osu.edu, DSpace 7), which now returns HTTP 403 Forbidden for every path -- including /robots.txt -- from two independent egress paths (direct curl and WebFetch). The journal's own host oslj.osu.edu no longer resolves in DNS. What remains reachable is this Drupal presence, which carries only the current volume: 1 print article (Vol. 86) plus 4 online pieces (Vol. 87), 5 open PDFs in total. That is not a collectable archive, so this seed is recorded for documentation and is not wired into adapter routing.",
+    "status_evidence_ref": "2026-08-29: getent oslj.osu.edu -> no DNS; curl https://kb.osu.edu/robots.txt -> 403; kb.osu.edu/handle/1811/64013 -> 403; kb.osu.edu/handle/1811/72602 (the OSTLJ collection the registry routes to OhioStateTechnologyLawJournalAdapter) -> 403; kb.osu.edu/server/api/core/bitstreams/<uuid>/content -> 403; WebFetch of kb.osu.edu collections URL -> 403. moritzlaw.osu.edu/oslj/, /ohio-state-law-journal/ and /study/journals/oslj-ohio-state-law-journal all -> 404 (site was rebuilt).",
+    "navigation": {
+      "archive_root": "https://moritzlaw.osu.edu/student-life/law-journals/ohio-state-law-journal/oslj-articles",
+      "volume_url_pattern": "none - the listing is bound to the current volume only",
+      "archive_path": "Moritz site -> Student Life -> Law Journals -> Ohio State Law Journal -> OSLJ Articles / OSLJ Online -> PDF linked directly on the listing item",
+      "pagination": "Drupal views_infinite_scroll on view journal_feed, display feed (drupalSettings.views.ajaxViews), pager_element 0. Server-side pages are fetched by POST to /views/ajax with view_name=journal_feed&view_display_id=feed&view_args=<term ids>&view_path=/node/<nid>&page=N. view_args are 558/561/599/598 for OSLJ Articles (node 2270) and 558/560/601/600 for OSLJ Online (node 2271). A plain ?page=N query string on the page URL does NOT paginate the feed (it returns a page with zero feed items), so anything relying on ?page=N would silently collect nothing.",
+      "pagination_url_template": "POST https://moritzlaw.osu.edu/views/ajax  (form-encoded, page={N})",
+      "pagination_verified": "Verified 2026-08-29: /views/ajax page=1 returns the same single item as the initial render, i.e. the feed is one page deep today. Sibling journal feeds on the same view (ostlj-articles=2 items, osjdr-articles=2, osjcl-articles=0) are equally shallow, confirming the Drupal site holds current content only rather than an archive.",
+      "total_volumes_estimated": 1,
+      "total_issues": 0,
+      "total_articles_estimated": 5,
+      "article_count_source": "direct count of a.bux-journal-feed__item-content[href$=.pdf] on both listing pages (1 + 4)",
+      "pdf_location": "direct-on-issue-page (/sites/default/files/{YYYY-MM}/*.pdf)",
+      "needs_headless": false,
+      "robots": "https://moritzlaw.osu.edu/robots.txt is stock Drupal: Disallow /core/, /profiles/, /admin/, /comment/reply/, /filter/tips, /node/add/, /search/, /search?, /user/{register,password,login,logout}, /media/oembed and the /index.php equivalents. No Crawl-delay. /student-life/..., /sites/default/files/ and /views/ajax are all permitted. kb.osu.edu/robots.txt itself returns 403, so no robots policy could be read for the Knowledge Bank -- that host must not be crawled until it responds again.",
+      "notes": "Not viable at corpus scale today. Alternatives checked and rejected: ohio-state-law-journal.scholasticahq.com is a submissions portal (its sitemap has 3 URLs: home, for-authors, editorial board) with no article content; ohiostatelawjournal.org is a parked domain serving a /lander redirect; oslj.org does not resolve; HeinOnline copies are paywalled. Note also that the library guide states current issues carry a two-year embargo on the Knowledge Bank. Recommendation: keep OSLJ paused and re-probe kb.osu.edu; if it returns, the existing seed oslj-osu-edu.json (kb.osu.edu/handle/1811/64013, DSpaceAdapter, already registered in registry.py) is the right route. moritzlaw.osu.edu is deliberately NOT registered to an adapter: several legacy seeds still carry now-404 moritzlaw.osu.edu start_urls, and routing the host to SelectorDrivenAdapter would turn those 404s into hard TypeErrors."
+    },
+    "smoke_test": {
+      "date": "2026-08-29",
+      "adapter": "none - host moritzlaw.osu.edu is intentionally unregistered, so scripts/pipeline/smoke_one_pdf_per_site.py reports UnmappedAdapter/todo_adapter_blocked for both seeds",
+      "pdf_candidates": 5,
+      "pdfs_downloaded_ok": 3,
+      "method": "selectors validated offline against the saved listing HTML (5/5 containers yielded title + author + PDF href); 3 of the 5 PDFs then fetched directly with a 2s delay",
+      "examples": [
+        {
+          "title": "Aligning Constitutional Law",
+          "authors": [
+            "Nicholas O. Stephanopoulos"
+          ],
+          "bytes": 356833,
+          "content_type": "application/pdf"
+        },
+        {
+          "title": "Can We Finally Get Serious about the Scarlet E?",
+          "authors": [
+            "Eric Dunn"
+          ],
+          "bytes": 426504,
+          "content_type": "application/pdf"
+        },
+        {
+          "title": "Umbrella Damages in Antitrust Cases",
+          "authors": [
+            "Edward D. Cavanagh"
+          ],
+          "bytes": 512591,
+          "content_type": "application/pdf"
+        }
+      ]
+    }
+  },
+  "selectors": [
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": "li.bux-journal-feed__item",
+      "parentSelectors": [
+        "_root"
+      ]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "h3.bux-journal-feed__item-content-title",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "author",
+      "type": "SelectorText",
+      "selector": "div.bux-journal-feed__item-content-author",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "abstract",
+      "type": "SelectorText",
+      "selector": "div.bux-journal-feed__item-content-summary",
+      "parentSelectors": [
+        "article_container"
+      ]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a.bux-journal-feed__item-content[href$=\".pdf\"]",
+      "parentSelectors": [
+        "article_container"
+      ]
+    }
+  ]
+}

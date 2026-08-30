@@ -9,9 +9,12 @@
     "platform": "dspace",
     "url": "https://oslj.osu.edu/",
     "created_date": "2026-04-01",
-    "status": "active",
-    "status_reason": "oslj.osu.edu offline (connection refused). Canonical archive is OSU Knowledge Bank DSpace collection at kb.osu.edu/handle/1811/64013.",
-    "status_updated_at": "2026-05-05T02:21:20Z",
-    "status_evidence_ref": "curl oslj.osu.edu -> 000; kb.osu.edu/handle/1811/64013 -> 200; DSpaceAdapter registered for kb.osu.edu in registry.py"
+    "status": "paused_waf",
+    "status_reason": "kb.osu.edu now returns HTTP 403 Forbidden for every path, including /robots.txt, so the DSpace collection this seed points at cannot be crawled and no robots policy can be read. oslj.osu.edu itself no longer resolves in DNS. Re-probe kb.osu.edu before reactivating; the handle below is still the right target if the host returns.",
+    "status_updated_at": "2026-08-29T02:15:00Z",
+    "status_evidence_ref": "2026-08-29: curl https://kb.osu.edu/robots.txt -> 403; /handle/1811/64013 -> 403; /handle/1811/72602 -> 403; /server/api/core/communities -> 403; /browse -> 403; WebFetch (independent egress) of a kb.osu.edu collections URL -> 403. getent hosts oslj.osu.edu -> no DNS. Fallback surveyed: moritzlaw-osu-edu-oslj.json (Moritz Drupal, current volume only, 5 open PDFs).",
+    "related_seeds": [
+      "moritzlaw-osu-edu-oslj.json"
+    ]
   }
 }

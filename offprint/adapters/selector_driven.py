@@ -188,9 +188,11 @@ class SelectorDrivenAdapter(Adapter):
                     if attr in {"href", "src"}:
                         return absolutize(page_url, value)
                     return value.strip()
-        # Default: text content
+        # Default: text content. Join inline children with a space and collapse
+        # whitespace: get_text(strip=True) concatenates adjacent inline nodes and
+        # produces glued values ("theChevronTwo-Step", "ByAmy L. Stein").
         for match in matches:
-            text = match.get_text(strip=True)
+            text = " ".join(match.get_text(" ", strip=True).split())
             if text:
                 return text
         return None
