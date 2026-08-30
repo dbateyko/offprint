@@ -172,7 +172,7 @@
     "platform": "WordPress",
     "url": "https://fordhamlawreview.org/",
     "created_date": "2026-08-29",
-    "status": "active_partial_metadata",
+    "status": "superseded_duplicate",
     "navigation": {
       "archive_root": "https://fordhamlawreview.org/law-review/current-issue/",
       "volume_url_pattern": "https://fordhamlawreview.org/issuescategory/{month}-{year}-vol-{N}-no-{M}/",
@@ -189,7 +189,7 @@
       "robots": "https://fordhamlawreview.org/robots.txt: Disallow /wp-admin/ (Allow admin-ajax.php) and Disallow /wp-content/uploads/vj-wp-import-export/. No Crawl-delay. Article PDFs under /wp-content/uploads/{YYYY}/{MM}/ are permitted. Sitemap line points at /sitemap_index.xml but that URL 404s.",
       "notes": "Elementor + JetEngine WordPress. Requires a full browser User-Agent: short UAs get HTTP 406 from the origin WAF on /wp-json/ paths. PDF coverage is partial in older volumes -- confirmed PDFs back to 2014 (vol 82), but some pre-2019 entries are metadata stubs with no PDF and no body text (e.g. all of vol 68, 1999). Volumes 1-67 (1914-1998) are not on this site at all; the complete back-run lives on Digital Commons at ir.lawnet.fordham.edu/flr (seed fordham_law_review.json). Issue-page cards carry title + author only, so volume/issue/year must be parsed from the issue page URL slug (vol-{N}-no-{M}) or from the PDF; the article detail page also shows 'Vol. N'/'No. M' headings but only as unclassed Elementor headings. Fordham Law Review Online (/fordham-law-review-online/) is a separate JetEngine listing with a JS load-more and is NOT covered by this seed. Author cards link each byline separately, so the seed uses div.a-author a:nth-of-type(1..5) (SelectorDrivenAdapter returns only the first match per selector, and ids containing 'author' are accumulated); a whole-heading fallback was deliberately omitted because it would re-add a 'By ...' string as an author; this keeps co-authors instead of dropping them."
     },
-    "status_reason": "Smoke test passed 3/3 (title + authors + PDF), but the issue-page cards carry no volume/issue/date, so article_volume/article_issue/article_year come back empty from discovery. Both are recoverable from the issue page URL slug (.../issuescategory/{month}-{year}-vol-{N}-no-{M}/) recorded as page_url, and from the PDF itself.",
+    "status_reason": "SUPERSEDED 2026-08-30: Fordham Law Review is already collected from its Digital Commons mirror (3,241 dc-flr-*.pdf under corpus/scraped/ir.lawnet.fordham.edu, seed fordham_law_review.json). This WordPress source is the same journal under different filenames, so no filename-level check would catch the overlap. Retain only if the WordPress site is later shown to carry volumes the DC mirror lacks.",
     "smoke_test": {
       "date": "2026-08-29",
       "seeds_tested": 3,
