@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import faulthandler
 import json
+import signal
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -848,8 +850,25 @@ def _run_retry_mode(args: argparse.Namespace) -> Dict[str, Any]:
     }
 
 
+def _install_stack_dump_handler() -> None:
+    """Dump all thread stacks to stderr on SIGUSR1.
+
+    A hung seed leaves the main thread parked in ThreadPoolExecutor shutdown with
+    no indication of which worker is stuck. py-spy needs root here
+    (ptrace_scope=1), so `kill -USR1 <pid>` is the privilege-free way to find out.
+    Stacks land in the run log alongside the heartbeats.
+    """
+    if not hasattr(signal, "SIGUSR1"):
+        return
+    try:
+        faulthandler.register(signal.SIGUSR1, all_threads=True, chain=False)
+    except (OSError, RuntimeError, ValueError):
+        pass
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     args = _parse_args(argv)
+    _install_stack_dump_handler()
     try:
         if args.mode == "retry":
             payload = _run_retry_mode(args)

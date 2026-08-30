@@ -54,12 +54,38 @@ class TulaneLawReviewOnlineAdapter(SiteArchiveAdapterBase):
             return False
         return urlparse(url).path.lower().endswith(".pdf")
 
+    #: Squarespace pages older posts behind ``?offset=`` links; the first
+    #: listing page alone holds only the ~20 most recent pieces.
+    MAX_INDEX_PAGES = 25
+
+    def _index_pages(self, seed_url: str) -> Iterable[BeautifulSoup]:
+        """Yield each listing page, following Squarespace ``rel="next"`` links."""
+        url = seed_url
+        visited: set = set()
+        for _ in range(self.MAX_INDEX_PAGES):
+            if not url or url in visited:
+                return
+            visited.add(url)
+            soup = self._get(url)
+            if not soup:
+                return
+            yield soup
+            nxt = soup.select_one('a[rel="next"][href]') or soup.select_one("a.older[href]")
+            if not nxt:
+                return
+            url = urljoin(url, (nxt.get("href") or "").strip())
+
     def discover_pdfs(self, seed_url: str, max_depth: int = 0) -> Iterable[DiscoveryResult]:
-        index_soup = self._get(seed_url)
-        if not index_soup:
-            return
         seen: set = set()
-        for post_url, listing_title in self._post_links(index_soup, seed_url):
+        seen_posts: set = set()
+        posts: List[Tuple[str, str]] = []
+        for index_soup in self._index_pages(seed_url):
+            for post_url, listing_title in self._post_links(index_soup, seed_url):
+                if post_url in seen_posts:
+                    continue
+                seen_posts.add(post_url)
+                posts.append((post_url, listing_title))
+        for post_url, listing_title in posts:
             post_soup = self._get(post_url)
             if not post_soup:
                 continue

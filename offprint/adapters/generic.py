@@ -245,6 +245,29 @@ class GenericAdapter(Adapter):
         except Exception:
             return None
 
+    def _get_json_retry(
+        self,
+        url: str,
+        *,
+        params: Optional[Dict[str, Any]] = None,
+        attempts: int = 4,
+        base_sleep: float = 5.0,
+    ) -> Optional[Dict[str, Any]]:
+        """_get_json with backoff.
+
+        _get_json collapses every failure (timeout, 429, 5xx) into None. Callers
+        that paginate used to treat that as end-of-results and stop, silently
+        truncating a collection to whatever had been read so far. Retrying keeps
+        a transient throttle from ending the walk.
+        """
+        for attempt in range(max(attempts, 1)):
+            payload = self._get_json(url, params=params)
+            if payload:
+                return payload
+            if attempt < attempts - 1:
+                time.sleep(base_sleep * (2**attempt))
+        return None
+
     def _extract_dspace_handle(self, url: str) -> str:
         parsed = urlparse(url)
         parts = [p for p in parsed.path.split("/") if p]
@@ -750,7 +773,7 @@ class GenericAdapter(Adapter):
         max_pages = 20
 
         for _ in range(max_pages):
-            payload = self._get_json(
+            payload = self._get_json_retry(
                 discover_url,
                 params={
                     **({"scope": resolved_scope} if resolved_scope else {}),
@@ -759,6 +782,11 @@ class GenericAdapter(Adapter):
                 },
             )
             if not payload:
+                print(
+                    f"\u26a0\ufe0f  DSpace discover failed at page {page} for {discover_url}; "
+                    f"results truncated after {len(seen_pdf_urls)} PDFs",
+                    flush=True,
+                )
                 break
             objects = (
                 payload.get("_embedded", {})
@@ -780,8 +808,11 @@ class GenericAdapter(Adapter):
                 if not bundles_href:
                     continue
 
-                bundles = self._get_json(bundles_href, params={"embed": "bitstreams", "size": 100})
+                bundles = self._get_json_retry(
+                    bundles_href, params={"embed": "bitstreams", "size": 100}
+                )
                 if not bundles:
+                    print(f"\u26a0\ufe0f  DSpace bundles fetch failed for item {item_id}", flush=True)
                     continue
                 bundles_arr = (bundles.get("_embedded") or {}).get("bundles") or []
                 if not isinstance(bundles_arr, list):
