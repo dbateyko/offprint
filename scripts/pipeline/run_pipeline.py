@@ -872,6 +872,23 @@ def _run_retry_mode(args: argparse.Namespace) -> Dict[str, Any]:
     }
 
 
+def _seed_groups(sitemaps_dir: str) -> Dict[str, str]:
+    """start_url -> the seed file that owns it, so a journal is judged as a whole."""
+    groups: Dict[str, str] = {}
+    try:
+        paths = sorted(Path(sitemaps_dir).glob("*.json"))
+    except OSError:
+        return groups
+    for path in paths:
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        for url in payload.get("start_urls") or []:
+            groups[str(url)] = path.name
+    return groups
+
+
 def _seed_expected_counts(sitemaps_dir: str) -> Dict[str, int]:
     """Expected article count per seed URL, as declared in the seed's own metadata.
 
@@ -913,28 +930,46 @@ def _report_completeness(payload: Dict[str, Any], args: argparse.Namespace) -> b
     if not seeds:
         return False
     expected_by_seed = _seed_expected_counts(args.sitemaps_dir)
+    owner = _seed_groups(args.sitemaps_dir)
     short: List[str] = []
     unknown = 0
     lines: List[str] = []
-    for seed_url, info in sorted(seeds.items()):
+
+    # expected_pdfs counts a JOURNAL, but a seed routinely enumerates one
+    # start_url per article or issue - Penn's are 753 Detail pages, all sharing
+    # expected_pdfs=753. Comparing each start_url against the journal total would
+    # mark every one of them short. Aggregate a seed file's URLs first.
+    grouped: Dict[str, Dict[str, Any]] = {}
+    for seed_url, info in seeds.items():
         runtime = info.get("runtime") or {}
-        got = int(info.get("ok_total") or runtime.get("downloaded") or 0)
-        gaps = (info.get("completeness") or {}).get("volume_gaps") or []
-        expected = expected_by_seed.get(seed_url)
+        key = owner.get(seed_url, seed_url)
+        bucket = grouped.setdefault(key, {"got": 0, "gaps": 0, "urls": 0,
+                                          "expected": expected_by_seed.get(seed_url),
+                                          "sample": seed_url})
+        bucket["got"] += int(info.get("ok_total") or runtime.get("downloaded") or 0)
+        bucket["gaps"] += len((info.get("completeness") or {}).get("volume_gaps") or [])
+        bucket["urls"] += 1
+        if bucket["expected"] is None:
+            bucket["expected"] = expected_by_seed.get(seed_url)
+
+    for key, b in sorted(grouped.items()):
+        got, expected, gaps = b["got"], b["expected"], b["gaps"]
+        label = key if b["urls"] > 1 else b["sample"]
+        span = f" [{b['urls']} urls]" if b["urls"] > 1 else ""
         if not expected:
             unknown += 1
             note = "expected=unknown (seed declares no count)"
             if gaps:
-                note += f", {len(gaps)} volume gap(s)"
-            lines.append(f"    {got:>6} collected  {note}  {seed_url[:72]}")
+                note += f", {gaps} volume gap(s)"
+            lines.append(f"    {got:>6} collected  {note}  {label[:66]}{span}")
             continue
         ratio = (got / expected) if expected else 0.0
         flag = "OK  " if ratio >= args.completeness_min_ratio else "SHORT"
         if flag == "SHORT":
-            short.append(f"{seed_url} ({got}/{expected}, {ratio:.0%})")
+            short.append(f"{label} ({got}/{expected}, {ratio:.0%})")
         lines.append(
             f"    {flag} {got:>6}/{expected:<6} ({ratio:>4.0%})"
-            f"{f'  {len(gaps)} volume gap(s)' if gaps else ''}  {seed_url[:60]}"
+            f"{f'  {gaps} volume gap(s)' if gaps else ''}  {label[:54]}{span}"
         )
     print("[pipeline] Completeness:")
     for line in lines:
