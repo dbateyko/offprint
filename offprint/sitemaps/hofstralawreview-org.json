@@ -1,17 +1,76 @@
 {
   "id": "hofstralawreview-org",
   "start_urls": [
-    "https://scholarlycommons.law.hofstra.edu/hlr/"
+    "https://hofstralawreview.org/archive/"
   ],
+  "start_urls_note": "The single /archive/ page lists every issue page the WordPress site publishes (24 issue pages, vol 48 iss 4 through vol 54 iss 3) plus 178 outbound links to the Digital Commons backfile. It is NOT paginated - there is no pager, no ?page=N, and no /page/N/; one fetch yields the complete issue list.",
   "source": "claude_code_skill",
   "metadata": {
     "journal_name": "Hofstra Law Review",
-    "platform": "digitalcommons",
+    "platform": "wordpress",
     "url": "https://hofstralawreview.org/",
     "created_date": "2026-04-04",
     "status": "active",
-    "status_reason": "WP shell at hofstralawreview.org/archive/ has volume-49+ links but no PDFs; older issues + full archive live on bepress backend at scholarlycommons.law.hofstra.edu/hlr/. Rerouted to DC.",
-    "status_updated_at": "2026-05-05T02:21:20Z",
-    "status_evidence_ref": "WebFetch hofstralawreview.org/archive/ shows scholarlycommons.law.hofstra.edu/hlr/vol*/iss*/ links"
-  }
+    "status_reason": "CORRECTED 2026-08-29. The prior seed claimed the WP shell had 'no PDFs' and rerouted everything to bepress. That is wrong: hofstralawreview.org/archive/volume-*/ pages link 195 PDFs directly under /wp-content/uploads/, and those download fine (3/3 smoke tests, 190KB-605KB, valid %PDF). The bepress backfile is the correct source for vol 1-47, but /cgi/viewcontent.cgi is currently Cloudflare-403 platform-wide, so the WordPress host is the only presently retrievable source.",
+    "status_updated_at": "2026-08-29",
+    "status_evidence_ref": "Fetched all 24 /archive/volume-* pages on 2026-08-29; 195 unique .pdf hrefs; downloaded AA.1.Golanski.pdf (604938 B), aa.1.maurer.pdf (190804 B), aa.2.kastenberg.pdf (580979 B).",
+    "navigation": {
+      "archive_root": "https://hofstralawreview.org/archive/",
+      "volume_url_pattern": "https://hofstralawreview.org/archive/volume-{N}-issue-{M}-{season}-{year}/",
+      "archive_path": "homepage -> /archive/ -> one page per issue -> PDFs linked inline on the issue page",
+      "pagination": "none - /archive/ is a single Elementor page holding the complete issue list; verified against https://hofstralawreview.org/wp-sitemap-posts-page-1.xml, which enumerates all 45 pages on the site and contains no issue page missing from /archive/",
+      "pagination_url_template": null,
+      "total_issue_pages_on_wordpress": 24,
+      "wordpress_volume_range": "vol 48 iss 4 (Summer 2020) through vol 54 iss 3 (Spring 2026)",
+      "total_pdf_links_on_wordpress": 195,
+      "pdf_links_note": "195 unique .pdf hrefs across the 24 issue pages; roughly 24 of those are per-issue TABLE OF CONTENTS PDFs, leaving ~171 article PDFs.",
+      "pdf_location": "direct-on-issue-page",
+      "pdf_url_pattern": "http://hofstralawreview.org/wp-content/uploads/{YYYY}/{MM}/{FILE}.pdf",
+      "needs_headless": false,
+      "backfile": {
+        "platform": "digitalcommons",
+        "sitemap": "https://scholarlycommons.law.hofstra.edu/hlr/sitemap.xml",
+        "archive_root": "https://scholarlycommons.law.hofstra.edu/hlr/all_issues.html",
+        "pagination": "none - one sitemap.xml lists everything",
+        "total_volumes": 54,
+        "total_issues": 203,
+        "total_articles": 2216,
+        "sitemap_url_count": 2474,
+        "status": "enumeration OK, retrieval blocked - /cgi/viewcontent.cgi returns Cloudflare HTTP 403 across all bepress hosts (see ACQUISITION_BACKLOG_2026-08-29.md). Covered by seeds scholarlycommons-law-hofstra-edu.json and hofstra_law_review.json."
+      },
+      "notes": "PDF hrefs are emitted as http:// (not https://) but the host redirects and serves them fine. Article author names are bare text nodes after a <br /> inside the same <p> as the title link, so there is no author element to select - the adapter must split the paragraph text. hofstralawreview.org robots.txt disallows only /wp-admin/ and /wp-content/uploads/bulk-media-register-tmp/; no Crawl-delay. The WP REST API is closed (401 rest_login_required), so use /archive/ or wp-sitemap.xml, not wp-json. No second journal is published on this host: wp-sitemap-posts-page-1.xml lists 45 pages, all Hofstra Law Review; the second registry row for this host (registry_hofstra_law_review_1885_c2108637c0.json, www.hofstralawreview.org) is a duplicate of the same journal, not a distinct publication. Hofstra's other journals live on separate hosts (hofstralelj.org, hofstrajibl.org, scholarlycommons.law.hofstra.edu/hlelj/, /jibl/)."
+    }
+  },
+  "selectors": [
+    {
+      "id": "issue_url",
+      "type": "SelectorLink",
+      "selector": "a[href*=\"/archive/volume-\"]",
+      "parentSelectors": ["_root"]
+    },
+    {
+      "id": "article_container",
+      "type": "SelectorElement",
+      "selector": ".elementor-widget-container p",
+      "parentSelectors": ["issue_url"]
+    },
+    {
+      "id": "title",
+      "type": "SelectorText",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "pdf_link",
+      "type": "SelectorLink",
+      "selector": "a[href$=\".pdf\"]",
+      "parentSelectors": ["article_container"]
+    },
+    {
+      "id": "issue_heading",
+      "type": "SelectorText",
+      "selector": ".elementor-widget-container h2",
+      "parentSelectors": ["issue_url"]
+    }
+  ]
 }

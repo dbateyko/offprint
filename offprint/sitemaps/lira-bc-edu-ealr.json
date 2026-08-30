@@ -1,0 +1,63 @@
+{
+  "id": "lira-bc-edu-ealr",
+  "start_urls": [],
+  "start_urls_note": "Intentionally empty: lira.bc.edu robots.txt Disallows '/' for User-agent: *. Do not populate without written permission from Boston College Libraries.",
+  "source": "claude_code_skill",
+  "metadata": {
+    "journal_name": "Boston College Environmental Affairs Law Review",
+    "platform": "lira-bc-edu (Next.js institutional repository; successor to bepress Digital Commons)",
+    "url": "https://lawdigitalcommons.bc.edu/ealr",
+    "successor_url": "https://lira.bc.edu/",
+    "created_date": "2026-08-30",
+    "status": "paused_robots_disallow",
+    "registry_mainids": "201",
+    "supersedes_seed": "registry_boston_college_environmental_affairs_law_review_201_5e5793581c.json",
+    "navigation": {
+      "archive_root": null,
+      "volume_url_pattern": null,
+      "archive_path": "unreachable",
+      "pagination": "unknown",
+      "pdf_location": "unknown",
+      "needs_headless": null,
+      "robots": {
+        "old_host_robots": "https://lawdigitalcommons.bc.edu/robots.txt -> 302 https://lira.bc.edu/ (no robots served)",
+        "new_host_robots": "https://lira.bc.edu/robots.txt",
+        "catch_all_rule": "User-agent: *\nDisallow: /",
+        "global_disallows": [
+          "/auth",
+          "/api/*"
+        ],
+        "crawl_delay": null,
+        "sitemap_declared": "https://lira.bc.edu/sitemap.xml (not fetched -- Disallowed for us)",
+        "allowlisted_agents": [
+          "Amzn-SearchBot",
+          "Amzn-User",
+          "Applebot",
+          "archive.org_bot",
+          "Baiduspider",
+          "Bingbot",
+          "ChatGPT-User",
+          "Claude-SearchBot",
+          "Claude-User",
+          "CrossrefEventDataBot",
+          "DuckAssistBot",
+          "DuckDuckBot",
+          "Googlebot",
+          "Meta-ExternalFetcher",
+          "MistralAI-Index",
+          "MistralAI-User",
+          "OAI-SearchBot",
+          "PerplexityBot",
+          "Perplexity-User",
+          "SemanticScholarBot",
+          "TurnitinBot",
+          "YandexBot",
+          "Yeti",
+          "YouBot"
+        ]
+      },
+      "notes": "BLOCKED BY ROBOTS. Verified 2026-08-30. The bepress/Digital Commons host lawdigitalcommons.bc.edu has been decommissioned: every path (including /robots.txt and /{series}/) returns HTTP 302 to https://lira.bc.edu/ (root, not a deep link), so no Digital Commons surface -- no all_issues.html, no /cgi/viewcontent.cgi, no /do/oai/ -- remains reachable. The successor repository lira.bc.edu is a Next.js app whose /robots.txt allowlists 24 named commercial/search/AI crawler UAs and ends with 'User-agent: *  Disallow: /'. Our collector is not one of the named agents, so all of lira.bc.edu is Disallowed for us; /api/* and /auth are additionally Disallowed for everyone. No Crawl-delay is declared anywhere. Per the repo's respectful-acquisition policy no enumeration, sitemap fetch, or PDF retrieval was attempted. Unblocking requires out-of-band permission from BC Libraries (or a bulk export), not a technical workaround."
+    }
+  },
+  "selectors": []
+}
