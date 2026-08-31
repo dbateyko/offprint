@@ -121,8 +121,11 @@ def promote_host(
 ) -> dict:
     v2_dir = SCRAPED_V2 / host
     corpus_host = CORPUS / host
-    if not v2_dir.exists():
+    if not v2_dir.exists() and selected_paths is None:
         return {"host": host, "skipped": "no v2 dir"}
+    # With --source-root the staged files live outside the inbox by design, so
+    # requiring an inbox directory made that documented option silently promote
+    # nothing: it returned "no v2 dir" before the allowlist was ever consulted.
 
     n_corpus_before = sum(1 for _ in corpus_host.rglob("*.pdf")) if corpus_host.exists() else 0
     print(f"\n=== {host} ===")

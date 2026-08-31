@@ -69,6 +69,22 @@ Staging counts as collected. Unpromoted work is invisible to `corpus/scraped`,
 and Georgetown Law Journal read as uncollected with 304 of its PDFs sitting in a
 staging run.
 
+## 2b. Filenames are not identity; hashes are
+
+Promotion SHA-256-deduplicates against the corpus, and that is the only test
+that actually holds. Two numbers from the 2026-08-30 promotion:
+
+- The CR-CL crawl promoted 11 net-new against 228 duplicates.
+- A targeted harvester that fetched exactly the 120 files a *filename* check had
+  called missing promoted **0 net-new against 116 duplicates**. The corpus
+  already held identical bytes under different names.
+
+So `check_seed_overlap`'s filename comparison is a coarse screen, useful only to
+catch the obvious case. It over-reports gaps whenever a source renames files, and
+the by-journal lookup in the attribution index is the better first question.
+Before a targeted re-fetch of "missing" files, hash-check them against the corpus
+rather than trusting names.
+
 ## 3. Do not disable the guards
 
 Every run launched in that session carried `--no-skip-well-covered-seeds`,
