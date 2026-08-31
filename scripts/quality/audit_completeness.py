@@ -95,6 +95,47 @@ def scan_runs(runs_dir: str) -> Tuple[Dict[str, int], Dict[str, int], Dict[str, 
     return best, gaps, last
 
 
+def gaps_by_journal(runs_dir: str, seeds_dir: str) -> Dict[str, Dict[str, Any]]:
+    """Attribute sequence_validator warnings to journals, not hosts.
+
+    The warnings are the one truncation signal recorded for the whole corpus, but
+    they were only ever reported per host - and a host serves many journals, so
+    "digitalcommons.law.byu.edu has 1,923 volume gaps" names no journal anyone
+    can act on. Every warning row carries seed_url, and the seed knows its
+    journal.
+    """
+    by_url: Dict[str, str] = {}
+    for path in glob.glob(os.path.join(seeds_dir, "*.json")):
+        try:
+            seed = json.loads(open(path, encoding="utf-8").read())
+        except (OSError, ValueError):
+            continue
+        name = (seed.get("metadata") or {}).get("journal_name")
+        if name:
+            for url in seed.get("start_urls") or []:
+                by_url[str(url).strip()] = name
+    out: Dict[str, Dict[str, Any]] = {}
+    for errs in glob.iglob(os.path.join(runs_dir, "*", "errors.jsonl")):
+        try:
+            fh = open(errs, encoding="utf-8", errors="ignore")
+        except OSError:
+            continue
+        with fh:
+            for line in fh:
+                try:
+                    rec = json.loads(line)
+                except ValueError:
+                    continue
+                if rec.get("error_type") != "completeness_warning":
+                    continue
+                journal = by_url.get(str(rec.get("seed_url") or "").strip())
+                if not journal:
+                    continue
+                slot = out.setdefault(journal, {"gaps": set(), "domain": rec.get("domain") or ""})
+                slot["gaps"].add(str(rec.get("message") or ""))
+    return out
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -102,6 +143,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--seeds-dir", default="offprint/sitemaps")
     ap.add_argument("--min-ratio", type=float, default=0.75)
     ap.add_argument("--out", default="")
+    ap.add_argument("--index", default="artifacts/attribution_index.json")
     args = ap.parse_args(argv)
 
     expected = load_expected(args.seeds_dir)
@@ -150,6 +192,23 @@ def main(argv: Optional[List[str]] = None) -> int:
             mark = "" if dom in expected else "   (no expected count -- unverifiable)"
             print(f"{n:>5} {got:>10}  {dom[:44]:45s}{mark}")
         print(f"\ntotal recorded volume-gap warnings: {sum(n for _, n, _, _ in gap_rows)}")
+
+    # journal-level view: which collected journals show missing volumes
+    jgaps = gaps_by_journal(args.runs_dir, args.seeds_dir)
+    if jgaps:
+        try:
+            index = json.loads(open(args.index, encoding="utf-8").read())
+            held: Dict[str, int] = {}
+            for entry in index.values():
+                j = entry.get("journal")
+                if j:
+                    held[j] = held.get(j, 0) + 1
+        except (OSError, ValueError):
+            held = {}
+        print(f"\n=== journals with recorded volume gaps ({len(jgaps)}) ===")
+        print(f"{'gaps':>5} {'held':>7}  journal")
+        for journal, slot in sorted(jgaps.items(), key=lambda kv: -len(kv[1]["gaps"]))[:20]:
+            print(f"{len(slot['gaps']):>5} {held.get(journal, 0):>7}  {journal[:56]}")
 
     if args.out:
         with open(args.out, "w", newline="", encoding="utf-8") as fh:
