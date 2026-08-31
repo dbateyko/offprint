@@ -78,3 +78,30 @@ def test_threshold_is_honoured(tmp_path):
 
 def test_empty_summary_is_not_a_failure(tmp_path):
     assert rp._report_completeness({"summary": {"seeds": {}}}, _args(tmp_path)) is False
+
+
+def test_reads_per_seed_stats_from_the_run_directory(tmp_path):
+    """The gate must work against what the pipeline actually hands it.
+
+    run_orchestrator returns run-level counters with no "seeds" key; the per-seed
+    detail is only in stats.json in the run directory. Reading the payload alone
+    made the gate return False and print nothing on every real run - installed,
+    green, and never once consulted.
+    """
+    seeds_dir = tmp_path / "seeds"
+    seeds_dir.mkdir()
+    _seed(seeds_dir, ["u1"], expected=100)
+    run_dir = tmp_path / "run"
+    run_dir.mkdir()
+    (run_dir / "stats.json").write_text(json.dumps(
+        {"seeds": {"u1": {"ok_total": 20, "runtime": {}, "completeness": {}}}}))
+    payload = {"summary": {}, "run_dir": str(run_dir)}          # no seeds inline
+    assert rp._report_completeness(payload, _args(seeds_dir)) is True
+
+
+def test_missing_stats_says_so_rather_than_passing_silently(tmp_path):
+    seeds_dir = tmp_path / "seeds"
+    seeds_dir.mkdir()
+    _seed(seeds_dir, ["u1"], expected=100)
+    assert rp._report_completeness({"summary": {}, "run_dir": str(tmp_path / "nope")},
+                                   _args(seeds_dir)) is False

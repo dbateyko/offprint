@@ -928,6 +928,20 @@ def _report_completeness(payload: Dict[str, Any], args: argparse.Namespace) -> b
     summary = (payload or {}).get("summary") or {}
     seeds = summary.get("seeds") or {}
     if not seeds:
+        # The orchestrator's returned summary carries run-level counters only; the
+        # per-seed detail is written to stats.json in the run directory. Reading
+        # just the payload meant this returned False and printed nothing on every
+        # real run - the gate looked installed and was never once consulted.
+        run_dir = (payload or {}).get("run_dir") or ""
+        if run_dir:
+            try:
+                stats = json.loads(
+                    (Path(run_dir) / "stats.json").read_text(encoding="utf-8"))
+                seeds = stats.get("seeds") or {}
+            except (OSError, ValueError):
+                seeds = {}
+    if not seeds:
+        print("[pipeline] Completeness: no per-seed stats found; cannot verify this run.")
         return False
     expected_by_seed = _seed_expected_counts(args.sitemaps_dir)
     owner = _seed_groups(args.sitemaps_dir)
