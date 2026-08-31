@@ -841,7 +841,11 @@ class WordPressAcademicBaseAdapter(Adapter):
                 continue
 
             article_url = urljoin(page_url, href)
-            article_title = link.get_text(strip=True)
+            # Separator matters: an anchor wrapping a title element and a byline
+            # element yields "Fee-Shifting Shortcutsby Maureen Carroll" without
+            # one -- the two texts welded at the seam. Every listing card on a
+            # WordPress academic theme has that shape.
+            article_title = link.get_text(" ", strip=True)
 
             if self._is_valid_article_url(article_url):
                 yield from self._extract_pdfs_from_article_url(article_url, article_title)
@@ -860,6 +864,13 @@ class WordPressAcademicBaseAdapter(Adapter):
 
         except Exception as e:
             print(f"⚠️  Error processing article {article_url}: {e}")
+
+    #: Above this many distinct PDFs on one page, the page is treated as a
+    #: listing rather than an article, and its page-level title and byline are
+    #: not attributed to any of them. A real article page carries one PDF, or a
+    #: few when a galley is split or an appendix is posted separately; an
+    #: archive index carries dozens.
+    MAX_PDFS_PER_ARTICLE_PAGE = 3
 
     def _extract_pdfs_from_article(
         self,
@@ -950,6 +961,22 @@ class WordPressAcademicBaseAdapter(Adapter):
                 pdf_anchor_signals[embedded_url] = True
 
         inline_metadata_by_pdf = self._extract_inline_pdf_metadata(soup, article_url)
+
+        # A page offering many distinct article PDFs is a LISTING (an archive or
+        # issue index), not an article. Its <title> and its byline belong to the
+        # page, not to the works it links -- and attributing them anyway is how
+        # 264 distinct Harvard PDFs came to share the title "Archive" and the
+        # author "Fee-Shifting Shortcutsby Maureen Carroll", one listing entry's
+        # link text run together and stamped onto every file behind it. That is
+        # a false statement about a named person; a blank is strictly better.
+        #
+        # This is the OJS scope leak (see the workspace CLAUDE.md) one level up:
+        # there a container page donated its SCOPE to third-party PDFs, here it
+        # donates its METADATA to other people's articles. Per-PDF inline
+        # metadata is still trusted, because that is genuinely per-item.
+        if len(ordered_urls) > self.MAX_PDFS_PER_ARTICLE_PAGE:
+            article_title = ""
+            hint_authors = None
 
         if not ordered_urls:
             pass

@@ -58,3 +58,54 @@ def test_missing_byline_still_yields_a_title():
     entry = next(iter(meta.values()))
     assert entry["title"] == "An Article With No Stated Byline"
     assert "authors" not in entry
+
+
+def test_an_unrecognised_listing_donates_no_metadata_at_all():
+    """The safety net beneath per-PDF extraction.
+
+    `_extract_listing_pdf_metadata` handles listing shapes it recognises. When
+    it does not recognise one, the page-level <title> and byline must NOT be
+    stamped onto every PDF instead: that is how 264 distinct Harvard articles
+    came to share the title "Archive" and one author's name. A blank beats a
+    false attribution.
+    """
+    html = "<html><head><title>Archive</title><body>" + "".join(
+        f'<div><a href="/crcl/uploads/a{i}.pdf">Download</a></div>' for i in range(12)
+    ) + "</body></html>"
+    adapter = _adapter()
+    results = list(adapter._extract_pdfs_from_article(
+        BeautifulSoup(html, "html.parser"),
+        "https://journals.law.harvard.edu/crcl/archive/",
+        "Archive",
+    ))
+    assert results, "the PDFs themselves must still be discovered"
+    for result in results:
+        assert not result.metadata.get("title")
+        assert not result.metadata.get("authors")
+
+
+def test_a_real_article_page_still_gets_its_title():
+    """One or two PDFs on a page is an article, not a listing."""
+    html = ('<html><head><title>A Real Article</title><body>'
+            '<a href="/crcl/uploads/x.pdf">PDF</a>'
+            '<a href="/crcl/uploads/x-appendix.pdf">Appendix PDF</a>'
+            '</body></html>')
+    adapter = _adapter()
+    results = list(adapter._extract_pdfs_from_article(
+        BeautifulSoup(html, "html.parser"),
+        "https://journals.law.harvard.edu/crcl/2020/01/a-real-article/",
+        "A Real Article",
+    ))
+    assert results
+    assert any(r.metadata.get("title") for r in results)
+
+
+def test_anchor_text_is_not_welded_at_the_seam():
+    """`get_text(strip=True)` produced "Fee-Shifting Shortcutsby Maureen Carroll"."""
+    html = ('<h2 class="entry-title"><a href="/crcl/2020/01/fee-shifting/">'
+            '<span>Fee-Shifting Shortcuts</span><span>by Maureen Carroll</span>'
+            '</a></h2>')
+    soup = BeautifulSoup(html, "html.parser")
+    link = soup.select_one("h2.entry-title a")
+    assert link.get_text(" ", strip=True) == "Fee-Shifting Shortcuts by Maureen Carroll"
+    assert link.get_text(strip=True) == "Fee-Shifting Shortcutsby Maureen Carroll"
