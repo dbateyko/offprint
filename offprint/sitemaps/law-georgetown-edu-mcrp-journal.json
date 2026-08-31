@@ -1,0 +1,24 @@
+{
+  "id": "law-georgetown-edu-mcrp-journal",
+  "start_urls": [
+    "https://www.law.georgetown.edu/mcrp-journal/in-print/"
+  ],
+  "source": "manual",
+  "metadata": {
+    "journal_name": "Georgetown Journal of Law & Modern Critical Race Perspectives",
+    "platform": "wordpress",
+    "url": "https://www.law.georgetown.edu/mcrp-journal/",
+    "status": "active",
+    "status_reason": "mapped 2026-08-30 from the Georgetown WordPress multisite",
+    "created_date": "2026-08-30",
+    "navigation": {
+      "archive_root": "https://www.law.georgetown.edu/mcrp-journal/in-print/",
+      "pagination": "none observed at the archive root; article pages are linked from it",
+      "pdfs_on_archive_root": 1,
+      "article_links_on_archive_root": 69,
+      "pdf_location": "mixed - some PDFs link straight off /in-print/, the rest sit on article pages",
+      "needs_headless": false,
+      "notes": "law.georgetown.edu is a WordPress multisite; each journal is a subsite on its first path segment and /in-print/ is the archive root, the same shape that collected 304 PDFs for the Georgetown Law Journal. No expected_pdfs is declared: the archive root's link count mixes article pages with site navigation, and a guessed total that is too LOW would let the completeness gate pass a truncated run. Set it from the first full run instead."
+    }
+  }
+}
