@@ -1,15 +1,18 @@
 {
   "id": "repository-usfca-edu",
   "start_urls": [
-    "https://repository.usfca.edu/ontarioreview/sitemap.xml",
     "https://repository.usfca.edu/usflawreview/sitemap.xml"
   ],
   "source": "lawreviewcommons",
   "metadata": {
-    "journal_name": "University of San Francisco (multiple collections)",
+    "journal_name": "University of San Francisco Law Review",
     "platform": "digitalcommons",
     "url": "https://repository.usfca.edu/",
     "created_date": "2026-02-26",
-    "notes": "Domain-root seed to include USF Law Review and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]"
+    "notes": "Domain-root seed to include USF Law Review and related series. [Updated to XML sitemap on 2026-03-03] [Scoped to law-related sub-sitemaps on 2026-03-03]",
+    "navigation": {
+      "expected_pdfs": 534,
+      "notes": "CORRECTED 2026-08-31: this seed also carried https://repository.usfca.edu/ontarioreview/sitemap.xml. Ontario Review is the Joyce Carol Oates literary magazine, not a law journal, and 238 of its PDFs are in corpus/scraped/repository.usfca.edu. Pooling it with the law review also inflated the volume range that detect_volume_gaps checks, which is most of the 64 'missing volume' warnings recorded for this host. usflawreview has 534 article pages across 24 volumes; the other volumes were never digitised to bepress, so those gaps are an upstream publication fact, not a crawl failure. PDFs are currently unreachable: /cgi/viewcontent.cgi returns Cloudflare 403, the platform-wide bepress block."
+    }
   }
 }

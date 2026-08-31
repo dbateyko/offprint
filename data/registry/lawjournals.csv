@@ -604,7 +604,7 @@ Tulsa Law Review,https://digitalcommons.law.utulsa.edu/tlr/sitemap.xml,digitalco
 "Minnesota Journal of Law, Science & Technology",https://scholarship.law.umn.edu/mjlst/,scholarship.law.umn.edu,digital_commons_origin_fetch,active,minnesota_journal_of_law_science_technology.json,626,334,yes,sitemap,
 "Minnesota Journal of Law, Science & Technology",https://scholarship.law.umn.edu/mjlst,scholarship.law.umn.edu,digital_commons,todo_adapter,registry_minnesota_journal_of_law_science_technology_626_cf783b88dd.json,626,334,yes,sitemap,
 University of San Francisco Law Review,https://www.usfca.edu/law/professional-skills/student-run-academic-journals/law-review,usfca.edu,drupal,paused_waf,registry_university_of_san_francisco_law_review_1904_0e8c019c0a.json,1904,335,yes,sitemap,
-University of San Francisco Law Review,https://repository.usfca.edu/usflawreview/sitemap.xml,repository.usfca.edu,digitalcommons,,university_of_san_francisco_law_review.json,1904,335,yes,sitemap,https://repository.usfca.edu/usflrev/
+University of San Francisco Law Review,https://repository.usfca.edu/usflawreview/sitemap.xml,repository.usfca.edu,digitalcommons,,university_of_san_francisco_law_review.json,1904,335,yes,sitemap,https://repository.usfca.edu/usflawreview/
 Georgetown Journal of International Law,https://www.law.georgetown.edu/international-law-journal/in-print/,law.georgetown.edu,WordPress,,georgetown_journal_of_international_law.json,461,336,yes,sitemap,
 Georgetown Journal of International Law,http://www.gjil.org/,gjil.org,wordpress,paused_waf,registry_georgetown_journal_of_international_law_461_151bf18bb8.json,461,336,yes,sitemap,
 Georgetown Journal of International Law,http://www.gjil.org/,gjil.org,wordpress,active,www-gjil-org.json,461,336,,sitemap,
@@ -2472,7 +2472,7 @@ University of Pennsylvania Journal of Constitutional Law Online,https://pennjour
 University of Pennsylvania Law Review Online,https://www.pennlawreview.com/online,pennlawreview.com,wordpress,active,registry_university_of_pennsylvania_law_review_online_1410_fec6248d9e.json,1410,,,sitemap,
 University of Puerto Rico Business Law Journal,https://www.uprblj.com/,uprblj.com,wordpress,,uprblj-com.json,1690,,,sitemap,
 University of Queensland Law Journal,https://journal.law.uq.edu.au/index.php/uqlj/index,journal.law.uq.edu.au,,no_sitemap,,769,,,wlu,
-University of San Francisco (multiple collections),https://repository.usfca.edu/,repository.usfca.edu,digitalcommons,,repository-usfca-edu.json,,,,sitemap,https://repository.usfca.edu/usflrev/
+University of San Francisco (multiple collections),https://repository.usfca.edu/,repository.usfca.edu,digitalcommons,,repository-usfca-edu.json,,,,sitemap,https://repository.usfca.edu/usflawreview/
 University of San Francisco Maritime Law Journal,https://usfmaritimelawjournal.wordpress.com/,usfmaritimelawjournal.wordpress.com,wordpress,paused_login,registry_university_of_san_francisco_maritime_law_journal_342_28e66b9ddb.json,342,,yes,sitemap,
 University of St. Thomas Journal of Law & Public Policy,https://www.stthomas.edu/law/life/journals/jlpp,stthomas.edu,unknown,active,registry_university_of_st_thomas_journal_of_law_public_policy_1442_95dff51bce.json,1442,,,sitemap,
 University of St. Thomas Journal of Law and Public Policy,,,,no_sitemap,,,,yes,cilp,
