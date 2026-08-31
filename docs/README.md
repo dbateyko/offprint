@@ -30,6 +30,7 @@ Use this page as the task-oriented index for maintained Offprint documentation.
 | [Operator playbook](OPERATOR_PLAYBOOK.md) | Supervised run lifecycle and recovery decisions |
 | [Script catalog](../scripts/README.md) | Which maintained CLI handles each workflow |
 | [Footnote corpus audit](FOOTNOTE_FULL_CORPUS_AUDIT.md) | Parser-quality denominators, audit outputs, and OCR routing |
+| [Coverage and silent failure](COVERAGE_AND_SILENT_FAILURE.md) | Whether a journal is already collected, and why runs exit 0 having collected a fraction |
 
 ## Govern and Plan
 

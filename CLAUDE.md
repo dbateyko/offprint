@@ -12,6 +12,37 @@ Production-grade PDF scraper toolkit for U.S. law review journals. Discovers and
 
 When implementing a user's plan or spec, follow it step-by-step exactly as described. Do not skip diagnostic/measurement steps or reorder phases. If the plan says 'measure first, then implement,' do not jump to implementation.
 
+## Adding Journals: Check Coverage First
+
+`corpus/scraped` is laid out by host and one host serves many journals, so host
+presence never answers "do we already have this journal?". Getting this wrong
+re-crawled three journals we already held in a single session. Before any crawl:
+
+```bash
+python scripts/quality/check_seed_overlap.py --seed offprint/sitemaps/<seed>.json
+python scripts/quality/coverage_by_journal.py
+```
+
+Declare `navigation.expected_pdfs` in new seeds so the completeness gate can
+verify the run, but never guess it: a count that is too low lets a truncated run
+pass. Do not pass `--no-skip-well-covered-seeds` without a specific reason - it
+disables the guard against re-crawling covered ground.
+
+Runs that collect a fraction and still exit 0 are the normal failure here, not
+the exception. See `docs/COVERAGE_AND_SILENT_FAILURE.md` for the mechanisms
+found so far, the politeness rules (robots longest-match, one job per host), and
+the bepress 403 block.
+
+## Verifying Your Own Tooling
+
+Unit tests written against an assumed interface prove nothing. Four separate
+tools in this repo were installed, passing, and doing nothing - the completeness
+gate read a key the pipeline does not return and printed no verdict for a day.
+Every one surfaced only by running the tool against real data with an answer
+known in advance: a finished run's `stats.json`, a journal known to be a
+duplicate. Do that check before trusting anything new, and confirm a regression
+test actually fails against the unfixed code.
+
 ## PDF Processing
 
 When working with this codebase, always use `liteparse` for PDF parsing/footnote extraction unless explicitly told otherwise. Do not substitute other parsers like opendataloader.
